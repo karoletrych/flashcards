@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
 
-using Xamarin.Forms;
+[assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 
 namespace FlashCards
 {
@@ -13,7 +11,7 @@ namespace FlashCards
 		{
 			InitializeComponent();
 
-			MainPage = new FlashCards.MainPage();
+			MainPage = new NavigationPage(new MainPage());
 		}
 
 		protected override void OnStart ()

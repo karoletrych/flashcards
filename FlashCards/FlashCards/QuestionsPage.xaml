@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:FlashCards"
+             x:Class="FlashCards.QuestionsPage">
+
+    <AbsoluteLayout>
+        <StackLayout>
+            <local:MulticolorBar x:Name="QuestionsProgressBar" VerticalOptions="CenterAndExpand" HeightRequest="50">
+                <local:StepItem Color="Green" Value="100" />
+                <local:StepItem Color="Red" Value="100" />
+                <local:StepItem Color="Gray" Value="100"  />
+            </local:MulticolorBar>
+            <Label Text="0/0" />
+        </StackLayout>
+
+        <StackLayout x:Name="ImageAndQuestion" AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds=".5,.5,1,.5">
+            <Image x:Name="QuestionImage"
+                   BackgroundColor="Green"
+                   HorizontalOptions="FillAndExpand"
+                   VerticalOptions="CenterAndExpand" />
+            <StackLayout Orientation="Horizontal">
+                <Label x:Name="QuestionAnswer" Text="Podpis" />
+                <Button Image="speaker_icon.png" />
+            </StackLayout>
+        </StackLayout>
+
+        <StackLayout x:Name="AnswerButtons" Orientation="Horizontal" AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds=".5,1,1,.1">
+            <Button x:Name="ShowAnswer"
+                    Text="Pokaż odpowiedź"
+                    HorizontalOptions="FillAndExpand"
+                    VerticalOptions="CenterAndExpand"
+                    Clicked="OnShowAnswerButtonClicked" />
+
+            <Button x:Name="Know"
+                    Text="Wiem"
+                    HorizontalOptions="FillAndExpand"
+                    VerticalOptions="CenterAndExpand"
+                    Clicked="OnKnowButtonClicked" IsVisible="False"  />
+            <Button x:Name="DontKnow"
+                    Text="Nie wiem"
+                    HorizontalOptions="FillAndExpand"
+                    VerticalOptions="CenterAndExpand"
+                    Clicked="OnDontKnowButtonClicked" IsVisible="False"  />
+        </StackLayout>
+    </AbsoluteLayout>
+</ContentPage>
+
+
+

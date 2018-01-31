@@ -4,8 +4,7 @@
              xmlns:local="clr-namespace:FlashCards"
              x:Class="FlashCards.MainPage">
 
-	<Label Text="Welcome to Xamarin.Forms!" 
-           VerticalOptions="Center" 
-           HorizontalOptions="Center" />
+
+    <Button x:Name="AskQuestionsButton" Text="AskQuestions" Clicked="AskQuestions" />
 
 </ContentPage>
