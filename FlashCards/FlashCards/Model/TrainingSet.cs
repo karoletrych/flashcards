@@ -3,21 +3,29 @@ using FlashCards.ViewModel;
 
 namespace FlashCards.Model
 {
-    class TrainingSet
+    internal class TrainingSet
     {
-        public IEnumerable<QuestionStatus> QuestionsStatus => new[] { QuestionStatus.AnsweredCorrectly, QuestionStatus.AnsweredWrong, QuestionStatus.AnsweredCorrectly, QuestionStatus.NotAsked, QuestionStatus.NotAsked, QuestionStatus.NotAsked, QuestionStatus.NotAsked };
+        public IEnumerable<QuestionStatus> QuestionsStatus =>
+            new[]
+            {
+                QuestionStatus.AnsweredCorrectly,
+                QuestionStatus.AnsweredWrongly,
+                QuestionStatus.AnsweredCorrectly,
+                QuestionStatus.NotAsked,
+                QuestionStatus.NotAsked,
+                QuestionStatus.NotAsked,
+                QuestionStatus.NotAsked
+            };
 
         public void AnswerKnow()
         {
-
         }
 
         public void AnswerDontKnow()
         {
-
         }
 
-        public Question GetQuestion()
+        public Question GetNextQuestion()
         {
             return new Question();
         }
@@ -25,5 +33,7 @@ namespace FlashCards.Model
 
     internal class Question
     {
+        public string QuestionText { get; set; }
+        public string AnswerText { get; set; }
     }
 }

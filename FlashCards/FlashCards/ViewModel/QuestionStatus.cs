@@ -8,6 +8,6 @@ namespace FlashCards.ViewModel
     {
         NotAsked,
         AnsweredCorrectly,
-        AnsweredWrong
+        AnsweredWrongly
     }
 }
