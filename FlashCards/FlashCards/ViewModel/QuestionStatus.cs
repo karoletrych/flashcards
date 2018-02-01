@@ -6,7 +6,7 @@ namespace FlashCards.ViewModel
 {
     public enum QuestionStatus
     {
-        NotAsked,
+        NotAnswered,
         AnsweredCorrectly,
         AnsweredWrongly
     }
