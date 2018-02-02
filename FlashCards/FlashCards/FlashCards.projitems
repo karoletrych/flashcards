@@ -27,6 +27,6 @@
       <DependentUpon>TrainingSetListPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)ViewModel\QuestionsViewModel.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ViewModel\TrainingSetListItemViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModel\TrainingSetListViewModel.cs" />
   </ItemGroup>
 </Project>
