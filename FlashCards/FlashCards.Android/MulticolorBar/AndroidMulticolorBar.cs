@@ -25,6 +25,10 @@ namespace FlashCards.Droid.MulticolorBar
             var barEnd = 0;
             var totalLength = StepItems.Select(item => item.Value).Sum();
 
+            var white = new Paint();
+            white.SetARGB(255,255,255,255);
+            canvas.DrawRect(0,0,Width, ProgressBarHeight, white);
+
             foreach (var stepItem in StepItems)
             {
                 var (a, r, g, b) = ConvertColorToInteger(stepItem.Color);

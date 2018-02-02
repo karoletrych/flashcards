@@ -1,4 +1,5 @@
-﻿using Android.Content;
+﻿using System.ComponentModel;
+using Android.Content;
 using Android.Graphics;
 using FlashCards;
 using FlashCards.Droid.MulticolorBar;
@@ -29,21 +30,29 @@ namespace FlashCards.Droid.MulticolorBar
 
 		    if (e.OldElement != null)
 		    {
-		        // Unsubscribe from event handlers and cleanup any resources
-		    }
+                // Unsubscribe from event handlers and cleanup any resources
+		        e.NewElement.PropertyChanged -= Redraw;
+            }
 
             if (e.NewElement != null)
             {
                 _multicolorBar.StepItems = e.NewElement.StepItems;
+                e.NewElement.PropertyChanged += Redraw;
                 // Configure the control and subscribe to event handlers
             }
         }
 
-		protected override void OnDraw(Canvas canvas)
+	    private void Redraw(object sender, PropertyChangedEventArgs e)
+	    {
+            var newMulticolorBar = sender as FlashCards.MulticolorBar;
+	        _multicolorBar.StepItems = newMulticolorBar.StepItems;
+            Invalidate();
+	    }
+
+	    protected override void OnDraw(Canvas canvas)
 		{
 			base.OnDraw(canvas);
 			_multicolorBar.Draw(canvas);
-
 		}
 	}
 }

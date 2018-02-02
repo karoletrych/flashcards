@@ -1,50 +1,68 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8"?>
+
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:FlashCards"
+             xmlns:viewModel="clr-namespace:FlashCards.ViewModel"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
              x:Class="FlashCards.QuestionsPage">
 
     <AbsoluteLayout>
+        <AbsoluteLayout.BindingContext>
+            <viewModel:QuestionsViewModel />
+        </AbsoluteLayout.BindingContext>
+
         <StackLayout>
-            <local:MulticolorBar x:Name="QuestionsProgressBar" VerticalOptions="CenterAndExpand" HeightRequest="50">
-                <local:StepItem Color="Green" Value="100" />
-                <local:StepItem Color="Red" Value="100" />
-                <local:StepItem Color="Gray" Value="100"  />
+            <local:MulticolorBar 
+                x:Name="QuestionsProgressBar"
+                VerticalOptions="CenterAndExpand"
+                HeightRequest="50"
+                StepItems="{Binding QuestionStatuses}">
             </local:MulticolorBar>
             <Label Text="0/0" />
         </StackLayout>
 
-        <StackLayout x:Name="ImageAndQuestion" AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds=".5,.5,1,.5">
+        <StackLayout x:Name="ImageAndQuestion" AbsoluteLayout.LayoutFlags="All"
+                     AbsoluteLayout.LayoutBounds=".5,.5,1,.5">
             <Image x:Name="QuestionImage"
                    BackgroundColor="Green"
                    HorizontalOptions="FillAndExpand"
                    VerticalOptions="CenterAndExpand" />
             <StackLayout Orientation="Horizontal">
-                <Label x:Name="QuestionAnswer" Text="Podpis" />
+                <Label Text="{Binding QuestionAnswerText}" />
                 <Button Image="speaker_icon.png" />
             </StackLayout>
         </StackLayout>
 
-        <StackLayout x:Name="AnswerButtons" Orientation="Horizontal" AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds=".5,1,1,.1">
-            <Button x:Name="ShowAnswer"
-                    Text="Pokaż odpowiedź"
+        <StackLayout x:Name="AnswerButtons" Orientation="Horizontal" AbsoluteLayout.LayoutFlags="All"
+                     AbsoluteLayout.LayoutBounds=".5,1,1,.1">
+            <Button Text="Pokaż odpowiedź"
                     HorizontalOptions="FillAndExpand"
                     VerticalOptions="CenterAndExpand"
-                    Clicked="OnShowAnswerButtonClicked" />
+                    IsVisible="{Binding QuestionIsVisible}"
+                    Command="{Binding ShowAnswerCommand}" />
 
-            <Button x:Name="Know"
-                    Text="Wiem"
+            <Button Text="Wiedziałem"
+                    BackgroundColor="LawnGreen"
                     HorizontalOptions="FillAndExpand"
                     VerticalOptions="CenterAndExpand"
-                    Clicked="OnKnowButtonClicked" IsVisible="False"  />
-            <Button x:Name="DontKnow"
-                    Text="Nie wiem"
+                    IsVisible="{Binding AnswerIsVisible}"
+                    Command="{Binding UserAnswerCommand}">
+                <Button.CommandParameter>
+                    <system:Boolean>True</system:Boolean>
+                </Button.CommandParameter>
+            </Button>
+
+            <Button Text="Nie wiedziałem"
+                    BackgroundColor="Red"
                     HorizontalOptions="FillAndExpand"
                     VerticalOptions="CenterAndExpand"
-                    Clicked="OnDontKnowButtonClicked" IsVisible="False"  />
+                    IsVisible="{Binding AnswerIsVisible}"
+                    Command="{Binding UserAnswerCommand}">
+                <Button.CommandParameter>
+                    <system:Boolean>False</system:Boolean>
+                </Button.CommandParameter>
+            </Button>
         </StackLayout>
     </AbsoluteLayout>
 </ContentPage>
-
-
-

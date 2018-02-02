@@ -3,8 +3,5 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:FlashCards"
              x:Class="FlashCards.MainPage">
-
-
     <Button x:Name="AskQuestionsButton" Text="AskQuestions" Clicked="AskQuestions" />
-
 </ContentPage>
