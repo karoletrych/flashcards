@@ -11,7 +11,7 @@ namespace FlashCards
 		{
 			InitializeComponent();
 
-			MainPage = new NavigationPage(new MainPage());
+			MainPage = new NavigationPage(new TrainingSetListPage());
 		}
 
 		protected override void OnStart ()

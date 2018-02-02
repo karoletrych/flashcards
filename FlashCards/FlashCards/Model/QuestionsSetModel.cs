@@ -38,7 +38,7 @@ namespace FlashCards.Model
             _currentQuestion.Status = QuestionStatus.AnsweredBadly;
             _answeredQuestions.Add(_currentQuestion);
         }
-
+         
         public Question GetNextQuestion()
         {
             if (_currentQuestion != null && _currentQuestion.Status == QuestionStatus.NotAnswered)

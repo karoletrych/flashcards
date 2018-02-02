@@ -10,15 +10,12 @@
   </PropertyGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)App.xaml" />
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)MainPage.xaml" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)QuestionsPage.xaml" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)TrainingSetListPage.xaml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)MainPage.xaml.cs">
-      <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Model\QuestionsSetModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MulticolorBar\MulticolorBar.cs" />
@@ -26,6 +23,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)QuestionsPage.xaml.cs">
       <DependentUpon>QuestionsPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)TrainingSetListPage.xaml.cs">
+      <DependentUpon>TrainingSetListPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)ViewModel\QuestionsViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModel\TrainingSetListItemViewModel.cs" />
   </ItemGroup>
 </Project>
