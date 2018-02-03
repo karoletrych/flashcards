@@ -2,7 +2,6 @@
 using Xamarin.Forms.Xaml;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
-
 namespace FlashCards
 {
 	public partial class App : Application
