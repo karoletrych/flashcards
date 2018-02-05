@@ -17,9 +17,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Model\QuestionsSetModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MulticolorBar\MulticolorBar.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MulticolorBar\StepItem.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)QuestionsPageService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)QuestionsPage.xaml.cs">
       <DependentUpon>QuestionsPage.xaml</DependentUpon>
     </Compile>

@@ -10,7 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)CommandViewCell.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Language.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)INavigationService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)QuestionsViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TrainingSetListViewModel.cs" />
   </ItemGroup>

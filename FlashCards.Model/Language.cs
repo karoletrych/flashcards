@@ -1,4 +1,4 @@
-﻿namespace FlashCards.ViewModel
+﻿namespace FlashCards.Model
 {
     enum Language
     {

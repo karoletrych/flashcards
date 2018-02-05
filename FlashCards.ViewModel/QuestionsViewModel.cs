@@ -12,7 +12,7 @@ namespace FlashCards.ViewModel
 {
     internal class QuestionsViewModel : INotifyPropertyChanged
     {
-        private readonly QuestionsSetModel _questionsSetModel;
+        private readonly LessonModel _lessonModel;
         private string _questionAnswerText;
         private bool _answerIsVisible;
         private IList<StepItem> _questionStatuses = new List<StepItem>{
@@ -21,15 +21,12 @@ namespace FlashCards.ViewModel
 
     public QuestionsViewModel()
         {
-            _questionsSetModel = new QuestionsSetModel(new List<Question>());
-            UserAnswerCommand = new Command<bool>(answer =>
+            _lessonModel = new LessonModel(new List<Question>());
+            UserAnswerCommand = new Command<bool>(known =>
             {
-                if (answer)
-                    _questionsSetModel.AnswerKnow();
-                else
-                    _questionsSetModel.AnswerDontKnow();
+                _lessonModel.Answer(isKnown: known);
 
-                QuestionStatuses = _questionsSetModel.QuestionsStatuses.Select(x =>
+                QuestionStatuses = _lessonModel.QuestionsStatuses.Select(x =>
                 {
                     switch (x)
                     {
@@ -44,14 +41,14 @@ namespace FlashCards.ViewModel
                     }
                 }).ToList();
 
-                QuestionAnswerText = _questionsSetModel.GetNextQuestion().QuestionText;
+                QuestionAnswerText = _lessonModel.GetNextQuestion().QuestionText;
                 ShowQuestion();
             });
 
             ShowAnswerCommand = new Command(() =>
             {
-                QuestionAnswerText = _questionsSetModel.CurrentQuestionAnswer;
-                QuestionStatuses = _questionsSetModel.QuestionsStatuses.Select(questionStatus =>
+                QuestionAnswerText = _lessonModel.CurrentQuestionAnswer;
+                QuestionStatuses = _lessonModel.QuestionsStatuses.Select(questionStatus =>
                 {
                     switch (questionStatus)
                     {
@@ -69,7 +66,7 @@ namespace FlashCards.ViewModel
                 ShowAnswer();
             });
 
-            QuestionAnswerText = _questionsSetModel.GetNextQuestion().QuestionText;
+            QuestionAnswerText = _lessonModel.GetNextQuestion().QuestionText;
         }
 
         public ICommand UserAnswerCommand { get; }

@@ -18,21 +18,21 @@ namespace FlashCards.UnitTests
                 new Question {QuestionText = "cat", AnswerText = "kot"},
                 new Question {QuestionText = "duck", AnswerText = "kaczka"}
             };
-            _questionsSet = new QuestionsSetModel(_questions);
+            _lesson = new LessonModel(_questions);
         }
 
-        private QuestionsSetModel _questionsSet;
+        private LessonModel _lesson;
         private IList<Question> _questions;
 
         [Test]
         public void QuestionsStatusesCorrespondToAnswers()
         {
-            _questionsSet.GetNextQuestion();
-            _questionsSet.AnswerKnow();
-            _questionsSet.GetNextQuestion();
-            _questionsSet.AnswerDontKnow();
+            _lesson.GetNextQuestion();
+            _lesson.Answer(isKnown: true);
+            _lesson.GetNextQuestion();
+            _lesson.Answer(isKnown: false);
 
-            var statuses = _questionsSet.QuestionsStatuses.ToList();
+            var statuses = _lesson.QuestionsStatuses.ToList();
             Assert.That(statuses[0] == QuestionStatus.AnsweredCorrectly);
             Assert.That(statuses[1] == QuestionStatus.AnsweredBadly);
             Assert.That(statuses[2] == QuestionStatus.NotAnswered);
@@ -41,12 +41,12 @@ namespace FlashCards.UnitTests
         [Test]
         public void TrainingSetReturnsQuestions()
         {
-            var q0 = _questionsSet.GetNextQuestion();
-            _questionsSet.AnswerKnow();
-            var q1 = _questionsSet.GetNextQuestion();
-            _questionsSet.AnswerDontKnow();
-            var q2 = _questionsSet.GetNextQuestion();
-            _questionsSet.AnswerDontKnow();
+            var q0 = _lesson.GetNextQuestion();
+            _lesson.Answer(isKnown: true);
+            var q1 = _lesson.GetNextQuestion();
+            _lesson.Answer(isKnown: false);
+            var q2 = _lesson.GetNextQuestion();
+            _lesson.Answer(isKnown: false);
 
             Assert.That(_questions[0] == q0);
             Assert.That(_questions[1] == q1);
@@ -59,8 +59,8 @@ namespace FlashCards.UnitTests
             Assert.Throws<InvalidOperationException>(
                 () =>
                 {
-                    _questionsSet.GetNextQuestion();
-                    _questionsSet.GetNextQuestion();
+                    _lesson.GetNextQuestion();
+                    _lesson.GetNextQuestion();
                 });
         }
     }

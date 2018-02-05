@@ -124,4 +124,5 @@
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Import Project="..\FlashCards\FlashCards.projitems" Label="Shared" />
   <Import Project="..\..\FlashCards.ViewModel\FlashCards.ViewModel.projitems" Label="Shared" />
+  <Import Project="..\..\FlashCards.Model\FlashCards.Model.projitems" Label="Shared" />
 </Project>

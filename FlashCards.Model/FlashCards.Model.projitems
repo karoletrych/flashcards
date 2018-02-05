@@ -9,5 +9,10 @@
     <Import_RootNamespace>FlashCards.Model</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)FlashCard.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Language.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Question.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)QuestionStatus.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)LessonModel.cs" />
   </ItemGroup>
 </Project>
