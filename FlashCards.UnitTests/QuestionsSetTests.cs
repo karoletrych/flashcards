@@ -1,59 +1,56 @@
-﻿using FlashCards.Model;
-using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using FlashCards.Model;
+using Xunit;
 
 namespace FlashCards.UnitTests
 {
-    [TestFixture]
     public class QuestionsSetTests
     {
-        [SetUp]
-        public void SetUp()
+        public QuestionsSetTests()
         {
-            _questions = new[]
-            {
-                new Question {QuestionText = "dog", AnswerText = "pies"},
-                new Question {QuestionText = "cat", AnswerText = "kot"},
-                new Question {QuestionText = "duck", AnswerText = "kaczka"}
-            };
             _lesson = new LessonModel(_questions);
         }
 
-        private LessonModel _lesson;
-        private IList<Question> _questions;
+        private readonly LessonModel _lesson;
+        private readonly IList<Question> _questions = new[]
+        {
+            new Question("dog", "pies"),
+            new Question("cat", "kot"),
+            new Question("duck", "kaczka")
+        };
 
-        [Test]
+        [Fact]
         public void QuestionsStatusesCorrespondToAnswers()
         {
             _lesson.GetNextQuestion();
-            _lesson.Answer(isKnown: true);
+            _lesson.Answer(true);
             _lesson.GetNextQuestion();
-            _lesson.Answer(isKnown: false);
+            _lesson.Answer(false);
 
             var statuses = _lesson.QuestionsStatuses.ToList();
-            Assert.That(statuses[0] == QuestionStatus.AnsweredCorrectly);
-            Assert.That(statuses[1] == QuestionStatus.AnsweredBadly);
-            Assert.That(statuses[2] == QuestionStatus.NotAnswered);
+            Assert.Equal(expected: QuestionStatus.AnsweredCorrectly, actual: statuses[0]);
+            Assert.Equal(expected: QuestionStatus.AnsweredBadly, actual: statuses[1]);
+            Assert.Equal(expected: QuestionStatus.NotAnswered, actual: statuses[2]);
         }
 
-        [Test]
+        [Fact]
         public void TrainingSetReturnsQuestions()
         {
             var q0 = _lesson.GetNextQuestion();
-            _lesson.Answer(isKnown: true);
+            _lesson.Answer(true);
             var q1 = _lesson.GetNextQuestion();
-            _lesson.Answer(isKnown: false);
+            _lesson.Answer(false);
             var q2 = _lesson.GetNextQuestion();
-            _lesson.Answer(isKnown: false);
+            _lesson.Answer(false);
 
-            Assert.That(_questions[0] == q0);
-            Assert.That(_questions[1] == q1);
-            Assert.That(_questions[2] == q2);
+            Assert.Equal(expected: q0, actual: _questions[0]);
+            Assert.Equal(expected: q1, actual: _questions[1]);
+            Assert.Equal(expected: q2, actual: _questions[2]);
         }
 
-        [Test]
+        [Fact]
         public void TrainingSetThrowsException_WhenAnswerWasNotSuppliedAndNextQuestionIsRetrieved()
         {
             Assert.Throws<InvalidOperationException>(

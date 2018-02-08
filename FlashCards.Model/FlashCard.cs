@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace FlashCards.Model
 {
@@ -9,8 +8,11 @@ namespace FlashCards.Model
         public IEnumerable<FlashCard> FlashCards { get; }
         public Language TopLanguage { get; }
         public Language BottomLanguage { get; }
-        void AddFlashCard(string top, string bottom, Uri imageUri);
 
+        void AddFlashCard(string top, string bottom, Uri imageUri)
+        {
+
+        }
     }
 
     class FlashCard
