@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
 
-using Xamarin.Forms;
-
-namespace FlashCards
+[assembly: XamlCompilation(XamlCompilationOptions.Compile)]
+namespace Views
 {
 	public partial class App : Application
 	{
@@ -13,7 +10,7 @@ namespace FlashCards
 		{
 			InitializeComponent();
 
-			MainPage = new FlashCards.MainPage();
+			MainPage = new NavigationPage(new TrainingSetListPage());
 		}
 
 		protected override void OnStart ()

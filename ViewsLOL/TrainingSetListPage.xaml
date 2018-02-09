@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FlashCards.TrainingSetListPage"
+             xmlns:viewModels="clr-namespace:ViewModels;assembly=ViewModels">
+    <ListView ItemsSource="{Binding Items}"
+              CachingStrategy="RecycleElement">
+        <ListView.BindingContext>
+            <viewModels:TrainingSetListViewModel />
+        </ListView.BindingContext>
+
+        <ListView.ItemTemplate>
+            <DataTemplate>
+                <viewModels:CommandViewCell Command="OpenQuestionsPage">
+                    <StackLayout Orientation="Horizontal">
+                        <Label Text="{Binding Name}"
+                               Style="{DynamicResource ListItemTextStyle}" />
+                        <Label Text="{Binding QuestionsCount}"
+                               Style="{DynamicResource ListItemDetailTextStyle}" />
+                        <Label Text="{Binding Languages}"
+                               Style="{DynamicResource ListItemDetailTextStyle}" />
+                    </StackLayout>
+                </viewModels:CommandViewCell>
+            </DataTemplate>
+        </ListView.ItemTemplate>
+    </ListView>
+</ContentPage>

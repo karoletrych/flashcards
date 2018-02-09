@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{361B400D-D5DC-4597-B8A0-CDE77D77D632}</ProjectGuid>
+    <ProjectGuid>{04398B5C-D231-4A11-882E-2FE4F38AF1F2}</ProjectGuid>
     <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <RootNamespace>FlashCards.Droid</RootNamespace>
@@ -28,9 +28,6 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AndroidLinkMode>None</AndroidLinkMode>
-    <AotAssemblies>false</AotAssemblies>
-    <EnableLLVM>false</EnableLLVM>
-    <BundleAssemblies>false</BundleAssemblies>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -59,8 +56,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MainActivity.cs" />
-    <Compile Include="MulticolorBar\AndroidMulticolorBar.cs" />
-    <Compile Include="MulticolorBar\MulticolorBarRenderer.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -85,19 +80,10 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\speaker_icon.png" />
+    <ProjectReference Include="..\..\Views\Views.csproj">
+      <Project>{99f85775-d0f1-4a7f-bce8-828d2ba4b0f8}</Project>
+      <Name>Views</Name>
+    </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-hdpi\speaker_icon.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xhdpi\speaker_icon.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\speaker_icon.png" />
-  </ItemGroup>
-  <Import Project="..\FlashCards\FlashCards.projitems" Label="Shared" />
-  <Import Project="..\..\FlashCards.ViewModel\FlashCards.ViewModel.projitems" Label="Shared" />
-  <Import Project="..\..\FlashCards.Model\FlashCards.Model.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>
