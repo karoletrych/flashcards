@@ -4,68 +4,68 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
-//using Models;
+using Models;
 using Xamarin.Forms;
 
 namespace ViewModels
 {
-    public class QuestionsViewModel : INotifyPropertyChanged
+    public class AskingQuestionsViewModel : INotifyPropertyChanged
     {
-//        private readonly LessonModel _lessonModel;
+        private readonly LessonModel _lessonModel;
         private string _questionAnswerText;
         private bool _answerIsVisible;
         private IList<StepItem> _questionStatuses = new List<StepItem>{
             new StepItem {Color = Color.Gray, Value = 1}
         };
 
-    public QuestionsViewModel()
+    public AskingQuestionsViewModel()
         {
-//            _lessonModel = new LessonModel(new List<Question>());
+            _lessonModel = new LessonModel(new List<Question>());
             UserAnswerCommand = new Command<bool>(known =>
             {
-//                _lessonModel.Answer(isKnown: known);
+                _lessonModel.Answer(isKnown: known);
 
-//                QuestionStatuses = _lessonModel.QuestionsStatuses.Select(x =>
-//                {
-//                    switch (x)
-//                    {
-//                        case QuestionStatus.AnsweredCorrectly:
-//                            return new StepItem { Color = Color.GreenYellow, Value = 1 };
-//                        case QuestionStatus.AnsweredBadly:
-//                            return new StepItem { Color = Color.Red, Value = 1 };
-//                        case QuestionStatus.NotAnswered:
-//                            return new StepItem { Color = Color.Gray, Value = 1 };
-//                        default:
-//                            throw new ArgumentOutOfRangeException(nameof(x), x, null);
-//                    }
-//                }).ToList();
-//
-//                QuestionAnswerText = _lessonModel.GetNextQuestion().QuestionText;
+                QuestionStatuses = _lessonModel.QuestionsStatuses.Select(x =>
+                {
+                    switch (x)
+                    {
+                        case QuestionStatus.AnsweredCorrectly:
+                            return new StepItem { Color = Color.GreenYellow, Value = 1 };
+                        case QuestionStatus.AnsweredBadly:
+                            return new StepItem { Color = Color.Red, Value = 1 };
+                        case QuestionStatus.NotAnswered:
+                            return new StepItem { Color = Color.Gray, Value = 1 };
+                        default:
+                            throw new ArgumentOutOfRangeException(nameof(x), x, null);
+                    }
+                }).ToList();
+
+                QuestionAnswerText = _lessonModel.GetNextQuestion().QuestionText;
                 ShowQuestion();
             });
 
             ShowAnswerCommand = new Command(() =>
             {
-//                QuestionAnswerText = _lessonModel.CurrentQuestionAnswer;
-//                QuestionStatuses = _lessonModel.QuestionsStatuses.Select(questionStatus =>
-//                {
-//                    switch (questionStatus)
-//                    {
-//                        case QuestionStatus.AnsweredCorrectly:
-//                            return new StepItem { Color = Color.GreenYellow, Value = 1 };
-//                        case QuestionStatus.AnsweredBadly:
-//                            return new StepItem { Color = Color.Red, Value = 1 };
-//                        case QuestionStatus.NotAnswered:
-//                            return new StepItem { Color = Color.Gray, Value = 1 };
-//                        default:
-//                            throw new ArgumentOutOfRangeException(nameof(questionStatus), questionStatus, null);
-//                    }
-//                }).ToList();
+                QuestionAnswerText = _lessonModel.CurrentQuestionAnswer;
+                QuestionStatuses = _lessonModel.QuestionsStatuses.Select(questionStatus =>
+                {
+                    switch (questionStatus)
+                    {
+                        case QuestionStatus.AnsweredCorrectly:
+                            return new StepItem { Color = Color.GreenYellow, Value = 1 };
+                        case QuestionStatus.AnsweredBadly:
+                            return new StepItem { Color = Color.Red, Value = 1 };
+                        case QuestionStatus.NotAnswered:
+                            return new StepItem { Color = Color.Gray, Value = 1 };
+                        default:
+                            throw new ArgumentOutOfRangeException(nameof(questionStatus), questionStatus, null);
+                    }
+                }).ToList();
 
                 ShowAnswer();
             });
 
-//            QuestionAnswerText = _lessonModel.GetNextQuestion().QuestionText;
+            QuestionAnswerText = _lessonModel.GetNextQuestion().QuestionText;
         }
 
         public ICommand UserAnswerCommand { get; }

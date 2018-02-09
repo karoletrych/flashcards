@@ -9,7 +9,7 @@
 
     <AbsoluteLayout>
         <AbsoluteLayout.BindingContext>
-            <viewModels:QuestionsViewModel />
+            <viewModels:AskingQuestionsViewModel />
         </AbsoluteLayout.BindingContext>
 
         <StackLayout>
