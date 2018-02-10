@@ -1,15 +1,35 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Models
+namespace FlashCards.Models
 {
-    public class LessonModel
+    public class Question
+    {
+        public Question(string questionText, string answerText)
+        {
+            QuestionText = questionText;
+            AnswerText = answerText;
+        }
+
+        public string QuestionText { get; }
+        public string AnswerText { get; }
+        public QuestionStatus Status { get; set; }
+    }
+
+    public enum QuestionStatus
+    {
+        NotAnswered,
+        AnsweredCorrectly,
+        AnsweredBadly
+    }
+
+    public class QuestionAsker
     {
         private readonly IList<Question> _askedQuestions = new List<Question>();
         private readonly Queue<Question> _questionsToAsk;
 
-        public LessonModel(IList<Question> questions)
+        public QuestionAsker(IList<Question> questions)
         {
             _questionsToAsk = new Queue<Question>(questions);
         }

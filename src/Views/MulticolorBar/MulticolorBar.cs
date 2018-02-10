@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using ViewModels;
+using System.Collections.Generic;
+using FlashCards.ViewModels;
 using Xamarin.Forms;
 
-namespace Views.MulticolorBar
+namespace FlashCards.Views.MulticolorBar
 {
     [ContentProperty("StepItems")]
     public sealed class MulticolorBar : View

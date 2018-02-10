@@ -1,18 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:viewModels="clr-namespace:ViewModels;assembly=ViewModels"
-             x:Class="Views.LessonListPage">
+             xmlns:lesson="clr-namespace:FlashCards.ViewModels.Lesson;assembly=ViewModels"
+             x:Class="FlashCards.Views.LessonListPage">
 
     <ListView ItemsSource="{Binding Items}"
-              CachingStrategy="RecycleElement">
+              CachingStrategy="RecycleElement"
+              ItemTapped="ListView_OnItemTapped">
         <ListView.BindingContext>
-            <viewModels:TrainingSetListViewModel />
+            <lesson:LessonListViewModel />
         </ListView.BindingContext>
 
         <ListView.ItemTemplate>
             <DataTemplate>
-                <viewModels:CommandViewCell Command="OpenQuestionsPage">
+                <ViewCell>
                     <StackLayout Orientation="Horizontal">
                         <Label Text="{Binding Name}"
                                Style="{DynamicResource ListItemTextStyle}" />
@@ -21,7 +22,7 @@
                         <Label Text="{Binding Languages}"
                                Style="{DynamicResource ListItemDetailTextStyle}" />
                     </StackLayout>
-                </viewModels:CommandViewCell>
+                </ViewCell>
             </DataTemplate>
         </ListView.ItemTemplate>
     </ListView>

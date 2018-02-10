@@ -1,6 +1,6 @@
-﻿using Xamarin.Forms;
+using Xamarin.Forms;
 
-namespace Views
+namespace FlashCards.Views
 {
     public partial class App : Application
 	{

@@ -1,8 +1,8 @@
-﻿using Xamarin.Forms;
+using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
-namespace Views
+namespace FlashCards.Views
 {
 	public partial class AskingQuestionsPage : ContentPage
 	{

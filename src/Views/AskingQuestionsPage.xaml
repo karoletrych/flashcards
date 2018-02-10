@@ -2,9 +2,9 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:system="clr-namespace:System;assembly=netstandard"
-             xmlns:viewModels="clr-namespace:ViewModels;assembly=ViewModels"
-             xmlns:multicolorBar="clr-namespace:Views.MulticolorBar;assembly=Views"
-             x:Class="Views.AskingQuestionsPage">
+             xmlns:viewModels="clr-namespace:FlashCards.ViewModels;assembly=ViewModels"
+             xmlns:multicolorBar="clr-namespace:FlashCards.Views.MulticolorBar;assembly=Views"
+             x:Class="FlashCards.Views.AskingQuestionsPage">
 
 
     <AbsoluteLayout>

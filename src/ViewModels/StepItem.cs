@@ -1,6 +1,6 @@
-﻿using Xamarin.Forms;
+using Xamarin.Forms;
 
-namespace ViewModels
+namespace FlashCards.ViewModels
 {
     public class StepItem
     {

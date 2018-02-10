@@ -1,17 +1,17 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
-using Models;
+using FlashCards.Models;
 using Xamarin.Forms;
 
-namespace ViewModels
+namespace FlashCards.ViewModels
 {
     public class AskingQuestionsViewModel : INotifyPropertyChanged
     {
-        private readonly LessonModel _lessonModel;
+        private readonly QuestionAsker _questionAsker;
         private string _questionAnswerText;
         private bool _answerIsVisible;
         private IList<StepItem> _questionStatuses = new List<StepItem>{
@@ -20,12 +20,12 @@ namespace ViewModels
 
     public AskingQuestionsViewModel()
         {
-            _lessonModel = new LessonModel(new List<Question>());
+            _questionAsker = new QuestionAsker(new List<Question>());
             UserAnswerCommand = new Command<bool>(known =>
             {
-                _lessonModel.Answer(isKnown: known);
+                _questionAsker.Answer(isKnown: known);
 
-                QuestionStatuses = _lessonModel.QuestionsStatuses.Select(x =>
+                QuestionStatuses = _questionAsker.QuestionsStatuses.Select(x =>
                 {
                     switch (x)
                     {
@@ -40,14 +40,14 @@ namespace ViewModels
                     }
                 }).ToList();
 
-                QuestionAnswerText = _lessonModel.GetNextQuestion().QuestionText;
+                QuestionAnswerText = _questionAsker.GetNextQuestion().QuestionText;
                 ShowQuestion();
             });
 
             ShowAnswerCommand = new Command(() =>
             {
-                QuestionAnswerText = _lessonModel.CurrentQuestionAnswer;
-                QuestionStatuses = _lessonModel.QuestionsStatuses.Select(questionStatus =>
+                QuestionAnswerText = _questionAsker.CurrentQuestionAnswer;
+                QuestionStatuses = _questionAsker.QuestionsStatuses.Select(questionStatus =>
                 {
                     switch (questionStatus)
                     {
@@ -65,7 +65,7 @@ namespace ViewModels
                 ShowAnswer();
             });
 
-            QuestionAnswerText = _lessonModel.GetNextQuestion().QuestionText;
+            QuestionAnswerText = _questionAsker.GetNextQuestion().QuestionText;
         }
 
         public ICommand UserAnswerCommand { get; }

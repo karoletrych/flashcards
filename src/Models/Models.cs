@@ -1,9 +1,13 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
+using SQLite;
 
-namespace Models
+namespace FlashCards.Models
 {
-    enum Language
+    public enum Language
     {
         German,
         English,
@@ -15,22 +19,42 @@ namespace Models
         Norwegian
     }
 
-    class Lesson
+    public class Lesson
     {
-        public IEnumerable<FlashCard> FlashCards { get; }
-        public Language TopLanguage { get; }
-        public Language BottomLanguage { get; }
+        [PrimaryKey]
+        [AutoIncrement]
+        public int Id { get; set; }
 
-        void AddFlashCard(string top, string bottom, Uri imageUri)
-        {
-
-        }
+        public Language TopLanguage { get; set; }
+        public Language BottomLanguage { get; set; }
     }
 
-    internal class FlashCard
+    public class FlashCard
     {
-        public int FlashCardId { get; set; }
+        private decimal _strength;
+
+        [PrimaryKey]
+        [AutoIncrement]
+        public int Id { get; set; }
+
+        [Indexed]
+        public int LessonId { get; set; }
+
+        [MaxLength(128)]
         public string Top { get; set; }
+
+        [MaxLength(128)]
         public string Bottom { get; set; }
+
+        public decimal Strength
+        {
+            get => _strength;
+            set
+            {
+                if (value > 1 || value < 0)
+                    throw new ArgumentException($"Invalid value of strength: {value}");
+                _strength = value;
+            }
+        }
     }
 }

@@ -1,7 +1,7 @@
-﻿using Android.App;
+using Android.App;
 using Android.Content.PM;
 using Android.OS;
-using Views;
+using App = FlashCards.Views.App;
 
 namespace FlashCards.Droid
 {

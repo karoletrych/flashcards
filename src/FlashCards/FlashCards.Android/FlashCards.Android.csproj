@@ -47,6 +47,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="sqlite-net-pcl">
+      <Version>1.4.118</Version>
+    </PackageReference>
     <PackageReference Include="Xamarin.Android.Support.Design" Version="26.1.0.1" />
     <PackageReference Include="Xamarin.Android.Support.v7.AppCompat" Version="26.1.0.1" />
     <PackageReference Include="Xamarin.Android.Support.v4" Version="26.1.0.1" />
@@ -82,8 +85,12 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Models\Models.csproj">
+      <Project>{830b5e94-94d7-4881-8db9-fdecc5fe215d}</Project>
+      <Name>Models</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Views\Views.csproj">
-      <Project>{99f85775-d0f1-4a7f-bce8-828d2ba4b0f8}</Project>
+      <Project>{4dcd6756-8ae6-4567-a2b9-1b61165a1146}</Project>
       <Name>Views</Name>
     </ProjectReference>
   </ItemGroup>

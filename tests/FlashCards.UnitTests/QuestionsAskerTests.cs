@@ -1,19 +1,19 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Models;
+using FlashCards.Models;
 using Xunit;
 
 namespace FlashCards.UnitTests
 {
-    public class QuestionsSetTests
+    public class QuestionsAskerTests
     {
-        public QuestionsSetTests()
+        public QuestionsAskerTests()
         {
-            _lesson = new LessonModel(_questions);
+            _lesson = new QuestionAsker(_questions);
         }
 
-        private readonly LessonModel _lesson;
+        private readonly QuestionAsker _lesson;
 
         private readonly IList<Question> _questions = new[]
         {
