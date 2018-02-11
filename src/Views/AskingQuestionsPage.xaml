@@ -1,4 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8"?>
+
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:system="clr-namespace:System;assembly=netstandard"
@@ -13,28 +14,26 @@
         </AbsoluteLayout.BindingContext>
 
         <StackLayout>
-            <multicolorBar:MulticolorBar 
-                x:Name="QuestionsProgressBar"
+            <multicolorBar:MulticolorBar
                 VerticalOptions="CenterAndExpand"
                 HeightRequest="50"
-                StepItems="{Binding QuestionStatuses}">
-            </multicolorBar:MulticolorBar>
+                StepItems="{Binding QuestionStatuses}" />
             <Label Text="0/0" />
         </StackLayout>
 
-        <StackLayout x:Name="ImageAndQuestion" AbsoluteLayout.LayoutFlags="All"
+        <StackLayout AbsoluteLayout.LayoutFlags="All"
                      AbsoluteLayout.LayoutBounds=".5,.5,1,.5">
-            <Image x:Name="QuestionImage"
-                   BackgroundColor="Green"
-                   HorizontalOptions="FillAndExpand"
-                   VerticalOptions="CenterAndExpand" />
+            <Image
+                BackgroundColor="Green"
+                HorizontalOptions="FillAndExpand"
+                VerticalOptions="CenterAndExpand" />
             <StackLayout Orientation="Horizontal">
                 <Label Text="{Binding QuestionAnswerText}" />
                 <Button Image="speaker_icon.png" />
             </StackLayout>
         </StackLayout>
 
-        <StackLayout x:Name="AnswerButtons" Orientation="Horizontal" AbsoluteLayout.LayoutFlags="All"
+        <StackLayout Orientation="Horizontal" AbsoluteLayout.LayoutFlags="All"
                      AbsoluteLayout.LayoutBounds=".5,1,1,.1">
             <Button Text="Pokaż odpowiedź"
                     HorizontalOptions="FillAndExpand"

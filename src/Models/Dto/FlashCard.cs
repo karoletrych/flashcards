@@ -1,34 +1,8 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
 using SQLite;
 
-namespace FlashCards.Models
+namespace FlashCards.Models.Dto
 {
-    public enum Language
-    {
-        German,
-        English,
-        Polish,
-        French,
-        Italian,
-        Spanish,
-        Swedish,
-        Norwegian
-    }
-
-    public class Lesson
-    {
-        [PrimaryKey]
-        [AutoIncrement]
-        public int Id { get; set; }
-
-        public Language TopLanguage { get; set; }
-        public Language BottomLanguage { get; set; }
-    }
-
     public class FlashCard
     {
         private decimal _strength;

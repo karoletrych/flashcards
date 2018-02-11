@@ -1,5 +1,6 @@
 using System.Linq;
 using FlashCards.Models;
+using FlashCards.Models.Dto;
 using Xunit;
 
 namespace FlashCards.UnitTests

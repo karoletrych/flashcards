@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using FlashCards.Models.Dto;
 using SQLite;
 
 namespace FlashCards.Models
@@ -10,9 +11,6 @@ namespace FlashCards.Models
     {
         public static SQLiteAsyncConnection Connect(string databasePath)
         {
-//            var databasePath = Path.Combine(
-//                Environment.GetFolderPath(Environment.SpecialFolder.Personal),
-//                "database.db3");
             var connection = new SQLiteAsyncConnection(databasePath,
                 SQLiteOpenFlags.FullMutex | SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite);
 
