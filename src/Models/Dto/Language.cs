@@ -13,6 +13,7 @@ namespace FlashCards.Models.Dto
         Italian,
         Spanish,
         Swedish,
-        Norwegian
+        Norwegian,
+        Russian
     }
 }
