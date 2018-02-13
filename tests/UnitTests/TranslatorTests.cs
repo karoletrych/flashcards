@@ -27,5 +27,12 @@ namespace FlashCards.UnitTests
             var expectedList = expected.ToList().AsReadOnly();
             Assert.Equal(expectedList, _yandexTranslator.Translate(@from, to, text).Result);
         }
+
+        [Fact]
+        public void TranlatiionOfEmptyStringReturnEmptyString()
+        {
+            var emptyList = new List<string>();
+            Assert.Equal(emptyList, _yandexTranslator.Translate(Language.English, Language.French, "").Result);
+        }
     }
 }

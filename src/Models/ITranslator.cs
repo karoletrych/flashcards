@@ -6,6 +6,6 @@ namespace FlashCards.Models
 {
     public interface ITranslator
     {
-        Task<IReadOnlyList<string>> Translate(Language @from, Language to, string text);
+        Task<IEnumerable<string>> Translate(Language @from, Language to, string text);
     }
 }

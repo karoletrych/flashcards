@@ -3,7 +3,7 @@ using FlashCards.Models.Dto;
 
 namespace FlashCards.Models
 {
-    public static class LanguageAcronyms
+    public static class LanguageExtensions
     {
         public static string Acronym(this Language language)
         {
@@ -30,6 +30,12 @@ namespace FlashCards.Models
                 default:
                     throw new ArgumentException($"{language}");
             }
+        }
+
+        public static Language ToLanguageEnum(this string name)
+        {
+            Enum.TryParse(name, out Language language);
+            return language;
         }
     }
 }

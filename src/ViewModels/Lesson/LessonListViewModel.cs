@@ -12,7 +12,7 @@ namespace FlashCards.ViewModels.Lesson
             _modelsRepository = modelsRepository;
         }
 
-        public IEnumerable<LessonViewModel> Items;
+        public IEnumerable<LessonViewModel> Items;// =
 //            _modelsRepository.FindAll().Result.Select(l => new LessonViewModel(l));
     }
 }

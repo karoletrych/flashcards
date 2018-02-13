@@ -4,27 +4,30 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:lesson="clr-namespace:FlashCards.ViewModels.Lesson;assembly=ViewModels"
              x:Class="FlashCards.Views.Lesson.AddLessonPage">
-    <ContentPage.BindingContext>
-        <lesson:AddLessonViewModel />
-    </ContentPage.BindingContext>
-
     <ContentPage.Content>
         <StackLayout>
             <StackLayout>
                 <Entry Placeholder="Nazwa lekcji" />
                 <StackLayout Orientation="Horizontal" VerticalOptions="FillAndExpand">
-                    <Label Text="Top language" />
-                    <Picker ItemsSource="{Binding LanguageNames} "  WidthRequest="100"/>
+                    <Label Text="Front language" />
+                    <Picker ItemsSource="{Binding LanguageNames}" SelectedItem="{Binding SelectedFrontLanguage}"  WidthRequest="100"/>
                 </StackLayout>
                 <StackLayout Orientation="Horizontal" VerticalOptions="FillAndExpand">
-                    <Label Text="Bottom language" />
-                    <Picker ItemsSource="{Binding LanguageNames}"  WidthRequest="100"/>
+                    <Label Text="Back language" />
+                    <Picker ItemsSource="{Binding LanguageNames}" SelectedItem="{Binding SelectedBackLanguage}"  WidthRequest="100"/>
                 </StackLayout>
             </StackLayout>
             <StackLayout>
+                <Entry 
+                    Placeholder="Front" 
+                    Text="{Binding FrontText, Mode = TwoWay}" 
+                    TextChanged="FrontEntry_OnTextChanged"/>
+                <Entry 
+                    Placeholder="Back" 
+                    Text="{Binding BackText, Mode = TwoWay}"
+                    TextChanged="BackEntry_OnTextChanged"/>
                 <Label Text="Powered by Yandex.Translate"></Label>
-                <Entry Placeholder="Top" />
-                <Entry Placeholder="Bottom" />
+
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />

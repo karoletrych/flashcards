@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using FlashCards.Models.Dto;
@@ -15,8 +16,11 @@ namespace FlashCards.Models
 
         private readonly HttpClient _client = new HttpClient();
 
-        public async Task<IReadOnlyList<string>> Translate(Language from, Language to, string text)
+        public async Task<IEnumerable<string>> Translate(Language from, Language to, string text)
         {
+            if (!text.Any())
+                return new List<string>();
+
             var request = new Uri("https://translate.yandex.net/api/v1.5/tr.json/translate")
                 .AddQuery("key", YandexKey)
                 .AddQuery("text", text)
@@ -26,7 +30,7 @@ namespace FlashCards.Models
             var response = await _client.GetStringAsync(request);
 
             var json = JsonConvert.DeserializeObject<dynamic>(response);
-            var translations = json["text"].ToObject<IReadOnlyList<string>>();
+            var translations = json["text"].ToObject<IEnumerable<string>>();
 
             return translations;
         }

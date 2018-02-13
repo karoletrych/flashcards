@@ -6,12 +6,15 @@ namespace FlashCards.Views.Lesson
 {
     public partial class LessonListPage : ContentPage
     {
+        private readonly Func<AddLessonPage> _addLessonPageFactory;
         private readonly Func<LessonViewModel, LessonDetailsPage> _lessonDetailsPageFactory;
 
         public LessonListPage(LessonListViewModel lessonListViewModel,
-            Func<LessonViewModel, LessonDetailsPage> lessonDetailsPageFactory)
+            Func<LessonViewModel, LessonDetailsPage> lessonDetailsPageFactory,
+            Func<AddLessonPage> addLessonPageFactory)
         {
             _lessonDetailsPageFactory = lessonDetailsPageFactory;
+            _addLessonPageFactory = addLessonPageFactory;
             InitializeComponent();
 
             BindingContext = lessonListViewModel;
@@ -26,7 +29,8 @@ namespace FlashCards.Views.Lesson
 
         private async void MenuItem_OnClicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new NavigationPage(new AddLessonPage()));
+            var addLessonPage = _addLessonPageFactory();
+            await Navigation.PushAsync(new NavigationPage(addLessonPage));
         }
     }
 }
