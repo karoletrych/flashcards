@@ -17,28 +17,28 @@ namespace FlashCards.Services.Database
 
     public class Repository<T> : IRepository<T> where T : new()
     {
-        private readonly SQLiteAsyncConnection _dbConnection;
+        private readonly SQLiteConnection _dbConnection;
 
-        public Repository(SQLiteAsyncConnection dbConnection)
+        public Repository(SQLiteConnection dbConnection)
         {
             _dbConnection = dbConnection;
         }
 
         public async Task<IEnumerable<T>> FindAll()
         {
-            var list = await _dbConnection.Table<T>().ToListAsync();
+            var list =  _dbConnection.Table<T>().ToList();
             return list.AsEnumerable();
         }
 
         public async Task<IEnumerable<T>> FindMatching(Expression<Func<T, bool>> predicate)
         {
-            var list = await _dbConnection.Table<T>().Where(predicate).ToListAsync();
+            var list =  _dbConnection.Table<T>().Where(predicate).ToList();
             return list.AsEnumerable();
         }
 
         public async void Insert(T entity)
         {
-            await _dbConnection.InsertAsync(entity);
+             _dbConnection.Insert(entity);
         }
     }
 }

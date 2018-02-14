@@ -7,8 +7,7 @@ namespace FlashCards.Models
     {
         private decimal _strength;
 
-        [PrimaryKey]
-        [AutoIncrement]
+        [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
 
         [Indexed]

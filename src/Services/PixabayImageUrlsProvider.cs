@@ -8,13 +8,13 @@ using Newtonsoft.Json.Linq;
 
 namespace FlashCards.Services
 {
-    public class ImageUrlsProvider
+    public class PixabayImageUrlsProvider : IImageUrlsProvider
     {
         private const string PixabayKey = "7086795-ed8c5c96965624c739c6e22af";
         private readonly HttpClient _httpClient = new HttpClient();
         private readonly int _numberOfResults;
 
-        public ImageUrlsProvider(int numberOfResults = 9)
+        public PixabayImageUrlsProvider(int numberOfResults = 9)
         {
             _numberOfResults = numberOfResults;
         }

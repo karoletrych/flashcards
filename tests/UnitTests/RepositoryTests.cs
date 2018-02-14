@@ -2,7 +2,7 @@ using System.Linq;
 using FlashCards.Models;
 using FlashCards.Services.Database;
 using Xunit;
-using DatabaseConnectionFactory = FlashCards.Models.DatabaseConnectionFactory;
+using DatabaseConnectionFactory = FlashCards.Services.Database.DatabaseConnectionFactory;
 
 namespace FlashCards.UnitTests
 {
@@ -13,9 +13,9 @@ namespace FlashCards.UnitTests
 
         public RepositoryTests()
         {
-            var inMemoryConnection = DatabaseConnectionFactory.Connect(":memory:");
-            _flashCardRepository = new Repository<FlashCard>(inMemoryConnection);
-            _lessonRepository = new Repository<Lesson>(inMemoryConnection);
+            var sqLiteAsyncConnection = DatabaseConnectionFactory.Connect(":memory:");
+            _flashCardRepository = new Repository<FlashCard>(sqLiteAsyncConnection);
+            _lessonRepository = new Repository<Lesson>(sqLiteAsyncConnection);
         }
 
         [Fact]
@@ -56,6 +56,21 @@ namespace FlashCards.UnitTests
             var matchingFlashCards = _flashCardRepository.FindMatching(f => f.LessonId == 1).Result;
 
             Assert.Equal(2, matchingFlashCards.Count());
+        }
+
+        [Fact]
+        public void IdIsIncremented()
+        {
+            var lesson = new Lesson
+            {
+                TopLanguage = Language.English,
+                BottomLanguage = Language.Polish
+            };
+            _lessonRepository.Insert(lesson);
+            _lessonRepository.Insert(lesson);
+            var lessons = _lessonRepository.FindAll().Result.ToList();
+            Assert.Equal(1, lessons[0].Id);
+            Assert.Equal(2, lessons[1].Id);
         }
     }
 }

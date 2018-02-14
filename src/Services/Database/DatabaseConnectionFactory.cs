@@ -5,20 +5,20 @@ namespace FlashCards.Services.Database
 {
     public static class DatabaseConnectionFactory
     {
-        public static SQLiteAsyncConnection Connect(string databasePath)
+        public static SQLiteConnection Connect(string databasePath)
         {
-            var connection = new SQLiteAsyncConnection(databasePath,
-                SQLiteOpenFlags.FullMutex | SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite);
+            var connection = new SQLiteConnection(databasePath,
+                SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.NoMutex);
 
             CreateTablesIfDoNotExist(connection);
 
             return connection;
         }
 
-        private static void CreateTablesIfDoNotExist(SQLiteAsyncConnection connection)
+        private static void CreateTablesIfDoNotExist(SQLiteConnection connection)
         {
-            connection.CreateTableAsync<FlashCard>();
-            connection.CreateTableAsync<Lesson>();
+            connection.CreateTable<FlashCard>();
+            connection.CreateTable<Lesson>();
         }
     }
 }

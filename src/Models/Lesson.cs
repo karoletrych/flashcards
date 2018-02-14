@@ -4,8 +4,7 @@ namespace FlashCards.Models
 {
     public class Lesson
     {
-        [PrimaryKey]
-        [AutoIncrement]
+        [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
 
         public Language TopLanguage { get; set; }

@@ -6,7 +6,6 @@ using FlashCards.Models;
 using FlashCards.Services.Database;
 using FlashCards.ViewModels;
 using SQLite;
-using DatabaseConnectionFactory = FlashCards.Models.DatabaseConnectionFactory;
 
 namespace FlashCards.Views
 {
@@ -37,7 +36,7 @@ namespace FlashCards.Views
                 "database.db3");
             containerBuilder
                 .Register(_ => DatabaseConnectionFactory.Connect(databasePath))
-                .As<SQLiteAsyncConnection>()
+                .As<SQLiteConnection>()
                 .SingleInstance();
 
             return containerBuilder.Build();
