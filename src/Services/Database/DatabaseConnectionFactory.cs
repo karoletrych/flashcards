@@ -1,6 +1,7 @@
+using FlashCards.Models;
 using SQLite;
 
-namespace FlashCards.Models
+namespace FlashCards.Services.Database
 {
     public static class DatabaseConnectionFactory
     {

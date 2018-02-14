@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Timers;
 using FlashCards.Models;
-using FlashCards.Models.Dto;
-using FlashCards.ViewModels.Annotations;
 
 namespace FlashCards.ViewModels.Lesson
 {

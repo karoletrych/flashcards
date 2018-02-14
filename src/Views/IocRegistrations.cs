@@ -3,9 +3,10 @@ using System.IO;
 using System.Reflection;
 using Autofac;
 using FlashCards.Models;
-using FlashCards.Models.Dto;
+using FlashCards.Services.Database;
 using FlashCards.ViewModels;
 using SQLite;
+using DatabaseConnectionFactory = FlashCards.Models.DatabaseConnectionFactory;
 
 namespace FlashCards.Views
 {

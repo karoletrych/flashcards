@@ -82,8 +82,12 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\Models\Models.csproj">
-      <Project>{830B5E94-94D7-4881-8DB9-FDECC5FE215D}</Project>
+      <Project>{BF8FC753-3438-42CD-B3D4-7337E16F8223}</Project>
       <Name>Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Services\Services.csproj">
+      <Project>{71E85B13-54C6-4A98-BC94-8379B3744844}</Project>
+      <Name>Services</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\src\Views\Views.csproj">
       <Project>{4DCD6756-8AE6-4567-A2B9-1B61165A1146}</Project>

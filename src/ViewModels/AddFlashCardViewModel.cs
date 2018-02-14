@@ -2,16 +2,19 @@
 using System.Runtime.CompilerServices;
 using System.Timers;
 using FlashCards.Models;
-using FlashCards.Models.Dto;
+using FlashCards.Services;
 using FlashCards.ViewModels.Annotations;
 
 namespace FlashCards.ViewModels
 {
     public class AddFlashCardViewModel : INotifyPropertyChanged
     {
+        public delegate AddFlashCardViewModel
+            Factory(Language frontLanguage, Language backLanguage);
+
         private const int TranslationDelayInMilliseconds = 800;
-        private readonly Language _backLanguage;
         private readonly Language _frontLanguage;
+        private readonly Language _backLanguage;
 
         private readonly Timer _timer = new Timer(TranslationDelayInMilliseconds)
         {
@@ -30,14 +33,11 @@ namespace FlashCards.ViewModels
 
         private string _frontText;
 
-        public AddFlashCardViewModel(
-            ITranslator translator,
-            Language frontLanguage,
-            Language backLanguage)
+        public AddFlashCardViewModel(ITranslator translator, Language backLanguage, Language frontLanguage)
         {
             _translator = translator;
-            _frontLanguage = frontLanguage;
             _backLanguage = backLanguage;
+            _frontLanguage = frontLanguage;
             _timer.Elapsed += TimerOnElapsed;
             _timerBack.Elapsed += TimerOnElapsedBack;
         }

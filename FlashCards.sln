@@ -4,13 +4,15 @@ VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlashCards.Android", "src\FlashCards\FlashCards.Android\FlashCards.Android.csproj", "{04398B5C-D231-4A11-882E-2FE4F38AF1F2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models", "src\Models\Models.csproj", "{830B5E94-94D7-4881-8DB9-FDECC5FE215D}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ViewModels", "src\ViewModels\ViewModels.csproj", "{CE907DEC-EB8C-48D5-92D0-CB346331248E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Views", "src\Views\Views.csproj", "{4DCD6756-8AE6-4567-A2B9-1B61165A1146}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "tests\UnitTests\UnitTests.csproj", "{CCC1453B-C753-44E1-ACD9-22C6A5B29D39}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services", "src\Services\Services.csproj", "{71E85B13-54C6-4A98-BC94-8379B3744844}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models", "src\Models\Models.csproj", "{BF8FC753-3438-42CD-B3D4-7337E16F8223}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,10 +26,6 @@ Global
 		{04398B5C-D231-4A11-882E-2FE4F38AF1F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{04398B5C-D231-4A11-882E-2FE4F38AF1F2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{04398B5C-D231-4A11-882E-2FE4F38AF1F2}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{830B5E94-94D7-4881-8DB9-FDECC5FE215D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{830B5E94-94D7-4881-8DB9-FDECC5FE215D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{830B5E94-94D7-4881-8DB9-FDECC5FE215D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{830B5E94-94D7-4881-8DB9-FDECC5FE215D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CE907DEC-EB8C-48D5-92D0-CB346331248E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CE907DEC-EB8C-48D5-92D0-CB346331248E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CE907DEC-EB8C-48D5-92D0-CB346331248E}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -40,6 +38,14 @@ Global
 		{CCC1453B-C753-44E1-ACD9-22C6A5B29D39}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CCC1453B-C753-44E1-ACD9-22C6A5B29D39}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CCC1453B-C753-44E1-ACD9-22C6A5B29D39}.Release|Any CPU.Build.0 = Release|Any CPU
+		{71E85B13-54C6-4A98-BC94-8379B3744844}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71E85B13-54C6-4A98-BC94-8379B3744844}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71E85B13-54C6-4A98-BC94-8379B3744844}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71E85B13-54C6-4A98-BC94-8379B3744844}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF8FC753-3438-42CD-B3D4-7337E16F8223}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF8FC753-3438-42CD-B3D4-7337E16F8223}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF8FC753-3438-42CD-B3D4-7337E16F8223}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF8FC753-3438-42CD-B3D4-7337E16F8223}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

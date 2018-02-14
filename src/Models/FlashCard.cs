@@ -1,7 +1,7 @@
 using System;
 using SQLite;
 
-namespace FlashCards.Models.Dto
+namespace FlashCards.Models
 {
     public class FlashCard
     {

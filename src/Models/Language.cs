@@ -1,8 +1,20 @@
-﻿using System;
-using FlashCards.Models.Dto;
+using System;
 
 namespace FlashCards.Models
 {
+    public enum Language
+    {
+        German,
+        English,
+        Polish,
+        French,
+        Italian,
+        Spanish,
+        Swedish,
+        Norwegian,
+        Russian
+    }
+
     public static class LanguageExtensions
     {
         public static string Acronym(this Language language)

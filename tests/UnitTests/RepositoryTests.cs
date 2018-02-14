@@ -1,7 +1,8 @@
 using System.Linq;
 using FlashCards.Models;
-using FlashCards.Models.Dto;
+using FlashCards.Services.Database;
 using Xunit;
+using DatabaseConnectionFactory = FlashCards.Models.DatabaseConnectionFactory;
 
 namespace FlashCards.UnitTests
 {

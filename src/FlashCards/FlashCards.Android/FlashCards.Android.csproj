@@ -85,10 +85,6 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Models\Models.csproj">
-      <Project>{830b5e94-94d7-4881-8db9-fdecc5fe215d}</Project>
-      <Name>Models</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Views\Views.csproj">
       <Project>{4dcd6756-8ae6-4567-a2b9-1b61165a1146}</Project>
       <Name>Views</Name>

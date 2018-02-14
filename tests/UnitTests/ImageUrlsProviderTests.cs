@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using FlashCards.Models;
-using FlashCards.Models.Dto;
+using FlashCards.Services;
 using Xunit;
 
 namespace FlashCards.UnitTests

@@ -30,7 +30,7 @@ namespace FlashCards.Views.Lesson
         private async void MenuItem_OnClicked(object sender, EventArgs e)
         {
             var addLessonPage = _addLessonPageFactory();
-            await Navigation.PushAsync(new NavigationPage(addLessonPage));
+            await Navigation.PushModalAsync(new NavigationPage(addLessonPage));
         }
     }
 }

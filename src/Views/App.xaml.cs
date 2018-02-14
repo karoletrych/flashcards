@@ -1,7 +1,4 @@
-using System.Reflection;
 using Autofac;
-using FlashCards.Models;
-using FlashCards.ViewModels;
 using FlashCards.Views.Lesson;
 using Xamarin.Forms;
 

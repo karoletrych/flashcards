@@ -1,13 +1,13 @@
 using System.Collections.Generic;
-using FlashCards.Models;
+using FlashCards.Services.Database;
 
 namespace FlashCards.ViewModels.Lesson
 {
     public class LessonListViewModel
     {
-        private readonly IRepository<Models.Dto.Lesson> _modelsRepository;
+        private readonly IRepository<Models.Lesson> _modelsRepository;
 
-        public LessonListViewModel(IRepository<Models.Dto.Lesson> modelsRepository)
+        public LessonListViewModel(IRepository<Models.Lesson> modelsRepository)
         {
             _modelsRepository = modelsRepository;
         }

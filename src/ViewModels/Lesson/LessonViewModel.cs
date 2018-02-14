@@ -7,7 +7,7 @@ namespace FlashCards.ViewModels.Lesson
         public string Languages { get; set; }
 
 
-        public LessonViewModel(Models.Dto.Lesson lesson)
+        public LessonViewModel(Models.Lesson lesson)
         {
             Name = lesson.Name;
             FlashCardCount = lesson.FlashCardCount;
