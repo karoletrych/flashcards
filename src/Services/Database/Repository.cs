@@ -7,14 +7,6 @@ using SQLite;
 
 namespace FlashCards.Services.Database
 {
-    public interface IRepository<T> where T : new()
-    {
-        Task<IEnumerable<T>> FindAll();
-        Task<IEnumerable<T>> FindMatching(Expression<Func<T, bool>> predicate);
-
-        void Insert(T entity);
-    }
-
     public class Repository<T> : IRepository<T> where T : new()
     {
         private readonly SQLiteConnection _dbConnection;
@@ -24,21 +16,21 @@ namespace FlashCards.Services.Database
             _dbConnection = dbConnection;
         }
 
-        public async Task<IEnumerable<T>> FindAll()
+        public Task<IEnumerable<T>> FindAll()
         {
-            var list =  _dbConnection.Table<T>().ToList();
-            return list.AsEnumerable();
+            var list = _dbConnection.Table<T>().ToList();
+            return Task.FromResult(list.AsEnumerable());
         }
 
-        public async Task<IEnumerable<T>> FindMatching(Expression<Func<T, bool>> predicate)
+        public Task<IEnumerable<T>> FindMatching(Expression<Func<T, bool>> predicate)
         {
-            var list =  _dbConnection.Table<T>().Where(predicate).ToList();
-            return list.AsEnumerable();
+            var list = _dbConnection.Table<T>().Where(predicate).ToList();
+            return Task.FromResult(list.AsEnumerable());
         }
 
-        public async void Insert(T entity)
+        public void Insert(T entity)
         {
-             _dbConnection.Insert(entity);
+            _dbConnection.Insert(entity);
         }
     }
 }

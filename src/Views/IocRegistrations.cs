@@ -27,7 +27,7 @@ namespace FlashCards.Views
                 .InstancePerDependency();
 
             containerBuilder
-                .RegisterGeneric(typeof(Repository<>))
+                .RegisterGeneric(typeof(AsyncRepository<>))
                 .As(typeof(IRepository<>))
                 .InstancePerDependency();
 
@@ -35,7 +35,7 @@ namespace FlashCards.Views
                 Environment.GetFolderPath(Environment.SpecialFolder.Personal),
                 "database.db3");
             containerBuilder
-                .Register(_ => DatabaseConnectionFactory.Connect(databasePath))
+                .Register(_ => DatabaseConnectionFactory.CreateAsyncConnection(databasePath))
                 .As<SQLiteConnection>()
                 .SingleInstance();
 
