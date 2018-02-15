@@ -26,6 +26,8 @@ namespace FlashCards.Droid
 		
 		public static void UpdateIdValues()
 		{
+			global::Tesseract.Droid.Resource.String.ApplicationName = global::FlashCards.Droid.Resource.String.ApplicationName;
+			global::Tesseract.Droid.Resource.String.Hello = global::FlashCards.Droid.Resource.String.Hello;
 			global::Xamarin.Forms.Platform.Android.Resource.Attribute.actionBarSize = global::FlashCards.Droid.Resource.Attribute.actionBarSize;
 		}
 		
@@ -3930,6 +3932,12 @@ namespace FlashCards.Droid
 		
 		public partial class String
 		{
+			
+			// aapt resource value: 0x7f09003f
+			public const int ApplicationName = 2131296319;
+			
+			// aapt resource value: 0x7f09003e
+			public const int Hello = 2131296318;
 			
 			// aapt resource value: 0x7f090015
 			public const int abc_action_bar_home_description = 2131296277;

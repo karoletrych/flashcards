@@ -1,4 +1,9 @@
+using System;
+using System.IO;
+using System.Reflection;
+using System.Threading.Tasks;
 using Autofac;
+using FlashCards.Services;
 using FlashCards.Views.Lesson;
 using Xamarin.Forms;
 
@@ -6,14 +11,15 @@ namespace FlashCards.Views
 {
     public partial class App
     {
-        public App()
+        public App(Func<LessonListPage> lessonListPageFactory, Func<ImageImporter> importerFactory)
         {
-            var container = IocRegistrations.RegisterTypesInIocContainer();
-            var lessonListPage = container.Resolve<LessonListPage>();
+            var lessonListPage = lessonListPageFactory();
 
             InitializeComponent();
 
             MainPage = new NavigationPage(lessonListPage);
+
+
         }
 
         protected override void OnStart()

@@ -47,6 +47,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Autofac">
+      <Version>4.6.2</Version>
+    </PackageReference>
     <PackageReference Include="sqlite-net-pcl">
       <Version>1.4.118</Version>
     </PackageReference>
@@ -58,13 +61,20 @@
     <PackageReference Include="Xamarin.Forms">
       <Version>2.5.0.122203</Version>
     </PackageReference>
+    <PackageReference Include="Xamarin.Tesseract">
+      <Version>0.3.4</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IocRegistrations.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <AndroidAsset Include="Assets\tessdata\eng.traineddata" />
+    <AndroidAsset Include="Assets\tessdata\ita.traineddata" />
+    <AndroidAsset Include="Assets\tessdata\pol.traineddata" />
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
   </ItemGroup>
@@ -85,10 +95,26 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Models\Models.csproj">
+      <Project>{BF8FC753-3438-42CD-B3D4-7337E16F8223}</Project>
+      <Name>Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Services\Services.csproj">
+      <Project>{71E85B13-54C6-4A98-BC94-8379B3744844}</Project>
+      <Name>Services</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ViewModels\ViewModels.csproj">
+      <Project>{CE907DEC-EB8C-48D5-92D0-CB346331248E}</Project>
+      <Name>ViewModels</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Views\Views.csproj">
       <Project>{4dcd6756-8ae6-4567-a2b9-1b61165a1146}</Project>
       <Name>Views</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Samples\sample1.jpg" />
+    <EmbeddedResource Include="Samples\sample2.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>
