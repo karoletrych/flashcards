@@ -11,7 +11,7 @@ namespace FlashCards.ViewModels.Lesson
         {
             Name = lesson.Name;
             FlashCardCount = lesson.FlashCardCount;
-            Languages = lesson.TopLanguage + " - " + lesson.BottomLanguage;
+            Languages = lesson.FrontLanguage + " - " + lesson.BackLanguage;
         }
     }
 }

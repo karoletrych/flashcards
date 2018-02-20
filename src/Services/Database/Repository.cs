@@ -28,9 +28,14 @@ namespace FlashCards.Services.Database
             return Task.FromResult(list.AsEnumerable());
         }
 
-        public void Insert(T entity)
+        public Task<int> Insert(T entity)
         {
+            _dbConnection.BeginTransaction();
             _dbConnection.Insert(entity);
+            var id = _dbConnection.ExecuteScalar<int>("SELECT last_insert_rowid()");
+            _dbConnection.Commit();
+
+            return Task.FromResult(id);
         }
     }
 }

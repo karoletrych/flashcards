@@ -1,11 +1,14 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using Autofac;
 using FlashCards.Models;
 using FlashCards.Services.Database;
 using FlashCards.ViewModels;
 using SQLite;
+using Xamarin.Forms;
+using Xamarin.Forms.Internals;
 
 namespace FlashCards.Views
 {
@@ -23,8 +26,7 @@ namespace FlashCards.Views
             containerBuilder
                 .RegisterAssemblyTypes(assemblies)
                 .AsSelf()
-                .AsImplementedInterfaces()
-                .InstancePerDependency();
+                .AsImplementedInterfaces();
 
             containerBuilder
                 .RegisterGeneric(typeof(AsyncRepository<>))
@@ -36,7 +38,7 @@ namespace FlashCards.Views
                 "database.db3");
             containerBuilder
                 .Register(_ => DatabaseConnectionFactory.CreateAsyncConnection(databasePath))
-                .As<SQLiteConnection>()
+                .As<SQLiteAsyncConnection>()
                 .SingleInstance();
 
             return containerBuilder.Build();

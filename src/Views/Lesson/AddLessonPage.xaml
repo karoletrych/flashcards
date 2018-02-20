@@ -5,7 +5,7 @@
              xmlns:lesson="clr-namespace:FlashCards.ViewModels.Lesson;assembly=ViewModels"
              x:Class="FlashCards.Views.Lesson.AddLessonPage">
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Add flashcards" Clicked="MenuItem_OnClicked" />
+        <ToolbarItem Text="Add flashcards" Clicked="AddFlashCards_OnClicked" />
     </ContentPage.ToolbarItems>
 
     <ContentPage.Content>

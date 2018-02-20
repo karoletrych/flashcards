@@ -2,6 +2,7 @@
 using System.Linq;
 using FlashCards.Models;
 using FlashCards.Services;
+using FlashCards.Services.Http;
 using Xunit;
 
 namespace FlashCards.UnitTests

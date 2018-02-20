@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using FlashCards.Models;
 using Newtonsoft.Json;
 
-namespace FlashCards.Services
+namespace FlashCards.Services.Http
 {
     public class YandexTranslator : ITranslator
     {

@@ -28,9 +28,15 @@ namespace FlashCards.Services.Database
             return list.AsEnumerable();
         }
 
-        public async void Insert(T entity)
+        public async Task<int> Insert(T entity)
         {
-             await _dbConnection.InsertAsync(entity);
+            var id = 0;
+            await _dbConnection.RunInTransactionAsync(async connection =>
+            {
+                await _dbConnection.InsertAsync(entity);
+                id = await _dbConnection.ExecuteScalarAsync<int>("SELECT last_insert_rowid()");
+            });
+            return id;
         }
     }
 }

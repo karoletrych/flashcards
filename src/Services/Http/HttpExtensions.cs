@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Web;
 
-namespace FlashCards.Services
+namespace FlashCards.Services.Http
 {
     static class HttpExtensions
     {

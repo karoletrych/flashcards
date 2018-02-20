@@ -7,8 +7,8 @@ namespace FlashCards.Models
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
 
-        public Language TopLanguage { get; set; }
-        public Language BottomLanguage { get; set; }
+        public Language FrontLanguage { get; set; }
+        public Language BackLanguage { get; set; }
 
         [MaxLength(128)]
         public string Name { get; set; }

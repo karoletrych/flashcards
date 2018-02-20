@@ -1,8 +1,8 @@
-﻿using FlashCards.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using FlashCards.Models;
 
-namespace FlashCards.Services
+namespace FlashCards.Services.Http
 {
     public interface ITranslator
     {

@@ -10,6 +10,6 @@ namespace FlashCards.Services.Database
         Task<IEnumerable<T>> FindAll();
         Task<IEnumerable<T>> FindMatching(Expression<Func<T, bool>> predicate);
 
-        void Insert(T entity);
+        Task<int> Insert(T entity);
     }
 }

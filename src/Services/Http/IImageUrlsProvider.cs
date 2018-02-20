@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using FlashCards.Models;
 
-namespace FlashCards.Services
+namespace FlashCards.Services.Http
 {
     public interface IImageUrlsProvider
     {
