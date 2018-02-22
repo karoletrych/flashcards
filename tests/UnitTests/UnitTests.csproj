@@ -90,7 +90,6 @@
     <Compile Include="ImageUrlsProviderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuestionsAskerTests.cs" />
-    <Compile Include="RegistrationsTests.cs" />
     <Compile Include="RepositoryTests.cs" />
     <Compile Include="TranslatorTests.cs" />
   </ItemGroup>

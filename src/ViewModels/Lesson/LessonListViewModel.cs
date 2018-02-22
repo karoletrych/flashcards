@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Windows.Input;
 using FlashCards.Services.Database;
+using Prism.Navigation;
 using Xamarin.Forms;
 
 namespace FlashCards.ViewModels.Lesson
@@ -10,15 +12,14 @@ namespace FlashCards.ViewModels.Lesson
         private readonly IRepository<Models.Lesson> _modelsRepository;
         private readonly INavigationService _navigationService;
 
+        public IEnumerable<LessonViewModel> Items; // =
+
         public LessonListViewModel(IRepository<Models.Lesson> modelsRepository, INavigationService navigationService)
         {
             _modelsRepository = modelsRepository;
             _navigationService = navigationService;
         }
 
-        public IEnumerable<LessonViewModel> Items;// =
-//            _modelsRepository.FindAll().Result.Select(l => new LessonViewModel(l));
-
-        private ICommand AddLesson => new Command(() => _navigationService.NavigateTo("AddLessonPage"));
+        public ICommand AddLesson => new Command(() => { _navigationService.NavigateAsync("AddLessonPage"); });
     }
 }

@@ -4,7 +4,7 @@
              x:Class="FlashCards.Views.Lesson.LessonListPage">
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Add" Command = "{Binding AddLesson}" />
+        <ToolbarItem Text="Add" Command= "{Binding AddLesson}" />
     </ContentPage.ToolbarItems>
 
     <ListView ItemsSource="{Binding Items}"

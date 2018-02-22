@@ -1,22 +1,18 @@
-using System;
-using System.IO;
-using System.Linq;
-using System.Reflection;
 using Autofac;
 using FlashCards.Models;
 using FlashCards.Services.Database;
 using FlashCards.ViewModels;
 using SQLite;
-using Xamarin.Forms;
-using Xamarin.Forms.Internals;
+using System;
+using System.IO;
+using System.Reflection;
 
 namespace FlashCards.Views
 {
     public static class IocRegistrations
     {
-        public static IContainer RegisterTypesInIocContainer()
+        public static void RegisterTypesInIocContainer(ContainerBuilder containerBuilder)
         {
-            var containerBuilder = new ContainerBuilder();
             var assemblies = new[]
             {
                 Assembly.GetAssembly(typeof(App)),
@@ -40,8 +36,6 @@ namespace FlashCards.Views
                 .Register(_ => DatabaseConnectionFactory.CreateAsyncConnection(databasePath))
                 .As<SQLiteAsyncConnection>()
                 .SingleInstance();
-
-            return containerBuilder.Build();
         }
     }
 }

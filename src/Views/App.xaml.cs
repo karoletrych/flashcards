@@ -1,34 +1,30 @@
-using Autofac;
+using FlashCards.ViewModels.Lesson;
 using FlashCards.Views.Lesson;
+using Prism.Autofac;
+using Prism.Ioc;
 using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
+
+[assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 
 namespace FlashCards.Views
 {
-    public partial class App
+    public partial class App : PrismApplication
     {
-        public App()
+        protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            var container = IocRegistrations.RegisterTypesInIocContainer();
-            var lessonListPage = container.Resolve<LessonListPage>();
+            containerRegistry.RegisterForNavigation<NavigationPage>();
+            containerRegistry.RegisterForNavigation<LessonListPage, LessonListViewModel>();
+            containerRegistry.RegisterForNavigation<AddLessonPage, AddLessonViewModel>();
+            
+            var builder = containerRegistry.GetBuilder();
+            IocRegistrations.RegisterTypesInIocContainer(builder);
+        }
 
+        protected override void OnInitialized()
+        {
             InitializeComponent();
-
-            MainPage = new NavigationPage(lessonListPage);
-        }
-
-        protected override void OnStart()
-        {
-            // Handle when your app starts
-        }
-
-        protected override void OnSleep()
-        {
-            // Handle when your app sleeps
-        }
-
-        protected override void OnResume()
-        {
-            // Handle when your app resumes
+            NavigationService.NavigateAsync("NavigationPage/LessonListPage");
         }
     }
 }

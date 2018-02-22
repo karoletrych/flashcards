@@ -6,7 +6,6 @@ using Xamarin.Forms.Xaml;
 
 namespace FlashCards.Views
 {
-    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class AddFlashCardPage : ContentPage
     {
         public delegate AddFlashCardPage Factory(Language frontLanguage, Language backLanguage);
