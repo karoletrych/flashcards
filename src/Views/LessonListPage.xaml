@@ -1,19 +1,31 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8"?>
+
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:Flashcards.Views.CustomControls"
              x:Class="Flashcards.Views.LessonListPage">
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Add lesson" Command = "{Binding AddLesson}" />
+        <ToolbarItem Text="Add lesson" Command="{Binding AddLessonCommand}" />
     </ContentPage.ToolbarItems>
 
-    <controls:CommandListView             
-              ItemsSource="{Binding Items.Result}"
-              ItemClickCommand="{Binding LessonTappedCommand}">
+    <controls:CommandListView
+        ItemsSource="{Binding Lessons}"
+        ItemClickCommand="{Binding PracticeLessonCommand}"
+        x:Name="LessonList">
         <controls:CommandListView.ItemTemplate>
             <DataTemplate>
                 <ViewCell>
+                    <ViewCell.ContextActions>
+                        <MenuItem
+                            Command="{Binding Path=BindingContext.EditLessonCommand, Source={x:Reference LessonList}}"
+                            CommandParameter="{Binding .}"
+                            Text="Edit" />
+                        <MenuItem
+                            Command="{Binding Path=BindingContext.DeleteLessonCommand, Source={x:Reference LessonList}}"
+                            CommandParameter="{Binding .}"
+                            Text="Delete" IsDestructive="True" />
+                    </ViewCell.ContextActions>
                     <StackLayout Orientation="Horizontal">
                         <Label Text="{Binding Name}"
                                Style="{DynamicResource ListItemTextStyle}" />
@@ -27,4 +39,3 @@
         </controls:CommandListView.ItemTemplate>
     </controls:CommandListView>
 </ContentPage>
-

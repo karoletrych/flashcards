@@ -11,5 +11,6 @@ namespace Flashcards.Services.Database
         Task<IEnumerable<T>> FindMatching(Expression<Func<T, bool>> predicate);
 
         Task<int> Insert(T entity);
+        Task Delete(int id);
     }
 }

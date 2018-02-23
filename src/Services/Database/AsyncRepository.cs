@@ -38,5 +38,10 @@ namespace Flashcards.Services.Database
             });
             return id;
         }
+
+        public async Task Delete(int id)
+        {
+            await _dbConnection.DeleteAsync<T>(id);
+        }
     }
 }

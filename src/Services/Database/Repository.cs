@@ -41,5 +41,11 @@ namespace Flashcards.Services.Database
 
             return Task.FromResult(id);
         }
+
+        public Task Delete(int id)
+        {
+            _dbConnection.Delete<T>(id);
+            return Task.CompletedTask;
+        }
     }
 }
