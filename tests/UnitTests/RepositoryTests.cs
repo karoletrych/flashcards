@@ -1,30 +1,30 @@
 using System.Linq;
-using FlashCards.Models;
-using FlashCards.Services.Database;
+using Flashcards.Models;
+using Flashcards.Services.Database;
 using Xunit;
-using DatabaseConnectionFactory = FlashCards.Services.Database.DatabaseConnectionFactory;
+using DatabaseConnectionFactory = Flashcards.Services.Database.DatabaseConnectionFactory;
 
-namespace FlashCards.UnitTests
+namespace Flashcards.UnitTests
 {
     public class RepositoryTests
     {
-        private readonly IRepository<FlashCard> _flashCardRepository;
+        private readonly IRepository<Flashcard> _FlashcardRepository;
         private readonly IRepository<Lesson> _lessonRepository;
 
         public RepositoryTests()
         {
             var sqliteConnection = DatabaseConnectionFactory.CreateConnection(":memory:");
-            _flashCardRepository = new Repository<FlashCard>(sqliteConnection);
+            _FlashcardRepository = new Repository<Flashcard>(sqliteConnection);
             _lessonRepository = new Repository<Lesson>(sqliteConnection);
         }
 
         [Fact]
         public void RetrievalOfObjectsFromEmptyRepository()
         {
-            var flashCards = _flashCardRepository.FindAll().Result;
+            var Flashcards = _FlashcardRepository.FindAll().Result;
             var lessons = _lessonRepository.FindAll().Result;
 
-            Assert.Empty(flashCards);
+            Assert.Empty(Flashcards);
             Assert.Empty(lessons);
         }
 
@@ -32,30 +32,30 @@ namespace FlashCards.UnitTests
         public void InsertedObjectsAreRetrieved()
         {
             var lesson = new Lesson {FrontLanguage = Language.English, BackLanguage = Language.Polish};
-            var flashCard = new FlashCard {Top = "cat", Bottom = "kot", LessonId = 1, Strength = 0.3m};
+            var Flashcard = new Flashcard {Front = "cat", Back = "kot", LessonId = 1, Strength = 0.3m};
             _lessonRepository.Insert(lesson);
-            _flashCardRepository.Insert(flashCard);
+            _FlashcardRepository.Insert(Flashcard);
 
             var lessons = _lessonRepository.FindAll().Result;
-            var flashCards = _flashCardRepository.FindAll().Result;
+            var Flashcards = _FlashcardRepository.FindAll().Result;
 
             Assert.NotEmpty(lessons);
-            Assert.NotEmpty(flashCards);
+            Assert.NotEmpty(Flashcards);
         }
 
         [Fact]
         public void ObjectsMatchingPredicateAreRetrieved()
         {
             var lesson = new Lesson { FrontLanguage = Language.English, BackLanguage = Language.Polish };
-            var flashCard = new FlashCard { Top = "cat", Bottom = "kot", LessonId = 1, Strength = 0.3m };
-            var flashCard2 = new FlashCard { Top = "dog", Bottom = "pies", LessonId = 1, Strength = 0.3m };
+            var Flashcard = new Flashcard { Front = "cat", Back = "kot", LessonId = 1, Strength = 0.3m };
+            var Flashcard2 = new Flashcard { Front = "dog", Back = "pies", LessonId = 1, Strength = 0.3m };
             _lessonRepository.Insert(lesson);
-            _flashCardRepository.Insert(flashCard2);
-            _flashCardRepository.Insert(flashCard);
+            _FlashcardRepository.Insert(Flashcard2);
+            _FlashcardRepository.Insert(Flashcard);
 
-            var matchingFlashCards = _flashCardRepository.FindMatching(f => f.LessonId == 1).Result;
+            var matchingFlashcards = _FlashcardRepository.FindMatching(f => f.LessonId == 1).Result;
 
-            Assert.Equal(2, matchingFlashCards.Count());
+            Assert.Equal(2, matchingFlashcards.Count());
         }
 
         [Fact]

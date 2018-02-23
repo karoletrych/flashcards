@@ -4,10 +4,10 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
-using FlashCards.Models;
+using Flashcards.Models;
 using Xamarin.Forms;
 
-namespace FlashCards.ViewModels
+namespace Flashcards.ViewModels
 {
     public class AskingQuestionsViewModel : INotifyPropertyChanged
     {

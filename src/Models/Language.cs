@@ -1,6 +1,6 @@
 using System;
 
-namespace FlashCards.Models
+namespace Flashcards.Models
 {
     public enum Language
     {

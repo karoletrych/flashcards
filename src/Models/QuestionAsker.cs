@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace FlashCards.Models
+namespace Flashcards.Models
 {
     public class Question
     {

@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Nito.Mvvm.Async" Version="1.0.0-pre-03" />
     <PackageReference Include="Prism.Autofac.Forms" Version="7.0.0.396" />
     <PackageReference Include="Prism.Core" Version="7.0.0.396" />
   </ItemGroup>

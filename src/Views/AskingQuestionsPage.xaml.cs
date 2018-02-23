@@ -1,7 +1,7 @@
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace FlashCards.Views
+namespace Flashcards.Views
 {
 	public partial class AskingQuestionsPage : ContentPage
 	{

@@ -28,6 +28,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="AddFlashCardPage.xaml.cs">
+      <DependentUpon>AddFlashcardPage.xaml</DependentUpon>
+    </Compile>
     <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="App.xaml.cs">
       <DependentUpon>*.xaml</DependentUpon>
     </Compile>
@@ -37,7 +40,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="AddFlashCardPage.xaml">
+    <EmbeddedResource Update="AddFlashcardPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Lesson\AddLessonPage.xaml">

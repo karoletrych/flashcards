@@ -1,5 +1,7 @@
-using FlashCards.ViewModels.Lesson;
-using FlashCards.Views.Lesson;
+using Flashcards.Services.Http;
+using Flashcards.ViewModels;
+using Flashcards.ViewModels.Lesson;
+using Flashcards.Views.Lesson;
 using Prism.Autofac;
 using Prism.Ioc;
 using Xamarin.Forms;
@@ -7,7 +9,7 @@ using Xamarin.Forms.Xaml;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 
-namespace FlashCards.Views
+namespace Flashcards.Views
 {
     public partial class App : PrismApplication
     {
@@ -16,6 +18,9 @@ namespace FlashCards.Views
             containerRegistry.RegisterForNavigation<NavigationPage>();
             containerRegistry.RegisterForNavigation<LessonListPage, LessonListViewModel>();
             containerRegistry.RegisterForNavigation<AddLessonPage, AddLessonViewModel>();
+            containerRegistry.RegisterForNavigation<AddFlashcardPage, AddFlashcardViewModel>();
+
+            containerRegistry.Register<ITranslatorService, YandexTranslatorService>();
             
             var builder = containerRegistry.GetBuilder();
             IocRegistrations.RegisterTypesInIocContainer(builder);

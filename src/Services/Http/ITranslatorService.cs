@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using FlashCards.Models;
+using Flashcards.Models;
 
-namespace FlashCards.Services.Http
+namespace Flashcards.Services.Http
 {
-    public interface ITranslator
+    public interface ITranslatorService
     {
         Task<IEnumerable<string>> Translate(Language @from, Language to, string text);
     }

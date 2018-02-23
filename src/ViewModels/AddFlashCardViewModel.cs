@@ -1,21 +1,20 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Timers;
-using FlashCards.Models;
+using System.Windows.Input;
+using Flashcards.Models;
+using Flashcards.Services.Http;
+using Flashcards.ViewModels.Annotations;
 using FlashCards.Services;
-using FlashCards.Services.Http;
-using FlashCards.ViewModels.Annotations;
+using Prism.Navigation;
+using Xamarin.Forms;
 
-namespace FlashCards.ViewModels
+namespace Flashcards.ViewModels
 {
-    public class AddFlashCardViewModel : INotifyPropertyChanged
+    public class AddFlashcardViewModel : INotifyPropertyChanged, INavigatedAware
     {
-        public delegate AddFlashCardViewModel
-            Factory(Language frontLanguage, Language backLanguage);
-
         private const int TranslationDelayInMilliseconds = 800;
-        private readonly Language _frontLanguage;
-        private readonly Language _backLanguage;
+        private readonly AddFlashcardService _addFlashcardService;
 
         private readonly Timer _timer = new Timer(TranslationDelayInMilliseconds)
         {
@@ -27,18 +26,19 @@ namespace FlashCards.ViewModels
             AutoReset = false
         };
 
-        private readonly ITranslator _translator;
-
+        private readonly ITranslatorService _translatorService;
+        private Language _backLanguage;
 
         private string _backText;
+        private Language _frontLanguage;
 
         private string _frontText;
+        private int _lessonId;
 
-        public AddFlashCardViewModel(ITranslator translator, Language backLanguage, Language frontLanguage)
+        public AddFlashcardViewModel(ITranslatorService translatorService, AddFlashcardService addFlashcardService)
         {
-            _translator = translator;
-            _backLanguage = backLanguage;
-            _frontLanguage = frontLanguage;
+            _translatorService = translatorService;
+            _addFlashcardService = addFlashcardService;
             _timer.Elapsed += TimerOnElapsed;
             _timerBack.Elapsed += TimerOnElapsedBack;
         }
@@ -64,6 +64,23 @@ namespace FlashCards.ViewModels
                 _backText = value;
                 OnPropertyChanged();
             }
+        }
+
+        public ICommand NextFlashcard => new Command(() =>
+        {
+            _addFlashcardService.AddFlashcard(FrontText, BackText, _lessonId);
+        });
+
+        // TODO: get rid of this shit (Prism) and inject parameters via constructor
+        public void OnNavigatedTo(NavigationParameters parameters)
+        {
+            _frontLanguage = (Language) parameters["frontLanguage"];
+            _backLanguage = (Language) parameters["backLanguage"];
+            _lessonId = (int) parameters["lessonId"];
+        }
+
+        public void OnNavigatedFrom(NavigationParameters parameters)
+        {
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -92,7 +109,7 @@ namespace FlashCards.ViewModels
 
         private async void TimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
         {
-            var translations = await _translator.Translate(
+            var translations = await _translatorService.Translate(
                 from: _frontLanguage,
                 to: _backLanguage,
                 text: FrontText);
@@ -101,7 +118,7 @@ namespace FlashCards.ViewModels
 
         private async void TimerOnElapsedBack(object sender, ElapsedEventArgs elapsedEventArgs)
         {
-            var translations = await _translator.Translate(
+            var translations = await _translatorService.Translate(
                 from: _backLanguage,
                 to: _frontLanguage,
                 text: BackText);

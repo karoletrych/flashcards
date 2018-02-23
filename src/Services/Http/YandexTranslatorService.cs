@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using FlashCards.Models;
+using Flashcards.Models;
 using Newtonsoft.Json;
 
-namespace FlashCards.Services.Http
+namespace Flashcards.Services.Http
 {
-    public class YandexTranslator : ITranslator
+    public class YandexTranslatorService : ITranslatorService
     {
         private const string YandexKey =
             "trnsl.1.1.20171117T191335Z.d621ce719bfba7b1.078c313c6f9536f1a4cb15469216f22f05a2318b";

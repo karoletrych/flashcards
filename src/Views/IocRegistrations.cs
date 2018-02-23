@@ -1,13 +1,13 @@
 using Autofac;
-using FlashCards.Models;
-using FlashCards.Services.Database;
-using FlashCards.ViewModels;
+using Flashcards.Models;
+using Flashcards.Services.Database;
+using Flashcards.ViewModels;
 using SQLite;
 using System;
 using System.IO;
 using System.Reflection;
 
-namespace FlashCards.Views
+namespace Flashcards.Views
 {
     public static class IocRegistrations
     {
@@ -17,7 +17,7 @@ namespace FlashCards.Views
             {
                 Assembly.GetAssembly(typeof(App)),
                 Assembly.GetAssembly(typeof(AskingQuestionsViewModel)),
-                Assembly.GetAssembly(typeof(FlashCard))
+                Assembly.GetAssembly(typeof(Flashcard))
             };
             containerBuilder
                 .RegisterAssemblyTypes(assemblies)

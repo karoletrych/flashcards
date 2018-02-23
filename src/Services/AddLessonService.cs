@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
-using FlashCards.Models;
-using FlashCards.Services.Database;
+using Flashcards.Models;
+using Flashcards.Services.Database;
 
-namespace FlashCards.Services
+namespace Flashcards.Services
 {
-    class AddLessonService
+    public class AddLessonService
     {
         private readonly IRepository<Lesson> _lessonRepository;
 
@@ -14,7 +14,7 @@ namespace FlashCards.Services
             _lessonRepository = lessonRepository;
         }
 
-        public async Task<int> Add(string name, Language frontLanguage, Language backLanguage)
+        public async Task<int> AddLesson(string name, Language frontLanguage, Language backLanguage)
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException("Lesson name cannot be empty");
@@ -23,7 +23,6 @@ namespace FlashCards.Services
                 Name = name,
                 FrontLanguage = frontLanguage,
                 BackLanguage = backLanguage,
-                FlashCardCount = 0
             };
             return await _lessonRepository.Insert(lesson);
         }

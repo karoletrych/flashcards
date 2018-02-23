@@ -1,24 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="FlashCards.Views.Lesson.LessonListPage">
+             x:Class="Flashcards.Views.Lesson.LessonListPage">
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Add" Command= "{Binding AddLesson}" />
+        <ToolbarItem Text="Add lesson" Command = "{Binding AddLesson}" />
     </ContentPage.ToolbarItems>
 
-    <ListView ItemsSource="{Binding Items}"
-              CachingStrategy="RecycleElement"
-              ItemTapped="ListView_OnItemTapped">
+    <ListView ItemsSource="{Binding Items.Result}"
+              CachingStrategy="RecycleElement">
         <ListView.ItemTemplate>
             <DataTemplate>
                 <ViewCell>
                     <StackLayout Orientation="Horizontal">
                         <Label Text="{Binding Name}"
                                Style="{DynamicResource ListItemTextStyle}" />
-                        <Label Text="{Binding FlashCardCount}"
+                        <Label Text="{Binding FrontLanguage}"
                                Style="{DynamicResource ListItemDetailTextStyle}" />
-                        <Label Text="{Binding Languages}"
+                        <Label Text="{Binding BackLanguage}"
                                Style="{DynamicResource ListItemDetailTextStyle}" />
                     </StackLayout>
                 </ViewCell>

@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using SQLite;
 
-namespace FlashCards.Services.Database
+namespace Flashcards.Services.Database
 {
     public class Repository<T> : IRepository<T> where T : new()
     {

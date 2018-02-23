@@ -1,12 +1,13 @@
 using Android.App;
 using Android.Content.PM;
 using Android.OS;
-using App = FlashCards.Views.App;
+using FlashCards.Droid;
+using App = Flashcards.Views.App;
 
-namespace FlashCards.Droid
+namespace Flashcards.Droid
 {
     [Activity(
-        Label = "FlashCards",
+        Label = "Flashcards",
         Icon = "@drawable/icon",
         Theme = "@style/MainTheme",
         MainLauncher = true,

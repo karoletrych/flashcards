@@ -2,16 +2,16 @@
 
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:lesson="clr-namespace:FlashCards.ViewModels.Lesson;assembly=ViewModels"
-             x:Class="FlashCards.Views.Lesson.AddLessonPage">
+             xmlns:lesson="clr-namespace:Flashcards.ViewModels.Lesson;assembly=ViewModels"
+             x:Class="Flashcards.Views.Lesson.AddLessonPage">
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Add flashcards" Clicked="AddFlashCards_OnClicked" />
+        <ToolbarItem Text="Add Flashcards" Command="{Binding AddFlashcards}" />
     </ContentPage.ToolbarItems>
 
     <ContentPage.Content>
         <AbsoluteLayout>
             <StackLayout AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,0.25">
-                <Entry Placeholder="Nazwa lekcji" />
+                <Entry Placeholder="Nazwa lekcji" Text="{Binding LessonName}" />
                 <StackLayout Orientation="Horizontal" VerticalOptions="FillAndExpand">
                     <Label Text="Front language" />
                     <Picker ItemsSource="{Binding LanguageNames}" SelectedItem="{Binding SelectedFrontLanguage}"
@@ -23,6 +23,9 @@
                             WidthRequest="100" />
                 </StackLayout>
             </StackLayout>
+            <ListView AbsoluteLayout.LayoutBounds="0,0.25,1,0.75">
+
+            </ListView>
         </AbsoluteLayout>
     </ContentPage.Content>
 </ContentPage>

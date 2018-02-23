@@ -1,21 +1,13 @@
 ﻿using System;
-using FlashCards.Models;
-using FlashCards.ViewModels;
+using Flashcards.ViewModels;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
-namespace FlashCards.Views
+namespace Flashcards.Views
 {
-    public partial class AddFlashCardPage : ContentPage
+    public partial class AddFlashcardPage : ContentPage
     {
-        public delegate AddFlashCardPage Factory(Language frontLanguage, Language backLanguage);
-
-        public AddFlashCardPage(
-            Language frontLanguage,
-            Language backLanguage,
-            AddFlashCardViewModel.Factory addFlashCardViewModelFactory)
+        public AddFlashcardPage()
         {
-            BindingContext = addFlashCardViewModelFactory(frontLanguage, backLanguage);
             InitializeComponent();
             GenerateImagesGrid();
         }
@@ -24,7 +16,7 @@ namespace FlashCards.Views
         {
             if (!((Entry) sender).IsFocused)
                 return; // do not translate when entry was not modified by user
-            var viewModel = (AddFlashCardViewModel) BindingContext;
+            var viewModel = (AddFlashcardViewModel) BindingContext;
             viewModel.FrontTextModified();
         }
 
@@ -32,7 +24,7 @@ namespace FlashCards.Views
         {
             if (!((Entry) sender).IsFocused)
                 return; // do not translate when entry was not modified by user
-            var viewModel = (AddFlashCardViewModel) BindingContext;
+            var viewModel = (AddFlashcardViewModel) BindingContext;
             viewModel.BackTextModified();
         }
 

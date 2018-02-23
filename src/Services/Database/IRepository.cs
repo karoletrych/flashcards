@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace FlashCards.Services.Database
+namespace Flashcards.Services.Database
 {
     public interface IRepository<T> where T : new()
     {

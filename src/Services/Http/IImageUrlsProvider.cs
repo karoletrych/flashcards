@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using FlashCards.Models;
+using Flashcards.Models;
 
-namespace FlashCards.Services.Http
+namespace Flashcards.Services.Http
 {
     public interface IImageUrlsProvider
     {

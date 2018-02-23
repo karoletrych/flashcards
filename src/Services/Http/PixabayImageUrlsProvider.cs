@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using FlashCards.Models;
+using Flashcards.Models;
 using Newtonsoft.Json.Linq;
 
-namespace FlashCards.Services.Http
+namespace Flashcards.Services.Http
 {
     public class PixabayImageUrlsProvider : IImageUrlsProvider
     {

@@ -1,7 +1,7 @@
-using FlashCards.Models;
+using Flashcards.Models;
 using SQLite;
 
-namespace FlashCards.Services.Database
+namespace Flashcards.Services.Database
 {
     public static class DatabaseConnectionFactory
     {
@@ -10,7 +10,7 @@ namespace FlashCards.Services.Database
             var connection = new SQLiteAsyncConnection(databasePath,
                 SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.NoMutex);
 
-            connection.CreateTableAsync<FlashCard>();
+            connection.CreateTableAsync<Flashcard>();
             connection.CreateTableAsync<Lesson>();
 
             return connection;
@@ -21,7 +21,7 @@ namespace FlashCards.Services.Database
             var connection = new SQLiteConnection(databasePath,
                 SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.NoMutex);
 
-            connection.CreateTable<FlashCard>();
+            connection.CreateTable<Flashcard>();
             connection.CreateTable<Lesson>();
 
             return connection;

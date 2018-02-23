@@ -1,9 +1,9 @@
 using System;
 using SQLite;
 
-namespace FlashCards.Models
+namespace Flashcards.Models
 {
-    public class FlashCard
+    public class Flashcard
     {
         private decimal _strength;
 
@@ -14,10 +14,10 @@ namespace FlashCards.Models
         public int LessonId { get; set; }
 
         [MaxLength(128)]
-        public string Top { get; set; }
+        public string Front { get; set; }
 
         [MaxLength(128)]
-        public string Bottom { get; set; }
+        public string Back { get; set; }
 
         public decimal Strength
         {
