@@ -4,72 +4,71 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
-using Flashcards.Models;
+using FlashCards.Services;
+using Prism.Navigation;
 using Xamarin.Forms;
 
 namespace Flashcards.ViewModels
 {
-    public class AskingQuestionsViewModel : INotifyPropertyChanged
+    public class AskingQuestionsViewModel : INotifyPropertyChanged, INavigationAware
     {
-        private readonly QuestionAsker _questionAsker;
-        private string _questionAnswerText;
+        private readonly ExaminerFactory _examinerFactory;
         private bool _answerIsVisible;
-        private IList<StepItem> _questionStatuses = new List<StepItem>{
+        private Examiner _examiner; // TODO: make it readonly (remove Prism)
+        private string _questionAnswerText;
+
+        private IList<StepItem> _questionStatuses = new List<StepItem>
+        {
             new StepItem {Color = Color.Gray, Value = 1}
         };
 
-    public AskingQuestionsViewModel()
+        public AskingQuestionsViewModel(ExaminerFactory examinerFactory)
         {
-            _questionAsker = new QuestionAsker(new List<Question>());
-            UserAnswerCommand = new Command<bool>(known =>
-            {
-                _questionAsker.Answer(isKnown: known);
-
-                QuestionStatuses = _questionAsker.QuestionsStatuses.Select(x =>
-                {
-                    switch (x)
-                    {
-                        case QuestionStatus.AnsweredCorrectly:
-                            return new StepItem { Color = Color.GreenYellow, Value = 1 };
-                        case QuestionStatus.AnsweredBadly:
-                            return new StepItem { Color = Color.Red, Value = 1 };
-                        case QuestionStatus.NotAnswered:
-                            return new StepItem { Color = Color.Gray, Value = 1 };
-                        default:
-                            throw new ArgumentOutOfRangeException(nameof(x), x, null);
-                    }
-                }).ToList();
-
-                QuestionAnswerText = _questionAsker.GetNextQuestion().QuestionText;
-                ShowQuestion();
-            });
-
-            ShowAnswerCommand = new Command(() =>
-            {
-                QuestionAnswerText = _questionAsker.CurrentQuestionAnswer;
-                QuestionStatuses = _questionAsker.QuestionsStatuses.Select(questionStatus =>
-                {
-                    switch (questionStatus)
-                    {
-                        case QuestionStatus.AnsweredCorrectly:
-                            return new StepItem { Color = Color.GreenYellow, Value = 1 };
-                        case QuestionStatus.AnsweredBadly:
-                            return new StepItem { Color = Color.Red, Value = 1 };
-                        case QuestionStatus.NotAnswered:
-                            return new StepItem { Color = Color.Gray, Value = 1 };
-                        default:
-                            throw new ArgumentOutOfRangeException(nameof(questionStatus), questionStatus, null);
-                    }
-                }).ToList();
-
-                ShowAnswer();
-            });
-
-            QuestionAnswerText = _questionAsker.GetNextQuestion().QuestionText;
+            _examinerFactory = examinerFactory;
         }
 
-        public ICommand UserAnswerCommand { get; }
-        public ICommand ShowAnswerCommand { get; }
+        public ICommand UserAnswerCommand => new Command<bool>(known =>
+        {
+            _examiner.Answer(isKnown: known);
+
+            QuestionStatuses = _examiner.QuestionsStatuses.Select(x =>
+            {
+                switch (x)
+                {
+                    case QuestionStatus.Known:
+                        return new StepItem {Color = Color.GreenYellow, Value = 1};
+                    case QuestionStatus.Unknown:
+                        return new StepItem {Color = Color.Red, Value = 1};
+                    case QuestionStatus.NotAnswered:
+                        return new StepItem {Color = Color.Gray, Value = 1};
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(x), x, null);
+                }
+            }).ToList();
+
+            QuestionAnswerText = _examiner.GetNextQuestion().FrontText;
+            QuestionIsVisible = true;
+        });
+
+        public ICommand ShowAnswerCommand => new Command(() =>
+        {
+            QuestionStatuses = _examiner.QuestionsStatuses.Select(questionStatus =>
+            {
+                switch (questionStatus)
+                {
+                    case QuestionStatus.Known:
+                        return new StepItem {Color = Color.GreenYellow, Value = 1};
+                    case QuestionStatus.Unknown:
+                        return new StepItem {Color = Color.Red, Value = 1};
+                    case QuestionStatus.NotAnswered:
+                        return new StepItem {Color = Color.Gray, Value = 1};
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(questionStatus), questionStatus, null);
+                }
+            }).ToList();
+
+            AnswerIsVisible = true;
+        });
 
 
         public IList<StepItem> QuestionStatuses
@@ -98,7 +97,10 @@ namespace Flashcards.ViewModels
             get => _answerIsVisible;
             set
             {
+                if(_answerIsVisible == value)
+                    return;
                 _answerIsVisible = value;
+                QuestionIsVisible = !value;
                 OnPropertyChanged();
             }
         }
@@ -108,21 +110,27 @@ namespace Flashcards.ViewModels
             get => !_answerIsVisible;
             set
             {
-                _answerIsVisible = !value;
+                if (_answerIsVisible == !value)
+                    return;
+                AnswerIsVisible = !value;
                 OnPropertyChanged();
             }
         }
 
-        private void ShowAnswer()
+        public void OnNavigatedTo(NavigationParameters parameters)
         {
-            QuestionIsVisible = false;
-            AnswerIsVisible = true;
+            
         }
 
-        private void ShowQuestion()
+        public void OnNavigatedFrom(NavigationParameters parameters)
         {
-            QuestionIsVisible = true;
-            AnswerIsVisible = false;
+        }
+
+        public void OnNavigatingTo(NavigationParameters parameters)
+        {
+            var lessonId = (int)parameters["lessonId"];
+            _examiner = _examinerFactory.Create(lessonId).Result;
+            QuestionAnswerText = _examiner.GetNextQuestion().FrontText;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

@@ -1,11 +1,12 @@
-using Autofac;
-using Flashcards.Models;
-using Flashcards.Services.Database;
-using Flashcards.ViewModels;
-using SQLite;
 using System;
 using System.IO;
 using System.Reflection;
+using Autofac;
+using Flashcards.Models;
+using Flashcards.Services.Database;
+using Flashcards.Services.Http;
+using Flashcards.ViewModels;
+using SQLite;
 
 namespace Flashcards.Views
 {
@@ -17,7 +18,8 @@ namespace Flashcards.Views
             {
                 Assembly.GetAssembly(typeof(App)),
                 Assembly.GetAssembly(typeof(AskingQuestionsViewModel)),
-                Assembly.GetAssembly(typeof(Flashcard))
+                Assembly.GetAssembly(typeof(Flashcard)),
+                Assembly.GetAssembly(typeof(ITranslatorService)),
             };
             containerBuilder
                 .RegisterAssemblyTypes(assemblies)

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Flashcards.Models;
+using FlashCards.Services;
 using Xunit;
 
 namespace Flashcards.UnitTests
@@ -10,16 +11,16 @@ namespace Flashcards.UnitTests
     {
         public QuestionsAskerTests()
         {
-            _lesson = new QuestionAsker(_questions);
+            _lesson = new Examiner(_questions);
         }
 
-        private readonly QuestionAsker _lesson;
+        private readonly Examiner _lesson;
 
-        private readonly IList<Question> _questions = new[]
+        private readonly IList<FlashcardQuestion> _questions = new[]
         {
-            new Question("dog", "pies"),
-            new Question("cat", "kot"),
-            new Question("duck", "kaczka")
+            new FlashcardQuestion("dog", "pies"),
+            new FlashcardQuestion("cat", "kot"),
+            new FlashcardQuestion("duck", "kaczka")
         };
 
         [Fact]
@@ -31,8 +32,8 @@ namespace Flashcards.UnitTests
             _lesson.Answer(false);
 
             var statuses = _lesson.QuestionsStatuses.ToList();
-            Assert.Equal(QuestionStatus.AnsweredCorrectly, statuses[0]);
-            Assert.Equal(QuestionStatus.AnsweredBadly, statuses[1]);
+            Assert.Equal(QuestionStatus.Known, statuses[0]);
+            Assert.Equal(QuestionStatus.Unknown, statuses[1]);
             Assert.Equal(QuestionStatus.NotAnswered, statuses[2]);
         }
 

@@ -28,13 +28,13 @@ namespace Flashcards.ViewModels.Lesson
         public string SelectedBackLanguage { get; set; }
         public string LessonName { get; set; }
 
-        public ICommand AddFlashcards => new Command(() =>
+        public ICommand AddFlashcards => new Command(async () =>
         {
             var frontLanguage = SelectedFrontLanguage.ToLanguageEnum();
             var backLanguage = SelectedBackLanguage.ToLanguageEnum();
-            var lessonId = _addLessonService.AddLesson(LessonName, frontLanguage, backLanguage);
+            var lessonId = await _addLessonService.AddLesson(LessonName, frontLanguage, backLanguage);
 
-            _navigationService.NavigateAsync("AddFlashcardPage", new NavigationParameters
+            await _navigationService.NavigateAsync("AddFlashcardPage", new NavigationParameters
             {
                 {"frontLanguage", frontLanguage},
                 {"backLanguage", backLanguage},

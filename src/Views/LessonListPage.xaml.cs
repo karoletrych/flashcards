@@ -1,6 +1,6 @@
 using Xamarin.Forms;
 
-namespace Flashcards.Views.Lesson
+namespace Flashcards.Views
 {
     public partial class LessonListPage : ContentPage
     {

@@ -2,6 +2,7 @@ using Flashcards.Services.Http;
 using Flashcards.ViewModels;
 using Flashcards.ViewModels.Lesson;
 using Flashcards.Views.Lesson;
+using FlashCards.Services;
 using Prism.Autofac;
 using Prism.Ioc;
 using Xamarin.Forms;
@@ -19,9 +20,10 @@ namespace Flashcards.Views
             containerRegistry.RegisterForNavigation<LessonListPage, LessonListViewModel>();
             containerRegistry.RegisterForNavigation<AddLessonPage, AddLessonViewModel>();
             containerRegistry.RegisterForNavigation<AddFlashcardPage, AddFlashcardViewModel>();
+            containerRegistry.RegisterForNavigation<AskingQuestionsPage, AskingQuestionsViewModel>();
 
-            containerRegistry.Register<ITranslatorService, YandexTranslatorService>();
-            
+            containerRegistry.Register<ExaminerFactory>();
+
             var builder = containerRegistry.GetBuilder();
             IocRegistrations.RegisterTypesInIocContainer(builder);
         }

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Flashcards.Models;
-using Flashcards.Services;
 using Flashcards.Services.Http;
 using Xunit;
 

@@ -24,7 +24,7 @@ namespace Flashcards.Services.Database
 
         public async Task<IEnumerable<T>> FindMatching(Expression<Func<T, bool>> predicate)
         {
-            var list =  await _dbConnection.Table<T>().Where(predicate).ToListAsync();
+            var list =  _dbConnection.Table<T>().Where(predicate).ToListAsync().Result;
             return list.AsEnumerable();
         }
 

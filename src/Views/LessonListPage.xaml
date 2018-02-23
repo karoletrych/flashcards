@@ -1,15 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Flashcards.Views.Lesson.LessonListPage">
+             xmlns:controls="clr-namespace:Flashcards.Views.CustomControls"
+             x:Class="Flashcards.Views.LessonListPage">
 
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Add lesson" Command = "{Binding AddLesson}" />
     </ContentPage.ToolbarItems>
 
-    <ListView ItemsSource="{Binding Items.Result}"
-              CachingStrategy="RecycleElement">
-        <ListView.ItemTemplate>
+    <controls:CommandListView             
+              ItemsSource="{Binding Items.Result}"
+              ItemClickCommand="{Binding LessonTappedCommand}">
+        <controls:CommandListView.ItemTemplate>
             <DataTemplate>
                 <ViewCell>
                     <StackLayout Orientation="Horizontal">
@@ -22,7 +24,7 @@
                     </StackLayout>
                 </ViewCell>
             </DataTemplate>
-        </ListView.ItemTemplate>
-    </ListView>
+        </controls:CommandListView.ItemTemplate>
+    </controls:CommandListView>
 </ContentPage>
 

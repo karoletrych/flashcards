@@ -3,16 +3,11 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:system="clr-namespace:System;assembly=netstandard"
-             xmlns:viewModels="clr-namespace:Flashcards.ViewModels;assembly=ViewModels"
              xmlns:customControls="clr-namespace:Flashcards.Views.CustomControls;assembly=Views"
              x:Class="Flashcards.Views.AskingQuestionsPage">
 
 
     <AbsoluteLayout>
-        <AbsoluteLayout.BindingContext>
-            <viewModels:AskingQuestionsViewModel />
-        </AbsoluteLayout.BindingContext>
-
         <StackLayout>
             <customControls:MulticolorBar
                 VerticalOptions="CenterAndExpand"
@@ -28,7 +23,7 @@
                 HorizontalOptions="FillAndExpand"
                 VerticalOptions="CenterAndExpand" />
             <StackLayout Orientation="Horizontal">
-                <Label Text="{Binding QuestionAnswerText}" />
+                <Label Text="{Binding FrontText}" />
                 <Button Image="speaker_icon.png" />
             </StackLayout>
         </StackLayout>

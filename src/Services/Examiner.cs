@@ -2,51 +2,50 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Flashcards.Models
+namespace FlashCards.Services
 {
-    public class Question
+    public class FlashcardQuestion
     {
-        public Question(string questionText, string answerText)
+        public FlashcardQuestion(string frontText, string backText)
         {
-            QuestionText = questionText;
-            AnswerText = answerText;
+            FrontText = frontText;
+            BackText = backText;
+            Status = QuestionStatus.NotAnswered;
         }
 
-        public string QuestionText { get; }
-        public string AnswerText { get; }
+        public string FrontText { get; }
+        public string BackText { get; }
         public QuestionStatus Status { get; set; }
     }
 
     public enum QuestionStatus
     {
         NotAnswered,
-        AnsweredCorrectly,
-        AnsweredBadly
+        Known,
+        Unknown
     }
 
-    public class QuestionAsker
+    public class Examiner
     {
-        private readonly IList<Question> _askedQuestions = new List<Question>();
-        private readonly Queue<Question> _questionsToAsk;
+        private readonly IList<FlashcardQuestion> _askedQuestions = new List<FlashcardQuestion>();
+        private readonly Queue<FlashcardQuestion> _questionsToAsk;
 
-        public QuestionAsker(IList<Question> questions)
+        public Examiner(IList<FlashcardQuestion> questions)
         {
-            _questionsToAsk = new Queue<Question>(questions);
+            _questionsToAsk = new Queue<FlashcardQuestion>(questions);
         }
 
         public IEnumerable<QuestionStatus> QuestionsStatuses =>
             _askedQuestions.Select(q => q.Status)
                 .Concat(_questionsToAsk.Select(q => q.Status));
 
-        public string CurrentQuestionAnswer => _askedQuestions.Last().AnswerText;
-
         public void Answer(bool isKnown)
         {
             _askedQuestions.Last().Status =
-                isKnown ? QuestionStatus.AnsweredCorrectly : QuestionStatus.AnsweredBadly;
+                isKnown ? QuestionStatus.Known : QuestionStatus.Unknown;
         }
 
-        public Question GetNextQuestion()
+        public FlashcardQuestion GetNextQuestion()
         {
             if (_askedQuestions.Any() && _askedQuestions.Last().Status == QuestionStatus.NotAnswered)
                 throw new InvalidOperationException("Previous question has not been answered.");
