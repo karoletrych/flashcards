@@ -4,7 +4,7 @@ using Flashcards.Services.Database;
 using Xunit;
 using DatabaseConnectionFactory = Flashcards.Services.Database.DatabaseConnectionFactory;
 
-namespace Flashcards.UnitTests
+namespace Flashcards.ServicesTests
 {
     public class RepositoryTests
     {

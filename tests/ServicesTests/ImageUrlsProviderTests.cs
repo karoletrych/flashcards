@@ -1,10 +1,9 @@
 ﻿using System.Linq;
 using Flashcards.Models;
-using Flashcards.Services;
 using Flashcards.Services.Http;
 using Xunit;
 
-namespace Flashcards.UnitTests
+namespace Flashcards.ServicesTests
 {
     public class ImageUrlsProviderTests
     {

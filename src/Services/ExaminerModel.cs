@@ -25,12 +25,12 @@ namespace FlashCards.Services
         Unknown
     }
 
-    public class Examiner
+    public class ExaminerModel
     {
         private readonly IList<FlashcardQuestion> _askedQuestions = new List<FlashcardQuestion>();
         private readonly Queue<FlashcardQuestion> _questionsToAsk;
 
-        public Examiner(IEnumerable<FlashcardQuestion> questions)
+        public ExaminerModel(IEnumerable<FlashcardQuestion> questions)
         {
             _questionsToAsk = new Queue<FlashcardQuestion>(questions);
         }
@@ -45,13 +45,21 @@ namespace FlashCards.Services
                 isKnown ? QuestionStatus.Known : QuestionStatus.Unknown;
         }
 
-        public FlashcardQuestion GetNextQuestion()
+        public bool TryAskNextQuestion(out FlashcardQuestion question)
         {
             if (_askedQuestions.Any() && _askedQuestions.Last().Status == QuestionStatus.NotAnswered)
                 throw new InvalidOperationException("Previous question has not been answered.");
-            var newQuestion = _questionsToAsk.Dequeue();
-            _askedQuestions.Add(newQuestion);
-            return newQuestion;
+
+            if (_questionsToAsk.Any())
+            {
+                var newQuestion = _questionsToAsk.Dequeue();
+                _askedQuestions.Add(newQuestion);
+                question = newQuestion;
+                return true;
+            }
+
+            question = null;
+            return false;
         }
     }
 }

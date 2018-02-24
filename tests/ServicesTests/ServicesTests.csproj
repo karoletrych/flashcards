@@ -8,8 +8,8 @@
     <ProjectGuid>{CCC1453B-C753-44E1-ACD9-22C6A5B29D39}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>FlashCards.UnitTests</RootNamespace>
-    <AssemblyName>UnitTests</AssemblyName>
+    <RootNamespace>Flashcards.ServicesTests</RootNamespace>
+    <AssemblyName>ServicesTests</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>

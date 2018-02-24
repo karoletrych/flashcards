@@ -6,27 +6,39 @@ using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using FlashCards.Services;
 using Prism.Navigation;
+using Prism.Services;
 using Xamarin.Forms;
 
 namespace Flashcards.ViewModels
 {
     public class AskingQuestionsViewModel : INotifyPropertyChanged, INavigationAware
     {
+        private readonly IPageDialogService _dialogService;
         private readonly IExaminerModelFactory _examinerModelFactory;
+        private readonly INavigationService _navigationService;
+
+        private string _backText;
+        private ExaminerModel _examinerModel; // TODO: make it readonly (remove Prism)
         private bool _frontIsVisible;
-        private Examiner _examiner; // TODO: make it readonly (remove Prism)
         private string _frontText;
 
         private IList<StepItem> _questionStatuses = new List<StepItem>
         {
-            new StepItem {Color = Color.Gray, Value = 1}
+            new StepItem
+            {
+                Color = Color.Gray,
+                Value = 1
+            }
         };
 
-        private string _backText;
-
-        public AskingQuestionsViewModel(IExaminerModelFactory examinerModelFactory)
+        public AskingQuestionsViewModel(
+            IExaminerModelFactory examinerModelFactory,
+            INavigationService navigationService,
+            IPageDialogService dialogService)
         {
             _examinerModelFactory = examinerModelFactory;
+            _navigationService = navigationService;
+            _dialogService = dialogService;
         }
 
         // just for View binding
@@ -38,39 +50,63 @@ namespace Flashcards.ViewModels
 
         public ICommand UserAnswerCommand => new Command<bool>(known =>
         {
-            _examiner.Answer(isKnown: known);
+            _examinerModel.Answer(isKnown: known);
 
-            QuestionStatuses = _examiner.QuestionsStatuses.Select(x =>
+            QuestionStatuses = _examinerModel.QuestionsStatuses.Select(x =>
             {
                 switch (x)
                 {
                     case QuestionStatus.Known:
-                        return new StepItem {Color = Color.GreenYellow, Value = 1};
+                        return new StepItem
+                        {
+                            Color = Color.GreenYellow,
+                            Value = 1
+                        };
                     case QuestionStatus.Unknown:
-                        return new StepItem {Color = Color.Red, Value = 1};
+                        return new StepItem
+                        {
+                            Color = Color.Red,
+                            Value = 1
+                        };
                     case QuestionStatus.NotAnswered:
-                        return new StepItem {Color = Color.Gray, Value = 1};
+                        return new StepItem
+                        {
+                            Color = Color.Gray,
+                            Value = 1
+                        };
                     default:
                         throw new ArgumentOutOfRangeException(nameof(x), x, null);
                 }
             }).ToList();
 
             FrontIsVisible = false;
-            ShowNextQuestion();
+            ShowNextQuestionOrEnd();
         });
 
         public ICommand ShowBackCommand => new Command(() =>
         {
-            QuestionStatuses = _examiner.QuestionsStatuses.Select(questionStatus =>
+            QuestionStatuses = _examinerModel.QuestionsStatuses.Select(questionStatus =>
             {
                 switch (questionStatus)
                 {
                     case QuestionStatus.Known:
-                        return new StepItem {Color = Color.GreenYellow, Value = 1};
+                        return new StepItem
+                        {
+                            Color = Color.GreenYellow,
+                            Value = 1
+                        };
                     case QuestionStatus.Unknown:
-                        return new StepItem {Color = Color.Red, Value = 1};
+                        return new StepItem
+                        {
+                            Color = Color.Red,
+                            Value = 1
+                        };
                     case QuestionStatus.NotAnswered:
-                        return new StepItem {Color = Color.Gray, Value = 1};
+                        return new StepItem
+                        {
+                            Color = Color.Gray,
+                            Value = 1
+                        };
                     default:
                         throw new ArgumentOutOfRangeException(nameof(questionStatus), questionStatus, null);
                 }
@@ -83,7 +119,7 @@ namespace Flashcards.ViewModels
         public IList<StepItem> QuestionStatuses
         {
             get => _questionStatuses;
-            set
+            private set
             {
                 _questionStatuses = value;
                 OnPropertyChanged();
@@ -93,7 +129,7 @@ namespace Flashcards.ViewModels
         public string FrontText
         {
             get => _frontText;
-            set
+            private set
             {
                 _frontText = value;
                 OnPropertyChanged();
@@ -103,7 +139,7 @@ namespace Flashcards.ViewModels
         public string BackText
         {
             get => _backText;
-            set
+            private set
             {
                 _backText = value;
                 OnPropertyChanged();
@@ -113,9 +149,9 @@ namespace Flashcards.ViewModels
         public bool FrontIsVisible
         {
             get => _frontIsVisible;
-            set
+            private set
             {
-                if(_frontIsVisible == value)
+                if (_frontIsVisible == value)
                     return;
                 _frontIsVisible = value;
                 OnPropertyChanged();
@@ -125,7 +161,6 @@ namespace Flashcards.ViewModels
 
         public void OnNavigatedTo(NavigationParameters parameters)
         {
-            
         }
 
         public void OnNavigatedFrom(NavigationParameters parameters)
@@ -134,19 +169,31 @@ namespace Flashcards.ViewModels
 
         public async void OnNavigatingTo(NavigationParameters parameters)
         {
-            var lessonId = (int)parameters["lessonId"];
-            _examiner = await _examinerModelFactory.Create(lessonId);
-            ShowNextQuestion();
-        }
+            var lessonId = (int) parameters["lessonId"];
+            _examinerModel = await _examinerModelFactory.Create(lessonId);
 
-        private void ShowNextQuestion()
-        {
-            var question = _examiner.GetNextQuestion();
-            FrontText = question.FrontText;
-            BackText = question.BackText;
+            ShowNextQuestionOrEnd();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        private async void ShowNextQuestionOrEnd()
+        {
+            if (_examinerModel.TryAskNextQuestion(out var question))
+            {
+                FrontText = question.FrontText;
+                BackText = question.BackText;
+            }
+            else
+            {
+                await _dialogService.DisplayAlertAsync("Koniec",
+                    $"Znane: {_examinerModel.QuestionsStatuses.Count(x => x == QuestionStatus.Known)} \n" +
+                    $"Nieznane: {_examinerModel.QuestionsStatuses.Count(x => x == QuestionStatus.Unknown)}",
+                    "OK");
+
+                await _navigationService.GoBackAsync();
+            }
+        }
 
         private void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {

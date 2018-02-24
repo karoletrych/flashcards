@@ -4,7 +4,7 @@ using Flashcards.Models;
 using Flashcards.Services.Http;
 using Xunit;
 
-namespace Flashcards.UnitTests
+namespace Flashcards.ServicesTests
 {
     public class TranslatorTests
     {

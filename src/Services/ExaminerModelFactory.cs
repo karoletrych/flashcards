@@ -7,7 +7,7 @@ namespace FlashCards.Services
 {
     public interface IExaminerModelFactory
     {
-        Task<Examiner> Create(int lessonId);
+        Task<ExaminerModel> Create(int lessonId);
     }
 
     public class ExaminerModelFactory : IExaminerModelFactory
@@ -19,7 +19,7 @@ namespace FlashCards.Services
             _flashcardRepository = flashcardRepository;
         }
 
-        public async Task<Examiner> Create(int lessonId)
+        public async Task<ExaminerModel> Create(int lessonId)
         {
             var lessonsFlashcards =
                 await _flashcardRepository.FindMatching(flashcard => flashcard.LessonId == lessonId);
@@ -27,7 +27,7 @@ namespace FlashCards.Services
                 lessonsFlashcards
                     .Select(flashcard => new FlashcardQuestion(flashcard.Front, flashcard.Back));
 
-            return new Examiner(questions);
+            return new ExaminerModel(questions);
         }
     }
 }

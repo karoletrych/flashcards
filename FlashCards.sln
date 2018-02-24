@@ -8,7 +8,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ViewModels", "src\ViewModel
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Views", "src\Views\Views.csproj", "{4DCD6756-8AE6-4567-A2B9-1B61165A1146}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "tests\UnitTests\UnitTests.csproj", "{CCC1453B-C753-44E1-ACD9-22C6A5B29D39}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServicesTests", "tests\ServicesTests\ServicesTests.csproj", "{CCC1453B-C753-44E1-ACD9-22C6A5B29D39}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services", "src\Services\Services.csproj", "{71E85B13-54C6-4A98-BC94-8379B3744844}"
 EndProject

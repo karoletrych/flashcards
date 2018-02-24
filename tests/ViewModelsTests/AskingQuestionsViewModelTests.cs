@@ -3,6 +3,7 @@ using Flashcards.ViewModels;
 using FlashCards.Services;
 using NSubstitute;
 using Prism.Navigation;
+using Prism.Services;
 using Xunit;
 
 namespace ViewModelsTests
@@ -10,10 +11,11 @@ namespace ViewModelsTests
     public class AskingQuestionsViewModelTests
     {
         private readonly AskingQuestionsViewModel _askingQuestionsViewModel;
+        private readonly INavigationService _navigationService;
 
         public AskingQuestionsViewModelTests()
         {
-            var examiner = new Examiner(new[]
+            var examiner = new ExaminerModel(new[]
             {
                 new FlashcardQuestion("cat", "kot"),
                 new FlashcardQuestion("dog", "pies"),
@@ -22,7 +24,10 @@ namespace ViewModelsTests
 
             var examinerFactory = Substitute.For<IExaminerModelFactory>();
             examinerFactory.Create(Arg.Any<int>()).Returns(examiner);
-            _askingQuestionsViewModel = new AskingQuestionsViewModel(examinerFactory);
+            _navigationService = Substitute.For<INavigationService>();
+            var dialogService = Substitute.For<IPageDialogService>();
+
+            _askingQuestionsViewModel = new AskingQuestionsViewModel(examinerFactory, _navigationService, dialogService);
         }
 
         private async Task NavigateToViewModel()
@@ -62,6 +67,20 @@ namespace ViewModelsTests
             Assert.Equal("dog", _askingQuestionsViewModel.FrontText);
             Assert.Equal("pies", _askingQuestionsViewModel.BackText);
             Assert.False(_askingQuestionsViewModel.FrontIsVisible);
+        }
+
+        [Fact]
+        public async void WhenAllQuestionsAreAnswered_NavigatesBack()
+        {
+            await NavigateToViewModel();
+            _askingQuestionsViewModel.ShowBackCommand.Execute(null);
+            _askingQuestionsViewModel.UserAnswerCommand.Execute(true);
+            _askingQuestionsViewModel.ShowBackCommand.Execute(null);
+            _askingQuestionsViewModel.UserAnswerCommand.Execute(true);
+            _askingQuestionsViewModel.ShowBackCommand.Execute(null);
+            _askingQuestionsViewModel.UserAnswerCommand.Execute(true);
+
+            await _navigationService.Received().GoBackAsync();
         }
     }
 }
