@@ -68,6 +68,8 @@ namespace Flashcards.ViewModels
         public ICommand NextFlashcard => new Command(async () =>
         {
             await _addFlashcardService.AddFlashcard(FrontText, BackText, _lessonId);
+            FrontText = "";
+            BackText = "";
         });
 
         // TODO: get rid of this shit (Prism) and inject parameters via constructor

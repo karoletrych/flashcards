@@ -29,6 +29,11 @@ namespace Flashcards.ViewModels
             _examinerModelFactory = examinerModelFactory;
         }
 
+        // just for View binding
+        public AskingQuestionsViewModel()
+        {
+        }
+
         public bool ShowBackButtonIsVisible => !FrontIsVisible;
 
         public ICommand UserAnswerCommand => new Command<bool>(known =>

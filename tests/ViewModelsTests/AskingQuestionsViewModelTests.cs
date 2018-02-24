@@ -2,7 +2,6 @@
 using Flashcards.ViewModels;
 using FlashCards.Services;
 using NSubstitute;
-using NSubstitute.Extensions;
 using Prism.Navigation;
 using Xunit;
 
