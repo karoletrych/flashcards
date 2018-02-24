@@ -19,6 +19,9 @@ namespace Flashcards.Models
         [MaxLength(128)]
         public string Back { get; set; }
 
+        [MaxLength(2000)]
+        public string ImageUrl { get; set; }
+
         public decimal Strength
         {
             get => _strength;

@@ -171,7 +171,7 @@ namespace Flashcards.ViewModels
         {
             var lessonId = (int) parameters["lessonId"];
             _examinerModel = await _examinerModelFactory.Create(lessonId);
-
+             
             ShowNextQuestionOrEnd();
         }
 
