@@ -1,4 +1,5 @@
-﻿using Flashcards.Models;
+﻿using System.Threading.Tasks;
+using Flashcards.Models;
 using Flashcards.Services.Database;
 
 namespace FlashCards.Services
@@ -12,10 +13,10 @@ namespace FlashCards.Services
             _flashcardRepository = flashcardRepository;
         }
 
-        public void AddFlashcard(string frontText, string backText, int lessonId)
+        public async Task AddFlashcard(string frontText, string backText, int lessonId)
         {
             var flashcard = new Flashcard {Front = frontText, Back = backText, LessonId = lessonId, Strength = 0};
-            _flashcardRepository.Insert(flashcard);
+            await _flashcardRepository.Insert(flashcard);
         }
     }
 }

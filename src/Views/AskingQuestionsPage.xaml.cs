@@ -2,7 +2,7 @@ using Xamarin.Forms;
 
 namespace Flashcards.Views
 {
-	public partial class AskingQuestionsPage : ContentPage
+	public partial class AskingQuestionsPage
 	{
 		public AskingQuestionsPage ()
 		{

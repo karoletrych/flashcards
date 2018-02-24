@@ -30,7 +30,7 @@ namespace FlashCards.Services
         private readonly IList<FlashcardQuestion> _askedQuestions = new List<FlashcardQuestion>();
         private readonly Queue<FlashcardQuestion> _questionsToAsk;
 
-        public Examiner(IList<FlashcardQuestion> questions)
+        public Examiner(IEnumerable<FlashcardQuestion> questions)
         {
             _questionsToAsk = new Queue<FlashcardQuestion>(questions);
         }

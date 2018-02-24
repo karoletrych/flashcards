@@ -4,7 +4,6 @@ using System.Timers;
 using System.Windows.Input;
 using Flashcards.Models;
 using Flashcards.Services.Http;
-using Flashcards.ViewModels.Annotations;
 using FlashCards.Services;
 using Prism.Navigation;
 using Xamarin.Forms;
@@ -66,9 +65,9 @@ namespace Flashcards.ViewModels
             }
         }
 
-        public ICommand NextFlashcard => new Command(() =>
+        public ICommand NextFlashcard => new Command(async () =>
         {
-            _addFlashcardService.AddFlashcard(FrontText, BackText, _lessonId);
+            await _addFlashcardService.AddFlashcard(FrontText, BackText, _lessonId);
         });
 
         // TODO: get rid of this shit (Prism) and inject parameters via constructor

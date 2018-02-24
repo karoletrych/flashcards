@@ -12,7 +12,7 @@ using Xamarin.Forms.Xaml;
 
 namespace Flashcards.Views
 {
-    public partial class App : PrismApplication
+    public partial class App
     {
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
@@ -22,7 +22,7 @@ namespace Flashcards.Views
             containerRegistry.RegisterForNavigation<AddFlashcardPage, AddFlashcardViewModel>();
             containerRegistry.RegisterForNavigation<AskingQuestionsPage, AskingQuestionsViewModel>();
 
-            containerRegistry.Register<ExaminerFactory>();
+            containerRegistry.Register<ExaminerModelFactory>();
 
             var builder = containerRegistry.GetBuilder();
             IocRegistrations.RegisterTypesInIocContainer(builder);

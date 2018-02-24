@@ -5,6 +5,7 @@ using System.Windows.Input;
 using Flashcards.Models;
 using Flashcards.Services;
 using Prism.Navigation;
+using Prism.Services;
 using Xamarin.Forms;
 
 namespace Flashcards.ViewModels.Lesson
@@ -13,14 +14,23 @@ namespace Flashcards.ViewModels.Lesson
     {
         private readonly AddLessonService _addLessonService;
         private readonly INavigationService _navigationService;
+        private readonly IPageDialogService _pageDialogService;
 
-        public AddLessonViewModel(INavigationService navigationService, AddLessonService addLessonService)
+        public AddLessonViewModel(
+            INavigationService navigationService,
+            AddLessonService addLessonService,
+            IPageDialogService pageDialogService)
         {
             _navigationService = navigationService;
             _addLessonService = addLessonService;
+            _pageDialogService = pageDialogService;
         }
 
-        public IList<string> LanguageNames =>
+        public IList<string> FrontLanguageNames =>
+            Enum.GetNames(typeof(Language))
+                .OrderBy(language => language).ToList();
+
+        public IList<string> BackLanguageNames =>
             Enum.GetNames(typeof(Language))
                 .OrderBy(language => language).ToList();
 
@@ -28,18 +38,20 @@ namespace Flashcards.ViewModels.Lesson
         public string SelectedBackLanguage { get; set; }
         public string LessonName { get; set; }
 
-        public ICommand AddFlashcards => new Command(async () =>
-        {
-            var frontLanguage = SelectedFrontLanguage.ToLanguageEnum();
-            var backLanguage = SelectedBackLanguage.ToLanguageEnum();
-            var lessonId = await _addLessonService.AddLesson(LessonName, frontLanguage, backLanguage);
-
-            await _navigationService.NavigateAsync("AddFlashcardPage", new NavigationParameters
+        public ICommand AddFlashcards => new Command(() =>
+            DialogHandler.HandleExceptions(_pageDialogService, async () =>
             {
-                {"frontLanguage", frontLanguage},
-                {"backLanguage", backLanguage},
-                {"lessonId", lessonId}
-            });
-        });
+                var frontLanguage = SelectedFrontLanguage.ToLanguageEnum();
+                var backLanguage = SelectedBackLanguage.ToLanguageEnum();
+                var lessonId = await _addLessonService.AddLesson(LessonName, frontLanguage, backLanguage);
+
+                await _navigationService.NavigateAsync("AddFlashcardPage", new NavigationParameters
+                {
+                    {"frontLanguage", frontLanguage},
+                    {"backLanguage", backLanguage},
+                    {"lessonId", lessonId}
+                });
+            })
+        );
     }
 }

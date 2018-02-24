@@ -5,8 +5,6 @@
              xmlns:system="clr-namespace:System;assembly=netstandard"
              xmlns:customControls="clr-namespace:Flashcards.Views.CustomControls;assembly=Views"
              x:Class="Flashcards.Views.AskingQuestionsPage">
-
-
     <AbsoluteLayout>
         <StackLayout>
             <customControls:MulticolorBar
@@ -24,23 +22,22 @@
                 VerticalOptions="CenterAndExpand" />
             <StackLayout Orientation="Horizontal">
                 <Label Text="{Binding FrontText}" />
-                <Button Image="speaker_icon.png" />
             </StackLayout>
         </StackLayout>
 
         <StackLayout Orientation="Horizontal" AbsoluteLayout.LayoutFlags="All"
                      AbsoluteLayout.LayoutBounds=".5,1,1,.1">
-            <Button Text="Pokaż odpowiedź"
+            <Button Text="Pokaż"
                     HorizontalOptions="FillAndExpand"
                     VerticalOptions="CenterAndExpand"
-                    IsVisible="{Binding QuestionIsVisible}"
-                    Command="{Binding ShowAnswerCommand}" />
+                    IsVisible="{Binding ShowBackButtonIsVisible}"
+                    Command="{Binding ShowBackCommand}" />
 
             <Button Text="Wiedziałem"
                     BackgroundColor="LawnGreen"
                     HorizontalOptions="FillAndExpand"
                     VerticalOptions="CenterAndExpand"
-                    IsVisible="{Binding AnswerIsVisible}"
+                    IsVisible="{Binding FrontIsVisible}"
                     Command="{Binding UserAnswerCommand}">
                 <Button.CommandParameter>
                     <system:Boolean>True</system:Boolean>
@@ -51,7 +48,7 @@
                     BackgroundColor="Red"
                     HorizontalOptions="FillAndExpand"
                     VerticalOptions="CenterAndExpand"
-                    IsVisible="{Binding AnswerIsVisible}"
+                    IsVisible="{Binding FrontIsVisible}"
                     Command="{Binding UserAnswerCommand}">
                 <Button.CommandParameter>
                     <system:Boolean>False</system:Boolean>

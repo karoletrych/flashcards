@@ -24,17 +24,17 @@ namespace Flashcards.Services.Database
 
         public async Task<IEnumerable<T>> FindMatching(Expression<Func<T, bool>> predicate)
         {
-            var list =  _dbConnection.Table<T>().Where(predicate).ToListAsync().Result;
+            var list =  await _dbConnection.Table<T>().Where(predicate).ToListAsync();
             return list.AsEnumerable();
         }
 
         public async Task<int> Insert(T entity)
         {
             var id = 0;
-            await _dbConnection.RunInTransactionAsync(async connection =>
+            await _dbConnection.RunInTransactionAsync(connection =>
             {
-                await _dbConnection.InsertAsync(entity);
-                id = await _dbConnection.ExecuteScalarAsync<int>("SELECT last_insert_rowid()");
+                connection.Insert(entity);
+                id = connection.ExecuteScalar<int>("SELECT last_insert_rowid()");
             });
             return id;
         }

@@ -1,12 +1,8 @@
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using Flashcards.Services.Database;
 using FlashCards.Services;
-using Nito.Mvvm;
 using Prism.Navigation;
 using Prism.Services;
 using Xamarin.Forms;
@@ -63,22 +59,24 @@ namespace Flashcards.ViewModels.Lesson
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public async void OnNavigatingTo(NavigationParameters parameters)
+        public void OnNavigatingTo(NavigationParameters parameters)
         {
+
+        }
+
+        public void OnNavigatedFrom(NavigationParameters parameters)
+        {
+            Lessons.Clear();
+        }
+
+        public async void OnNavigatedTo(NavigationParameters parameters)
+        {
+
             var lessons = await _lessonRepository.FindAll();
             foreach (var lesson in lessons)
             {
                 Lessons.Add(lesson);
             }
-        }
-
-        public void OnNavigatedFrom(NavigationParameters parameters)
-        {
-            
-        }
-
-        public void OnNavigatedTo(NavigationParameters parameters)
-        {
         }
     }
 }

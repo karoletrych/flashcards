@@ -12,18 +12,24 @@
         <AbsoluteLayout>
             <StackLayout AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,0.25">
                 <Entry Placeholder="Nazwa lekcji" Text="{Binding LessonName}" />
-                <StackLayout Orientation="Horizontal" VerticalOptions="FillAndExpand">
-                    <Label Text="Front language" />
-                    <Picker ItemsSource="{Binding LanguageNames}" SelectedItem="{Binding SelectedFrontLanguage}"
-                            WidthRequest="100" />
+                <StackLayout Orientation="Horizontal">
+                    <StackLayout Orientation="Horizontal" VerticalOptions="FillAndExpand">
+                        <Picker WidthRequest="100"
+                                ItemsSource="{Binding FrontLanguageNames}"
+                                SelectedItem="{Binding SelectedFrontLanguage}" />
+                    </StackLayout>
+                    <Label Text="-" />
+                    <StackLayout Orientation="Horizontal" VerticalOptions="FillAndExpand">
+                        <Picker WidthRequest="100" ItemsSource="{Binding BackLanguageNames}"
+                                SelectedItem="{Binding SelectedBackLanguage}" />
+                    </StackLayout>
                 </StackLayout>
-                <StackLayout Orientation="Horizontal" VerticalOptions="FillAndExpand">
-                    <Label Text="Back language" />
-                    <Picker ItemsSource="{Binding LanguageNames}" SelectedItem="{Binding SelectedBackLanguage}"
-                            WidthRequest="100" />
-                </StackLayout>
+
             </StackLayout>
             <ListView AbsoluteLayout.LayoutBounds="0,0.25,1,0.75">
+                <ListView.ItemTemplate>
+
+                </ListView.ItemTemplate>
 
             </ListView>
         </AbsoluteLayout>

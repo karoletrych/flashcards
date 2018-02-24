@@ -5,11 +5,16 @@ using Flashcards.Services.Database;
 
 namespace FlashCards.Services
 {
-    public class ExaminerFactory
+    public interface IExaminerModelFactory
+    {
+        Task<Examiner> Create(int lessonId);
+    }
+
+    public class ExaminerModelFactory : IExaminerModelFactory
     {
         private readonly IRepository<Flashcard> _flashcardRepository;
 
-        public ExaminerFactory(IRepository<Flashcard> flashcardRepository)
+        public ExaminerModelFactory(IRepository<Flashcard> flashcardRepository)
         {
             _flashcardRepository = flashcardRepository;
         }
@@ -20,8 +25,7 @@ namespace FlashCards.Services
                 await _flashcardRepository.FindMatching(flashcard => flashcard.LessonId == lessonId);
             var questions =
                 lessonsFlashcards
-                    .Select(flashcard => new FlashcardQuestion(flashcard.Front, flashcard.Back))
-                    .ToList();
+                    .Select(flashcard => new FlashcardQuestion(flashcard.Front, flashcard.Back));
 
             return new Examiner(questions);
         }

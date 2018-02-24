@@ -26,7 +26,7 @@ namespace Flashcards.UnitTests
         }
 
         [Fact]
-        public void TranlatiionOfEmptyStringReturnEmptyString()
+        public void TranslationOfEmptyStringReturnEmptyString()
         {
             var emptyList = new List<string>();
             Assert.Equal(emptyList, _yandexTranslatorService.Translate(Language.English, Language.French, "").Result);

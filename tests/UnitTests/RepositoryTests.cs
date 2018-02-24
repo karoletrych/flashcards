@@ -21,10 +21,10 @@ namespace Flashcards.UnitTests
         [Fact]
         public void FindAll_EmptyRepository()
         {
-            var Flashcards = _flashcardRepository.FindAll().Result;
+            var flashcards = _flashcardRepository.FindAll().Result;
             var lessons = _lessonRepository.FindAll().Result;
 
-            Assert.Empty(Flashcards);
+            Assert.Empty(flashcards);
             Assert.Empty(lessons);
         }
 
@@ -32,26 +32,26 @@ namespace Flashcards.UnitTests
         public void FindAll_ReturnsAllObjects()
         {
             var lesson = new Lesson {FrontLanguage = Language.English, BackLanguage = Language.Polish};
-            var Flashcard = new Flashcard {Front = "cat", Back = "kot", LessonId = 1, Strength = 0.3m};
+            var flashcard = new Flashcard {Front = "cat", Back = "kot", LessonId = 1, Strength = 0.3m};
             _lessonRepository.Insert(lesson);
-            _flashcardRepository.Insert(Flashcard);
+            _flashcardRepository.Insert(flashcard);
 
             var lessons = _lessonRepository.FindAll().Result;
-            var Flashcards = _flashcardRepository.FindAll().Result;
+            var flashcards = _flashcardRepository.FindAll().Result;
 
             Assert.NotEmpty(lessons);
-            Assert.NotEmpty(Flashcards);
+            Assert.NotEmpty(flashcards);
         }
 
         [Fact]
         public void FindMatching_ReturnsResults()
         {
             var lesson = new Lesson { FrontLanguage = Language.English, BackLanguage = Language.Polish };
-            var Flashcard = new Flashcard { Front = "cat", Back = "kot", LessonId = 1, Strength = 0.3m };
-            var Flashcard2 = new Flashcard { Front = "dog", Back = "pies", LessonId = 1, Strength = 0.3m };
+            var flashcard = new Flashcard { Front = "cat", Back = "kot", LessonId = 1, Strength = 0.3m };
+            var flashcard2 = new Flashcard { Front = "dog", Back = "pies", LessonId = 1, Strength = 0.3m };
             _lessonRepository.Insert(lesson);
-            _flashcardRepository.Insert(Flashcard2);
-            _flashcardRepository.Insert(Flashcard);
+            _flashcardRepository.Insert(flashcard2);
+            _flashcardRepository.Insert(flashcard);
 
             var matchingFlashcards = _flashcardRepository.FindMatching(f => f.LessonId == 1).Result;
 

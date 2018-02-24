@@ -1,15 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Flashcards.Models;
 using FlashCards.Services;
 using Xunit;
 
 namespace Flashcards.UnitTests
 {
-    public class QuestionsAskerTests
+    public class ExaminerModelTests
     {
-        public QuestionsAskerTests()
+        public ExaminerModelTests()
         {
             _lesson = new Examiner(_questions);
         }

@@ -12,20 +12,24 @@ namespace Flashcards.ViewModels
 {
     public class AskingQuestionsViewModel : INotifyPropertyChanged, INavigationAware
     {
-        private readonly ExaminerFactory _examinerFactory;
-        private bool _answerIsVisible;
+        private readonly IExaminerModelFactory _examinerModelFactory;
+        private bool _frontIsVisible;
         private Examiner _examiner; // TODO: make it readonly (remove Prism)
-        private string _questionAnswerText;
+        private string _frontText;
 
         private IList<StepItem> _questionStatuses = new List<StepItem>
         {
             new StepItem {Color = Color.Gray, Value = 1}
         };
 
-        public AskingQuestionsViewModel(ExaminerFactory examinerFactory)
+        private string _backText;
+
+        public AskingQuestionsViewModel(IExaminerModelFactory examinerModelFactory)
         {
-            _examinerFactory = examinerFactory;
+            _examinerModelFactory = examinerModelFactory;
         }
+
+        public bool ShowBackButtonIsVisible => !FrontIsVisible;
 
         public ICommand UserAnswerCommand => new Command<bool>(known =>
         {
@@ -46,11 +50,11 @@ namespace Flashcards.ViewModels
                 }
             }).ToList();
 
-            QuestionAnswerText = _examiner.GetNextQuestion().FrontText;
-            QuestionIsVisible = true;
+            FrontIsVisible = false;
+            ShowNextQuestion();
         });
 
-        public ICommand ShowAnswerCommand => new Command(() =>
+        public ICommand ShowBackCommand => new Command(() =>
         {
             QuestionStatuses = _examiner.QuestionsStatuses.Select(questionStatus =>
             {
@@ -67,7 +71,7 @@ namespace Flashcards.ViewModels
                 }
             }).ToList();
 
-            AnswerIsVisible = true;
+            FrontIsVisible = true;
         });
 
 
@@ -81,39 +85,36 @@ namespace Flashcards.ViewModels
             }
         }
 
-        public string QuestionAnswerText
+        public string FrontText
         {
-            get => _questionAnswerText;
+            get => _frontText;
             set
             {
-                _questionAnswerText = value;
+                _frontText = value;
                 OnPropertyChanged();
             }
         }
 
-
-        public bool AnswerIsVisible
+        public string BackText
         {
-            get => _answerIsVisible;
+            get => _backText;
             set
             {
-                if(_answerIsVisible == value)
-                    return;
-                _answerIsVisible = value;
-                QuestionIsVisible = !value;
+                _backText = value;
                 OnPropertyChanged();
             }
         }
 
-        public bool QuestionIsVisible
+        public bool FrontIsVisible
         {
-            get => !_answerIsVisible;
+            get => _frontIsVisible;
             set
             {
-                if (_answerIsVisible == !value)
+                if(_frontIsVisible == value)
                     return;
-                AnswerIsVisible = !value;
+                _frontIsVisible = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(ShowBackButtonIsVisible));
             }
         }
 
@@ -126,11 +127,18 @@ namespace Flashcards.ViewModels
         {
         }
 
-        public void OnNavigatingTo(NavigationParameters parameters)
+        public async void OnNavigatingTo(NavigationParameters parameters)
         {
             var lessonId = (int)parameters["lessonId"];
-            _examiner = _examinerFactory.Create(lessonId).Result;
-            QuestionAnswerText = _examiner.GetNextQuestion().FrontText;
+            _examiner = await _examinerModelFactory.Create(lessonId);
+            ShowNextQuestion();
+        }
+
+        private void ShowNextQuestion()
+        {
+            var question = _examiner.GetNextQuestion();
+            FrontText = question.FrontText;
+            BackText = question.BackText;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

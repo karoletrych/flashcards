@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <RootNamespace>FlashCards.ViewModels</RootNamespace>
+    <RootNamespace>Flashcards.ViewModels</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
