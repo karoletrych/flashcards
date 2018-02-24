@@ -55,7 +55,7 @@ namespace ViewModelsTests
             await NavigateToViewModel();
             _askingQuestionsViewModel.ShowBackCommand.Execute(null);
             Assert.True(_askingQuestionsViewModel.FrontIsVisible);
-            Assert.False(_askingQuestionsViewModel.ShowBackButtonIsVisible);
+            Assert.False(_askingQuestionsViewModel.BackIsVisible);
         }
 
         [Fact]

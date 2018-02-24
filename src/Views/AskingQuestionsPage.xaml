@@ -25,7 +25,8 @@
                 HorizontalOptions="FillAndExpand"
                 VerticalOptions="CenterAndExpand" />
             <StackLayout Orientation="Horizontal">
-                <Label Text="{Binding FrontText}" />
+                <Label IsVisible ="{Binding FrontIsVisible}" Text="{Binding FrontText}" />
+                <Label IsVisible ="{Binding BackIsVisible}" Text="{Binding BackText}" />
             </StackLayout>
         </StackLayout>
 
@@ -34,7 +35,7 @@
             <Button Text="Pokaż"
                     HorizontalOptions="FillAndExpand"
                     VerticalOptions="CenterAndExpand"
-                    IsVisible="{Binding ShowBackButtonIsVisible}"
+                    IsVisible="{Binding BackIsVisible}"
                     Command="{Binding ShowBackCommand}" />
 
             <Button Text="Wiedziałem"

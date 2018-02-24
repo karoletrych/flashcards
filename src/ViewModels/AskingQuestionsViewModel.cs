@@ -46,7 +46,7 @@ namespace Flashcards.ViewModels
         {
         }
 
-        public bool ShowBackButtonIsVisible => !FrontIsVisible;
+        public bool BackIsVisible => !FrontIsVisible;
 
         public ICommand UserAnswerCommand => new Command<bool>(known =>
         {
@@ -155,7 +155,7 @@ namespace Flashcards.ViewModels
                     return;
                 _frontIsVisible = value;
                 OnPropertyChanged();
-                OnPropertyChanged(nameof(ShowBackButtonIsVisible));
+                OnPropertyChanged(nameof(BackIsVisible));
             }
         }
 
