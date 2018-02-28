@@ -4,7 +4,7 @@ using Xamarin.Forms;
 
 namespace Flashcards.Views
 {
-    public partial class AddFlashcardPage : ContentPage
+    public partial class AddFlashcardPage
     {
         public AddFlashcardPage()
         {

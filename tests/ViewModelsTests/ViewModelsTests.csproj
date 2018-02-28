@@ -88,6 +88,10 @@
     <Analyzer Include="..\..\packages\xunit.analyzers.0.8.0\analyzers\dotnet\cs\xunit.analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Models\Models.csproj">
+      <Project>{BF8FC753-3438-42CD-B3D4-7337E16F8223}</Project>
+      <Name>Models</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\Services\Services.csproj">
       <Project>{71E85B13-54C6-4A98-BC94-8379B3744844}</Project>
       <Name>Services</Name>

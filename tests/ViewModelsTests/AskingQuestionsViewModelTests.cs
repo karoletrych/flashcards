@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
+using Flashcards.Models;
+using Flashcards.Services;
 using Flashcards.ViewModels;
-using FlashCards.Services;
 using NSubstitute;
 using Prism.Navigation;
 using Prism.Services;
@@ -15,19 +16,17 @@ namespace ViewModelsTests
 
         public AskingQuestionsViewModelTests()
         {
-            var examiner = new ExaminerModel(new[]
+            var examiner = new Examiner(new[]
             {
-                new FlashcardQuestion("cat", "kot"),
-                new FlashcardQuestion("dog", "pies"),
-                new FlashcardQuestion("duck", "kaczka"),
+                new Flashcard {Front = "cat", Back = "kot"},
+                new Flashcard {Front = "dog", Back = "pies"},
+                new Flashcard {Front = "duck", Back = "kaczka"}
             });
 
-            var examinerFactory = Substitute.For<IExaminerModelFactory>();
-            examinerFactory.Create(Arg.Any<int>()).Returns(examiner);
             _navigationService = Substitute.For<INavigationService>();
             var dialogService = Substitute.For<IPageDialogService>();
 
-            _askingQuestionsViewModel = new AskingQuestionsViewModel(examinerFactory, _navigationService, dialogService);
+            _askingQuestionsViewModel = new AskingQuestionsViewModel(_navigationService, dialogService);
         }
 
         private async Task NavigateToViewModel()

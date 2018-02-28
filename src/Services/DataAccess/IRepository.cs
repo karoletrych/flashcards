@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace Flashcards.Services.Database
+namespace Flashcards.Services.DataAccess
 {
     public interface IRepository<T> where T : new()
     {
@@ -12,5 +12,6 @@ namespace Flashcards.Services.Database
 
         Task<int> Insert(T entity);
         Task Delete(int id);
+        Task Update(T entity);
     }
 }

@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using FlashCards.Services;
+using Flashcards.Models;
+using Flashcards.Services;
 using Xunit;
 
 namespace Flashcards.ServicesTests
@@ -10,16 +11,16 @@ namespace Flashcards.ServicesTests
     {
         public ExaminerModelTests()
         {
-            _examiner = new ExaminerModel(_questions);
+            _examiner = new Examiner(_questions);
         }
 
-        private readonly ExaminerModel _examiner;
+        private readonly Examiner _examiner;
 
-        private readonly IList<FlashcardQuestion> _questions = new[]
+        private readonly IList<Flashcard> _questions = new[]
         {
-            new FlashcardQuestion("dog", "pies"),
-            new FlashcardQuestion("cat", "kot"),
-            new FlashcardQuestion("duck", "kaczka")
+            new Flashcard{Front = "dog", Back = "pies"},
+            new Flashcard{Front = "cat", Back = "kot"},
+            new Flashcard{Front = "duck", Back = "kaczka"}
         };
 
         [Fact]
@@ -46,9 +47,9 @@ namespace Flashcards.ServicesTests
             _examiner.TryAskNextQuestion(out var q2);
             _examiner.Answer(false);
 
-            Assert.Equal(q0, _questions[0]);
-            Assert.Equal(q1, _questions[1]);
-            Assert.Equal(q2, _questions[2]);
+            Assert.Equal(q0.Flashcard, _questions[0]);
+            Assert.Equal(q1.Flashcard, _questions[1]);
+            Assert.Equal(q2.Flashcard, _questions[2]);
         }
 
         [Fact]
@@ -59,7 +60,7 @@ namespace Flashcards.ServicesTests
             _examiner.TryAskNextQuestion(out _);
             _examiner.Answer(false);
 
-            var statuses = _examiner.QuestionsStatuses.ToList();
+            var statuses = _examiner.Answers.Select(q => q.Status).ToList();
             Assert.Equal(QuestionStatus.Known, statuses[0]);
             Assert.Equal(QuestionStatus.Unknown, statuses[1]);
             Assert.Equal(QuestionStatus.NotAnswered, statuses[2]);

@@ -1,9 +1,9 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using Flashcards.Models;
-using Flashcards.Services.Database;
+using Flashcards.Services.DataAccess.Database;
 
-namespace FlashCards.Services
+namespace Flashcards.Services.DataAccess
 {
     public class DeleteLessonService
     {

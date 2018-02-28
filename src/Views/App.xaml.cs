@@ -1,15 +1,12 @@
-using Flashcards.Services.Http;
 using Flashcards.ViewModels;
 using Flashcards.ViewModels.Lesson;
 using Flashcards.Views.Lesson;
-using FlashCards.Services;
 using Prism.Autofac;
 using Prism.Ioc;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
-
 namespace Flashcards.Views
 {
     public partial class App
@@ -22,10 +19,7 @@ namespace Flashcards.Views
             containerRegistry.RegisterForNavigation<AddFlashcardPage, AddFlashcardViewModel>();
             containerRegistry.RegisterForNavigation<AskingQuestionsPage, AskingQuestionsViewModel>();
 
-            containerRegistry.Register<ExaminerModelFactory>();
-
-            var builder = containerRegistry.GetBuilder();
-            IocRegistrations.RegisterTypesInIocContainer(builder);
+            IocRegistrations.RegisterTypesInIocContainer(containerRegistry.GetBuilder());
         }
 
         protected override void OnInitialized()

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Flashcards.Models;
-using Flashcards.Services.Database;
+using Flashcards.Services.DataAccess.Database;
 
-namespace Flashcards.Services
+namespace Flashcards.Services.DataAccess
 {
     public class AddLessonService
     {

@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
-using FlashCards.Services;
+using Flashcards.Services;
 using Prism.Navigation;
 using Prism.Services;
 using Xamarin.Forms;
@@ -14,11 +14,10 @@ namespace Flashcards.ViewModels
     public class AskingQuestionsViewModel : INotifyPropertyChanged, INavigationAware
     {
         private readonly IPageDialogService _dialogService;
-        private readonly IExaminerModelFactory _examinerModelFactory;
         private readonly INavigationService _navigationService;
 
         private string _backText;
-        private ExaminerModel _examinerModel; // TODO: make it readonly (remove Prism)
+        private Examiner _examiner;
         private bool _frontIsVisible;
         private string _frontText;
 
@@ -32,11 +31,9 @@ namespace Flashcards.ViewModels
         };
 
         public AskingQuestionsViewModel(
-            IExaminerModelFactory examinerModelFactory,
             INavigationService navigationService,
             IPageDialogService dialogService)
         {
-            _examinerModelFactory = examinerModelFactory;
             _navigationService = navigationService;
             _dialogService = dialogService;
         }
@@ -50,11 +47,11 @@ namespace Flashcards.ViewModels
 
         public ICommand UserAnswerCommand => new Command<bool>(known =>
         {
-            _examinerModel.Answer(isKnown: known);
+            _examiner.Answer(isKnown: known);
 
-            QuestionStatuses = _examinerModel.QuestionsStatuses.Select(x =>
+            QuestionStatuses = _examiner.Answers.Select(question =>
             {
-                switch (x)
+                switch (question.Status)
                 {
                     case QuestionStatus.Known:
                         return new StepItem
@@ -75,7 +72,7 @@ namespace Flashcards.ViewModels
                             Value = 1
                         };
                     default:
-                        throw new ArgumentOutOfRangeException(nameof(x), x, null);
+                        throw new ArgumentOutOfRangeException(nameof(question), question, null);
                 }
             }).ToList();
 
@@ -85,9 +82,9 @@ namespace Flashcards.ViewModels
 
         public ICommand ShowBackCommand => new Command(() =>
         {
-            QuestionStatuses = _examinerModel.QuestionsStatuses.Select(questionStatus =>
+            QuestionStatuses = _examiner.Answers.Select(question =>
             {
-                switch (questionStatus)
+                switch (question.Status)
                 {
                     case QuestionStatus.Known:
                         return new StepItem
@@ -108,7 +105,7 @@ namespace Flashcards.ViewModels
                             Value = 1
                         };
                     default:
-                        throw new ArgumentOutOfRangeException(nameof(questionStatus), questionStatus, null);
+                        throw new ArgumentOutOfRangeException(nameof(question), question, null);
                 }
             }).ToList();
 
@@ -167,11 +164,9 @@ namespace Flashcards.ViewModels
         {
         }
 
-        public async void OnNavigatingTo(NavigationParameters parameters)
+        public void OnNavigatingTo(NavigationParameters parameters)
         {
-            var lessonId = (int) parameters["lessonId"];
-            _examinerModel = await _examinerModelFactory.Create(lessonId);
-             
+            _examiner = (Examiner) parameters["examiner"];
             ShowNextQuestionOrEnd();
         }
 
@@ -179,19 +174,17 @@ namespace Flashcards.ViewModels
 
         private async void ShowNextQuestionOrEnd()
         {
-            if (_examinerModel.TryAskNextQuestion(out var question))
+            if (_examiner.TryAskNextQuestion(out var question))
             {
-                FrontText = question.FrontText;
-                BackText = question.BackText;
+                FrontText = question.Flashcard.Front;
+                BackText = question.Flashcard.Back;
             }
             else
             {
-                await _dialogService.DisplayAlertAsync("Koniec",
-                    $"Znane: {_examinerModel.QuestionsStatuses.Count(x => x == QuestionStatus.Known)} \n" +
-                    $"Nieznane: {_examinerModel.QuestionsStatuses.Count(x => x == QuestionStatus.Unknown)}",
-                    "OK");
-
-                await _navigationService.GoBackAsync();
+                await _dialogService.DisplayAlertAsync("Koniec, naciœnij OK a potem wstecz",
+                    $"Znane: {_examiner.Answers.Count(x => x.Status == QuestionStatus.Known)} \n" +
+                    $"Nieznane: {_examiner.Answers.Count(x => x.Status == QuestionStatus.Unknown)}",
+                    "OK, nacisnê");
             }
         }
 

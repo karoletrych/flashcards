@@ -1,8 +1,9 @@
 using System.Linq;
 using Flashcards.Models;
-using Flashcards.Services.Database;
+using Flashcards.Services.DataAccess;
+using Flashcards.Services.DataAccess.Database;
 using Xunit;
-using DatabaseConnectionFactory = Flashcards.Services.Database.DatabaseConnectionFactory;
+using DatabaseConnectionFactory = Flashcards.Services.DataAccess.Database.DatabaseConnectionFactory;
 
 namespace Flashcards.ServicesTests
 {
@@ -13,7 +14,8 @@ namespace Flashcards.ServicesTests
 
         public RepositoryTests()
         {
-            var sqliteConnection = DatabaseConnectionFactory.CreateConnection(":memory:");
+            var databaseConnectionFactory = new DatabaseConnectionFactory(new [] {new CoreTableCreator()});
+            var sqliteConnection = databaseConnectionFactory.CreateConnection(":memory:");
             _flashcardRepository = new Repository<Flashcard>(sqliteConnection);
             _lessonRepository = new Repository<Lesson>(sqliteConnection);
         }
@@ -32,7 +34,7 @@ namespace Flashcards.ServicesTests
         public void FindAll_ReturnsAllObjects()
         {
             var lesson = new Lesson {FrontLanguage = Language.English, BackLanguage = Language.Polish};
-            var flashcard = new Flashcard {Front = "cat", Back = "kot", LessonId = 1, Strength = 0.3m};
+            var flashcard = new Flashcard {Front = "cat", Back = "kot", LessonId = 1};
             _lessonRepository.Insert(lesson);
             _flashcardRepository.Insert(flashcard);
 
@@ -47,8 +49,8 @@ namespace Flashcards.ServicesTests
         public void FindMatching_ReturnsResults()
         {
             var lesson = new Lesson { FrontLanguage = Language.English, BackLanguage = Language.Polish };
-            var flashcard = new Flashcard { Front = "cat", Back = "kot", LessonId = 1, Strength = 0.3m };
-            var flashcard2 = new Flashcard { Front = "dog", Back = "pies", LessonId = 1, Strength = 0.3m };
+            var flashcard = new Flashcard { Front = "cat", Back = "kot", LessonId = 1};
+            var flashcard2 = new Flashcard { Front = "dog", Back = "pies", LessonId = 1 };
             _lessonRepository.Insert(lesson);
             _flashcardRepository.Insert(flashcard2);
             _flashcardRepository.Insert(flashcard);

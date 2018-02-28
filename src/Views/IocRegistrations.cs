@@ -3,8 +3,11 @@ using System.IO;
 using System.Reflection;
 using Autofac;
 using Flashcards.Models;
-using Flashcards.Services.Database;
+using Flashcards.Services.DataAccess;
+using Flashcards.Services.DataAccess.Database;
 using Flashcards.Services.Http;
+using Flashcards.SpacedRepetition.Leitner;
+using Flashcards.SpacedRepetition.Provider;
 using Flashcards.ViewModels;
 using SQLite;
 
@@ -20,6 +23,8 @@ namespace Flashcards.Views
                 Assembly.GetAssembly(typeof(AskingQuestionsViewModel)),
                 Assembly.GetAssembly(typeof(Flashcard)),
                 Assembly.GetAssembly(typeof(ITranslatorService)),
+                Assembly.GetAssembly(typeof(ISpacedRepetition)),
+                Assembly.GetAssembly(typeof(Algorithm.LeitnerRepetition)),
             };
             containerBuilder
                 .RegisterAssemblyTypes(assemblies)
@@ -35,7 +40,9 @@ namespace Flashcards.Views
                 Environment.GetFolderPath(Environment.SpecialFolder.Personal),
                 "database.db3");
             containerBuilder
-                .Register(_ => DatabaseConnectionFactory.CreateAsyncConnection(databasePath))
+                .Register(ctx => ctx
+                    .Resolve<DatabaseConnectionFactory>()
+                    .CreateAsyncConnection(databasePath))
                 .As<SQLiteAsyncConnection>()
                 .SingleInstance();
         }

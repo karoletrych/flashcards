@@ -1,8 +1,12 @@
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Input;
-using Flashcards.Services.Database;
-using FlashCards.Services;
+using Flashcards.Models;
+using Flashcards.Services;
+using Flashcards.Services.DataAccess;
+using Flashcards.Services.DataAccess.Database;
 using Prism.Navigation;
 using Prism.Services;
 using Xamarin.Forms;
@@ -13,19 +17,25 @@ namespace Flashcards.ViewModels.Lesson
     {
         private readonly DeleteLessonService _deleteLessonService;
         private readonly IPageDialogService _dialogService;
+        private readonly IRepository<Flashcard> _flashcardRepository;
         private readonly IRepository<Models.Lesson> _lessonRepository;
         private readonly INavigationService _navigationService;
+        private readonly Func<IEnumerable<Flashcard>, Examiner> _examinerFactory;
 
         public LessonListViewModel(
             IRepository<Models.Lesson> lessonRepository,
             INavigationService navigationService,
             IPageDialogService dialogService,
-            DeleteLessonService deleteLessonService)
+            DeleteLessonService deleteLessonService,
+            IRepository<Flashcard> flashcardRepository,
+            Func<IEnumerable<Flashcard>, Examiner> examinerFactory)
         {
             _lessonRepository = lessonRepository;
             _navigationService = navigationService;
             _dialogService = dialogService;
             _deleteLessonService = deleteLessonService;
+            _flashcardRepository = flashcardRepository;
+            _examinerFactory = examinerFactory;
             Lessons = new ObservableCollection<Models.Lesson>();
         }
 
@@ -38,8 +48,15 @@ namespace Flashcards.ViewModels.Lesson
         {
             DialogHandler.HandleExceptions(_dialogService, async () =>
             {
-                var lessonId = new NavigationParameters {{"lessonId", lesson.Id}};
-                await _navigationService.NavigateAsync("AskingQuestionsPage", lessonId);
+                var flashcards = await _flashcardRepository.FindMatching(f => f.LessonId == lesson.Id);
+                var examiner = _examinerFactory(flashcards);
+
+                await _navigationService.NavigateAsync("AskingQuestionsPage", new NavigationParameters
+                {
+                    {
+                        "examiner", examiner
+                    }
+                });
             });
         });
 
@@ -57,11 +74,8 @@ namespace Flashcards.ViewModels.Lesson
                     Lessons.Remove(lesson);
                 });
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
         public void OnNavigatingTo(NavigationParameters parameters)
         {
-
         }
 
         public void OnNavigatedFrom(NavigationParameters parameters)
@@ -71,12 +85,10 @@ namespace Flashcards.ViewModels.Lesson
 
         public async void OnNavigatedTo(NavigationParameters parameters)
         {
-
             var lessons = await _lessonRepository.FindAll();
-            foreach (var lesson in lessons)
-            {
-                Lessons.Add(lesson);
-            }
+            foreach (var lesson in lessons) Lessons.Add(lesson);
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

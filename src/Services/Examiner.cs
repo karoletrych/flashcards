@@ -1,20 +1,18 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Flashcards.Models;
 
-namespace FlashCards.Services
+namespace Flashcards.Services
 {
     public class FlashcardQuestion
     {
-        public FlashcardQuestion(string frontText, string backText)
+        public FlashcardQuestion(Flashcard flashcard)
         {
-            FrontText = frontText;
-            BackText = backText;
-            Status = QuestionStatus.NotAnswered;
+            Flashcard = flashcard;
         }
 
-        public string FrontText { get; }
-        public string BackText { get; }
+        public Flashcard Flashcard { get; }
         public QuestionStatus Status { get; set; }
     }
 
@@ -25,19 +23,19 @@ namespace FlashCards.Services
         Unknown
     }
 
-    public class ExaminerModel
+    public class Examiner
     {
         private readonly IList<FlashcardQuestion> _askedQuestions = new List<FlashcardQuestion>();
         private readonly Queue<FlashcardQuestion> _questionsToAsk;
 
-        public ExaminerModel(IEnumerable<FlashcardQuestion> questions)
+        public Examiner(IEnumerable<Flashcard> questions)
         {
-            _questionsToAsk = new Queue<FlashcardQuestion>(questions);
+            _questionsToAsk = new Queue<FlashcardQuestion>(
+                questions.Select(f => new FlashcardQuestion(f)));
         }
 
-        public IEnumerable<QuestionStatus> QuestionsStatuses =>
-            _askedQuestions.Select(q => q.Status)
-                .Concat(_questionsToAsk.Select(q => q.Status));
+        public IEnumerable<FlashcardQuestion> Questions =>
+            _askedQuestions.Concat(_questionsToAsk);
 
         public void Answer(bool isKnown)
         {

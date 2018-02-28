@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using SQLite;
 
-namespace Flashcards.Services.Database
+namespace Flashcards.Services.DataAccess.Database
 {
     public class Repository<T> : IRepository<T> where T : new()
     {
@@ -45,6 +45,12 @@ namespace Flashcards.Services.Database
         public Task Delete(int id)
         {
             _dbConnection.Delete<T>(id);
+            return Task.CompletedTask;
+        }
+
+        public Task Update(T entity)
+        {
+            _dbConnection.Update(entity);
             return Task.CompletedTask;
         }
     }
