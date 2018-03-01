@@ -11,7 +11,9 @@ namespace Flashcards.Services.DataAccess
         Task<IEnumerable<T>> FindMatching(Expression<Func<T, bool>> predicate);
 
         Task<int> Insert(T entity);
-        Task Delete(int id);
         Task Update(T entity);
+        event EventHandler<T> ObjectInserted;
+        Task Delete(T entity);
+        Task UpdateAll(IEnumerable<T> entities);
     }
 }

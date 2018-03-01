@@ -7,6 +7,6 @@ namespace Flashcards.SpacedRepetition.Provider
     public interface ISpacedRepetition
     {
         Task<IEnumerable<Flashcard>> ChooseFlashcards();
-        void RearrangeFlashcards(IEnumerable<(Flashcard, bool)> questionResults);
+        void RearrangeFlashcards(IEnumerable<(Flashcard, bool isKnown)> questionResults);
     }
 }

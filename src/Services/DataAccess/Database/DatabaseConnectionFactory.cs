@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using Flashcards.Models;
 using SQLite;
 
 namespace Flashcards.Services.DataAccess.Database
@@ -8,22 +8,13 @@ namespace Flashcards.Services.DataAccess.Database
         private const SQLiteOpenFlags SqliteOpenFlags =
             SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.NoMutex;
 
-        private readonly IEnumerable<ITableCreator> _tableCreators;
-
-        public DatabaseConnectionFactory(IEnumerable<ITableCreator> tableCreators)
-        {
-            _tableCreators = tableCreators;
-        }
-
         public SQLiteAsyncConnection CreateAsyncConnection(string databasePath)
         {
             var connection = new SQLiteAsyncConnection(databasePath,
                 SqliteOpenFlags);
 
-            foreach (var tableCreator in _tableCreators)
-            {
-                tableCreator.CreateTablesAsync(connection);
-            }
+            connection.CreateTableAsync<Flashcard>();
+            connection.CreateTableAsync<Lesson>();
 
             return connection;
         }
@@ -33,10 +24,8 @@ namespace Flashcards.Services.DataAccess.Database
             var connection = new SQLiteConnection(databasePath,
                 SqliteOpenFlags);
 
-            foreach (var tableCreator in _tableCreators)
-            {
-                tableCreator.CreateTables(connection);
-            }
+            connection.CreateTable<Flashcard>();
+            connection.CreateTable<Lesson>();
 
             return connection;
         }

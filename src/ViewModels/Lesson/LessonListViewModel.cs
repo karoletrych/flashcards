@@ -15,25 +15,27 @@ namespace Flashcards.ViewModels.Lesson
 {
     public class LessonListViewModel : INotifyPropertyChanged, INavigationAware
     {
-        private readonly DeleteLessonService _deleteLessonService;
         private readonly IPageDialogService _dialogService;
         private readonly IRepository<Flashcard> _flashcardRepository;
         private readonly IRepository<Models.Lesson> _lessonRepository;
         private readonly INavigationService _navigationService;
         private readonly Func<IEnumerable<Flashcard>, Examiner> _examinerFactory;
 
+        public LessonListViewModel()
+        {
+            
+        }
+
         public LessonListViewModel(
             IRepository<Models.Lesson> lessonRepository,
             INavigationService navigationService,
             IPageDialogService dialogService,
-            DeleteLessonService deleteLessonService,
             IRepository<Flashcard> flashcardRepository,
             Func<IEnumerable<Flashcard>, Examiner> examinerFactory)
         {
             _lessonRepository = lessonRepository;
             _navigationService = navigationService;
             _dialogService = dialogService;
-            _deleteLessonService = deleteLessonService;
             _flashcardRepository = flashcardRepository;
             _examinerFactory = examinerFactory;
             Lessons = new ObservableCollection<Models.Lesson>();
@@ -70,7 +72,7 @@ namespace Flashcards.ViewModels.Lesson
             new Command<Models.Lesson>(
                 async lesson =>
                 {
-                    await _deleteLessonService.Delete(lesson.Id);
+                    await _lessonRepository.Delete(lesson);
                     Lessons.Remove(lesson);
                 });
 

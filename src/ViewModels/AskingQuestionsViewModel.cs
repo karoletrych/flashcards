@@ -49,7 +49,7 @@ namespace Flashcards.ViewModels
         {
             _examiner.Answer(isKnown: known);
 
-            QuestionStatuses = _examiner.Answers.Select(question =>
+            QuestionStatuses = _examiner.Questions.Select(question =>
             {
                 switch (question.Status)
                 {
@@ -82,7 +82,7 @@ namespace Flashcards.ViewModels
 
         public ICommand ShowBackCommand => new Command(() =>
         {
-            QuestionStatuses = _examiner.Answers.Select(question =>
+            QuestionStatuses = _examiner.Questions.Select(question =>
             {
                 switch (question.Status)
                 {
@@ -182,8 +182,8 @@ namespace Flashcards.ViewModels
             else
             {
                 await _dialogService.DisplayAlertAsync("Koniec, naciœnij OK a potem wstecz",
-                    $"Znane: {_examiner.Answers.Count(x => x.Status == QuestionStatus.Known)} \n" +
-                    $"Nieznane: {_examiner.Answers.Count(x => x.Status == QuestionStatus.Unknown)}",
+                    $"Znane: {_examiner.Questions.Count(x => x.Status == QuestionStatus.Known)} \n" +
+                    $"Nieznane: {_examiner.Questions.Count(x => x.Status == QuestionStatus.Unknown)}",
                     "OK, nacisnê");
             }
         }

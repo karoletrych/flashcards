@@ -1,9 +1,8 @@
-﻿using System;
-using System.Linq;
-using Flashcards.Services;
+﻿using Flashcards.Services;
 using Flashcards.SpacedRepetition.Provider;
 using Flashcards.ViewModels;
 using Flashcards.ViewModels.Lesson;
+using Prism;
 using Prism.Autofac;
 using Prism.Ioc;
 using Prism.Navigation;
@@ -13,13 +12,15 @@ namespace Flashcards.Views
 {
     public class Repetition : PrismApplication
     {
+        public Repetition(IPlatformInitializer platformInitializer) : base(platformInitializer)
+        {
+        }
+
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
             containerRegistry.RegisterForNavigation<NavigationPage>();
             containerRegistry.RegisterForNavigation<AskingQuestionsPage, AskingQuestionsViewModel>();
             containerRegistry.RegisterForNavigation<LessonListPage, LessonListViewModel>();
-
-            IocRegistrations.RegisterTypesInIocContainer(containerRegistry.GetBuilder());
         }
 
         protected override async void OnInitialized()
@@ -28,6 +29,7 @@ namespace Flashcards.Views
 
             var flashcards = await spacedRepetition.ChooseFlashcards();
             var examiner = new Examiner(flashcards);
+
             await NavigationService.NavigateAsync("NavigationPage/AskingQuestionsPage",
                 new NavigationParameters
                 {
@@ -36,25 +38,12 @@ namespace Flashcards.Views
                         examiner
                     }
                 });
-            
-            var repetitionResults = examiner.Questions.Select(q => (q.Flashcard, IsKnown(q)));
+            var results = await examiner.QuestionResults.Task;
 
-            spacedRepetition.RearrangeFlashcards (repetitionResults);
+            spacedRepetition.RearrangeFlashcards(results);
+
         }
 
-        bool IsKnown(FlashcardQuestion flashcardQuestion)
-        {
-            switch (flashcardQuestion.Status)
-            {
-                case QuestionStatus.NotAnswered:
-                    throw new ArgumentException("should be answered at this stage");
-                case QuestionStatus.Known:
-                    return true;
-                case QuestionStatus.Unknown:
-                    return false;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-        }
+
     }
 }

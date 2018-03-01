@@ -9,9 +9,10 @@ using Flashcards.Services.Http;
 using Flashcards.SpacedRepetition.Leitner;
 using Flashcards.SpacedRepetition.Provider;
 using Flashcards.ViewModels;
+using Flashcards.Views;
 using SQLite;
 
-namespace Flashcards.Views
+namespace FlashCards.Droid
 {
     public static class IocRegistrations
     {
@@ -34,7 +35,7 @@ namespace Flashcards.Views
             containerBuilder
                 .RegisterGeneric(typeof(AsyncRepository<>))
                 .As(typeof(IRepository<>))
-                .InstancePerDependency();
+                .SingleInstance();
 
             var databasePath = Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.Personal),

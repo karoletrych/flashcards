@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Flashcards.Models;
 
 namespace Flashcards.Services
@@ -37,6 +38,9 @@ namespace Flashcards.Services
         public IEnumerable<FlashcardQuestion> Questions =>
             _askedQuestions.Concat(_questionsToAsk);
 
+        public TaskCompletionSource<IEnumerable<ValueTuple<Flashcard, bool>>> QuestionResults =
+            new TaskCompletionSource<IEnumerable<ValueTuple<Flashcard, bool>>>();
+
         public void Answer(bool isKnown)
         {
             _askedQuestions.Last().Status =
@@ -56,8 +60,24 @@ namespace Flashcards.Services
                 return true;
             }
 
+            QuestionResults.SetResult(_askedQuestions.Select(q => (q.Flashcard, IsKnown(q.Status))));
             question = null;
             return false;
+        }
+
+        private bool IsKnown(QuestionStatus status)
+        {
+            switch (status)
+            {
+                case QuestionStatus.NotAnswered:
+                    throw new ArgumentException("should be answered at this stage");
+                case QuestionStatus.Known:
+                    return true;
+                case QuestionStatus.Unknown:
+                    return false;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
     }
 }

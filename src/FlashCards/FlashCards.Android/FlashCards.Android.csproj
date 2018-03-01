@@ -71,6 +71,8 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AndroidPlatformInitializer.cs" />
+    <Compile Include="IocRegistrations.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="RepetitionActivity.cs" />
     <Compile Include="RepetitionNotificationService.cs" />

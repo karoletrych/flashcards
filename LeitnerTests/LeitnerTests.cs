@@ -32,68 +32,71 @@ namespace LeitnerTests
 
     public class LeitnerTests
     {
+        private const int FlashcardCount = 20;
+
         public LeitnerTests(ITestOutputHelper output)
         {
             _output = output;
-            var databaseConnectionFactory =
-                new DatabaseConnectionFactory(new ITableCreator[]
-                {
-                    new CoreTableCreator(),
-                    new LeitnerCardDeckCreator(),
-                });
-            var sqliteConnection = databaseConnectionFactory.CreateConnection(":memory:");
-            _flashcardRepository = new Repository<Flashcard>(sqliteConnection);
-            _cardDeckRepository = new Repository<CardDeck>(sqliteConnection);
+            var sqliteConnection = 
+                new DatabaseConnectionFactory()
+                    .CreateConnection(":memory:");
+
+            _deckRepository = new Repository<Deck>(sqliteConnection);
+            var flashcardRepository = new Repository<Flashcard>(sqliteConnection);
+            var tableCreator = new TableCreator(sqliteConnection);
+
+            ISpacedRepetitionInitializer leitnerInitializer =
+                new LeitnerInitializer(
+                    flashcardRepository,
+                    _deckRepository,
+                    tableCreator);
+            leitnerInitializer.Initialize();
+
+            Enumerable
+                .Range(1, FlashcardCount)
+                .Select(cardId =>
+                    new Flashcard
+                    {
+                        Id = cardId,
+                        LessonId = 1
+                    })
+                .ToList()
+                .ForEach(f => flashcardRepository.Insert(f));
 
             _leitner = new LeitnerRepetition(
-                _cardDeckRepository,
-                _flashcardRepository,
+                _deckRepository,
                 new PropertiesMock());
-            Enumerable
-                .Range(1, 100)
-                .ToList()
-                .ForEach(cardId =>
-                    {
-                        _flashcardRepository.Insert(
-                            new Flashcard
-                            {
-                                Id = cardId,
-                            });
-                        _cardDeckRepository.Insert(new CardDeck
-                        {
-                            CardId = cardId,
-                            DeckTitle = DeckTitleEnum.CurrentDeck
-                        });
-                    }
-                );
+
         }
 
         private readonly ITestOutputHelper _output;
 
-        private readonly Repository<Flashcard> _flashcardRepository;
-        private readonly Repository<CardDeck> _cardDeckRepository;
+        private readonly Repository<Deck> _deckRepository;
         private readonly ISpacedRepetition _leitner;
 
-        private IEnumerable<CardDeck> Flashcards(DeckTitleEnum deck)
+        private IEnumerable<Flashcard> Flashcards(string deck)
         {
-            return _cardDeckRepository.FindMatching(cd => cd.DeckTitle == deck).Result;
+            return _deckRepository
+                .FindMatching(cd => cd.DeckTitle == deck)
+                .Result
+                .Single()
+                .Cards;
         }
 
         [Fact]
         public void After10CorrectSessions_AllCardsAreInRetiredDeck()
         {
-            for (var i = 0; i < 10; ++i)
+            for (var i = 0; i < 20; ++i)
             {
-                var flashcards = _leitner.ChooseFlashcards().Result;
+                var flashcards = _leitner.ChooseFlashcards().Result.ToList();
                 _leitner.RearrangeFlashcards(flashcards.Select(f => (f, true)));
-
                 _output.WriteLine($"session: {i}");
-                foreach (var deck in typeof(DeckTitleEnum).GetEnumValues())
-                    _output.WriteLine(deck + ": " + Flashcards((DeckTitleEnum) deck).Count());
+                foreach (var deck in _deckRepository.FindAll().Result)
+                    _output.WriteLine(deck.DeckTitle + ": " + deck.Cards.Count());
                 _output.WriteLine("");
             }
 
-            Assert.Equal(100, Flashcards(DeckTitleEnum.RetiredDeck).Count());
+            Assert.Equal(FlashcardCount, Flashcards(retiredDeckName).Count());
         }
 
         [Fact]
@@ -103,7 +106,7 @@ namespace LeitnerTests
             _leitner.RearrangeFlashcards(flashcards.Select(f => (f, true)));
             var rearrangedFlashcards = _leitner.ChooseFlashcards().Result;
 
-            Assert.True(rearrangedFlashcards.Count() < 100);
+            Assert.NotEqual(FlashcardCount, rearrangedFlashcards.Count());
         }
 
         [Fact]
@@ -113,11 +116,11 @@ namespace LeitnerTests
             _leitner.RearrangeFlashcards(flashcards.Select(f => (f, true)));
 
             var session0DeckCards =
-                _cardDeckRepository.FindMatching(cd => cd.DeckTitle == DeckTitleEnum._0259).Result;
+                _deckRepository.FindMatching(cd => cd.DeckTitle == "0259").Result;
             Assert.NotEmpty(session0DeckCards);
 
             var currentDeckCards =
-                _cardDeckRepository.FindMatching(cd => cd.DeckTitle == DeckTitleEnum.CurrentDeck).Result;
+                _deckRepository.FindMatching(cd => cd.DeckTitle == currentDeckName).Result.Single().Cards;
             Assert.Empty(currentDeckCards);
         }
 
@@ -125,7 +128,7 @@ namespace LeitnerTests
         public void ChooseFlashcards_ReturnsAllFromCurrentDeck()
         {
             var flashcards = _leitner.ChooseFlashcards().Result;
-            Assert.Equal(100, flashcards.Count());
+            Assert.Equal(FlashcardCount, flashcards.Count());
         }
     }
 }

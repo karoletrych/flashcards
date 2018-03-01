@@ -13,7 +13,6 @@ namespace Flashcards.ViewModels
     public class AddFlashcardViewModel : INotifyPropertyChanged, INavigatedAware
     {
         private const int TranslationDelayInMilliseconds = 800;
-        private readonly AddFlashcardService _addFlashcardService;
 
         private readonly Timer _timer = new Timer(TranslationDelayInMilliseconds)
         {
@@ -26,6 +25,7 @@ namespace Flashcards.ViewModels
         };
 
         private readonly ITranslatorService _translatorService;
+        private readonly IRepository<Flashcard> _flashcardRepository;
         private Language _backLanguage;
 
         private string _backText;
@@ -34,10 +34,10 @@ namespace Flashcards.ViewModels
         private string _frontText;
         private int _lessonId;
 
-        public AddFlashcardViewModel(ITranslatorService translatorService, AddFlashcardService addFlashcardService)
+        public AddFlashcardViewModel(ITranslatorService translatorService, IRepository<Flashcard> flashcardRepository)
         {
             _translatorService = translatorService;
-            _addFlashcardService = addFlashcardService;
+            _flashcardRepository = flashcardRepository;
             _timer.Elapsed += TimerOnElapsed;
             _timerBack.Elapsed += TimerOnElapsedBack;
         }
@@ -67,12 +67,11 @@ namespace Flashcards.ViewModels
 
         public ICommand NextFlashcard => new Command(async () =>
         {
-            await _addFlashcardService.AddFlashcard(FrontText, BackText, _lessonId);
+            await _flashcardRepository.Insert(new Flashcard{Front = FrontText, Back = BackText, LessonId = _lessonId});
             FrontText = "";
             BackText = "";
         });
 
-        // TODO: get rid of this shit (Prism) and inject parameters via constructor
         public void OnNavigatedTo(NavigationParameters parameters)
         {
             _frontLanguage = (Language) parameters["frontLanguage"];

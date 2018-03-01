@@ -2,6 +2,8 @@
 using Android.Content.PM;
 using Android.OS;
 using Flashcards.Views;
+using Xamarin.Forms;
+using Xamarin.Forms.Platform.Android;
 
 namespace FlashCards.Droid
 {
@@ -10,7 +12,7 @@ namespace FlashCards.Droid
         Icon = "@drawable/icon",
         Theme = "@style/MainTheme",
         ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
-    public class RepetitionActivity : Xamarin.Forms.Platform.Android.FormsAppCompatActivity
+    public class RepetitionActivity : FormsAppCompatActivity
     {
         protected override void OnCreate(Bundle bundle)
         {
@@ -19,10 +21,9 @@ namespace FlashCards.Droid
 
             base.OnCreate(bundle);
 
-            Xamarin.Forms.Forms.Init(this, bundle);
+            Forms.Init(this, bundle);
 
-            LoadApplication(new Repetition());
+            LoadApplication(new Repetition(new AndroidPlatformInitializer()));
         }
     }
-
 }

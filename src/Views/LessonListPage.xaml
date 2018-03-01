@@ -3,11 +3,16 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:Flashcards.Views.CustomControls"
+             xmlns:lesson="clr-namespace:Flashcards.ViewModels.Lesson;assembly=ViewModels"
              x:Class="Flashcards.Views.LessonListPage">
 
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Add lesson" Command="{Binding AddLessonCommand}" />
     </ContentPage.ToolbarItems>
+
+    <ContentPage.BindingContext>
+        <lesson:LessonListViewModel/>
+    </ContentPage.BindingContext>
 
     <controls:CommandListView
         ItemsSource="{Binding Lessons}"

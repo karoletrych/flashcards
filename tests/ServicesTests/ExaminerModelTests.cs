@@ -60,7 +60,7 @@ namespace Flashcards.ServicesTests
             _examiner.TryAskNextQuestion(out _);
             _examiner.Answer(false);
 
-            var statuses = _examiner.Answers.Select(q => q.Status).ToList();
+            var statuses = _examiner.Questions.Select(q => q.Status).ToList();
             Assert.Equal(QuestionStatus.Known, statuses[0]);
             Assert.Equal(QuestionStatus.Unknown, statuses[1]);
             Assert.Equal(QuestionStatus.NotAnswered, statuses[2]);

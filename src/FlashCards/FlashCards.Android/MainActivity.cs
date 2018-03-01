@@ -29,14 +29,10 @@ namespace Flashcards.Droid
 
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
-//            var startServiceIntent = new Intent(this, typeof(RepetitionNotificationService));
-//            StartService(startServiceIntent);
-
             ScheduleJob();
 
             Xamarin.Forms.Forms.Init(this, bundle);
-            LoadApplication(new App());
-            
+            LoadApplication(new App(new AndroidPlatformInitializer()));
         }
 
         private void ScheduleJob()
@@ -44,9 +40,9 @@ namespace Flashcards.Droid
             var componentName = new ComponentName(ApplicationContext, Java.Lang.Class.FromType(typeof(RepetitionNotificationService)));
             var jobInfo = 
                 new JobInfo.Builder(1, componentName)
-//                .SetMinimumLatency(10_000) 
+                .SetMinimumLatency(10_000) 
 //                .SetPeriodic(1200_000) // 20 minutes
-                .SetPeriodic(21600_000) // 6 hours
+//                .SetPeriodic(21600_000) // 6 hours
                 .Build();
 
             var jobScheduler = (JobScheduler)ApplicationContext.GetSystemService(JobSchedulerService);

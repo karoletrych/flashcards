@@ -1,8 +1,9 @@
-﻿using Android.App;
+﻿using System.Linq;
+using Android.App;
 using Android.App.Job;
 using Android.Content;
-using Flashcards.Droid;
-using Java.Lang;
+using Autofac;
+using Flashcards.SpacedRepetition.Provider;
 
 namespace FlashCards.Droid
 {
@@ -11,9 +12,26 @@ namespace FlashCards.Droid
     {
         public override bool OnStartJob(JobParameters @params)
         {
+            var containerBuilder = new ContainerBuilder();
+            IocRegistrations.RegisterTypesInIocContainer(containerBuilder);
+
+            var spacedRepetition = 
+                containerBuilder
+                    .Build()
+                    .Resolve<ISpacedRepetition>();
+            if (spacedRepetition.ChooseFlashcards().Result.Any())
+            {
+                ShowNotification();
+            }
+
+            return true;
+        }
+
+        private void ShowNotification()
+        {
             var secondIntent = new Intent(this, typeof(RepetitionActivity));
 
-            var pendingIntent = 
+            var pendingIntent =
                 TaskStackBuilder.Create(this)
                     .AddNextIntentWithParentStack(secondIntent)
                     .GetPendingIntent(0, PendingIntentFlags.UpdateCurrent);
@@ -34,8 +52,6 @@ namespace FlashCards.Droid
                 GetSystemService(NotificationService) as NotificationManager;
 
             notificationManager.Notify(0, notification);
-
-            return true;
         }
 
         public override bool OnStopJob(JobParameters @params)

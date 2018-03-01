@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Flashcards.Models;
 using Flashcards.Services.DataAccess;
@@ -14,8 +15,7 @@ namespace Flashcards.ServicesTests
 
         public RepositoryTests()
         {
-            var databaseConnectionFactory = new DatabaseConnectionFactory(new [] {new CoreTableCreator()});
-            var sqliteConnection = databaseConnectionFactory.CreateConnection(":memory:");
+            var sqliteConnection = new DatabaseConnectionFactory().CreateConnection(":memory:");
             _flashcardRepository = new Repository<Flashcard>(sqliteConnection);
             _lessonRepository = new Repository<Lesson>(sqliteConnection);
         }
@@ -84,6 +84,50 @@ namespace Flashcards.ServicesTests
             var lessons = _lessonRepository.FindAll().Result.ToList();
             Assert.Equal(1, lessons[0].Id);
             Assert.Equal(2, lessons[1].Id);
+        }
+
+        [Fact]
+        public async void FlashcardsAreDeleted_WhenItsLessonIsDeleted()
+        {
+            var lesson = new Lesson
+            {
+                FrontLanguage = Language.English,
+                BackLanguage = Language.Polish,
+                Flashcards = new List<Flashcard>
+                {
+                    new Flashcard{Id = 0},
+                    new Flashcard{Id = 1},
+                    new Flashcard{Id = 2},
+                }
+            };
+            var id = await _lessonRepository.Insert(lesson);
+
+            await _lessonRepository.Delete(lesson);
+            Assert.Empty(_lessonRepository.FindAll().Result);
+            Assert.Empty(_flashcardRepository.FindAll().Result);
+        }
+
+        [Fact]
+        public async void FlashcardsAreDeleted_WhenItsLessonIsDeletedBySeparateReference()
+        {
+            var lesson = new Lesson
+            {
+                FrontLanguage = Language.English,
+                BackLanguage = Language.Polish,
+                Flashcards = new List<Flashcard>
+                {
+                    new Flashcard{Id = 0},
+                    new Flashcard{Id = 1},
+                    new Flashcard{Id = 2},
+                }
+            };
+            var id = await _lessonRepository.Insert(lesson);
+            var lessonRef = _lessonRepository.FindAll().Result.Single();
+
+
+            await _lessonRepository.Delete(lesson);
+            Assert.Empty(_lessonRepository.FindAll().Result);
+            Assert.Empty(_flashcardRepository.FindAll().Result);
         }
     }
 }

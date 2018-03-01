@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
 using Flashcards.Models;
-using Flashcards.Services;
 using Flashcards.Services.DataAccess;
 using Prism.Navigation;
 using Prism.Services;
@@ -13,19 +12,16 @@ namespace Flashcards.ViewModels.Lesson
 {
     public class AddLessonViewModel
     {
-        private readonly AddLessonService _addLessonService;
+        private readonly IRepository<Models.Lesson> _lessonRepository;
         private readonly INavigationService _navigationService;
         private readonly IPageDialogService _pageDialogService;
 
         public AddLessonViewModel(
             INavigationService navigationService,
-            AddLessonService addLessonService,
-            IPageDialogService pageDialogService)
-        {
-            _navigationService = navigationService;
-            _addLessonService = addLessonService;
-            _pageDialogService = pageDialogService;
-        }
+            IPageDialogService pageDialogService,
+            IRepository<Models.Lesson> lessonRepository) =>
+            (_navigationService, _pageDialogService, _lessonRepository) = 
+                (navigationService, pageDialogService, lessonRepository);
 
         public IList<string> FrontLanguageNames =>
             Enum.GetNames(typeof(Language))
@@ -44,13 +40,26 @@ namespace Flashcards.ViewModels.Lesson
             {
                 var frontLanguage = SelectedFrontLanguage.ToLanguageEnum();
                 var backLanguage = SelectedBackLanguage.ToLanguageEnum();
-                var lessonId = await _addLessonService.AddLesson(LessonName, frontLanguage, backLanguage);
+
+                var lesson = new Models.Lesson
+                {
+                    Name = LessonName,
+                    BackLanguage = backLanguage,
+                    FrontLanguage = frontLanguage
+                };
+                var lessonId = await _lessonRepository.Insert(lesson);
 
                 await _navigationService.NavigateAsync("AddFlashcardPage", new NavigationParameters
                 {
-                    {"frontLanguage", frontLanguage},
-                    {"backLanguage", backLanguage},
-                    {"lessonId", lessonId}
+                    {
+                        "frontLanguage", frontLanguage
+                    },
+                    {
+                        "backLanguage", backLanguage
+                    },
+                    {
+                        "lessonId", lessonId
+                    }
                 });
             })
         );
