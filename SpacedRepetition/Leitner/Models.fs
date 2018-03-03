@@ -30,7 +30,6 @@ module Models =
 
     type Deck () = 
         [<PrimaryKey>]
-        [<AutoIncrement>]
         member val Id = 0 with get, set
 
         [<Indexed>]
@@ -57,20 +56,22 @@ module Models =
            tableCreator : ITableCreator) =
         interface ISpacedRepetitionInitializer with
             member this.Initialize() =
-                let insertIntoDeck (flashcard : Flashcard) =
-                    let deck =
+                let insertIntoDeck (flashcard : Flashcard) = 
+                    async{
+                    let! decks =
                         deckRepository.FindMatching(fun d -> d.DeckTitle = CurrentDeckName)
                         |> Async.AwaitTask
-                        |> Async.RunSynchronously
-                        |> Seq.exactlyOne
+                    let deck = decks |> Seq.exactlyOne
                     deck.Cards.Add(flashcard)
-                    deckRepository.Update(deck) |> Async.AwaitTask |> Async.RunSynchronously |> ignore
-                
+                    do! deckRepository.Update(deck) |> Async.AwaitTask
+                    }
+                    |> Async.StartImmediate
+
                 tableCreator.CreateTable<CardDeck>() |> ignore
                 tableCreator.CreateTable<Deck>() |> ignore
                 
                 deckRepository.UpdateAll(deckTitles 
-                |> List.map (fun title -> Deck(DeckTitle = title, Cards = List<Flashcard>())))
+                |> List.mapi (fun id title -> Deck(DeckTitle = title, Cards = List<Flashcard>(), Id = id)))
                 |> Async.AwaitTask
                 |> Async.RunSynchronously
                 |> ignore
