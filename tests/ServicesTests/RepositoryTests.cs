@@ -34,7 +34,7 @@ namespace Flashcards.ServicesTests
         public void FindAll_ReturnsAllObjects()
         {
             var lesson = new Lesson {FrontLanguage = Language.English, BackLanguage = Language.Polish};
-            var flashcard = new Flashcard {Front = "cat", Back = "kot", LessonId = 1};
+            var flashcard = new Flashcard {Front = "cat", Back = "kot", LessonId = "1"};
             _lessonRepository.Insert(lesson);
             _flashcardRepository.Insert(flashcard);
 
@@ -49,13 +49,13 @@ namespace Flashcards.ServicesTests
         public void FindMatching_ReturnsResults()
         {
             var lesson = new Lesson { FrontLanguage = Language.English, BackLanguage = Language.Polish };
-            var flashcard = new Flashcard { Front = "cat", Back = "kot", LessonId = 1};
-            var flashcard2 = new Flashcard { Front = "dog", Back = "pies", LessonId = 1 };
+            var flashcard = new Flashcard { Front = "cat", Back = "kot", LessonId = "1"};
+            var flashcard2 = new Flashcard { Front = "dog", Back = "pies", LessonId = "1" };
             _lessonRepository.Insert(lesson);
             _flashcardRepository.Insert(flashcard2);
             _flashcardRepository.Insert(flashcard);
 
-            var matchingFlashcards = _flashcardRepository.FindMatching(f => f.LessonId == 1).Result;
+            var matchingFlashcards = _flashcardRepository.FindMatching(f => f.LessonId == "1").Result;
 
             Assert.Equal(2, matchingFlashcards.Count());
         }
@@ -66,24 +66,9 @@ namespace Flashcards.ServicesTests
             var lesson = new Lesson { FrontLanguage = Language.English, BackLanguage = Language.Polish };
             _lessonRepository.Insert(lesson);
 
-            var matchingFlashcards = _flashcardRepository.FindMatching(f => f.LessonId == 1).Result;
+            var matchingFlashcards = _flashcardRepository.FindMatching(f => f.LessonId == "1").Result;
 
             Assert.Empty(matchingFlashcards);
-        }
-
-        [Fact]
-        public void OnInsert_IdIsIncremented()
-        {
-            var lesson = new Lesson
-            {
-                FrontLanguage = Language.English,
-                BackLanguage = Language.Polish
-            };
-            _lessonRepository.Insert(lesson);
-            _lessonRepository.Insert(lesson);
-            var lessons = _lessonRepository.FindAll().Result.ToList();
-            Assert.Equal(1, lessons[0].Id);
-            Assert.Equal(2, lessons[1].Id);
         }
 
         [Fact]
@@ -100,7 +85,7 @@ namespace Flashcards.ServicesTests
                     new Flashcard{Id = 2},
                 }
             };
-            var id = await _lessonRepository.Insert(lesson);
+            await _lessonRepository.Insert(lesson);
 
             await _lessonRepository.Delete(lesson);
             Assert.Empty(_lessonRepository.FindAll().Result);
@@ -121,7 +106,7 @@ namespace Flashcards.ServicesTests
                     new Flashcard{Id = 2},
                 }
             };
-            var id = await _lessonRepository.Insert(lesson);
+            await _lessonRepository.Insert(lesson);
             var lessonRef = _lessonRepository.FindAll().Result.Single();
 
 

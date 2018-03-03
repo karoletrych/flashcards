@@ -10,10 +10,12 @@ namespace Flashcards.Services.DataAccess
         Task<IEnumerable<T>> FindAll();
         Task<IEnumerable<T>> FindMatching(Expression<Func<T, bool>> predicate);
 
-        Task<int> Insert(T entity);
-        Task Update(T entity);
-        event EventHandler<T> ObjectInserted;
-        Task Delete(T entity);
+	    event EventHandler<T> ObjectInserted;
+		Task Insert(T entity);
+
         Task UpdateAll(IEnumerable<T> entities);
+        Task Update(T entity);
+
+        Task Delete(T entity);
     }
 }

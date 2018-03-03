@@ -40,14 +40,16 @@ namespace Flashcards.ViewModels.Lesson
             {
                 var frontLanguage = SelectedFrontLanguage.ToLanguageEnum();
                 var backLanguage = SelectedBackLanguage.ToLanguageEnum();
+	            var lessonId = Guid.NewGuid().ToString();
 
                 var lesson = new Models.Lesson
                 {
-                    Name = LessonName,
+					Id = lessonId,
+					Name = LessonName,
                     BackLanguage = backLanguage,
                     FrontLanguage = frontLanguage
                 };
-                var lessonId = await _lessonRepository.Insert(lesson);
+                await _lessonRepository.Insert(lesson);
 
                 await _navigationService.NavigateAsync("AddFlashcardPage", new NavigationParameters
                 {

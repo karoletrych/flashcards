@@ -35,36 +35,30 @@ namespace Flashcards.Services.DataAccess.Database
             return list.AsEnumerable();
         }
 
-        public async Task<int> Insert(T entity)
+        public async Task Insert(T entity)
         {
-            var id = 0;
-            await _dbConnection.RunInTransactionAsync(connection =>
-            {
-                connection.InsertWithChildren(entity, recursive: true);
-                id = connection.ExecuteScalar<int>("SELECT last_insert_rowid()");
-            });
+            await _dbConnection.InsertWithChildrenAsync(entity, recursive: true);
 
             ObjectInserted?.Invoke(this, entity);
-
-            return id;
         }
         
         public async Task Update(T entity)
         {
-            await _dbConnection.UpdateAsync(entity).ConfigureAwait(continueOnCapturedContext: false);
+            await _dbConnection.InsertOrReplaceAsync(entity).ConfigureAwait(continueOnCapturedContext: false);
         }
 
         public event EventHandler<T> ObjectInserted;
 
 
-        public async Task Delete(T entity)
+	    public async Task UpdateAll(IEnumerable<T> entities)
+	    {
+		    await _dbConnection.InsertAllWithChildrenAsync(entities)
+			    .ConfigureAwait(continueOnCapturedContext: false);
+	    }
+
+	    public async Task Delete(T entity)
         {
             await _dbConnection.DeleteAsync(entity, recursive: true).ConfigureAwait(false);
-        }
-
-        public Task UpdateAll(IEnumerable<T> entities)
-        {
-            throw new NotImplementedException();
         }
     }
 }

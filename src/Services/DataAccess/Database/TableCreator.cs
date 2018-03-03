@@ -5,7 +5,7 @@ namespace Flashcards.Services.DataAccess.Database
 {
     public interface ITableCreator
     {
-        Task<CreateTableResult> CreateTable<T>(CreateFlags createFlags = CreateFlags.None);
+        Task CreateTable<T>() where T : new();
     }
 
     public class TableCreator : ITableCreator
@@ -17,14 +17,14 @@ namespace Flashcards.Services.DataAccess.Database
             _sqliteConnection = sqliteConnection;
         }
 
-        public Task<CreateTableResult> CreateTable<T>(CreateFlags createFlags = CreateFlags.None)
-        {
+        public Task CreateTable<T>() where T : new()
+		{
             return Task.FromResult(
-                _sqliteConnection.CreateTable<T>(createFlags));
+                _sqliteConnection.CreateTable<T>());
         }
     }
 
-    internal class AsyncTableCreator
+	public class AsyncTableCreator : ITableCreator
     {
         private readonly SQLiteAsyncConnection _sqLiteAsyncConnection;
 
@@ -33,10 +33,9 @@ namespace Flashcards.Services.DataAccess.Database
             _sqLiteAsyncConnection = sqLiteAsyncConnection;
         }
 
-        public Task<CreateTableResult> CreateTable<T>(CreateFlags createFlags = CreateFlags.None)
-            where T : new()
+        public Task CreateTable<T>() where T : new()
         {
-            return _sqLiteAsyncConnection.CreateTableAsync<T>(createFlags);
+            return _sqLiteAsyncConnection.CreateTableAsync<T>();
         }
     }
 }

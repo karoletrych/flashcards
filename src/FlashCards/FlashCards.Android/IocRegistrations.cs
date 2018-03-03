@@ -37,6 +37,10 @@ namespace FlashCards.Droid
                 .As(typeof(IRepository<>))
                 .SingleInstance();
 
+	        containerBuilder
+		        .RegisterType<AsyncTableCreator>()
+		        .As<ITableCreator>();
+
             var databasePath = Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.Personal),
                 "database.db3");

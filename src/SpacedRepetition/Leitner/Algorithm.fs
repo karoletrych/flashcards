@@ -58,7 +58,6 @@ module Algorithm =
 
     type LeitnerRepetition(deckRepository : IRepository<Deck>, 
                            properties : IProperties) =
-        [<Literal>]
         let sessionNumberKey = "LeitnerSessionNumber"
         member this.allDecks () = 
             deckRepository.FindAll()

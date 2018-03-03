@@ -32,7 +32,7 @@ namespace Flashcards.ViewModels
         private Language _frontLanguage;
 
         private string _frontText;
-        private int _lessonId;
+        private string _lessonId;
 
         public AddFlashcardViewModel(ITranslatorService translatorService, IRepository<Flashcard> flashcardRepository)
         {
@@ -76,7 +76,7 @@ namespace Flashcards.ViewModels
         {
             _frontLanguage = (Language) parameters["frontLanguage"];
             _backLanguage = (Language) parameters["backLanguage"];
-            _lessonId = (int) parameters["lessonId"];
+            _lessonId = (string) parameters["lessonId"];
         }
 
         public void OnNavigatedFrom(NavigationParameters parameters)

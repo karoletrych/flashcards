@@ -34,16 +34,13 @@ namespace Flashcards.Services.DataAccess.Database
             return Task.FromResult(list.AsEnumerable());
         }
 
-        public Task<int> Insert(T entity)
+        public Task Insert(T entity)
         {
-            _dbConnection.BeginTransaction();
             _dbConnection.InsertWithChildren(entity, true);
-            var id = _dbConnection.ExecuteScalar<int>("SELECT last_insert_rowid()");
-            _dbConnection.Commit();
 
             ObjectInserted?.Invoke(this, entity);
 
-            return Task.FromResult(id);
+            return Task.CompletedTask;
         }
 
         public Task Delete(T entity)
