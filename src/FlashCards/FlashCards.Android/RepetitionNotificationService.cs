@@ -4,7 +4,7 @@ using Android.App.Job;
 using Android.Content;
 using Autofac;
 using Flashcards.SpacedRepetition.Provider;
-using Flashcards.Views;
+using static Flashcards.Views.RepetitionProperties;
 
 namespace FlashCards.Droid
 {
@@ -13,24 +13,27 @@ namespace FlashCards.Droid
     {
         public override bool OnStartJob(JobParameters @params)
         {
-            var containerBuilder = new ContainerBuilder();
-            IocRegistrations.RegisterTypesInIocContainer(containerBuilder);
+	        IncrementSessionNumber().ContinueWith(
+		        task =>
+		        {
+					var containerBuilder = new ContainerBuilder();
+					IocRegistrations.RegisterTypesInIocContainer(containerBuilder);
 
-            var spacedRepetition = 
-                containerBuilder
-                    .Build()
-                    .Resolve<ISpacedRepetition>();
+					var spacedRepetition =
+						containerBuilder
+							.Build()
+							.Resolve<ISpacedRepetition>();
 
-	        if (spacedRepetition.ChooseFlashcards(RepetitionProperties.SessionNumber).Result.Any())
-            {
-                ShowNotification();
-            }
+					if (spacedRepetition.ChooseFlashcards(SessionNumber).Result.Any())
+					{
+						ShowNotification();
+					}
 
-			RepetitionProperties.IncrementSessionNumber();
-            return true;
-        }
+				});
+	        return true;
+		}
 
-        private void ShowNotification()
+		private void ShowNotification()
         {
             var secondIntent = new Intent(this, typeof(RepetitionActivity));
 

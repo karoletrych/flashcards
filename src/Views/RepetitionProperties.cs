@@ -1,4 +1,5 @@
-﻿using Xamarin.Forms;
+﻿using System.Threading.Tasks;
+using static Xamarin.Forms.Application;
 
 namespace Flashcards.Views
 {
@@ -10,21 +11,25 @@ namespace Flashcards.Views
 		{
 			get
 			{
-				if (Application.Current.Properties.TryGetValue(SessionNumberKey, out var sessionNumber))
+				if (Current.Properties.TryGetValue(SessionNumberKey, out var sessionNumber))
 					return (int) sessionNumber;
-				Application.Current.Properties[SessionNumberKey] = 0;
+				Current.Properties[SessionNumberKey] = 0;
 				return 0;
 			}
 		}
 
-		public static void IncrementSessionNumber()
+		public static async Task IncrementSessionNumber()
 		{
 			var sessionNumber = SessionNumber;
 			if (sessionNumber < 9)
-				Application.Current.Properties[SessionNumberKey] =
-					(int)Application.Current.Properties[SessionNumberKey] + 1;
+				Current.Properties[SessionNumberKey] =
+					(int)Current.Properties[SessionNumberKey] + 1;
 			else
-				Application.Current.Properties[SessionNumberKey] = 0;
+			{
+				Current.Properties[SessionNumberKey] = 0;
+			}
+
+			await Current.SavePropertiesAsync().ConfigureAwait(false);
 		}
 	}
 }

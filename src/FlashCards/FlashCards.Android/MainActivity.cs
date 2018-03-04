@@ -7,8 +7,8 @@ using Android.Media;
 using Android.OS;
 using Android.Support.V4.App;
 using Android.Util;
+using Flashcards.Views;
 using FlashCards.Droid;
-using App = Flashcards.Views.App;
 
 namespace Flashcards.Droid
 {
@@ -20,7 +20,7 @@ namespace Flashcards.Droid
         ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
-        protected override void OnCreate(Bundle bundle)
+        protected override async void OnCreate(Bundle bundle)
         {
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
