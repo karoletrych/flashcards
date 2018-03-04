@@ -4,6 +4,7 @@ using Android.App.Job;
 using Android.Content;
 using Autofac;
 using Flashcards.SpacedRepetition.Provider;
+using Flashcards.Views;
 
 namespace FlashCards.Droid
 {
@@ -19,11 +20,13 @@ namespace FlashCards.Droid
                 containerBuilder
                     .Build()
                     .Resolve<ISpacedRepetition>();
-            if (spacedRepetition.ChooseFlashcards().Result.Any())
+
+	        if (spacedRepetition.ChooseFlashcards(RepetitionProperties.SessionNumber).Result.Any())
             {
                 ShowNotification();
             }
 
+			RepetitionProperties.IncrementSessionNumber();
             return true;
         }
 

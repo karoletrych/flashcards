@@ -7,6 +7,7 @@ open Flashcards.SpacedRepetition.Provider
 open SQLiteNetExtensions.Attributes
 open Flashcards.Services.DataAccess.Database
 
+
 module Models =
     [<Literal>]
     let CurrentDeckName = "CurrentDeck"
@@ -26,7 +27,10 @@ module Models =
         "7926";
         "8037";
         "9148";
-    ]    
+    ]   
+    let inline sync (x : System.Threading.Tasks.Task) = x |> Async.AwaitTask |> Async.RunSynchronously
+    let inline syncT x = x |> Async.AwaitTask |> Async.RunSynchronously
+    
 
     type Deck () = 
         [<PrimaryKey>]
@@ -49,7 +53,7 @@ module Models =
         [<PrimaryKey>]
         member val CardDeckId = 0 with get, set
 
-
+        
      type LeitnerInitializer
          (flashcardRepository : IRepository<Flashcard>,
           deckRepository : IRepository<Deck>,
@@ -57,22 +61,18 @@ module Models =
         interface ISpacedRepetitionInitializer with
             member this.Initialize() =
                 let insertIntoDeck (flashcard : Flashcard) = 
-                    async{
-                    let! decks =
-                        deckRepository.FindMatching(fun d -> d.DeckTitle = CurrentDeckName)
-                        |> Async.AwaitTask
+                    let decks =
+                        deckRepository.FindMatching(fun d -> d.DeckTitle = "CurrentDeck") 
+                        |> syncT
                     let deck = decks |> Seq.exactlyOne
                     deck.Cards.Add(flashcard)
-                    do! deckRepository.Update(deck) |> Async.AwaitTask
-                    }
-                    |> Async.StartImmediate
+                    deckRepository.Update(deck) |> sync
 
-                tableCreator.CreateTable<CardDeck>() |> ignore
-                tableCreator.CreateTable<Deck>() |> ignore
-                
-                deckRepository.UpdateAll(deckTitles 
-                |> List.mapi (fun id title -> Deck(DeckTitle = title, Cards = List<Flashcard>(), Id = id)))
-                |> Async.AwaitTask
-                |> Async.RunSynchronously
-                |> ignore
+                tableCreator.CreateTable<CardDeck>() |> sync
+                tableCreator.CreateTable<Deck>() |> sync
+                if deckRepository.FindAll() |> syncT |> Seq.isEmpty then
+                    deckRepository.UpdateAll(deckTitles 
+                                                |> List.mapi (fun id title -> 
+                                                            Deck(DeckTitle = title, Cards = List<Flashcard>(), Id = id)))
+                                                |> sync
                 flashcardRepository.ObjectInserted.Add(fun f -> insertIntoDeck f)

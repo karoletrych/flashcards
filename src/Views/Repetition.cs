@@ -7,27 +7,30 @@ using Prism.Autofac;
 using Prism.Ioc;
 using Prism.Navigation;
 using Xamarin.Forms;
+using static Flashcards.Views.RepetitionProperties;
 
 namespace Flashcards.Views
 {
-    public class Repetition : PrismApplication
+	public class Repetition : PrismApplication
     {
-        public Repetition(IPlatformInitializer platformInitializer) : base(platformInitializer)
-        {
-        }
+	    public Repetition(IPlatformInitializer platformInitializer) : base(platformInitializer)
+	    {
+	    }
 
-        protected override void RegisterTypes(IContainerRegistry containerRegistry)
+
+	    protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
             containerRegistry.RegisterForNavigation<NavigationPage>();
             containerRegistry.RegisterForNavigation<AskingQuestionsPage, AskingQuestionsViewModel>();
             containerRegistry.RegisterForNavigation<LessonListPage, LessonListViewModel>();
         }
 
-        protected override async void OnInitialized()
+	    protected override async void OnInitialized()
         {
             var spacedRepetition = Container.Resolve<ISpacedRepetition>();
 
-            var flashcards = await spacedRepetition.ChooseFlashcards();
+	        var sessionNumber = SessionNumber;
+	        var flashcards = await spacedRepetition.ChooseFlashcards(sessionNumber);
             var examiner = new Examiner(flashcards);
 
             await NavigationService.NavigateAsync("NavigationPage/AskingQuestionsPage",
@@ -40,10 +43,7 @@ namespace Flashcards.Views
                 });
             var results = await examiner.QuestionResults.Task;
 
-            spacedRepetition.RearrangeFlashcards(results);
-
+            spacedRepetition.RearrangeFlashcards(results, sessionNumber);
         }
-
-
     }
 }

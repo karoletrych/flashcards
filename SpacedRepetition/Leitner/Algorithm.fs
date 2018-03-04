@@ -30,7 +30,7 @@ module Algorithm =
                 decks
                 |> Seq.find (fun d -> d.DeckTitle = deckName)
             results
-            |> Seq.iter (fun struct (card, known, deck : Deck) ->
+            |> Seq.iter (fun (card, known, deck : Deck) ->
                 match deck.DeckTitle with
                 // If a learner is successful at a card from Deck Current,
                 // it gets transferred into the progress deck that begins with 
@@ -51,37 +51,16 @@ module Algorithm =
                 | _ -> ())
             decks
             
-    type IProperties = 
-        abstract member Get : string -> obj
-        abstract member Set : string -> obj -> unit
-        abstract member ContainsKey : string -> bool
-
-    type LeitnerRepetition(deckRepository : IRepository<Deck>, 
-                           properties : IProperties) =
+    type LeitnerRepetition(deckRepository : IRepository<Deck>) =
         [<Literal>]
         let sessionNumberKey = "LeitnerSessionNumber"
         member this.allDecks () = 
             deckRepository.FindAll()
             |> Async.AwaitTask
             |> Async.RunSynchronously
-                
-        member this.sessionNumber () = 
-            if not (properties.ContainsKey sessionNumberKey)
-            then 
-                (properties.Set sessionNumberKey 0)
-                0
-            else 
-                let number = (properties.Get sessionNumberKey) :?> int
-                number
-        member this.incrementSessionNumber () = 
-            let sessionNumber = this.sessionNumber ()
-            if sessionNumber = 9
-            then
-                properties.Set sessionNumberKey 0
-            else
-                properties.Set sessionNumberKey (sessionNumber + 1)
+       
         interface ISpacedRepetition with 
-            member this.ChooseFlashcards () = 
+            member this.ChooseFlashcards sessionNumber = 
                 let cardsToAsk sessionNumber decks = 
                     decks
                     |> Seq.filter (fun (deck : Deck) -> 
@@ -91,31 +70,26 @@ module Algorithm =
                 
                 let decks = this.allDecks()
                 decks
-                |> cardsToAsk (this.sessionNumber())
+                |> cardsToAsk sessionNumber
                 |> Task.FromResult
                 
-            member this.RearrangeFlashcards results =
+            member this.RearrangeFlashcards (results, sessionNumber) =
                 let decks = this.allDecks()
-                
-                let deckWithCard (card : Flashcard) = 
-                    decks 
-                    |> Seq.find(fun deck -> 
-                        deck.Cards 
-                        |> Seq.exists (fun c -> c.Id = card.Id))
 
                 let cardsWithDecks = 
+                    let parentDeck (card : Flashcard) = 
+                        decks 
+                        |> Seq.find(fun deck -> 
+                            deck.Cards 
+                            |> Seq.exists (fun c -> c.Id = card.Id))
                     results
-                    |> Seq.map (fun struct (card, known) -> 
-                                    struct (card, known, deckWithCard card))
+                    |> Seq.map (fun result -> 
+                                    (result.Flashcard, result.IsKnown, parentDeck result.Flashcard))
                 let newDecks = 
                     rearrangeCards 
                         cardsWithDecks
-                        (this.sessionNumber())
+                        sessionNumber
                         (decks)
 
                 deckRepository.UpdateAll(newDecks)
-                |> Async.AwaitTask
-                |> Async.RunSynchronously
-
-                this.incrementSessionNumber ()
-                
+                |> sync

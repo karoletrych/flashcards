@@ -26,7 +26,7 @@ namespace Flashcards.Views
             containerRegistry.RegisterForNavigation<AskingQuestionsPage, AskingQuestionsViewModel>();
         }
 
-        protected override void OnInitialized()
+		protected override void OnInitialized()
         {
             void InitializeSpacedRepetition()
             {

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Flashcards.Models;
 using Flashcards.Services.DataAccess.Database;
@@ -10,26 +11,6 @@ using static Flashcards.SpacedRepetition.Leitner.Algorithm;
 
 namespace LeitnerTests
 {
-    internal class PropertiesMock : IProperties
-    {
-        private readonly Dictionary<string, object> _properties = new Dictionary<string, object>();
-
-        public object Get(string key)
-        {
-            return _properties[key];
-        }
-
-        public void Set(string key, object value)
-        {
-            _properties[key] = value;
-        }
-
-        public bool ContainsKey(string key)
-        {
-            return _properties.ContainsKey(key);
-        }
-    }
-
     public class LeitnerTests
     {
         private const int FlashcardCount = 20;
@@ -64,8 +45,7 @@ namespace LeitnerTests
                 .ForEach(f => flashcardRepository.Insert(f));
 
             _leitner = new LeitnerRepetition(
-                _deckRepository,
-                new PropertiesMock());
+                _deckRepository);
 
         }
 
@@ -88,8 +68,8 @@ namespace LeitnerTests
         {
             for (var i = 0; i < 20; ++i)
             {
-                var flashcards = _leitner.ChooseFlashcards().Result.ToList();
-                _leitner.RearrangeFlashcards(flashcards.Select(f => (f, true)));
+                var flashcards = _leitner.ChooseFlashcards(i).Result.ToList();
+                _leitner.RearrangeFlashcards(flashcards.Select(Known), i);
                 _output.WriteLine($"session: {i}");
                 foreach (var deck in _deckRepository.FindAll().Result)
                     _output.WriteLine(deck.DeckTitle + ": " + deck.Cards.Count());
@@ -102,9 +82,9 @@ namespace LeitnerTests
         [Fact]
         public void AnsweringCorrectlyAllFlashcards_DecreasesNumberOfFlashcardsInTheNextSession()
         {
-            var flashcards = _leitner.ChooseFlashcards().Result;
-            _leitner.RearrangeFlashcards(flashcards.Select(f => (f, true)));
-            var rearrangedFlashcards = _leitner.ChooseFlashcards().Result;
+            var flashcards = _leitner.ChooseFlashcards(0).Result;
+            _leitner.RearrangeFlashcards(flashcards.Select(Known), 0);
+            var rearrangedFlashcards = _leitner.ChooseFlashcards(1).Result;
 
             Assert.NotEqual(FlashcardCount, rearrangedFlashcards.Count());
         }
@@ -112,8 +92,8 @@ namespace LeitnerTests
         [Fact]
         public void AnsweringCorrectlyAllFlashcards_MovesThemToDeckBeginningWithSessionNumber()
         {
-            var flashcards = _leitner.ChooseFlashcards().Result;
-            _leitner.RearrangeFlashcards(flashcards.Select(f => (f, true)));
+            var flashcards = _leitner.ChooseFlashcards(0).Result;
+            _leitner.RearrangeFlashcards(flashcards.Select(Known), 0);
 
             var session0DeckCards =
                 _deckRepository.FindMatching(cd => cd.DeckTitle == "0259").Result;
@@ -124,10 +104,15 @@ namespace LeitnerTests
             Assert.Empty(currentDeckCards);
         }
 
-        [Fact]
+	    private static QuestionResult Known(Flashcard f)
+	    {
+		    return new QuestionResult(f, true);
+	    }
+
+	    [Fact]
         public void ChooseFlashcards_ReturnsAllFromCurrentDeck()
         {
-            var flashcards = _leitner.ChooseFlashcards().Result;
+            var flashcards = _leitner.ChooseFlashcards(0).Result;
             Assert.Equal(FlashcardCount, flashcards.Count());
         }
     }

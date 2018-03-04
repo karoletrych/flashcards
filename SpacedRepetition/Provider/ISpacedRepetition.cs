@@ -4,9 +4,21 @@ using Flashcards.Models;
 
 namespace Flashcards.SpacedRepetition.Provider
 {
+	public class QuestionResult
+	{
+		public QuestionResult(Flashcard flashcard, bool isKnown)
+		{
+			Flashcard = flashcard;
+			IsKnown = isKnown;
+		}
+
+		public Flashcard Flashcard { get; }
+		public bool IsKnown { get; }
+	}
+
     public interface ISpacedRepetition
     {
-        Task<IEnumerable<Flashcard>> ChooseFlashcards();
-        void RearrangeFlashcards(IEnumerable<(Flashcard, bool isKnown)> questionResults);
+        Task<IEnumerable<Flashcard>> ChooseFlashcards(int sessionNumber);
+        void RearrangeFlashcards(IEnumerable<QuestionResult> questionResults, int sessionNumber);
     }
 }

@@ -8,59 +8,59 @@ using SQLiteNetExtensions.Extensions;
 
 namespace Flashcards.Services.DataAccess.Database
 {
-    public class Repository<T> : IRepository<T> where T : new()
-    {
-        private readonly SQLiteConnection _dbConnection;
+	public class Repository<T> : IRepository<T> where T : new()
+	{
+		private readonly SQLiteConnection _dbConnection;
 
-        public Repository(SQLiteConnection dbConnection)
-        {
-            _dbConnection = dbConnection;
-        }
+		public Repository(SQLiteConnection dbConnection)
+		{
+			_dbConnection = dbConnection;
+		}
 
-        public Task<IEnumerable<T>> FindAll()
-        {
-            var list = _dbConnection
-                .GetAllWithChildren<T>(recursive: true)
-                .ToList();
-            return Task.FromResult(list.AsEnumerable());
-        }
+		public Task<IEnumerable<T>> FindAll()
+		{
+			var list = _dbConnection
+				.GetAllWithChildren<T>(recursive: true)
+				.ToList();
+			return Task.FromResult(list.AsEnumerable());
+		}
 
-        public Task<IEnumerable<T>> FindMatching(Expression<Func<T, bool>> predicate)
-        {
-            var list =
-                _dbConnection
-                    .GetAllWithChildren(predicate, recursive: true)
-                    .ToList();
-            return Task.FromResult(list.AsEnumerable());
-        }
+		public Task<IEnumerable<T>> FindMatching(Expression<Func<T, bool>> predicate)
+		{
+			var list =
+				_dbConnection
+					.GetAllWithChildren(predicate, recursive: true)
+					.ToList();
+			return Task.FromResult(list.AsEnumerable());
+		}
 
-        public Task Insert(T entity)
-        {
-            _dbConnection.InsertWithChildren(entity, true);
+		public event EventHandler<T> ObjectInserted;
 
-            ObjectInserted?.Invoke(this, entity);
+		public Task Insert(T entity)
+		{
+			_dbConnection.InsertWithChildren(entity, true);
 
-            return Task.CompletedTask;
-        }
+			ObjectInserted?.Invoke(this, entity);
 
-        public Task Delete(T entity)
-        {
-            _dbConnection.Delete(entity, recursive: true);
-            return Task.CompletedTask;
-        }
+			return Task.CompletedTask;
+		}
 
-        public Task Update(T entity)
-        {
-            _dbConnection.InsertOrReplaceWithChildren(entity, true);
-            return Task.CompletedTask;
-        }
+		public Task Update(T entity)
+		{
+			_dbConnection.InsertOrReplaceWithChildren(entity, true);
+			return Task.CompletedTask;
+		}
 
-        public Task UpdateAll(IEnumerable<T> entities)
-        {
-            _dbConnection.InsertOrReplaceAllWithChildren(entities, true);
-            return Task.CompletedTask;
-        }
+		public Task UpdateAll(IEnumerable<T> entities)
+		{
+			_dbConnection.InsertOrReplaceAllWithChildren(entities, true);
+			return Task.CompletedTask;
+		}
 
-        public event EventHandler<T> ObjectInserted;
-    }
+		public Task Delete(T entity)
+		{
+			_dbConnection.Delete(entity, recursive: true);
+			return Task.CompletedTask;
+		}
+	}
 }

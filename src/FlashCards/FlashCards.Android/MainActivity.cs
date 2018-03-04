@@ -40,7 +40,7 @@ namespace Flashcards.Droid
             var componentName = new ComponentName(ApplicationContext, Java.Lang.Class.FromType(typeof(RepetitionNotificationService)));
             var jobInfo = 
                 new JobInfo.Builder(1, componentName)
-                .SetMinimumLatency(10_000) 
+                .SetMinimumLatency(3_000) 
 //                .SetPeriodic(1200_000) // 20 minutes
 //                .SetPeriodic(21600_000) // 6 hours
                 .Build();

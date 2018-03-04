@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Flashcards.Models;
+using Flashcards.SpacedRepetition.Provider;
 
 namespace Flashcards.Services
 {
@@ -33,13 +34,13 @@ namespace Flashcards.Services
         {
             _questionsToAsk = new Queue<FlashcardQuestion>(
                 questions.Select(f => new FlashcardQuestion(f)));
+			QuestionResults = new TaskCompletionSource<IEnumerable<QuestionResult>>();
         }
 
         public IEnumerable<FlashcardQuestion> Questions =>
             _askedQuestions.Concat(_questionsToAsk);
 
-        public TaskCompletionSource<IEnumerable<ValueTuple<Flashcard, bool>>> QuestionResults =
-            new TaskCompletionSource<IEnumerable<ValueTuple<Flashcard, bool>>>();
+	    public TaskCompletionSource<IEnumerable<QuestionResult>> QuestionResults { get; }
 
         public void Answer(bool isKnown)
         {
@@ -60,7 +61,7 @@ namespace Flashcards.Services
                 return true;
             }
 
-            QuestionResults.SetResult(_askedQuestions.Select(q => (q.Flashcard, IsKnown(q.Status))));
+            QuestionResults.SetResult(_askedQuestions.Select(q => new QuestionResult(q.Flashcard, IsKnown(q.Status))));
             question = null;
             return false;
         }
