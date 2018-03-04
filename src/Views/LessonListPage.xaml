@@ -8,6 +8,7 @@
 
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Add lesson" Command="{Binding AddLessonCommand}" />
+        <ToolbarItem Text="Settings" Command="{Binding SettingsCommand}" />
     </ContentPage.ToolbarItems>
 
     <ContentPage.BindingContext>

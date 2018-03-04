@@ -56,7 +56,7 @@ namespace Flashcards.ViewModels.Lesson
 			    return;
 			}
 
-					var lesson = new Models.Lesson
+			var lesson = new Models.Lesson
 		    {
 			    Id = lessonId,
 			    Name = LessonName,

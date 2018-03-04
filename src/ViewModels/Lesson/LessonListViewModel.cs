@@ -76,7 +76,18 @@ namespace Flashcards.ViewModels.Lesson
                     Lessons.Remove(lesson);
                 });
 
-        public void OnNavigatingTo(NavigationParameters parameters)
+	    public ICommand SettingsCommand
+	    {
+		    get
+		    {
+			    return new Command(async () =>
+			    {
+				    await _navigationService.NavigateAsync("SettingsPage");
+			    });
+		    }
+	    }
+
+	    public void OnNavigatingTo(NavigationParameters parameters)
         {
         }
 

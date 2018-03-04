@@ -23,7 +23,8 @@ namespace Flashcards.Views
             containerRegistry.RegisterForNavigation<LessonListPage, LessonListViewModel>();
             containerRegistry.RegisterForNavigation<AddLessonPage, AddLessonViewModel>();
             containerRegistry.RegisterForNavigation<AddFlashcardPage, AddFlashcardViewModel>();
-            containerRegistry.RegisterForNavigation<AskingQuestionsPage, AskingQuestionsViewModel>();
+			containerRegistry.RegisterForNavigation<AskingQuestionsPage, AskingQuestionsViewModel>();
+			containerRegistry.RegisterForNavigation<SettingsPage>();
         }
 
 		protected override void OnInitialized()
