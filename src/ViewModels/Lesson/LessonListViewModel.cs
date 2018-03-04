@@ -82,12 +82,12 @@ namespace Flashcards.ViewModels.Lesson
 
         public void OnNavigatedFrom(NavigationParameters parameters)
         {
-            Lessons.Clear();
         }
 
         public async void OnNavigatedTo(NavigationParameters parameters)
         {
-            var lessons = await _lessonRepository.FindAll();
+	        Lessons.Clear();
+			var lessons = await _lessonRepository.FindAll();
             foreach (var lesson in lessons) Lessons.Add(lesson);
         }
 

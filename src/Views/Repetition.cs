@@ -33,7 +33,7 @@ namespace Flashcards.Views
 	        var flashcards = await spacedRepetition.ChooseFlashcards(sessionNumber);
             var examiner = new Examiner(flashcards);
 
-            await NavigationService.NavigateAsync("NavigationPage/AskingQuestionsPage",
+            await NavigationService.NavigateAsync("NavigationPage/LessonListPage/AskingQuestionsPage",
                 new NavigationParameters
                 {
                     {

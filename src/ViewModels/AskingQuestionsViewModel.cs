@@ -185,6 +185,7 @@ namespace Flashcards.ViewModels
                     $"Znane: {_examiner.Questions.Count(x => x.Status == QuestionStatus.Known)} \n" +
                     $"Nieznane: {_examiner.Questions.Count(x => x.Status == QuestionStatus.Unknown)}",
                     "OK, nacisnê");
+	            await _navigationService.GoBackAsync();
             }
         }
 
