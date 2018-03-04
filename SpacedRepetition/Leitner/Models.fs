@@ -10,13 +10,13 @@ open Flashcards.Services.DataAccess.Database
 
 module Models =
     [<Literal>]
-    let CurrentDeckName = "CurrentDeck"
+    let CurrentDeckTitle = "CurrentDeck"
     [<Literal>]
-    let RetiredDeckName = "RetiredDeck"
+    let RetiredDeckTitle = "RetiredDeck"
 
     let deckTitles = [
-        CurrentDeckName;
-        RetiredDeckName;
+        CurrentDeckTitle;
+        RetiredDeckTitle;
         "0259";
         "1360";
         "2471";
@@ -37,7 +37,7 @@ module Models =
         member val Id = 0 with get, set
 
         [<Indexed>]
-        member val DeckTitle = CurrentDeckName with get, set
+        member val DeckTitle = CurrentDeckTitle with get, set
 
         [<ManyToMany(typeof<CardDeck>, CascadeOperations = CascadeOperation.All)>]
         member val Cards = List<Flashcard>() with get, set 
@@ -61,12 +61,14 @@ module Models =
         interface ISpacedRepetitionInitializer with
             member this.Initialize() =
                 let insertIntoDeck (flashcard : Flashcard) = 
-                    let decks =
-                        deckRepository.FindMatching(fun d -> d.DeckTitle = "CurrentDeck") 
-                        |> syncT
-                    let deck = decks |> Seq.exactlyOne
-                    deck.Cards.Add(flashcard)
-                    deckRepository.Update(deck) |> sync
+                    async {
+                        let! decks =
+                            (deckRepository.FindMatching(fun d -> d.DeckTitle = CurrentDeckTitle)) |> Async.AwaitTask
+                        let deck = decks |> Seq.exactlyOne
+                        deck.Cards.Add(flashcard)
+                        do! deckRepository.Update(deck) |> Async.AwaitTask
+                    }
+                    |> Async.StartImmediate
 
                 tableCreator.CreateTable<CardDeck>() |> sync
                 tableCreator.CreateTable<Deck>() |> sync

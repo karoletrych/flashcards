@@ -76,7 +76,7 @@ namespace LeitnerTests
                 _output.WriteLine("");
             }
 
-            Assert.Equal(FlashcardCount, Flashcards(RetiredDeckName).Count());
+            Assert.Equal(FlashcardCount, Flashcards(RetiredDeckTitle).Count());
         }
 
         [Fact]
@@ -100,7 +100,7 @@ namespace LeitnerTests
             Assert.NotEmpty(session0DeckCards);
 
             var currentDeckCards =
-                _deckRepository.FindMatching(cd => cd.DeckTitle == CurrentDeckName).Result.Single().Cards;
+                _deckRepository.FindMatching(cd => cd.DeckTitle == CurrentDeckTitle).Result.Single().Cards;
             Assert.Empty(currentDeckCards);
         }
 

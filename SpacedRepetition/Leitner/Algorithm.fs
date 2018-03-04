@@ -35,19 +35,19 @@ module Algorithm =
                 // If a learner is successful at a card from Deck Current,
                 // it gets transferred into the progress deck that begins with 
                 // that session's number.
-                | CurrentDeckName when known ->
+                | CurrentDeckTitle when known ->
                     deck.Cards.Remove(card) |> ignore
                     (deckBeginningWithSession sessionNumber).Cards.Add(card)
                 // If a learner has difficulty with a card during a subsequent review, 
                 // the card is returned to Deck Current; 
                 | _ when not known ->
                     deck.Cards.Remove(card) |> ignore
-                    (decks |> findDeck CurrentDeckName).Cards.Add(card)
+                    (decks |> findDeck CurrentDeckTitle).Cards.Add(card)
                 // When a learner is successful at a card during a session that matches 
                 // the last number on the deck that card goes into Deck Retired
                 | deckTitle when known && (deckTitle |> Seq.last |> toInt) = sessionNumber ->
                     deck.Cards.Remove(card) |> ignore
-                    (decks |> findDeck RetiredDeckName).Cards.Add(card)
+                    (decks |> findDeck RetiredDeckTitle).Cards.Add(card)
                 | _ -> ())
             decks
             
@@ -65,7 +65,7 @@ module Algorithm =
                     decks
                     |> Seq.filter (fun (deck : Deck) -> 
                         (deck.DeckTitle |> Seq.map toInt |> Seq.contains sessionNumber 
-                        || deck.DeckTitle = CurrentDeckName))
+                        || deck.DeckTitle = CurrentDeckTitle))
                     |> Seq.collect (fun deck -> deck.Cards)
                 
                 let decks = this.allDecks()
