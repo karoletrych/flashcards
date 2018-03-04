@@ -48,7 +48,7 @@ namespace Flashcards.ViewModels.Lesson
 
         public ICommand PracticeLessonCommand => new Command<Models.Lesson>(lesson =>
         {
-            DialogHandler.HandleExceptions(_dialogService, async () =>
+            ExceptionHandler.HandleWithDialog(_dialogService, async () =>
             {
                 var flashcards = await _flashcardRepository.FindMatching(f => f.LessonId == lesson.Id);
                 var examiner = _examinerFactory(flashcards);

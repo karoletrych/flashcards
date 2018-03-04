@@ -181,10 +181,10 @@ namespace Flashcards.ViewModels
             }
             else
             {
-                await _dialogService.DisplayAlertAsync("Koniec, naciœnij OK a potem wstecz",
+                await _dialogService.DisplayAlertAsync("Koniec",
                     $"Znane: {_examiner.Questions.Count(x => x.Status == QuestionStatus.Known)} \n" +
                     $"Nieznane: {_examiner.Questions.Count(x => x.Status == QuestionStatus.Unknown)}",
-                    "OK, nacisnê");
+                    "OK");
 	            await _navigationService.GoBackAsync();
             }
         }

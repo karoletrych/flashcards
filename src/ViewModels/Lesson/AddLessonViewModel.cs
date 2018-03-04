@@ -14,13 +14,13 @@ namespace Flashcards.ViewModels.Lesson
     {
         private readonly IRepository<Models.Lesson> _lessonRepository;
         private readonly INavigationService _navigationService;
-        private readonly IPageDialogService _pageDialogService;
+        private readonly IPageDialogService _dialogService;
 
         public AddLessonViewModel(
             INavigationService navigationService,
             IPageDialogService pageDialogService,
             IRepository<Models.Lesson> lessonRepository) =>
-            (_navigationService, _pageDialogService, _lessonRepository) = 
+            (_navigationService, _dialogService, _lessonRepository) = 
                 (navigationService, pageDialogService, lessonRepository);
 
         public IList<string> FrontLanguageNames =>
@@ -35,35 +35,49 @@ namespace Flashcards.ViewModels.Lesson
         public string SelectedBackLanguage { get; set; }
         public string LessonName { get; set; }
 
-        public ICommand AddFlashcards => new Command(() =>
-            DialogHandler.HandleExceptions(_pageDialogService, async () =>
-            {
-                var frontLanguage = SelectedFrontLanguage.ToLanguageEnum();
-                var backLanguage = SelectedBackLanguage.ToLanguageEnum();
-	            var lessonId = Guid.NewGuid().ToString();
+	    public ICommand AddFlashcards => new Command(async () =>
+	    {
+		    var frontLanguage = SelectedFrontLanguage.ToLanguageEnum();
+		    var backLanguage = SelectedBackLanguage.ToLanguageEnum();
+		    var lessonId = Guid.NewGuid().ToString();
+		    if (string.IsNullOrWhiteSpace(LessonName))
+		    {
+			    await _dialogService.DisplayAlertAsync("Błąd", "Nazwa lekcji nie może być pusta", "OK");
+				return;
+		    }
+		    if (string.IsNullOrWhiteSpace(SelectedFrontLanguage))
+		    {
+			    await _dialogService.DisplayAlertAsync("Błąd", "Wybierz język frontu fiszek", "OK");
+			    return;
+			}
+		    if (string.IsNullOrWhiteSpace(SelectedBackLanguage))
+		    {
+			    await _dialogService.DisplayAlertAsync("Błąd", "Wybierz język tyłu fiszek", "OK");
+			    return;
+			}
 
-                var lesson = new Models.Lesson
-                {
-					Id = lessonId,
-					Name = LessonName,
-                    BackLanguage = backLanguage,
-                    FrontLanguage = frontLanguage
-                };
-                await _lessonRepository.Insert(lesson);
+					var lesson = new Models.Lesson
+		    {
+			    Id = lessonId,
+			    Name = LessonName,
+			    BackLanguage = backLanguage,
+			    FrontLanguage = frontLanguage
+		    };
+		    await _lessonRepository.Insert(lesson);
 
-                await _navigationService.NavigateAsync("AddFlashcardPage", new NavigationParameters
-                {
-                    {
-                        "frontLanguage", frontLanguage
-                    },
-                    {
-                        "backLanguage", backLanguage
-                    },
-                    {
-                        "lessonId", lessonId
-                    }
-                });
-            })
-        );
+		    await _navigationService.NavigateAsync("AddFlashcardPage",
+			    new NavigationParameters
+			    {
+				    {
+					    "frontLanguage", frontLanguage
+				    },
+				    {
+					    "backLanguage", backLanguage
+				    },
+				    {
+					    "lessonId", lessonId
+				    }
+			    });
+	    });
     }
 }

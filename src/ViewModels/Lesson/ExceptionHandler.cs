@@ -3,9 +3,9 @@ using Prism.Services;
 
 namespace Flashcards.ViewModels.Lesson
 {
-    static class DialogHandler
+    static class ExceptionHandler
     {
-        public static async void HandleExceptions(IPageDialogService dialogService, Action action)
+        public static async void HandleWithDialog(IPageDialogService dialogService, Action action)
         {
             try
             {
