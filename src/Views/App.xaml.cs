@@ -38,11 +38,12 @@ namespace Flashcards.Views
                 }
             }
 
+
             InitializeComponent();
 
             InitializeSpacedRepetition();
 
             NavigationService.NavigateAsync("NavigationPage/LessonListPage");
-        }
-    }
+		}
+	}
 }

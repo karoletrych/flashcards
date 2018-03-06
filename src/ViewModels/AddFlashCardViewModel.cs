@@ -12,6 +12,11 @@ namespace Flashcards.ViewModels
 {
     public class AddFlashcardViewModel : INotifyPropertyChanged, INavigatedAware
     {
+	    public AddFlashcardViewModel()
+	    {
+		    
+	    }
+
         private const int TranslationDelayInMilliseconds = 800;
 
         private readonly Timer _timer = new Timer(TranslationDelayInMilliseconds)

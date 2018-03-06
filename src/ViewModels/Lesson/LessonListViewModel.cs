@@ -23,7 +23,6 @@ namespace Flashcards.ViewModels.Lesson
 
         public LessonListViewModel()
         {
-            
         }
 
         public LessonListViewModel(

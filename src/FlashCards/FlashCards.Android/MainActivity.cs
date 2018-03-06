@@ -22,7 +22,7 @@ namespace Flashcards.Droid
 		ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
 	public class MainActivity : FormsAppCompatActivity
 	{
-		protected override async void OnCreate(Bundle bundle)
+		protected override void OnCreate(Bundle bundle)
 		{
 			TabLayoutResource = Resource.Layout.Tabbar;
 			ToolbarResource = Resource.Layout.Toolbar;
