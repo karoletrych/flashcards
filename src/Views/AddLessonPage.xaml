@@ -3,11 +3,10 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:lesson="clr-namespace:Flashcards.ViewModels.Lesson;assembly=ViewModels"
-             x:Class="Flashcards.Views.Lesson.AddLessonPage">
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Add Flashcards" Command="{Binding AddFlashcards}" />
-    </ContentPage.ToolbarItems>
-
+             x:Class="Flashcards.Views.AddLessonPage">
+    <ContentPage.BindingContext>
+        <lesson:AddLessonViewModel />
+    </ContentPage.BindingContext>
     <ContentPage.Content>
         <AbsoluteLayout>
             <StackLayout AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,0.25">
@@ -24,14 +23,13 @@
                                 SelectedItem="{Binding SelectedBackLanguage}" />
                     </StackLayout>
                 </StackLayout>
-
             </StackLayout>
-            <ListView AbsoluteLayout.LayoutBounds="0,0.25,1,0.75">
-                <ListView.ItemTemplate>
 
-                </ListView.ItemTemplate>
+            <Button AbsoluteLayout.LayoutBounds=".5,1,1,.1"
+                    AbsoluteLayout.LayoutFlags="All"
+                    Text="Add flashcards"
+                    Command="{Binding AddFlashcards}" />
 
-            </ListView>
         </AbsoluteLayout>
     </ContentPage.Content>
 </ContentPage>

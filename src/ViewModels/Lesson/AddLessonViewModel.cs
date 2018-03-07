@@ -16,6 +16,11 @@ namespace Flashcards.ViewModels.Lesson
         private readonly INavigationService _navigationService;
         private readonly IPageDialogService _dialogService;
 
+	    public AddLessonViewModel()
+	    {
+		    
+	    }
+
         public AddLessonViewModel(
             INavigationService navigationService,
             IPageDialogService pageDialogService,

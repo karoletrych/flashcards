@@ -7,8 +7,8 @@
              x:Class="Flashcards.Views.LessonListPage">
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Add lesson" Command="{Binding AddLessonCommand}" />
-        <ToolbarItem Text="Settings" Command="{Binding SettingsCommand}" />
+        <ToolbarItem Icon="ic_add_white_48dp.png" Command="{Binding AddLessonCommand}" />
+        <ToolbarItem Icon="ic_settings_white_48dp.png" Command="{Binding SettingsCommand}" />
     </ContentPage.ToolbarItems>
 
     <ContentPage.BindingContext>

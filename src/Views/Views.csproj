@@ -40,7 +40,7 @@
     <EmbeddedResource Update="AddFlashcardPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Lesson\AddLessonPage.xaml">
+    <EmbeddedResource Update="AddLessonPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="LessonListPage.xaml">

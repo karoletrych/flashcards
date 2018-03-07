@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using Flashcards.SpacedRepetition.Provider;
 using Flashcards.ViewModels;
 using Flashcards.ViewModels.Lesson;
-using Flashcards.Views.Lesson;
 using Prism;
 using Prism.Ioc;
 using Xamarin.Forms;
