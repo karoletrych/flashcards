@@ -5,13 +5,14 @@
              xmlns:system="clr-namespace:System;assembly=netstandard"
              xmlns:customControls="clr-namespace:Flashcards.Views.CustomControls;assembly=Views"
              xmlns:viewModels="clr-namespace:Flashcards.ViewModels;assembly=ViewModels"
+             xmlns:customViews="clr-namespace:Flashcards.Views.CustomViews;assembly=Views"
              x:Class="Flashcards.Views.AskingQuestionsPage">
     <ContentPage.BindingContext>
         <viewModels:AskingQuestionsViewModel/>
     </ContentPage.BindingContext>
     <AbsoluteLayout>
         <StackLayout>
-            <customControls:MulticolorBar
+            <customViews:MulticolorBar
                 VerticalOptions="CenterAndExpand"
                 HeightRequest="50"
                 StepItems="{Binding QuestionStatuses}" />

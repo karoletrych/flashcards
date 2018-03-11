@@ -9,8 +9,6 @@
     </ContentPage.BindingContext>
 
     <ContentPage.Content>
-
-
         <StackLayout VerticalOptions="FillAndExpand">
             <StackLayout>
                 <Entry

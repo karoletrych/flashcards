@@ -6,7 +6,6 @@ using System.Windows.Input;
 using Flashcards.Models;
 using Flashcards.Services;
 using Flashcards.Services.DataAccess;
-using Flashcards.Services.DataAccess.Database;
 using Prism.Navigation;
 using Prism.Services;
 using Xamarin.Forms;
@@ -21,11 +20,11 @@ namespace Flashcards.ViewModels.Lesson
         private readonly INavigationService _navigationService;
         private readonly Func<IEnumerable<Flashcard>, Examiner> _examinerFactory;
 
-        public LessonListViewModel()
+	    public LessonListViewModel()
         {
         }
 
-        public LessonListViewModel(
+	    public LessonListViewModel(
             IRepository<Models.Lesson> lessonRepository,
             INavigationService navigationService,
             IPageDialogService dialogService,
@@ -40,12 +39,27 @@ namespace Flashcards.ViewModels.Lesson
             Lessons = new ObservableCollection<Models.Lesson>();
         }
 
-        public ObservableCollection<Models.Lesson> Lessons { get; }
+	    public IList<Uri> ImagesTest { get; } = new List<Uri>
+	    {
+			new Uri("https://cdn.pixabay.com/photo/2018/02/26/16/13/dog-house-3183373_960_720.jpg"),
+			new Uri("https://cdn.pixabay.com/photo/2018/02/26/16/13/dog-house-3183373_960_720.jpg"),
+			new Uri("https://cdn.pixabay.com/photo/2018/02/26/16/13/dog-house-3183373_960_720.jpg"),
+			new Uri("https://cdn.pixabay.com/photo/2018/02/26/16/13/dog-house-3183373_960_720.jpg"),
+			new Uri("https://cdn.pixabay.com/photo/2018/02/26/16/13/dog-house-3183373_960_720.jpg"),
+			new Uri("https://cdn.pixabay.com/photo/2018/02/26/16/13/dog-house-3183373_960_720.jpg"),
+			new Uri("https://cdn.pixabay.com/photo/2018/02/26/16/13/dog-house-3183373_960_720.jpg"),
+			new Uri("https://cdn.pixabay.com/photo/2018/02/26/16/13/dog-house-3183373_960_720.jpg"),
+			new Uri("https://cdn.pixabay.com/photo/2018/02/26/16/13/dog-house-3183373_960_720.jpg")
+	    };
 
-        public ICommand AddLessonCommand =>
+	    public Uri Selected { get; set; }
+
+	    public ObservableCollection<Models.Lesson> Lessons { get; }
+
+	    public ICommand AddLessonCommand =>
             new Command(() => { _navigationService.NavigateAsync("AddLessonPage"); });
 
-        public ICommand PracticeLessonCommand => new Command<Models.Lesson>(lesson =>
+	    public ICommand PracticeLessonCommand => new Command<Models.Lesson>(lesson =>
         {
             ExceptionHandler.HandleWithDialog(_dialogService, async () =>
             {
@@ -61,13 +75,13 @@ namespace Flashcards.ViewModels.Lesson
             });
         });
 
-        public ICommand EditLessonCommand =>
+	    public ICommand EditLessonCommand =>
             new Command<Models.Lesson>(lesson =>
             {
                 _dialogService.DisplayAlertAsync("Edycja lekcji jeszcze nie gotowa", "", "OK, spoko");
             });
 
-        public ICommand DeleteLessonCommand =>
+	    public ICommand DeleteLessonCommand =>
             new Command<Models.Lesson>(
                 async lesson =>
                 {

@@ -2,9 +2,9 @@
 
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:controls="clr-namespace:Flashcards.Views.CustomControls"
              xmlns:lesson="clr-namespace:Flashcards.ViewModels.Lesson;assembly=ViewModels"
-             x:Class="Flashcards.Views.LessonListPage">
+             x:Class="Flashcards.Views.LessonListPage"
+             xmlns:customViews="clr-namespace:Flashcards.Views.CustomViews">
 
     <ContentPage.ToolbarItems>
         <ToolbarItem Icon="ic_add_white_48dp.png" Command="{Binding AddLessonCommand}" />
@@ -14,33 +14,42 @@
     <ContentPage.BindingContext>
         <lesson:LessonListViewModel/>
     </ContentPage.BindingContext>
-    <controls:CommandListView
-        ItemsSource="{Binding Lessons}"
-        ItemClickCommand="{Binding PracticeLessonCommand}"
-        x:Name="LessonList">
-        <controls:CommandListView.ItemTemplate>
-            <DataTemplate>
-                <ViewCell>
-                    <ViewCell.ContextActions>
-                        <MenuItem
-                            Command="{Binding Path=BindingContext.EditLessonCommand, Source={x:Reference LessonList}}"
-                            CommandParameter="{Binding .}"
-                            Text="Edit" />
-                        <MenuItem
-                            Command="{Binding Path=BindingContext.DeleteLessonCommand, Source={x:Reference LessonList}}"
-                            CommandParameter="{Binding .}"
-                            Text="Delete" IsDestructive="True" />
-                    </ViewCell.ContextActions>
-                    <StackLayout Orientation="Horizontal">
-                        <Label Text="{Binding Name}"
-                               Style="{DynamicResource ListItemTextStyle}" />
-                        <Label Text="{Binding FrontLanguage}"
-                               Style="{DynamicResource ListItemDetailTextStyle}" />
-                        <Label Text="{Binding BackLanguage}"
-                               Style="{DynamicResource ListItemDetailTextStyle}" />
-                    </StackLayout>
-                </ViewCell>
-            </DataTemplate>
-        </controls:CommandListView.ItemTemplate>
-    </controls:CommandListView>
+
+    <customViews:ImageGrid 
+        NumberOfRows ="3"
+        NumberOfColumns="3"
+        Source = "{Binding ImagesTest}"
+        Selected= "{Binding Selected}"
+        SelectionFrameColor="Red"
+        VerticalOptions="FillAndExpand"
+        HorizontalOptions="FillAndExpand"/>
+    <!--    <controls:CommandListView-->
+<!--        ItemsSource="{Binding Lessons}"-->
+<!--        ItemClickCommand="{Binding PracticeLessonCommand}"-->
+<!--        x:Name="LessonList">-->
+<!--        <controls:CommandListView.ItemTemplate>-->
+<!--            <DataTemplate>-->
+<!--                <ViewCell>-->
+<!--                    <ViewCell.ContextActions>-->
+<!--                        <MenuItem-->
+<!--                            Command="{Binding Path=BindingContext.EditLessonCommand, Source={x:Reference LessonList}}"-->
+<!--                            CommandParameter="{Binding .}"-->
+<!--                            Text="Edit" />-->
+<!--                        <MenuItem-->
+<!--                            Command="{Binding Path=BindingContext.DeleteLessonCommand, Source={x:Reference LessonList}}"-->
+<!--                            CommandParameter="{Binding .}"-->
+<!--                            Text="Delete" IsDestructive="True" />-->
+<!--                    </ViewCell.ContextActions>-->
+<!--                    <StackLayout Orientation="Horizontal">-->
+<!--                        <Label Text="{Binding Name}"-->
+<!--                               Style="{DynamicResource ListItemTextStyle}" />-->
+<!--                        <Label Text="{Binding FrontLanguage}"-->
+<!--                               Style="{DynamicResource ListItemDetailTextStyle}" />-->
+<!--                        <Label Text="{Binding BackLanguage}"-->
+<!--                               Style="{DynamicResource ListItemDetailTextStyle}" />-->
+<!--                    </StackLayout>-->
+<!--                </ViewCell>-->
+<!--            </DataTemplate>-->
+<!--        </controls:CommandListView.ItemTemplate>-->
+<!--    </controls:CommandListView>-->
 </ContentPage>

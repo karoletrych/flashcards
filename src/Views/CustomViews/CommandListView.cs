@@ -1,7 +1,7 @@
 ﻿using System.Windows.Input;
 using Xamarin.Forms;
 
-namespace Flashcards.Views.CustomControls
+namespace Flashcards.Views.CustomViews
 {
     public class CommandListView : ListView
     {

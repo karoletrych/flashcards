@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Flashcards.ViewModels;
 using Xamarin.Forms;
 
-namespace Flashcards.Views.CustomControls
+namespace Flashcards.Views.CustomViews
 {
     [ContentProperty("StepItems")]
     public sealed class MulticolorBar : View
