@@ -7,6 +7,7 @@
              xmlns:viewModels="clr-namespace:Flashcards.ViewModels;assembly=ViewModels">
 
     <ContentPage.ToolbarItems>
+        <ToolbarItem Order="Primary" Text="Lessons"></ToolbarItem>
         <ToolbarItem Icon="ic_add_white_48dp.png" Command="{Binding AddLessonCommand}" />
         <ToolbarItem Icon="ic_settings_white_48dp.png" Command="{Binding SettingsCommand}" />
     </ContentPage.ToolbarItems>
@@ -14,7 +15,6 @@
     <ContentPage.BindingContext>
         <viewModels:LessonListViewModel/>
     </ContentPage.BindingContext>
-
 
         <customViews:CommandListView
         ItemsSource="{Binding Lessons}"

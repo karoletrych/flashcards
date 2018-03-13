@@ -23,6 +23,7 @@ namespace Flashcards.Views
             containerRegistry.RegisterForNavigation<AddLessonPage, AddLessonViewModel>();
             containerRegistry.RegisterForNavigation<AddFlashcardPage, AddFlashcardViewModel>();
 			containerRegistry.RegisterForNavigation<AskingQuestionsPage, AskingQuestionsViewModel>();
+			containerRegistry.RegisterForNavigation<EditLessonPage, EditLessonViewModel>();
 			containerRegistry.RegisterForNavigation<SettingsPage>();
         }
 

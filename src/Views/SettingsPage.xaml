@@ -8,7 +8,7 @@
                 <TableSection Title="Powiadomienia">
                     <EntryCell 
                         x:Name ="Period" 
-                        Label = "Okres powiadomień(minuty)" 
+                        Label = "Częstotliwość powiadomień(minuty)" 
                         Keyboard="Numeric"/>
                 </TableSection>
             </TableRoot>

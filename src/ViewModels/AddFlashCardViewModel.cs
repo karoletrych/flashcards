@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Timers;
 using System.Windows.Input;
 using Flashcards.Models;
@@ -17,16 +18,12 @@ namespace Flashcards.ViewModels
 		private const int ImagesNumber = 9;
 		private readonly IRepository<Flashcard> _flashcardRepository;
 		private readonly IImageBrowser _imageBrowser;
-
-		private readonly ITranslator _translator;
-		private Language _backLanguage;
-
-		private string _backText;
 		private Language _frontLanguage;
+		private Language _backLanguage;
+		private readonly ITranslator _translator;
 
-		private string _frontText;
+
 		private string _lessonId;
-		private Uri _selectedImageUri;
 
 		public AddFlashcardViewModel()
 		{
@@ -44,38 +41,11 @@ namespace Flashcards.ViewModels
 
 		public ObservableCollection<Uri> ImageUris { get; } = new ObservableCollection<Uri>(new Uri[ImagesNumber]);
 
-		public Uri SelectedImageUri
-		{
-			get => _selectedImageUri;
-			set
-			{
-				if (value == _selectedImageUri) return;
-				_selectedImageUri = value;
-				OnPropertyChanged();
-			}
-		}
+		public Uri SelectedImageUri { get; set; }
 
-		public string FrontText
-		{
-			get => _frontText;
-			set
-			{
-				if (value == _frontText) return;
-				_frontText = value;
-				OnPropertyChanged();
-			}
-		}
+		public string FrontText { get; set; }
 
-		public string BackText
-		{
-			get => _backText;
-			set
-			{
-				if (value == _backText) return;
-				_backText = value;
-				OnPropertyChanged();
-			}
-		}
+		public string BackText { get; set; }
 
 		public ICommand NextFlashcardCommand => new Command(async () =>
 		{
@@ -102,12 +72,13 @@ namespace Flashcards.ViewModels
 
 		public void OnNavigatedFrom(NavigationParameters parameters)
 		{
+			parameters.Add("lessonId", _lessonId);
 		}
 
 		public event PropertyChangedEventHandler PropertyChanged;
 
 
-		public async void HandleFrontTextCompleted()
+		public async Task HandleFrontTextCompleted()
 		{
 			var translations = await _translator.Translate(
 				from: _frontLanguage,
@@ -120,7 +91,7 @@ namespace Flashcards.ViewModels
 			foreach (var imageUri in imageUris) ImageUris.Add(imageUri);
 		}
 
-		public async void HandleBackTextCompleted()
+		public async Task HandleBackTextCompleted()
 		{
 			var translations = await _translator.Translate(
 				from: _backLanguage,
@@ -133,7 +104,6 @@ namespace Flashcards.ViewModels
 			foreach (var imageUri in imageUris) ImageUris.Add(imageUri);
 		}
 
-		[NotifyPropertyChangedInvocator]
 		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
 		{
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

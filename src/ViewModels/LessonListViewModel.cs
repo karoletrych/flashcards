@@ -16,7 +16,7 @@ namespace Flashcards.ViewModels
     {
         private readonly IPageDialogService _dialogService;
         private readonly IRepository<Flashcard> _flashcardRepository;
-        private readonly IRepository<Models.Lesson> _lessonRepository;
+        private readonly IRepository<Lesson> _lessonRepository;
         private readonly INavigationService _navigationService;
         private readonly Func<IEnumerable<Flashcard>, Examiner> _examinerFactory;
 
@@ -25,7 +25,7 @@ namespace Flashcards.ViewModels
         }
 
 	    public LessonListViewModel(
-            IRepository<Models.Lesson> lessonRepository,
+            IRepository<Lesson> lessonRepository,
             INavigationService navigationService,
             IPageDialogService dialogService,
             IRepository<Flashcard> flashcardRepository,
@@ -36,30 +36,14 @@ namespace Flashcards.ViewModels
             _dialogService = dialogService;
             _flashcardRepository = flashcardRepository;
             _examinerFactory = examinerFactory;
-            Lessons = new ObservableCollection<Models.Lesson>();
         }
 
-	    public IList<Uri> ImagesTest { get; } = new List<Uri>
-	    {
-			new Uri("https://cdn.pixabay.com/photo/2018/02/26/16/13/dog-house-3183373_960_720.jpg"),
-			new Uri("https://cdn.pixabay.com/photo/2018/02/26/16/13/dog-house-3183373_960_720.jpg"),
-			new Uri("https://cdn.pixabay.com/photo/2018/02/26/16/13/dog-house-3183373_960_720.jpg"),
-			new Uri("https://cdn.pixabay.com/photo/2018/02/26/16/13/dog-house-3183373_960_720.jpg"),
-			new Uri("https://cdn.pixabay.com/photo/2018/02/26/16/13/dog-house-3183373_960_720.jpg"),
-			new Uri("https://cdn.pixabay.com/photo/2018/02/26/16/13/dog-house-3183373_960_720.jpg"),
-			new Uri("https://cdn.pixabay.com/photo/2018/02/26/16/13/dog-house-3183373_960_720.jpg"),
-			new Uri("https://cdn.pixabay.com/photo/2018/02/26/16/13/dog-house-3183373_960_720.jpg"),
-			new Uri("https://cdn.pixabay.com/photo/2018/02/26/16/13/dog-house-3183373_960_720.jpg")
-	    };
+	    public ObservableCollection<Lesson> Lessons { get; } = new ObservableCollection<Lesson>();
 
-	    public Uri Selected { get; set; }
-
-	    public ObservableCollection<Models.Lesson> Lessons { get; }
-
-	    public ICommand AddLessonCommand =>
+		public ICommand AddLessonCommand =>
             new Command(() => { _navigationService.NavigateAsync("AddLessonPage"); });
 
-	    public ICommand PracticeLessonCommand => new Command<Models.Lesson>(lesson =>
+	    public ICommand PracticeLessonCommand => new Command<Lesson>(lesson =>
         {
             ExceptionHandler.HandleWithDialog(_dialogService, async () =>
             {
@@ -76,13 +60,18 @@ namespace Flashcards.ViewModels
         });
 
 	    public ICommand EditLessonCommand =>
-            new Command<Models.Lesson>(lesson =>
+            new Command<Lesson>(async lesson =>
             {
-                _dialogService.DisplayAlertAsync("Edycja lekcji jeszcze nie gotowa", "", "OK, spoko");
+	            await _navigationService.NavigateAsync("EditLessonPage", new NavigationParameters
+	            {
+		            {
+			            "lessonId", lesson.Id
+		            }
+	            });
             });
 
 	    public ICommand DeleteLessonCommand =>
-            new Command<Models.Lesson>(
+            new Command<Lesson>(
                 async lesson =>
                 {
                     await _lessonRepository.Delete(lesson);

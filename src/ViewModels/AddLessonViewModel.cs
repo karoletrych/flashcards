@@ -12,7 +12,7 @@ namespace Flashcards.ViewModels
 {
     public class AddLessonViewModel
     {
-        private readonly IRepository<Models.Lesson> _lessonRepository;
+        private readonly IRepository<Lesson> _lessonRepository;
         private readonly INavigationService _navigationService;
         private readonly IPageDialogService _dialogService;
 
@@ -24,7 +24,7 @@ namespace Flashcards.ViewModels
         public AddLessonViewModel(
             INavigationService navigationService,
             IPageDialogService pageDialogService,
-            IRepository<Models.Lesson> lessonRepository) =>
+            IRepository<Lesson> lessonRepository) =>
             (_navigationService, _dialogService, _lessonRepository) = 
                 (navigationService, pageDialogService, lessonRepository);
 

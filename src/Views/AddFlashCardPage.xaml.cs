@@ -19,12 +19,12 @@ namespace Flashcards.Views
 
 	    private async void FrontEntry_OnCompleted(object sender, EventArgs e)
 	    {
-		    ((AddFlashcardViewModel) BindingContext).HandleFrontTextCompleted();
+		    await ((AddFlashcardViewModel) BindingContext).HandleFrontTextCompleted();
 	    }
 
 	    private async void BackEntry_OnCompleted(object sender, EventArgs e)
 	    {
-		    ((AddFlashcardViewModel)BindingContext).HandleBackTextCompleted();
+		    await ((AddFlashcardViewModel)BindingContext).HandleBackTextCompleted();
 		}
     }
 }

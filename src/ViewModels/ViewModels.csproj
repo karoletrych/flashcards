@@ -6,8 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Fody" Version="2.4.6" />
     <PackageReference Include="Prism.Autofac.Forms" Version="7.0.0.396" />
     <PackageReference Include="Prism.Core" Version="7.0.0.396" />
+    <PackageReference Include="PropertyChanged.Fody" Version="2.2.9" />
   </ItemGroup>
 
   <ItemGroup>

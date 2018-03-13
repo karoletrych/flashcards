@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Windows.Input;
 using SQLite;
 using SQLiteNetExtensions.Attributes;
 
@@ -18,6 +19,9 @@ namespace Flashcards.Models
 
         public Language FrontLanguage { get; set; }
         public Language BackLanguage { get; set; }
+
+	    public AskingMode AskingMode { get; set; }
+	    public bool AskInRepetitions { get; set; }
     }
 
     public class Flashcard : IEquatable<Flashcard>
@@ -58,7 +62,14 @@ namespace Flashcards.Models
 	    }
     }
 
-    public enum Language
+	public enum AskingMode
+	{
+		Front,
+		Back,
+		Random
+	}
+
+	public enum Language
     {
         German,
         English,
