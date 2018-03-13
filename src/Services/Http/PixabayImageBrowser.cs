@@ -8,18 +8,18 @@ using Newtonsoft.Json.Linq;
 
 namespace Flashcards.Services.Http
 {
-    public class PixabayImageUrlsProvider : IImageUrlsProvider
+    public class PixabayImageBrowser : IImageBrowser
     {
         private const string PixabayKey = "7086795-ed8c5c96965624c739c6e22af";
         private readonly HttpClient _httpClient = new HttpClient();
         private readonly int _numberOfResults;
 
-        public PixabayImageUrlsProvider(int numberOfResults = 9)
+        public PixabayImageBrowser(int numberOfResults = 9)
         {
             _numberOfResults = numberOfResults;
         }
 
-        public async Task<IEnumerable<string>> Find(string query, Language queryLanguage)
+        public async Task<IList<Uri>> Find(string query, Language queryLanguage)
         {
             var httpQuery =
                 new Uri("https://pixabay.com/api/?")
@@ -33,9 +33,10 @@ namespace Flashcards.Services.Http
             var response = await _httpClient.GetStringAsync(httpQuery);
 
             dynamic json = JObject.Parse(response);
-            var urls = ((IEnumerable<dynamic>) json.hits)
-                .Select(hit => (string)hit.previewURL);
-            return urls;
+            var uris = ((IEnumerable<dynamic>) json.hits)
+                .Select(hit => new Uri((string)hit.previewURL))
+	            .ToList();
+            return uris;
         }
     }
 }

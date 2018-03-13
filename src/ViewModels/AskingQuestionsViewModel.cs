@@ -30,7 +30,9 @@ namespace Flashcards.ViewModels
             }
         };
 
-        public AskingQuestionsViewModel(
+	    private Uri _imageUri;
+
+	    public AskingQuestionsViewModel(
             INavigationService navigationService,
             IPageDialogService dialogService)
         {
@@ -49,71 +51,52 @@ namespace Flashcards.ViewModels
         {
             _examiner.Answer(isKnown: known);
 
-            QuestionStatuses = _examiner.Questions.Select(question =>
-            {
-                switch (question.Status)
-                {
-                    case QuestionStatus.Known:
-                        return new StepItem
-                        {
-                            Color = Color.GreenYellow,
-                            Value = 1
-                        };
-                    case QuestionStatus.Unknown:
-                        return new StepItem
-                        {
-                            Color = Color.Red,
-                            Value = 1
-                        };
-                    case QuestionStatus.NotAnswered:
-                        return new StepItem
-                        {
-                            Color = Color.Gray,
-                            Value = 1
-                        };
-                    default:
-                        throw new ArgumentOutOfRangeException(nameof(question), question, null);
-                }
-            }).ToList();
 
-            FrontIsVisible = false;
-            ShowNextQuestionOrEnd();
+	        FrontIsVisible = false;
+	        ShowNextQuestionOrFinishAsking();
+
+	        UpdateQuestionStatuses();
         });
 
-        public ICommand ShowBackCommand => new Command(() =>
+	    public ICommand ShowBackCommand => new Command(() =>
         {
-            QuestionStatuses = _examiner.Questions.Select(question =>
-            {
-                switch (question.Status)
-                {
-                    case QuestionStatus.Known:
-                        return new StepItem
-                        {
-                            Color = Color.GreenYellow,
-                            Value = 1
-                        };
-                    case QuestionStatus.Unknown:
-                        return new StepItem
-                        {
-                            Color = Color.Red,
-                            Value = 1
-                        };
-                    case QuestionStatus.NotAnswered:
-                        return new StepItem
-                        {
-                            Color = Color.Gray,
-                            Value = 1
-                        };
-                    default:
-                        throw new ArgumentOutOfRangeException(nameof(question), question, null);
-                }
-            }).ToList();
+	        FrontIsVisible = true;
 
-            FrontIsVisible = true;
+	        UpdateQuestionStatuses();
         });
 
+	    private void UpdateQuestionStatuses()
+	    {
+		    QuestionStatuses = _examiner.Questions.Select(question =>
+		    {
+			    switch (question.Status)
+			    {
+				    case QuestionStatus.Known:
+					    return new StepItem
+					    {
+						    Color = Color.GreenYellow,
+						    Value = 1
+					    };
+				    case QuestionStatus.Unknown:
+					    return new StepItem
+					    {
+						    Color = Color.Red,
+						    Value = 1
+					    };
+				    case QuestionStatus.NotAnswered:
+					    return new StepItem
+					    {
+						    Color = Color.Gray,
+						    Value = 1
+					    };
+				    default:
+					    throw new ArgumentOutOfRangeException(nameof(question), question, null);
+			    }
+		    }).ToList();
+	    }
 
-        public IList<StepItem> QuestionStatuses
+
+	    public IList<StepItem> QuestionStatuses
         {
             get => _questionStatuses;
             private set
@@ -156,7 +139,18 @@ namespace Flashcards.ViewModels
             }
         }
 
-        public void OnNavigatedTo(NavigationParameters parameters)
+	    public Uri ImageUri
+	    {
+		    get => _imageUri;
+		    set
+		    {
+				if(_imageUri == value) return;
+			    _imageUri = value;
+				OnPropertyChanged();
+		    }
+	    }
+
+	    public void OnNavigatedTo(NavigationParameters parameters)
         {
         }
 
@@ -167,17 +161,18 @@ namespace Flashcards.ViewModels
         public void OnNavigatingTo(NavigationParameters parameters)
         {
             _examiner = (Examiner) parameters["examiner"];
-            ShowNextQuestionOrEnd();
+            ShowNextQuestionOrFinishAsking();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private async void ShowNextQuestionOrEnd()
+        private async void ShowNextQuestionOrFinishAsking()
         {
             if (_examiner.TryAskNextQuestion(out var question))
             {
                 FrontText = question.Flashcard.Front;
                 BackText = question.Flashcard.Back;
+	            ImageUri = new Uri(question.Flashcard.ImageUrl);
             }
             else
             {

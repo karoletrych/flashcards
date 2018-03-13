@@ -1,4 +1,6 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Timers;
 using System.Windows.Input;
@@ -10,130 +12,131 @@ using Xamarin.Forms;
 
 namespace Flashcards.ViewModels
 {
-    public class AddFlashcardViewModel : INotifyPropertyChanged, INavigatedAware
-    {
-	    public AddFlashcardViewModel()
-	    {
-		    
-	    }
+	public class AddFlashcardViewModel : INotifyPropertyChanged, INavigatedAware
+	{
+		private const int ImagesNumber = 9;
+		private readonly IRepository<Flashcard> _flashcardRepository;
+		private readonly IImageBrowser _imageBrowser;
 
-        private const int TranslationDelayInMilliseconds = 800;
+		private readonly ITranslator _translator;
+		private Language _backLanguage;
 
-        private readonly Timer _timer = new Timer(TranslationDelayInMilliseconds)
-        {
-            AutoReset = false
-        };
+		private string _backText;
+		private Language _frontLanguage;
 
-        private readonly Timer _timerBack = new Timer(TranslationDelayInMilliseconds)
-        {
-            AutoReset = false
-        };
+		private string _frontText;
+		private string _lessonId;
+		private Uri _selectedImageUri;
 
-        private readonly ITranslatorService _translatorService;
-        private readonly IRepository<Flashcard> _flashcardRepository;
-        private Language _backLanguage;
+		public AddFlashcardViewModel()
+		{
+		}
 
-        private string _backText;
-        private Language _frontLanguage;
+		public AddFlashcardViewModel(
+			ITranslator translator,
+			IRepository<Flashcard> flashcardRepository,
+			IImageBrowser imageBrowser)
+		{
+			_translator = translator;
+			_flashcardRepository = flashcardRepository;
+			_imageBrowser = imageBrowser;
+		}
 
-        private string _frontText;
-        private string _lessonId;
+		public ObservableCollection<Uri> ImageUris { get; } = new ObservableCollection<Uri>(new Uri[ImagesNumber]);
 
-        public AddFlashcardViewModel(ITranslatorService translatorService, IRepository<Flashcard> flashcardRepository)
-        {
-            _translatorService = translatorService;
-            _flashcardRepository = flashcardRepository;
-            _timer.Elapsed += TimerOnElapsed;
-            _timerBack.Elapsed += TimerOnElapsedBack;
-        }
+		public Uri SelectedImageUri
+		{
+			get => _selectedImageUri;
+			set
+			{
+				if (value == _selectedImageUri) return;
+				_selectedImageUri = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public string FrontText
+		{
+			get => _frontText;
+			set
+			{
+				if (value == _frontText) return;
+				_frontText = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public string BackText
+		{
+			get => _backText;
+			set
+			{
+				if (value == _backText) return;
+				_backText = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public ICommand NextFlashcardCommand => new Command(async () =>
+		{
+			await _flashcardRepository.Insert(new Flashcard
+			{
+				Front = FrontText,
+				Back = BackText,
+				LessonId = _lessonId,
+				ImageUrl = SelectedImageUri?.AbsoluteUri
+			});
+
+			FrontText = "";
+			BackText = "";
+			ImageUris.Clear();
+			SelectedImageUri = null;
+		});
+
+		public void OnNavigatedTo(NavigationParameters parameters)
+		{
+			_frontLanguage = (Language) parameters["frontLanguage"];
+			_backLanguage = (Language) parameters["backLanguage"];
+			_lessonId = (string) parameters["lessonId"];
+		}
+
+		public void OnNavigatedFrom(NavigationParameters parameters)
+		{
+		}
+
+		public event PropertyChangedEventHandler PropertyChanged;
 
 
-        public string FrontText
-        {
-            get => _frontText;
-            set
-            {
-                if (value == _frontText) return;
-                _frontText = value;
-                OnPropertyChanged();
-            }
-        }
+		public async void HandleFrontTextCompleted()
+		{
+			var translations = await _translator.Translate(
+				from: _frontLanguage,
+				to: _backLanguage,
+				text: FrontText);
+			BackText = string.Join("", translations);
 
-        public string BackText
-        {
-            get => _backText;
-            set
-            {
-                if (value == _backText) return;
-                _backText = value;
-                OnPropertyChanged();
-            }
-        }
+			var imageUris = await _imageBrowser.Find(FrontText, _frontLanguage);
+			ImageUris.Clear();
+			foreach (var imageUri in imageUris) ImageUris.Add(imageUri);
+		}
 
-        public ICommand NextFlashcard => new Command(async () =>
-        {
-            await _flashcardRepository.Insert(new Flashcard{Front = FrontText, Back = BackText, LessonId = _lessonId});
-            FrontText = "";
-            BackText = "";
-        });
+		public async void HandleBackTextCompleted()
+		{
+			var translations = await _translator.Translate(
+				from: _backLanguage,
+				to: _frontLanguage,
+				text: BackText);
+			FrontText = string.Join("", translations);
 
-        public void OnNavigatedTo(NavigationParameters parameters)
-        {
-            _frontLanguage = (Language) parameters["frontLanguage"];
-            _backLanguage = (Language) parameters["backLanguage"];
-            _lessonId = (string) parameters["lessonId"];
-        }
+			var imageUris = await _imageBrowser.Find(BackText, _backLanguage);
+			ImageUris.Clear();
+			foreach (var imageUri in imageUris) ImageUris.Add(imageUri);
+		}
 
-        public void OnNavigatedFrom(NavigationParameters parameters)
-        {
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void ResetTimer()
-        {
-            _timer.Stop();
-            _timer.Start();
-        }
-
-        private void ResetTimerBack()
-        {
-            _timerBack.Stop();
-            _timerBack.Start();
-        }
-
-        public void FrontTextModified()
-        {
-            ResetTimer();
-        }
-
-        public void BackTextModified()
-        {
-            ResetTimerBack();
-        }
-
-        private async void TimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
-        {
-            var translations = await _translatorService.Translate(
-                from: _frontLanguage,
-                to: _backLanguage,
-                text: FrontText);
-            BackText = string.Join("", translations);
-        }
-
-        private async void TimerOnElapsedBack(object sender, ElapsedEventArgs elapsedEventArgs)
-        {
-            var translations = await _translatorService.Translate(
-                from: _backLanguage,
-                to: _frontLanguage,
-                text: BackText);
-            FrontText = string.Join("", translations);
-        }
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-    }
+		[NotifyPropertyChangedInvocator]
+		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+		{
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+		}
+	}
 }

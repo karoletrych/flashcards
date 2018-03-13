@@ -23,7 +23,7 @@ namespace FlashCards.Droid
                 Assembly.GetAssembly(typeof(App)),
                 Assembly.GetAssembly(typeof(AskingQuestionsViewModel)),
                 Assembly.GetAssembly(typeof(Flashcard)),
-                Assembly.GetAssembly(typeof(ITranslatorService)),
+                Assembly.GetAssembly(typeof(ITranslator)),
                 Assembly.GetAssembly(typeof(ISpacedRepetition)),
                 Assembly.GetAssembly(typeof(Algorithm.LeitnerRepetition)),
             };

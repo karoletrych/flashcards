@@ -10,7 +10,7 @@ namespace Flashcards.ServicesTests
         [Fact]
         public void Test()
         {
-            var imageUrlsProvider = new PixabayImageUrlsProvider(9);
+            var imageUrlsProvider = new PixabayImageBrowser(9);
 
             var urls = imageUrlsProvider.Find("pies", Language.Polish).Result;
             Assert.Equal(9, urls.Count());

@@ -4,8 +4,8 @@ using Flashcards.Models;
 
 namespace Flashcards.Services.Http
 {
-    public interface IImageUrlsProvider
+    public interface ITranslator
     {
-        Task<IEnumerable<string>> Find(string query, Language queryLanguage);
+        Task<IEnumerable<string>> Translate(Language @from, Language to, string text);
     }
 }

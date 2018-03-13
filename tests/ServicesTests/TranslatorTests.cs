@@ -8,11 +8,11 @@ namespace Flashcards.ServicesTests
 {
     public class TranslatorTests
     {
-        private readonly YandexTranslatorService _yandexTranslatorService;
+        private readonly YandexTranslator _yandexTranslator;
 
         public TranslatorTests()
         {
-            _yandexTranslatorService = new YandexTranslatorService();
+            _yandexTranslator = new YandexTranslator();
         }
 
         [Theory]
@@ -22,14 +22,14 @@ namespace Flashcards.ServicesTests
         public void Translation(Language @from, Language to, string text, string[] expected)
         {
             var expectedList = expected.ToList().AsReadOnly();
-            Assert.Equal(expectedList, _yandexTranslatorService.Translate(@from, to, text).Result);
+            Assert.Equal(expectedList, _yandexTranslator.Translate(@from, to, text).Result);
         }
 
         [Fact]
         public void TranslationOfEmptyStringReturnEmptyString()
         {
             var emptyList = new List<string>();
-            Assert.Equal(emptyList, _yandexTranslatorService.Translate(Language.English, Language.French, "").Result);
+            Assert.Equal(emptyList, _yandexTranslator.Translate(Language.English, Language.French, "").Result);
         }
     }
 }

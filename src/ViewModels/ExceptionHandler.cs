@@ -1,7 +1,7 @@
 using System;
 using Prism.Services;
 
-namespace Flashcards.ViewModels.Lesson
+namespace Flashcards.ViewModels
 {
     static class ExceptionHandler
     {

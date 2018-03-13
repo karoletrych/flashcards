@@ -8,7 +8,7 @@ using Prism.Navigation;
 using Prism.Services;
 using Xamarin.Forms;
 
-namespace Flashcards.ViewModels.Lesson
+namespace Flashcards.ViewModels
 {
     public class AddLessonViewModel
     {

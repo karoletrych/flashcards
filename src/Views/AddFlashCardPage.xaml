@@ -3,35 +3,72 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:viewModels="clr-namespace:Flashcards.ViewModels;assembly=ViewModels"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:customViews="clr-namespace:Flashcards.Views.CustomViews;assembly=Views"
+             xmlns:controls="clr-namespace:DLToolkit.Forms.Controls;assembly=DLToolkit.Forms.Controls.FlowListView"
              x:Class="Flashcards.Views.AddFlashcardPage">
     <ContentPage.BindingContext>
-        <viewModels:AddFlashcardViewModel/>
+        <viewModels:AddFlashcardViewModel />
     </ContentPage.BindingContext>
 
     <ContentPage.Content>
-        <StackLayout VerticalOptions="FillAndExpand">
-            <StackLayout>
-                <Entry
-                    Placeholder="Front"
-                    Text="{Binding FrontText, Mode = TwoWay}"
-                    TextChanged="FrontEntry_OnTextChanged" />
-                <Entry
-                    Placeholder="Back"
-                    Text="{Binding BackText, Mode = TwoWay}"
-                    TextChanged="BackEntry_OnTextChanged" />
-                <Label Text="Powered by Yandex.Translate">
-                    <Label.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="YandexLabel_OnTapped" />
-                    </Label.GestureRecognizers>
-                </Label>
-            </StackLayout>
+        <AbsoluteLayout>
+            <StackLayout
+                    AbsoluteLayout.LayoutFlags="All"
+                    AbsoluteLayout.LayoutBounds=".5,0,1,.3"
+                    Spacing="0"
+                    VerticalOptions="Start">
+                    <Entry
+                        FontSize="Small"
+                        Placeholder="Front"
+                        Text="{Binding FrontText, Mode = TwoWay}"
+                        Completed="FrontEntry_OnCompleted" />
+                    <Entry
+                        FontSize="Small"
+                        Placeholder="Back"
+                        Text="{Binding BackText, Mode = TwoWay}"
+                        Completed="BackEntry_OnCompleted" />
+                    <Label
+                        Text="Powered by Yandex.Translate"
+                        FontSize="Small">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="YandexLabel_OnTapped" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                </StackLayout>
 
-            <Grid x:Name="ImagesGrid"
-                  RowSpacing="1" ColumnSpacing="1"
-                  VerticalOptions="FillAndExpand" />
-            <StackLayout Orientation="Vertical">
-                <Button Text="Next Flashcard" Command="{Binding NextFlashcard}" />
-            </StackLayout>
-        </StackLayout>
+            <Frame
+                Padding="0"
+                AbsoluteLayout.LayoutFlags="All"
+                AbsoluteLayout.LayoutBounds=".5,.38,.5,.20">
+                <Image
+                    Source="{Binding SelectedImageUri}"
+                    HeightRequest="250"
+                    Aspect="Fill" />
+            </Frame>
+
+            <controls:FlowListView
+                FlowColumnCount="3"
+                HasUnevenRows="false"
+                FlowItemsSource="{Binding ImageUris}"
+                FlowTappedBackgroundColor="LawnGreen"
+                FlowLastTappedItem="{Binding SelectedImageUri}"
+                AbsoluteLayout.LayoutFlags="All"
+                AbsoluteLayout.LayoutBounds=".5,.88,1,.4">
+                <controls:FlowListView.FlowColumnTemplate>
+                    <DataTemplate>
+                        <Image
+                            Source="{Binding .}"
+                            Aspect="Fill" />
+                    </DataTemplate>
+                </controls:FlowListView.FlowColumnTemplate>
+            </controls:FlowListView>
+
+            <Button
+                Text="Next Flashcard"
+                Command="{Binding NextFlashcardCommand}"
+                VerticalOptions="End"
+                AbsoluteLayout.LayoutBounds=".5,1,1,.1"
+                AbsoluteLayout.LayoutFlags="All" />
+        </AbsoluteLayout>
     </ContentPage.Content>
 </ContentPage>

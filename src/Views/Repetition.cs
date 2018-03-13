@@ -2,7 +2,6 @@
 using Flashcards.Services;
 using Flashcards.SpacedRepetition.Provider;
 using Flashcards.ViewModels;
-using Flashcards.ViewModels.Lesson;
 using Prism;
 using Prism.Autofac;
 using Prism.Ioc;

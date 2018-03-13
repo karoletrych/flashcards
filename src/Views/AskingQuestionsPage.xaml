@@ -16,7 +16,7 @@
                 VerticalOptions="CenterAndExpand"
                 HeightRequest="50"
                 StepItems="{Binding QuestionStatuses}" />
-            <Label Text="0/0" />
+            <Label Text="{Binding QuestionStatuses.Count, StringFormat='0/{0}'}" />
         </StackLayout>
 
         <StackLayout AbsoluteLayout.LayoutFlags="All"
@@ -24,7 +24,9 @@
             <Image
                 BackgroundColor="Green"
                 HorizontalOptions="FillAndExpand"
-                VerticalOptions="CenterAndExpand" />
+                VerticalOptions="FillAndExpand" 
+                Source ="{Binding ImageUri}"
+                Aspect="Fill"/>
             <StackLayout Orientation="Horizontal">
                 <Label IsVisible ="{Binding FrontIsVisible}" Text="{Binding FrontText}" />
                 <Label IsVisible ="{Binding BackIsVisible}" Text="{Binding BackText}" />
@@ -33,33 +35,43 @@
 
         <StackLayout Orientation="Horizontal" AbsoluteLayout.LayoutFlags="All"
                      AbsoluteLayout.LayoutBounds=".5,1,1,.1">
-            <Button Text="Pokaż"
-                    HorizontalOptions="FillAndExpand"
-                    VerticalOptions="CenterAndExpand"
+            <Button 
+                    Text="Pokaż"
                     IsVisible="{Binding BackIsVisible}"
-                    Command="{Binding ShowBackCommand}" />
+                    Command="{Binding ShowBackCommand}" 
+                    HorizontalOptions="FillAndExpand"/>
 
-            <Button Text="Wiedziałem"
-                    BackgroundColor="LawnGreen"
-                    HorizontalOptions="FillAndExpand"
-                    VerticalOptions="CenterAndExpand"
-                    IsVisible="{Binding FrontIsVisible}"
-                    Command="{Binding UserAnswerCommand}">
-                <Button.CommandParameter>
-                    <system:Boolean>True</system:Boolean>
-                </Button.CommandParameter>
-            </Button>
+            <Grid HorizontalOptions="FillAndExpand"
+                  IsVisible="{Binding FrontIsVisible}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.5*"></ColumnDefinition>
+                    <ColumnDefinition Width="0.5*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Button Text="Wiedziałem"
+                        FontSize="10"
+                        BackgroundColor="LawnGreen"
+                        HorizontalOptions="FillAndExpand"
+                        VerticalOptions="CenterAndExpand"
+                        Command="{Binding UserAnswerCommand}"
+                        Grid.Column="0">
+                    <Button.CommandParameter>
+                        <system:Boolean>True</system:Boolean>
+                    </Button.CommandParameter>
+                </Button>
 
-            <Button Text="Nie wiedziałem"
-                    BackgroundColor="Red"
-                    HorizontalOptions="FillAndExpand"
-                    VerticalOptions="CenterAndExpand"
-                    IsVisible="{Binding FrontIsVisible}"
-                    Command="{Binding UserAnswerCommand}">
-                <Button.CommandParameter>
-                    <system:Boolean>False</system:Boolean>
-                </Button.CommandParameter>
-            </Button>
+                <Button Text="Nie wiedziałem"
+                        BackgroundColor="Red"
+                        FontSize="10"
+                        HorizontalOptions="FillAndExpand"
+                        VerticalOptions="CenterAndExpand"
+                        Command="{Binding UserAnswerCommand}"
+                        Grid.Column="1">
+                    <Button.CommandParameter>
+                        <system:Boolean>False</system:Boolean>
+                    </Button.CommandParameter>
+                </Button>
+            </Grid>
+            
         </StackLayout>
     </AbsoluteLayout>
 

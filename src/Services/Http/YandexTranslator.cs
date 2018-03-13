@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 
 namespace Flashcards.Services.Http
 {
-    public class YandexTranslatorService : ITranslatorService
+    public class YandexTranslator : ITranslator
     {
         private const string YandexKey =
             "trnsl.1.1.20171117T191335Z.d621ce719bfba7b1.078c313c6f9536f1a4cb15469216f22f05a2318b";

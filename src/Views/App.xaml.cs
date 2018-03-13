@@ -1,7 +1,7 @@
 using System.Collections.Generic;
+using DLToolkit.Forms.Controls;
 using Flashcards.SpacedRepetition.Provider;
 using Flashcards.ViewModels;
-using Flashcards.ViewModels.Lesson;
 using Prism;
 using Prism.Ioc;
 using Xamarin.Forms;
@@ -28,21 +28,22 @@ namespace Flashcards.Views
 
 		protected override void OnInitialized()
         {
-            void InitializeSpacedRepetition()
-            {
-                var initializers = Container.Resolve<IEnumerable<ISpacedRepetitionInitializer>>();
-                foreach (var spacedRepetitionInitializer in initializers)
-                {
-                    spacedRepetitionInitializer.Initialize();
-                }
-            }
-
-
             InitializeComponent();
 
             InitializeSpacedRepetition();
 
-            NavigationService.NavigateAsync("NavigationPage/LessonListPage");
-		}
+	        FlowListView.Init();
+
+	        NavigationService.NavigateAsync("NavigationPage/LessonListPage");
+
+	        void InitializeSpacedRepetition()
+	        {
+		        var initializers = Container.Resolve<IEnumerable<ISpacedRepetitionInitializer>>();
+		        foreach (var spacedRepetitionInitializer in initializers)
+		        {
+			        spacedRepetitionInitializer.Initialize();
+		        }
+	        }
+        }
 	}
 }
