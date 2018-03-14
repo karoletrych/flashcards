@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="pl.karoletrych.Flashcards" android:installLocation="auto" android:versionName="1.2" android:versionCode="3">
 	<uses-sdk android:minSdkVersion="21" />
+	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 	<application android:label="Flashcards.Android" android:icon="@drawable/icon"></application>
 </manifest>

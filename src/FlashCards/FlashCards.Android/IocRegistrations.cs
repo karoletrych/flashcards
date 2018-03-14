@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Reflection;
 using Autofac;
+using Flashcards.Droid;
 using Flashcards.Models;
 using Flashcards.Services.DataAccess;
 using Flashcards.Services.DataAccess.Database;
@@ -26,11 +27,14 @@ namespace FlashCards.Droid
                 Assembly.GetAssembly(typeof(ITranslator)),
                 Assembly.GetAssembly(typeof(ISpacedRepetition)),
                 Assembly.GetAssembly(typeof(Algorithm.LeitnerRepetition)),
+				Assembly.GetAssembly(typeof(MainActivity))
             };
             containerBuilder
                 .RegisterAssemblyTypes(assemblies)
                 .AsSelf()
                 .AsImplementedInterfaces();
+
+
 
             containerBuilder
                 .RegisterGeneric(typeof(AsyncRepository<>))

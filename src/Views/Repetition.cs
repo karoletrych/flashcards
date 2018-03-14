@@ -7,7 +7,6 @@ using Prism.Autofac;
 using Prism.Ioc;
 using Prism.Navigation;
 using Xamarin.Forms;
-using static Flashcards.Views.Properties;
 
 namespace Flashcards.Views
 {
@@ -20,16 +19,20 @@ namespace Flashcards.Views
 
 	    protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            containerRegistry.RegisterForNavigation<NavigationPage>();
-            containerRegistry.RegisterForNavigation<AskingQuestionsPage, AskingQuestionsViewModel>();
-            containerRegistry.RegisterForNavigation<LessonListPage, LessonListViewModel>();
-        }
+	        containerRegistry.RegisterForNavigation<NavigationPage>();
+	        containerRegistry.RegisterForNavigation<LessonListPage, LessonListViewModel>();
+	        containerRegistry.RegisterForNavigation<AddLessonPage, AddLessonViewModel>();
+	        containerRegistry.RegisterForNavigation<AddFlashcardPage, AddFlashcardViewModel>();
+	        containerRegistry.RegisterForNavigation<AskingQuestionsPage, AskingQuestionsViewModel>();
+	        containerRegistry.RegisterForNavigation<EditLessonPage, EditLessonViewModel>();
+	        containerRegistry.RegisterForNavigation<SettingsPage>();
+		}
 
 	    protected override async void OnInitialized()
         {
             var spacedRepetition = Container.Resolve<ISpacedRepetition>();
 
-	        var sessionNumber = RepetitionSessionNumber;
+	        var sessionNumber = Settings.RepetitionSessionNumber;
 	        var flashcards = await spacedRepetition.ChooseFlashcards(sessionNumber);
 	        var flashcardList = flashcards.ToList();
 

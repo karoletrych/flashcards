@@ -37,8 +37,12 @@ namespace Flashcards.Views
 
 	        NavigationService.NavigateAsync("NavigationPage/LessonListPage");
 
+
 	        void InitializeSpacedRepetition()
 	        {
+		        var notificationScheduler = Container.Resolve<INotificationScheduler>();
+				notificationScheduler.Schedule(Settings.RepetitionTime);
+
 		        var initializers = Container.Resolve<IEnumerable<ISpacedRepetitionInitializer>>();
 		        foreach (var spacedRepetitionInitializer in initializers)
 		        {

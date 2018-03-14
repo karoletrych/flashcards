@@ -5,7 +5,7 @@ using Flashcards.Views;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
-namespace FlashCards.Droid
+namespace FlashCards.Droid.Repetitions
 {
     [Activity(
         Label = "Flashcards",
@@ -23,7 +23,7 @@ namespace FlashCards.Droid
 
             Forms.Init(this, bundle);
 
-            LoadApplication(new Repetition(new AndroidPlatformInitializer()));
+            LoadApplication(new Repetition(new AndroidPlatformInitializer(this)));
         }
     }
 }

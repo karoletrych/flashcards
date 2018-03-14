@@ -67,8 +67,14 @@
     <PackageReference Include="modernhttpclient">
       <Version>2.4.2</Version>
     </PackageReference>
+    <PackageReference Include="Prism.Autofac.Forms">
+      <Version>7.0.0.396</Version>
+    </PackageReference>
     <PackageReference Include="sqlite-net-pcl">
       <Version>1.5.166-beta</Version>
+    </PackageReference>
+    <PackageReference Include="Xam.Plugins.Settings">
+      <Version>3.1.1</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Android.Support.Design" Version="26.1.0.1" />
     <PackageReference Include="Xamarin.Android.Support.v7.AppCompat" Version="26.1.0.1" />
@@ -83,8 +89,10 @@
     <Compile Include="AndroidPlatformInitializer.cs" />
     <Compile Include="IocRegistrations.cs" />
     <Compile Include="MainActivity.cs" />
-    <Compile Include="RepetitionActivity.cs" />
-    <Compile Include="RepetitionNotificationService.cs" />
+    <Compile Include="Repetitions\BootReceiver.cs" />
+    <Compile Include="Repetitions\RepetitionActivity.cs" />
+    <Compile Include="Repetitions\NotificationAlarmReceiver.cs" />
+    <Compile Include="Repetitions\NotificationAlarmScheduler.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

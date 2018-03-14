@@ -1,22 +1,28 @@
 ﻿using System;
+using Flashcards.Views.CustomViews;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace Flashcards.Views
 {
-	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class SettingsPage : ContentPage
 	{
-		public SettingsPage ()
+		private readonly INotificationScheduler _notificationScheduler;
+
+		public SettingsPage (INotificationScheduler notificationScheduler)
 		{
-			InitializeComponent ();
-			Period.Text = Properties.RepetitionPeriod.ToString();
-			Period.Completed += UpdatePeriod;
+			_notificationScheduler = notificationScheduler;
+			InitializeComponent();
+
+			TimePicker.Time = Settings.RepetitionTime;
+			TimePicker.TimeChanged += UpdatePeriod;
 		}
 
 		private void UpdatePeriod(object sender, EventArgs e)
 		{
-			Properties.RepetitionPeriod = int.Parse(((EntryCell) sender).Text);
+			var time = ((TimePickerCell) sender).Time;
+
+			Settings.RepetitionTime = time;
+			_notificationScheduler.Schedule(time);
 		}
 	}
 }
