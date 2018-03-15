@@ -60,9 +60,11 @@ namespace FlashCards.Droid.Repetitions
 			    .SetAutoCancel(true)
 			    .SetVisibility(NotificationVisibility.Public);
 
-		    builder.SetDefaults(NotificationDefaults.All);
+#pragma warning disable CS0618 // Type or member is obsolete
+			builder.SetDefaults(NotificationDefaults.All);
+#pragma warning restore CS0618 // Type or member is obsolete
 
-		    var notification = builder.Build();
+			var notification = builder.Build();
 
 		    var notificationManager =
 			    (NotificationManager)context.GetSystemService(Context.NotificationService);

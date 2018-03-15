@@ -1,7 +1,4 @@
-﻿
-// Helpers/Settings.cs
-
-using System;
+﻿using System;
 using Plugin.Settings;
 using Plugin.Settings.Abstractions;
 
@@ -12,7 +9,7 @@ namespace Flashcards.Views
 		private static ISettings AppSettings => CrossSettings.Current;
 
 		private const string SessionNumberKey = "LeitnerSessionNumber";
-		private const string NotificationTimeKey = "NotificationHourKey";
+		private const string NotificationTimeKey = "NotificationTimeKey";
 
 		private static readonly int DefaultSessionNumber = 0;
 		private static readonly int DefaultRepetitionHour = 12;
