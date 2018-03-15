@@ -1,0 +1,3 @@
+[submodule "sqlite-net-extensions"]
+	path = sqlite-net-extensions
+	url = https://bitbucket.org/twincoders/sqlite-net-extensions.git

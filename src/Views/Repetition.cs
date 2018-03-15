@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using Flashcards.Services;
-using Flashcards.SpacedRepetition.Provider;
+using Flashcards.SpacedRepetition.Interface;
 using Flashcards.ViewModels;
 using Prism;
 using Prism.Autofac;

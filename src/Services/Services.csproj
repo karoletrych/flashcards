@@ -6,14 +6,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="sqlite-net-pcl" Version="1.5.166-beta" />
-    <PackageReference Include="SQLiteNetExtensions" Version="2.0.0" />
-    <PackageReference Include="SQLiteNetExtensions.Async" Version="2.0.0" />
+    <PackageReference Include="sqlite-net-pcl" Version="1.4.118" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\SpacedRepetition\Provider\Provider.csproj" />
+    <ProjectReference Include="..\..\sqlite-net-extensions\SQLiteNetExtensionsAsync-PCL\SQLiteNetExtensionsAsync-PCL.csproj" />
+    <ProjectReference Include="..\..\sqlite-net-extensions\SQLiteNetExtensions\SQLiteNetExtensions-PCL.csproj" />
     <ProjectReference Include="..\Models\Models.csproj" />
+    <ProjectReference Include="..\SpacedRepetition\Interface\Interface.csproj" />
   </ItemGroup>
 
   <ItemGroup>

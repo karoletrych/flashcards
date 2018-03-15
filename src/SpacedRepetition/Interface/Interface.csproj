@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <RootNamespace>Flashcards.SpacedRepetition.Provider</RootNamespace>
+    <RootNamespace>Flashcards.SpacedRepetition.Interface</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

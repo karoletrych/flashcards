@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using DLToolkit.Forms.Controls;
-using Flashcards.SpacedRepetition.Provider;
+using Flashcards.SpacedRepetition.Interface;
 using Flashcards.ViewModels;
 using Prism;
 using Prism.Ioc;

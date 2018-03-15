@@ -103,7 +103,9 @@ namespace Flashcards.ViewModels
 			var lessons = await _lessonRepository.FindAll();
             foreach (var lesson in lessons) Lessons.Add(lesson);
         }
+#pragma warning disable 0067
+		public event PropertyChangedEventHandler PropertyChanged;
+#pragma warning restore 0067
 
-        public event PropertyChangedEventHandler PropertyChanged;
-    }
+	}
 }

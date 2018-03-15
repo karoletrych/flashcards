@@ -53,9 +53,8 @@
     <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Leitner, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\SpacedRepetition\Leitner\bin\Debug\netstandard2.0\Leitner.dll</HintPath>
+    <Reference Include="Leitner">
+      <HintPath>..\..\SpacedRepetition\Leitner\bin\Debug\netstandard2.0\Leitner.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Android" />
     <Reference Include="System" />
@@ -71,16 +70,11 @@
       <Version>7.0.0.396</Version>
     </PackageReference>
     <PackageReference Include="sqlite-net-pcl">
-      <Version>1.5.166-beta</Version>
+      <Version>1.4.118</Version>
     </PackageReference>
     <PackageReference Include="Xam.Plugins.Settings">
       <Version>3.1.1</Version>
     </PackageReference>
-    <PackageReference Include="Xamarin.Android.Support.Design" Version="26.1.0.1" />
-    <PackageReference Include="Xamarin.Android.Support.v7.AppCompat" Version="26.1.0.1" />
-    <PackageReference Include="Xamarin.Android.Support.v4" Version="26.1.0.1" />
-    <PackageReference Include="Xamarin.Android.Support.v7.CardView" Version="26.1.0.1" />
-    <PackageReference Include="Xamarin.Android.Support.v7.MediaRouter" Version="26.1.0.1" />
     <PackageReference Include="Xamarin.Forms">
       <Version>2.5.0.280555</Version>
     </PackageReference>
@@ -117,10 +111,6 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\SpacedRepetition\Provider\Provider.csproj">
-      <Project>{D00787B0-0C5D-49CC-9788-BDB919C12758}</Project>
-      <Name>Provider</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Models\Models.csproj">
       <Project>{BF8FC753-3438-42CD-B3D4-7337E16F8223}</Project>
       <Name>Models</Name>
@@ -128,6 +118,10 @@
     <ProjectReference Include="..\..\Services\Services.csproj">
       <Project>{71E85B13-54C6-4A98-BC94-8379B3744844}</Project>
       <Name>Services</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SpacedRepetition\Interface\Interface.csproj">
+      <Project>{fe8515bb-9a6a-453c-9309-b6be2ce6c2cd}</Project>
+      <Name>Interface</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\ViewModels\ViewModels.csproj">
       <Project>{CE907DEC-EB8C-48D5-92D0-CB346331248E}</Project>

@@ -1,4 +1,4 @@
-﻿namespace Flashcards.SpacedRepetition.Provider
+﻿namespace Flashcards.SpacedRepetition.Interface
 {
     public interface ISpacedRepetitionInitializer
     {

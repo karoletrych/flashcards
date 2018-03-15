@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Flashcards.Models;
 
-namespace Flashcards.SpacedRepetition.Provider
+namespace Flashcards.SpacedRepetition.Interface
 {
 	public class QuestionResult
 	{

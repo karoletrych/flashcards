@@ -3,21 +3,20 @@ open System.Collections.Generic
 open SQLite
 open Flashcards.Services.DataAccess
 open Flashcards.Models
-open Flashcards.SpacedRepetition.Provider
+open Flashcards.SpacedRepetition.Interface
 open SQLiteNetExtensions.Attributes
 open Flashcards.Services.DataAccess.Database
-open System.Threading.Tasks
+
 
 module Models =
-
     [<Literal>]
-    let CurrentDeckName = "CurrentDeck"
+    let CurrentDeckTitle = "CurrentDeck"
     [<Literal>]
-    let RetiredDeckName = "RetiredDeck"
+    let RetiredDeckTitle = "RetiredDeck"
 
     let deckTitles = [
-        CurrentDeckName;
-        RetiredDeckName;
+        CurrentDeckTitle;
+        RetiredDeckTitle;
         "0259";
         "1360";
         "2471";
@@ -28,16 +27,17 @@ module Models =
         "7926";
         "8037";
         "9148";
-    ]    
-    let inline startAsPlainTask (work : Async<unit>) = Task.Factory.StartNew(fun () -> work |> Async.RunSynchronously)
+    ]   
+    let inline sync (x : System.Threading.Tasks.Task) = x |> Async.AwaitTask |> Async.RunSynchronously
+    let inline syncT x = x |> Async.AwaitTask |> Async.RunSynchronously
+    
 
     type Deck () = 
         [<PrimaryKey>]
-        [<AutoIncrement>]
         member val Id = 0 with get, set
 
         [<Indexed>]
-        member val DeckTitle = CurrentDeckName with get, set
+        member val DeckTitle = CurrentDeckTitle with get, set
 
         [<ManyToMany(typeof<CardDeck>, CascadeOperations = CascadeOperation.All)>]
         member val Cards = List<Flashcard>() with get, set 
@@ -53,34 +53,28 @@ module Models =
         [<PrimaryKey>]
         member val CardDeckId = 0 with get, set
 
-
+        
      type LeitnerInitializer
          (flashcardRepository : IRepository<Flashcard>,
           deckRepository : IRepository<Deck>,
            tableCreator : ITableCreator) =
         interface ISpacedRepetitionInitializer with
             member this.Initialize() =
-                let insertIntoDeck (flashcard : Flashcard) = async{
+                let insertIntoDeck (flashcard : Flashcard) = 
+                    async {
                         let! decks =
-                            (deckRepository.FindMatching(fun d -> d.DeckTitle = CurrentDeckName)) 
-                            |> Async.AwaitTask
+                            (deckRepository.FindMatching(fun d -> d.DeckTitle = CurrentDeckTitle)) |> Async.AwaitTask
                         let deck = decks |> Seq.exactlyOne
                         deck.Cards.Add(flashcard)
                         do! deckRepository.Update(deck) |> Async.AwaitTask
                     }
-                async{
-                    do! tableCreator.CreateTable<CardDeck>() 
-                        |> Async.AwaitTask 
-                        |> Async.Ignore
-                    do! tableCreator.CreateTable<Deck>() 
-                        |> Async.AwaitTask 
-                        |> Async.Ignore
+                    |> Async.StartImmediate
 
-                    do! deckRepository.UpdateAll(
-                            deckTitles 
-                            |> List.map (fun title -> Deck(DeckTitle = title)))
-                            |> Async.AwaitTask
-                    flashcardRepository.ObjectInserted.Add(fun f -> (insertIntoDeck f) |> Async.StartImmediate)
-                } 
-                |> startAsPlainTask
-
+                tableCreator.CreateTable<CardDeck>() |> sync
+                tableCreator.CreateTable<Deck>() |> sync
+                if deckRepository.FindAll() |> syncT |> Seq.isEmpty then
+                    deckRepository.UpdateAll(deckTitles 
+                                                |> List.mapi (fun id title -> 
+                                                            Deck(DeckTitle = title, Cards = List<Flashcard>(), Id = id)))
+                                                |> sync
+                flashcardRepository.ObjectInserted.Add(fun f -> insertIntoDeck f)

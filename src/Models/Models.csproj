@@ -7,7 +7,10 @@
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="11.0.1" />
-    <PackageReference Include="SQLiteNetExtensions" Version="2.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\sqlite-net-extensions\SQLiteNetExtensions\SQLiteNetExtensions-PCL.csproj" />
   </ItemGroup>
 
   <ItemGroup>

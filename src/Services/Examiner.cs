@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Flashcards.Models;
-using Flashcards.SpacedRepetition.Provider;
+using Flashcards.SpacedRepetition.Interface;
 
 namespace Flashcards.Services
 {
