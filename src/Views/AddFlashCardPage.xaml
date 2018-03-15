@@ -3,7 +3,6 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:viewModels="clr-namespace:Flashcards.ViewModels;assembly=ViewModels"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:customViews="clr-namespace:Flashcards.Views.CustomViews;assembly=Views"
              xmlns:controls="clr-namespace:DLToolkit.Forms.Controls;assembly=DLToolkit.Forms.Controls.FlowListView"
              x:Class="Flashcards.Views.AddFlashcardPage">
     <ContentPage.BindingContext>
@@ -11,12 +10,17 @@
     </ContentPage.BindingContext>
 
     <ContentPage.Content>
-        <AbsoluteLayout>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30*"></RowDefinition>
+                <RowDefinition Height="20*"></RowDefinition>
+                <RowDefinition Height="40*"></RowDefinition>
+                <RowDefinition Height="10*"></RowDefinition>
+            </Grid.RowDefinitions>
             <StackLayout
-                    AbsoluteLayout.LayoutFlags="All"
-                    AbsoluteLayout.LayoutBounds=".5,0,1,.3"
                     Spacing="0"
-                    VerticalOptions="Start">
+                    VerticalOptions="Start"
+                    Grid.Row="0">
                     <Entry
                         FontSize="Small"
                         Placeholder="Front"
@@ -36,10 +40,8 @@
                     </Label>
                 </StackLayout>
 
-            <Frame
-                Padding="0"
-                AbsoluteLayout.LayoutFlags="All"
-                AbsoluteLayout.LayoutBounds=".5,.38,.5,.20">
+            <Frame Grid.Row="1"
+                Padding="0">
                 <Image
                     Source="{Binding SelectedImageUri}"
                     HeightRequest="250"
@@ -52,8 +54,7 @@
                 FlowItemsSource="{Binding ImageUris}"
                 FlowTappedBackgroundColor="LawnGreen"
                 FlowLastTappedItem="{Binding SelectedImageUri}"
-                AbsoluteLayout.LayoutFlags="All"
-                AbsoluteLayout.LayoutBounds=".5,.88,1,.4">
+                Grid.Row="2">
                 <controls:FlowListView.FlowColumnTemplate>
                     <DataTemplate>
                         <Image
@@ -67,8 +68,7 @@
                 Text="Next Flashcard"
                 Command="{Binding NextFlashcardCommand}"
                 VerticalOptions="End"
-                AbsoluteLayout.LayoutBounds=".5,1,1,.1"
-                AbsoluteLayout.LayoutFlags="All" />
-        </AbsoluteLayout>
+                Grid.Row="3"/>
+        </Grid>
     </ContentPage.Content>
 </ContentPage>

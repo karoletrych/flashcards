@@ -21,8 +21,6 @@ namespace Flashcards.ViewModels
 		private Language _frontLanguage;
 		private Language _backLanguage;
 		private readonly ITranslator _translator;
-
-
 		private string _lessonId;
 
 		public AddFlashcardViewModel()
@@ -102,11 +100,6 @@ namespace Flashcards.ViewModels
 			var imageUris = await _imageBrowser.Find(BackText, _backLanguage);
 			ImageUris.Clear();
 			foreach (var imageUri in imageUris) ImageUris.Add(imageUri);
-		}
-
-		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-		{
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 	}
 }
