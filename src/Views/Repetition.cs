@@ -6,6 +6,7 @@ using Prism;
 using Prism.Autofac;
 using Prism.Ioc;
 using Prism.Navigation;
+using Settings;
 using Xamarin.Forms;
 
 namespace Flashcards.Views
@@ -31,8 +32,7 @@ namespace Flashcards.Views
 	    protected override async void OnInitialized()
         {
             var spacedRepetition = Container.Resolve<ISpacedRepetition>();
-
-	        var sessionNumber = Settings.RepetitionSessionNumber;
+	        var sessionNumber = Container.Resolve<ISetting<int>>().Value;
 	        var flashcards = await spacedRepetition.ChooseFlashcards(sessionNumber);
 	        var flashcardList = flashcards.ToList();
 

@@ -1,9 +1,12 @@
+using System;
 using System.Collections.Generic;
 using DLToolkit.Forms.Controls;
 using Flashcards.SpacedRepetition.Interface;
 using Flashcards.ViewModels;
+using Plugin.Settings.Abstractions;
 using Prism;
 using Prism.Ioc;
+using Settings;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -41,7 +44,8 @@ namespace Flashcards.Views
 	        void InitializeSpacedRepetition()
 	        {
 		        var notificationScheduler = Container.Resolve<INotificationScheduler>();
-				notificationScheduler.Schedule(Settings.RepetitionTime);
+		        var repetitionTimeSetting = Container.Resolve<ISetting<DateTime>>();
+				notificationScheduler.Schedule(repetitionTimeSetting.Value);
 
 		        var initializers = Container.Resolve<IEnumerable<ISpacedRepetitionInitializer>>();
 		        foreach (var spacedRepetitionInitializer in initializers)

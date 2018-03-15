@@ -6,7 +6,7 @@ namespace Flashcards.Services.DataAccess.Database
     public class DatabaseConnectionFactory
     {
         private const SQLiteOpenFlags SqliteOpenFlags =
-            SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.NoMutex;
+            SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.FullMutex;
 
         public SQLiteAsyncConnection CreateAsyncConnection(string databasePath)
         {

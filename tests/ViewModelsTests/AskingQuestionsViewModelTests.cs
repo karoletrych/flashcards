@@ -13,14 +13,15 @@ namespace ViewModelsTests
     {
         private readonly AskingQuestionsViewModel _askingQuestionsViewModel;
         private readonly INavigationService _navigationService;
+	    private Examiner _examiner;
 
-        public AskingQuestionsViewModelTests()
+	    public AskingQuestionsViewModelTests()
         {
-            var examiner = new Examiner(new[]
+            _examiner = new Examiner(new[]
             {
-                new Flashcard {Front = "cat", Back = "kot"},
-                new Flashcard {Front = "dog", Back = "pies"},
-                new Flashcard {Front = "duck", Back = "kaczka"}
+	            new Flashcard {Front = "cat", Back = "kot"},
+	            new Flashcard {Front = "dog", Back = "pies"},
+	            new Flashcard {Front = "duck", Back = "kaczka"}
             });
 
             _navigationService = Substitute.For<INavigationService>();
@@ -34,7 +35,7 @@ namespace ViewModelsTests
             await Task.Run(() => _askingQuestionsViewModel.OnNavigatingTo(new NavigationParameters
             {
                 {
-                    "lessonId", 123
+                    "examiner", _examiner
                 }
             }));
         }

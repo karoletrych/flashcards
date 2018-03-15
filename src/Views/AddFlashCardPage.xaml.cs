@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Timers;
 using Flashcards.ViewModels;
 using Xamarin.Forms;
 

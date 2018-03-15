@@ -15,7 +15,7 @@ namespace FlashCards.Droid.Repetitions
 			_context = context;
 		}
 
-		public void Schedule(TimeSpan time)
+		public void Schedule(DateTime time)
 		{
 			var intent = new Intent(_context, typeof(NotificationAlarmReceiver));
 			intent.AddFlags(ActivityFlags.NewTask);
@@ -28,15 +28,19 @@ namespace FlashCards.Droid.Repetitions
 				pendingIntent);
 		}
 
-		private static long AlarmTimeInMillis(TimeSpan time)
+		private static long AlarmTimeInMillis(DateTime time)
 		{
 			var date = Calendar.Instance;
-			var currentTime = new TimeSpan(0, date.Get(CalendarField.HourOfDay), date.Get(CalendarField.Minute), 0);
+			var currentTime =
+				new DateTime(0, 0, 0, 
+					hour: date.Get(CalendarField.HourOfDay),
+					minute: date.Get(CalendarField.Minute),
+					second: 0);
 			if (time < currentTime)
 				date.Add(CalendarField.Date, 1);
 
-			date.Set(CalendarField.HourOfDay, time.Hours);
-			date.Set(CalendarField.Minute, time.Minutes);
+			date.Set(CalendarField.HourOfDay, time.Hour);
+			date.Set(CalendarField.Minute, time.Minute);
 			date.Set(CalendarField.Second, 0);
 			date.Set(CalendarField.Millisecond, 0);
 			var dateTimeInMillis = date.TimeInMillis;
