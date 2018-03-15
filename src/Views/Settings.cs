@@ -9,10 +9,12 @@ namespace Flashcards.Views
 		private static ISettings AppSettings => CrossSettings.Current;
 
 		private const string SessionNumberKey = "LeitnerSessionNumber";
-		private const string NotificationTimeKey = "NotificationTimeKey";
+		private const string NotificationTimeHourKey = "NotificationTimeHourKey";
+		private const string NotificationTimeMinuteKey = "NotificationTimeMinuteKey";
 
 		private static readonly int DefaultSessionNumber = 0;
 		private static readonly int DefaultRepetitionHour = 12;
+		private static readonly int DefaultRepetitionMinute = 0;
 
 		public static int RepetitionSessionNumber
 		{
@@ -22,9 +24,15 @@ namespace Flashcards.Views
 
 		public static TimeSpan RepetitionTime
 		{
-			get => 
-				TimeSpan.FromHours(AppSettings.GetValueOrDefault(NotificationTimeKey, DefaultRepetitionHour));
-			set => AppSettings.AddOrUpdateValue(NotificationTimeKey, value.Hours);
+			get =>
+				new TimeSpan(0,
+					AppSettings.GetValueOrDefault(NotificationTimeHourKey, DefaultRepetitionHour),
+					AppSettings.GetValueOrDefault(NotificationTimeMinuteKey, DefaultRepetitionMinute), 0);
+			set
+			{
+				AppSettings.AddOrUpdateValue(NotificationTimeHourKey, value.Hours);
+				AppSettings.AddOrUpdateValue(NotificationTimeMinuteKey, value.Minutes);
+			}
 		}
 	}
 
