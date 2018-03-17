@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Flashcards.Models;
 using Flashcards.Services.DataAccess.Database;
+using Flashcards.Settings;
 using Flashcards.SpacedRepetition.Interface;
 using Xunit;
 using Xunit.Abstractions;
@@ -27,57 +29,14 @@ namespace LeitnerTests
 					})
 				.ToList()
 				.ForEach(f => flashcardRepository.Insert(f));
-
 			_leitner = new LeitnerRepetition(
-				_deckRepository);
+				_deckRepository,
+				new MockSessionSetting());
 		}
 
-		[Fact]
-		public void After10CorrectSessions_AllCardsAreInRetiredDeck()
+		private class MockSessionSetting : ISetting<int>
 		{
-			for (var i = 0; i < 20; ++i)
-			{
-				var flashcards = _leitner.ChooseFlashcards(i).Result.ToList();
-				_leitner.RearrangeFlashcards(flashcards.Select(Known), i);
-				_output.WriteLine($"session: {i}");
-				foreach (var deck in _deckRepository.FindAll().Result)
-					_output.WriteLine(deck.DeckTitle + ": " + deck.Cards.Count());
-				_output.WriteLine("");
-			}
-
-			Assert.Equal(FlashcardCount, Flashcards(RetiredDeckTitle).Count());
-		}
-
-		[Fact]
-		public void AnsweringCorrectlyAllFlashcards_DecreasesNumberOfFlashcardsInTheNextSession()
-		{
-			var flashcards = _leitner.ChooseFlashcards(0).Result;
-			_leitner.RearrangeFlashcards(flashcards.Select(Known), 0);
-			var rearrangedFlashcards = _leitner.ChooseFlashcards(1).Result;
-
-			Assert.NotEqual(FlashcardCount, rearrangedFlashcards.Count());
-		}
-
-		[Fact]
-		public void AnsweringCorrectlyAllFlashcards_MovesThemToDeckBeginningWithSessionNumber()
-		{
-			var flashcards = _leitner.ChooseFlashcards(0).Result;
-			_leitner.RearrangeFlashcards(flashcards.Select(Known), 0);
-
-			var session0DeckCards =
-				_deckRepository.FindMatching(cd => cd.DeckTitle == "0259").Result;
-			Assert.NotEmpty(session0DeckCards);
-
-			var currentDeckCards =
-				_deckRepository.FindMatching(cd => cd.DeckTitle == CurrentDeckTitle).Result.Single().Cards;
-			Assert.Empty(currentDeckCards);
-		}
-
-		[Fact]
-		public void ChooseFlashcards_ReturnsAllFromCurrentDeck()
-		{
-			var flashcards = _leitner.ChooseFlashcards(0).Result;
-			Assert.Equal(FlashcardCount, flashcards.Count());
+			public int Value { get; set; }
 		}
 
 		private const int FlashcardCount = 20;
@@ -118,6 +77,55 @@ namespace LeitnerTests
 		private static QuestionResult Known(Flashcard f)
 		{
 			return new QuestionResult(f, true);
+		}
+
+		[Fact]
+		public void After10CorrectSessions_AllCardsAreInRetiredDeck()
+		{
+			for (var i = 0; i < 20; ++i)
+			{
+				var flashcards = _leitner.GetRepetitionFlashcards().Result.ToList();
+				_leitner.RearrangeFlashcards(flashcards.Select(Known));
+				_leitner.Proceed();
+				_output.WriteLine($"session: {i}");
+				foreach (var deck in _deckRepository.FindAll().Result)
+					_output.WriteLine(deck.DeckTitle + ": " + deck.Cards.Count());
+				_output.WriteLine("");
+			}
+
+			Assert.Equal(FlashcardCount, Flashcards(RetiredDeckTitle).Count());
+		}
+
+		[Fact]
+		public void AnsweringCorrectlyAllFlashcards_DecreasesNumberOfFlashcardsInTheNextSession()
+		{
+			var flashcards = _leitner.GetRepetitionFlashcards().Result;
+			_leitner.RearrangeFlashcards(flashcards.Select(Known));
+			var rearrangedFlashcards = _leitner.GetRepetitionFlashcards().Result;
+
+			Assert.NotEqual(FlashcardCount, rearrangedFlashcards.Count());
+		}
+
+		[Fact]
+		public void AnsweringCorrectlyAllFlashcards_MovesThemToDeckBeginningWithSessionNumber()
+		{
+			var flashcards = _leitner.GetRepetitionFlashcards().Result;
+			_leitner.RearrangeFlashcards(flashcards.Select(Known));
+
+			var session0DeckCards =
+				_deckRepository.FindMatching(cd => cd.DeckTitle == "0259").Result;
+			Assert.NotEmpty(session0DeckCards);
+
+			var currentDeckCards =
+				_deckRepository.FindMatching(cd => cd.DeckTitle == CurrentDeckTitle).Result.Single().Cards;
+			Assert.Empty(currentDeckCards);
+		}
+
+		[Fact]
+		public void ChooseFlashcards_ReturnsAllFromCurrentDeck()
+		{
+			var flashcards = _leitner.GetRepetitionFlashcards().Result;
+			Assert.Equal(FlashcardCount, flashcards.Count());
 		}
 	}
 }

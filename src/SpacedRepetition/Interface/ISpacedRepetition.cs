@@ -18,7 +18,8 @@ namespace Flashcards.SpacedRepetition.Interface
 
     public interface ISpacedRepetition
     {
-        Task<IEnumerable<Flashcard>> ChooseFlashcards(int sessionNumber);
-        void RearrangeFlashcards(IEnumerable<QuestionResult> questionResults, int sessionNumber);
-    }
+        Task<IEnumerable<Flashcard>> GetRepetitionFlashcards();
+        void RearrangeFlashcards(IEnumerable<QuestionResult> questionResults);
+        void Proceed();
+	}
 }

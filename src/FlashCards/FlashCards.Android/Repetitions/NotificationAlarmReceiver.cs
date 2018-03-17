@@ -16,10 +16,11 @@ namespace FlashCards.Droid.Repetitions
 		{
 			try
 			{
-				IncrementSessionNumber.Increment();
+				var container = IocRegistrations.DefaultContainer();
+				var spacedRepetition = container.Resolve<ISpacedRepetition>();
 
-				var spacedRepetition = CreateSpacedRepetition();
-				var flashcards = await spacedRepetition.ChooseFlashcards(Settings.RepetitionSessionNumber);
+				spacedRepetition.Proceed();
+				var flashcards = await spacedRepetition.GetRepetitionFlashcards();
 
 				if (flashcards.Any())
 				{
@@ -31,18 +32,6 @@ namespace FlashCards.Droid.Repetitions
 				Toast.MakeText(context, e.ToString(), ToastLength.Long).Show();
 			}
 		}
-
-	    private static ISpacedRepetition CreateSpacedRepetition()
-	    {
-		    var containerBuilder = new ContainerBuilder();
-		    IocRegistrations.RegisterTypesInIocContainer(containerBuilder);
-
-		    var spacedRepetition =
-			    containerBuilder
-				    .Build()
-				    .Resolve<ISpacedRepetition>();
-		    return spacedRepetition;
-	    }
 
 	    private static void ShowNotification(Context context)
 	    {

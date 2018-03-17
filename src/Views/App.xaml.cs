@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using DLToolkit.Forms.Controls;
+using Flashcards.Settings;
 using Flashcards.SpacedRepetition.Interface;
 using Flashcards.ViewModels;
 using Plugin.Settings.Abstractions;
 using Prism;
 using Prism.Ioc;
-using Settings;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 

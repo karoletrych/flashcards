@@ -1,6 +1,9 @@
-﻿using Android.App;
+﻿using System;
+using Android.App;
 using Android.Content;
 using Android.Widget;
+using Autofac;
+using Flashcards.Settings;
 using Flashcards.Views;
 
 namespace FlashCards.Droid.Repetitions
@@ -15,7 +18,9 @@ namespace FlashCards.Droid.Repetitions
 		public override void OnReceive(Context context, Intent intent)
 		{
 			var notificationScheduler = new NotificationAlarmScheduler(context);
-			notificationScheduler.Schedule(Settings.RepetitionTime);
+			var repetitionTime = 
+				IocRegistrations.DefaultContainer().ResolveNamed<ISetting<DateTime>>("RepetitionTimeSetting");
+			notificationScheduler.Schedule(repetitionTime.Value);
 		}
 	}
 }

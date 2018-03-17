@@ -34,8 +34,6 @@ namespace FlashCards.Droid
                 .AsSelf()
                 .AsImplementedInterfaces();
 
-
-
             containerBuilder
                 .RegisterGeneric(typeof(AsyncRepository<>))
                 .As(typeof(IRepository<>))
@@ -55,5 +53,12 @@ namespace FlashCards.Droid
                 .As<SQLiteAsyncConnection>()
                 .SingleInstance();
         }
+
+	    public static IContainer DefaultContainer()
+	    {
+			var containerBuilder = new ContainerBuilder();
+			RegisterTypesInIocContainer(containerBuilder);
+		    return containerBuilder.Build();
+	    }
     }
 }

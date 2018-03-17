@@ -2,14 +2,14 @@
 using Plugin.Settings;
 using Plugin.Settings.Abstractions;
 
-namespace Settings
+namespace Flashcards.Settings
 {
 	public interface ISetting<T>
 	{
 		T Value { get; set; }
 	}
 
-	internal abstract class Setting<T> : ISetting<T>
+	public abstract class Setting<T> : ISetting<T>
 	{
 		protected static ISettings AppSettings => CrossSettings.Current;
 		protected abstract string Key { get; }
@@ -79,17 +79,5 @@ namespace Settings
 				}
 			}
 		}
-	}
-
-	class SessionNumberSetting : Setting<int>
-	{
-		protected override string Key => "LeitnerSessionNumberKey";
-		protected override int DefaultValue => 0;
-	}
-
-	class RepetitionTimeSetting : Setting<DateTime>
-	{
-		protected override string Key => "RepetitionTime";
-		protected override DateTime DefaultValue => new DateTime(0, 0, 0, hour: 12, minute: 0, second: 0);
 	}
 }

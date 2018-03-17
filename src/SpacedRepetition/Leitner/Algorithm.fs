@@ -3,6 +3,7 @@ open Flashcards.Services.DataAccess
 open Flashcards.Models
 open Flashcards.SpacedRepetition.Interface
 open Flashcards.SpacedRepetition.Leitner.Models
+open Flashcards.Settings
 open System.Threading.Tasks
 
 module Algorithm =
@@ -51,31 +52,30 @@ module Algorithm =
                 | _ -> ())
             decks
             
-    type LeitnerRepetition(deckRepository : IRepository<Deck>) =
-        [<Literal>]
-        let sessionNumberKey = "LeitnerSessionNumber"
+    type SessionNumberSetting() =
+        inherit Setting<int>() with
+            override this.Key with get () = ""
+            override this.DefaultValue with get () = 0
+
+     
+    type LeitnerRepetition(deckRepository : IRepository<Deck>, sessionNumberSetting : ISetting<int>) =
         member this.allDecks () = 
             deckRepository.FindAll()
             |> Async.AwaitTask
             |> Async.RunSynchronously
        
         interface ISpacedRepetition with 
-            member this.ChooseFlashcards sessionNumber = 
-                let cardsToAsk sessionNumber decks = 
-                    decks
-                    |> Seq.filter (fun (deck : Deck) -> 
-                        (deck.DeckTitle |> Seq.map toInt |> Seq.contains sessionNumber 
-                        || deck.DeckTitle = CurrentDeckTitle))
-                    |> Seq.collect (fun deck -> deck.Cards)
+            member this.GetRepetitionFlashcards ()= 
+                let sessionNumber = sessionNumberSetting.Value
                 
-                let decks = this.allDecks()
-                decks
-                |> cardsToAsk sessionNumber
+                this.allDecks()
+                |> Seq.filter (fun (deck : Deck) -> 
+                                        (deck.DeckTitle |> Seq.map toInt |> Seq.contains sessionNumber || deck.DeckTitle = CurrentDeckTitle))
+                |> Seq.collect (fun deck -> deck.Cards)
                 |> Task.FromResult
                 
-            member this.RearrangeFlashcards (results, sessionNumber) =
+            member this.RearrangeFlashcards (results) =
                 let decks = this.allDecks()
-
                 let cardsWithDecks = 
                     let parentDeck (card : Flashcard) = 
                         decks 
@@ -88,8 +88,18 @@ module Algorithm =
                 let newDecks = 
                     rearrangeCards 
                         cardsWithDecks
-                        sessionNumber
-                        (decks)
+                        sessionNumberSetting.Value
+                        decks
 
                 deckRepository.UpdateAll(newDecks)
                 |> sync
+
+            member this.Proceed () =
+                let sessionNumber = sessionNumberSetting.Value
+                if sessionNumber < 9
+                then 
+                    sessionNumberSetting.Value <- sessionNumber + 1;
+                else 
+                    sessionNumberSetting.Value <- 0;
+                
+                

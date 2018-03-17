@@ -1,6 +1,6 @@
 ﻿using System;
+using Flashcards.Settings;
 using Flashcards.Views.CustomViews;
-using Settings;
 using Xamarin.Forms;
 
 namespace Flashcards.Views
