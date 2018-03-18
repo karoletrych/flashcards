@@ -68,7 +68,8 @@ module Algorithm =
             member this.GetRepetitionFlashcards ()= 
                 let sessionNumber = sessionNumberSetting.Value
                 
-                this.allDecks()
+                let decks = this.allDecks()
+                decks
                 |> Seq.filter (fun (deck : Deck) -> 
                                         (deck.DeckTitle |> Seq.map toInt |> Seq.contains sessionNumber || deck.DeckTitle = CurrentDeckTitle))
                 |> Seq.collect (fun deck -> deck.Cards)

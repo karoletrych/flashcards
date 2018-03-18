@@ -19,7 +19,7 @@ namespace LeitnerTests
 			_output = output;
 			var flashcardRepository = InitializeSpacedRepetitionModule();
 
-			Enumerable
+			var cards = Enumerable
 				.Range(1, FlashcardCount)
 				.Select(cardId =>
 					new Flashcard
@@ -27,8 +27,13 @@ namespace LeitnerTests
 						Id = cardId,
 						LessonId = "1"
 					})
-				.ToList()
-				.ForEach(f => flashcardRepository.Insert(f));
+				.ToList();
+
+			foreach (var card in cards)
+			{
+				flashcardRepository.Insert(card);
+			}
+
 			_leitner = new LeitnerRepetition(
 				_deckRepository,
 				new MockSessionSetting());
@@ -82,6 +87,8 @@ namespace LeitnerTests
 		[Fact]
 		public void After10CorrectSessions_AllCardsAreInRetiredDeck()
 		{
+			var decks = _deckRepository.FindAll().Result;
+			
 			for (var i = 0; i < 20; ++i)
 			{
 				var flashcards = _leitner.GetRepetitionFlashcards().Result.ToList();
@@ -101,6 +108,8 @@ namespace LeitnerTests
 		{
 			var flashcards = _leitner.GetRepetitionFlashcards().Result;
 			_leitner.RearrangeFlashcards(flashcards.Select(Known));
+			_leitner.Proceed();
+			
 			var rearrangedFlashcards = _leitner.GetRepetitionFlashcards().Result;
 
 			Assert.NotEqual(FlashcardCount, rearrangedFlashcards.Count());

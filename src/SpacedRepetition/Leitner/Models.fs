@@ -68,13 +68,14 @@ module Models =
                         deck.Cards.Add(flashcard)
                         do! deckRepository.Update(deck) |> Async.AwaitTask
                     }
-                    |> Async.StartImmediate
+                    // |> Async.StartImmediate  <- makes tests fail
+                    |> Async.RunSynchronously
 
                 tableCreator.CreateTable<CardDeck>() |> sync
                 tableCreator.CreateTable<Deck>() |> sync
                 if deckRepository.FindAll() |> syncT |> Seq.isEmpty then
                     deckRepository.UpdateAll(deckTitles 
-                                                |> List.mapi (fun id title -> 
-                                                            Deck(DeckTitle = title, Cards = List<Flashcard>(), Id = id)))
-                                                |> sync
+                                             |> List.mapi (fun id title -> 
+                                                        Deck(DeckTitle = title, Cards = List<Flashcard>(), Id = id)))
+                                             |> sync
                 flashcardRepository.ObjectInserted.Add(fun f -> insertIntoDeck f)
