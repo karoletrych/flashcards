@@ -7,11 +7,11 @@ using Xunit;
 
 namespace Flashcards.ServicesTests
 {
-    public class ExaminerModelTests
+    public class ExaminerTests
     {
-        public ExaminerModelTests()
+        public ExaminerTests()
         {
-            _examiner = new Examiner(_questions);
+            _examiner = new Examiner(_questions.Select(f=>new Question(f)), repeatFailedQuestions: false);
         }
 
         private readonly Examiner _examiner;

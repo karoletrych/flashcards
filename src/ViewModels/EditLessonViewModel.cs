@@ -64,7 +64,7 @@ namespace Flashcards.ViewModels
 		{
 			var lessonId = (string)parameters["lessonId"];
 
-			_lesson = (await _lessonRepository.FindMatching(lesson => lesson.Id == lessonId)).Single();
+			_lesson = (await _lessonRepository.Where(lesson => lesson.Id == lessonId)).Single();
 
 			AskInRepetitions = _lesson.AskInRepetitions;
 			AskingMode = _lesson.AskingMode.ToString();

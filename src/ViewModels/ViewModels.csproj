@@ -1,22 +1,22 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>Flashcards.ViewModels</RootNamespace>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="Fody" Version="2.4.6" />
     <PackageReference Include="Prism.Autofac.Forms" Version="7.0.0.396" />
     <PackageReference Include="Prism.Core" Version="7.0.0.396" />
     <PackageReference Include="PropertyChanged.Fody" Version="2.2.9" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\Models\Models.csproj" />
     <ProjectReference Include="..\Services\Services.csproj" />
+    <ProjectReference Include="..\Settings\Settings.csproj">
+      <Project>{D3AE7397-71D5-4954-B9F4-8128D21918AA}</Project>
+      <Name>Settings</Name>
+    </ProjectReference>
   </ItemGroup>
-
   <ItemGroup>
     <Reference Include="Prism.Forms">
       <HintPath>..\..\..\..\Users\karol\.nuget\packages\prism.forms\7.0.0.396\lib\netstandard2.0\Prism.Forms.dll</HintPath>
@@ -25,5 +25,4 @@
       <HintPath>C:\Users\karol\.nuget\packages\xamarin.forms\2.5.0.122203\lib\MonoAndroid10\Xamarin.Forms.Core.dll</HintPath>
     </Reference>
   </ItemGroup>
-
 </Project>

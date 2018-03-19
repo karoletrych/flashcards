@@ -77,9 +77,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExaminerBuilderTests.cs" />
     <Compile Include="ImageUrlsProviderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ExaminerModelTests.cs" />
+    <Compile Include="ExaminerTests.cs" />
     <Compile Include="RepositoryTests.cs" />
     <Compile Include="TranslatorTests.cs" />
   </ItemGroup>

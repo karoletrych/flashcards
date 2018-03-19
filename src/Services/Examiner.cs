@@ -7,40 +7,23 @@ using Flashcards.SpacedRepetition.Interface;
 
 namespace Flashcards.Services
 {
-    public class FlashcardQuestion
-    {
-        public FlashcardQuestion(Flashcard flashcard)
-        {
-            Flashcard = flashcard;
-        }
-
-        public Flashcard Flashcard { get; }
-        public QuestionStatus Status { get; set; }
-    }
-
-    public enum QuestionStatus
-    {
-        NotAnswered,
-        Known,
-        Unknown
-    }
-
     public class Examiner
     {
-        private readonly IList<FlashcardQuestion> _askedQuestions = new List<FlashcardQuestion>();
-        private readonly Queue<FlashcardQuestion> _questionsToAsk;
+        private readonly bool _repeatFailedQuestions;
+        private readonly IList<Question> _askedQuestions = new List<Question>();
+        private readonly Queue<Question> _questionsToAsk;
 
-        public Examiner(IEnumerable<Flashcard> questions)
+        public Examiner(IEnumerable<Question> questions, bool repeatFailedQuestions)
         {
-            _questionsToAsk = new Queue<FlashcardQuestion>(
-                questions.Select(f => new FlashcardQuestion(f)));
-			QuestionResults = new TaskCompletionSource<IEnumerable<QuestionResult>>();
+            _repeatFailedQuestions = repeatFailedQuestions;
+            _questionsToAsk = new Queue<Question>(questions);
         }
 
-        public IEnumerable<FlashcardQuestion> Questions =>
+        public IEnumerable<Question> Questions =>
             _askedQuestions.Concat(_questionsToAsk);
 
-	    public TaskCompletionSource<IEnumerable<QuestionResult>> QuestionResults { get; }
+        public TaskCompletionSource<IEnumerable<QuestionResult>> QuestionResults { get; } 
+            = new TaskCompletionSource<IEnumerable<QuestionResult>>();
 
         public void Answer(bool isKnown)
         {
@@ -48,16 +31,15 @@ namespace Flashcards.Services
                 isKnown ? QuestionStatus.Known : QuestionStatus.Unknown;
         }
 
-        public bool TryAskNextQuestion(out FlashcardQuestion question)
+        public bool TryAskNextQuestion(out Question question)
         {
             if (_askedQuestions.Any() && _askedQuestions.Last().Status == QuestionStatus.NotAnswered)
                 throw new InvalidOperationException("Previous question has not been answered.");
 
             if (_questionsToAsk.Any())
             {
-                var newQuestion = _questionsToAsk.Dequeue();
-                _askedQuestions.Add(newQuestion);
-                question = newQuestion;
+                question = _questionsToAsk.Dequeue();
+                _askedQuestions.Add(question);
                 return true;
             }
 
@@ -66,16 +48,17 @@ namespace Flashcards.Services
             return false;
         }
 
-        private bool IsKnown(QuestionStatus status)
+        private static bool IsKnown(QuestionStatus status)
         {
             switch (status)
             {
-                case QuestionStatus.NotAnswered:
-                    throw new ArgumentException("should be answered at this stage");
+
                 case QuestionStatus.Known:
                     return true;
                 case QuestionStatus.Unknown:
                     return false;
+                case QuestionStatus.NotAnswered:
+                    throw new ArgumentException("should be answered at this stage");
                 default:
                     throw new ArgumentOutOfRangeException();
             }

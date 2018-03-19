@@ -20,7 +20,7 @@ namespace FlashCards.Droid.Repetitions
 				var spacedRepetition = container.Resolve<ISpacedRepetition>();
 
 				spacedRepetition.Proceed();
-				var flashcards = await spacedRepetition.GetRepetitionFlashcards();
+				var flashcards = await spacedRepetition.CurrentRepetitionFlashcards();
 
 				if (flashcards.Any())
 				{

@@ -47,7 +47,7 @@ namespace Flashcards.ViewModels
         {
             ExceptionHandler.HandleWithDialog(_dialogService, async () =>
             {
-                var flashcards = await _flashcardRepository.FindMatching(f => f.LessonId == lesson.Id);
+                var flashcards = await _flashcardRepository.Where(f => f.LessonId == lesson.Id);
                 var examiner = _examinerFactory(flashcards);
 
                 await _navigationService.NavigateAsync("AskingQuestionsPage", new NavigationParameters

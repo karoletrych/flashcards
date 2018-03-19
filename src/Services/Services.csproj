@@ -1,21 +1,17 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>Flashcards.Services</RootNamespace>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="sqlite-net-pcl" Version="1.4.118" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\..\sqlite-net-extensions\SQLiteNetExtensionsAsync-PCL\SQLiteNetExtensionsAsync-PCL.csproj" />
     <ProjectReference Include="..\..\sqlite-net-extensions\SQLiteNetExtensions\SQLiteNetExtensions-PCL.csproj" />
     <ProjectReference Include="..\Models\Models.csproj" />
     <ProjectReference Include="..\SpacedRepetition\Interface\Interface.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <Reference Include="Microsoft.CSharp">
       <HintPath>..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\Microsoft.CSharp.dll</HintPath>
@@ -24,5 +20,4 @@
       <HintPath>..\..\..\..\Users\Karol\.nuget\packages\sqlite-net-pcl\1.4.118\lib\netstandard1.1\SQLite-net.dll</HintPath>
     </Reference>
   </ItemGroup>
-
 </Project>

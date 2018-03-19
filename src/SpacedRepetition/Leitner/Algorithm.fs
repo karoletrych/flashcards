@@ -5,6 +5,7 @@ open Flashcards.SpacedRepetition.Interface
 open Flashcards.SpacedRepetition.Leitner.Models
 open Flashcards.Settings
 open System.Threading.Tasks
+open System.Linq
 
 module Algorithm =
 
@@ -65,7 +66,7 @@ module Algorithm =
             |> Async.RunSynchronously
        
         interface ISpacedRepetition with 
-            member this.GetRepetitionFlashcards ()= 
+            member this.CurrentRepetitionFlashcards ()= 
                 let sessionNumber = sessionNumberSetting.Value
                 
                 let decks = this.allDecks()
@@ -102,5 +103,16 @@ module Algorithm =
                     sessionNumberSetting.Value <- sessionNumber + 1;
                 else 
                     sessionNumberSetting.Value <- 0;
+                    
+            member this.LearnedFlashcards 
+                with get () =
+                    let cards = 
+                        deckRepository.FindMatching(fun deck -> deck.DeckTitle = RetiredDeckTitle)
+                        |> Async.AwaitTask
+                        |> Async.RunSynchronously
+                        |> Seq.exactlyOne
+                        |> (fun deck -> deck.Cards)
+                    cards.AsEnumerable()
+                    
                 
                 

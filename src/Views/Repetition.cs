@@ -1,11 +1,8 @@
-﻿using System.Linq;
-using Flashcards.Services;
-using Flashcards.SpacedRepetition.Interface;
+﻿using System;
 using Flashcards.ViewModels;
 using Prism;
 using Prism.Autofac;
 using Prism.Ioc;
-using Prism.Navigation;
 using Xamarin.Forms;
 
 namespace Flashcards.Views
@@ -29,31 +26,16 @@ namespace Flashcards.Views
 		}
 
 	    protected override async void OnInitialized()
-        {
-            var spacedRepetition = Container.Resolve<ISpacedRepetition>();
-	        var flashcards = await spacedRepetition.GetRepetitionFlashcards();
-	        var flashcardList = flashcards.ToList();
-
-	        if (flashcardList.Any())
-	        {
-		        var examiner = new Examiner(flashcardList);
-
-		        await NavigationService.NavigateAsync("NavigationPage/LessonListPage/AskingQuestionsPage",
-			        new NavigationParameters
-			        {
-				        {
-					        "examiner",
-					        examiner
-				        }
-			        });
-		        var results = await examiner.QuestionResults.Task;
-
-		        spacedRepetition.RearrangeFlashcards(results);
-	        }
-	        else
-	        {
-		        await NavigationService.NavigateAsync("NavigationPage/LessonListPage");
-	        }
-        }
+	    {
+		    try
+		    {
+			    var repetition = Container.Resolve<ViewModels.Repetition>();
+			    await repetition.Repeat();
+		    }
+		    catch (Exception e)
+		    {
+			    await NavigationService.NavigateAsync("NavigationPage/LessonListPage");
+		    }
+	    }
     }
 }

@@ -13,16 +13,16 @@ namespace ViewModelsTests
     {
         private readonly AskingQuestionsViewModel _askingQuestionsViewModel;
         private readonly INavigationService _navigationService;
-	    private Examiner _examiner;
+	    private readonly Examiner _examiner;
 
 	    public AskingQuestionsViewModelTests()
         {
-            _examiner = new Examiner(new[]
+            _examiner = new ExaminerBuilder().WithFlashcards(new[]
             {
-	            new Flashcard {Front = "cat", Back = "kot"},
-	            new Flashcard {Front = "dog", Back = "pies"},
-	            new Flashcard {Front = "duck", Back = "kaczka"}
-            });
+                new Flashcard {Front = "cat", Back = "kot"},
+                new Flashcard {Front = "dog", Back = "pies"},
+                new Flashcard {Front = "duck", Back = "kaczka"}
+            }).Build();
 
             _navigationService = Substitute.For<INavigationService>();
             var dialogService = Substitute.For<IPageDialogService>();

@@ -73,7 +73,7 @@ namespace LeitnerTests
 		private IEnumerable<Flashcard> Flashcards(string deck)
 		{
 			return _deckRepository
-				.FindMatching(cd => cd.DeckTitle == deck)
+				.Where(cd => cd.DeckTitle == deck)
 				.Result
 				.Single()
 				.Cards;
@@ -87,11 +87,9 @@ namespace LeitnerTests
 		[Fact]
 		public void After10CorrectSessions_AllCardsAreInRetiredDeck()
 		{
-			var decks = _deckRepository.FindAll().Result;
-			
 			for (var i = 0; i < 20; ++i)
 			{
-				var flashcards = _leitner.GetRepetitionFlashcards().Result.ToList();
+				var flashcards = _leitner.CurrentRepetitionFlashcards().Result.ToList();
 				_leitner.RearrangeFlashcards(flashcards.Select(Known));
 				_leitner.Proceed();
 				_output.WriteLine($"session: {i}");
@@ -101,16 +99,18 @@ namespace LeitnerTests
 			}
 
 			Assert.Equal(FlashcardCount, Flashcards(RetiredDeckTitle).Count());
+			Assert.Equal(FlashcardCount, _leitner.LearnedFlashcards.Count());
+
 		}
 
 		[Fact]
 		public void AnsweringCorrectlyAllFlashcards_DecreasesNumberOfFlashcardsInTheNextSession()
 		{
-			var flashcards = _leitner.GetRepetitionFlashcards().Result;
+			var flashcards = _leitner.CurrentRepetitionFlashcards().Result;
 			_leitner.RearrangeFlashcards(flashcards.Select(Known));
 			_leitner.Proceed();
 			
-			var rearrangedFlashcards = _leitner.GetRepetitionFlashcards().Result;
+			var rearrangedFlashcards = _leitner.CurrentRepetitionFlashcards().Result;
 
 			Assert.NotEqual(FlashcardCount, rearrangedFlashcards.Count());
 		}
@@ -118,22 +118,22 @@ namespace LeitnerTests
 		[Fact]
 		public void AnsweringCorrectlyAllFlashcards_MovesThemToDeckBeginningWithSessionNumber()
 		{
-			var flashcards = _leitner.GetRepetitionFlashcards().Result;
+			var flashcards = _leitner.CurrentRepetitionFlashcards().Result;
 			_leitner.RearrangeFlashcards(flashcards.Select(Known));
 
 			var session0DeckCards =
-				_deckRepository.FindMatching(cd => cd.DeckTitle == "0259").Result;
+				_deckRepository.Where(cd => cd.DeckTitle == "0259").Result;
 			Assert.NotEmpty(session0DeckCards);
 
 			var currentDeckCards =
-				_deckRepository.FindMatching(cd => cd.DeckTitle == CurrentDeckTitle).Result.Single().Cards;
+				_deckRepository.Where(cd => cd.DeckTitle == CurrentDeckTitle).Result.Single().Cards;
 			Assert.Empty(currentDeckCards);
 		}
 
 		[Fact]
 		public void ChooseFlashcards_ReturnsAllFromCurrentDeck()
 		{
-			var flashcards = _leitner.GetRepetitionFlashcards().Result;
+			var flashcards = _leitner.CurrentRepetitionFlashcards().Result;
 			Assert.Equal(FlashcardCount, flashcards.Count());
 		}
 	}

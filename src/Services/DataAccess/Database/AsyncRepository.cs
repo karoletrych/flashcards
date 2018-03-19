@@ -26,7 +26,7 @@ namespace Flashcards.Services.DataAccess.Database
 				.AsEnumerable();
 		}
 
-		public async Task<IEnumerable<T>> FindMatching(Expression<Func<T, bool>> predicate)
+		public async Task<IEnumerable<T>> Where(Expression<Func<T, bool>> predicate)
 		{
 			var list = await _dbConnection
 				.GetAllWithChildrenAsync(predicate, recursive: true)
