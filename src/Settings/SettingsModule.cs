@@ -7,7 +7,7 @@ using Module = Autofac.Module;
 
 namespace Flashcards.Settings
 {
-	class SettingsModule : Module
+	public class SettingsModule : Module
 	{
 		private readonly Assembly[] _assemblies;
 
@@ -23,12 +23,14 @@ namespace Flashcards.Settings
 			registration.Preparing += InjectSettings;
 		}
 
-		private void InjectSettings(object sender, PreparingEventArgs e)
+		private static void InjectSettings(object sender, PreparingEventArgs e)
 		{
 			e.Parameters = e.Parameters.Union(new[]
 			{
 				new ResolvedParameter(
-					(info, context) => info.ParameterType.GetGenericTypeDefinition() == typeof(ISetting<>),
+					(info, context) => 
+						info.ParameterType.IsGenericType &&
+						info.ParameterType.GetGenericTypeDefinition() == typeof(ISetting<>),
 					(parameterInfo, context) =>
 						context.ResolveNamed(parameterInfo.Name.ToLower(), parameterInfo.ParameterType))
 			});
@@ -36,19 +38,21 @@ namespace Flashcards.Settings
 
 		protected override void Load(ContainerBuilder builder)
 		{
-			bool IsISetting(Type type)
+			bool IsSettingType(Type type)
 			{
-				return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(ISetting<>);
+				return type.IsGenericType 
+				       && type.GetGenericTypeDefinition() == typeof(ISetting<>);
 			}
 
 			var settingTypes = _assemblies
 				.SelectMany(assembly =>
 					assembly.GetTypes()
 						.Where(t => t.GetInterfaces()
-							.Any(IsISetting)));
+							.Any(IsSettingType)))
+				.ToList();
 			foreach (var type in settingTypes)
 				builder.RegisterType(type)
-					.Named(type.Name.ToLower(), type.GetInterfaces().Single(IsISetting));
+					.Named(type.Name.ToLower(), type.GetInterfaces().Single(IsSettingType));
 		}
 	}
 }

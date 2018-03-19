@@ -31,11 +31,10 @@ namespace FlashCards.Droid.Repetitions
 		private static long AlarmTimeInMillis(DateTime time)
 		{
 			var date = Calendar.Instance;
-			var currentTime =
-				new DateTime(0, 0, 0, 
-					hour: date.Get(CalendarField.HourOfDay),
-					minute: date.Get(CalendarField.Minute),
-					second: 0);
+			var currentTime = new DateTime()
+				.AddHours(date.Get(CalendarField.HourOfDay))
+				.AddMinutes(date.Get(CalendarField.Minute));
+
 			if (time < currentTime)
 				date.Add(CalendarField.Date, 1);
 

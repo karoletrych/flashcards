@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Timers;
@@ -76,30 +77,48 @@ namespace Flashcards.ViewModels
 		public event PropertyChangedEventHandler PropertyChanged;
 
 
-		public async Task HandleFrontTextCompleted()
+		private async Task UpdateImages(Language language, string text)
 		{
-			var translations = await _translator.Translate(
-				from: _frontLanguage,
-				to: _backLanguage,
-				text: FrontText);
-			BackText = string.Join("", translations);
-
-			var imageUris = await _imageBrowser.Find(FrontText, _frontLanguage);
+			var imageUris = await _imageBrowser.Find(text, language);
 			ImageUris.Clear();
 			foreach (var imageUri in imageUris) ImageUris.Add(imageUri);
 		}
 
-		public async Task HandleBackTextCompleted()
+		public async Task HandleFrontTextChangedByUser()
 		{
-			var translations = await _translator.Translate(
-				from: _backLanguage,
-				to: _frontLanguage,
-				text: BackText);
-			FrontText = string.Join("", translations);
+			if(!string.IsNullOrEmpty(BackText))
+				return;
 
-			var imageUris = await _imageBrowser.Find(BackText, _backLanguage);
-			ImageUris.Clear();
-			foreach (var imageUri in imageUris) ImageUris.Add(imageUri);
+			async Task UpdateTranslation()
+			{
+				var translations = await _translator.Translate(
+					from: _frontLanguage,
+					to: _backLanguage,
+					text: FrontText);
+				BackText = string.Join("", translations);
+			}
+
+			var updateImages = UpdateImages(_frontLanguage, FrontText);
+
+			await Task.WhenAll(UpdateTranslation(), updateImages);
+		}
+
+		public async Task HandleBackTextChangedByUser()
+		{
+			if(!string.IsNullOrEmpty(FrontText))
+				return;
+
+			async Task UpdateTranslation()
+			{
+				var translations = await _translator.Translate(
+					from: _backLanguage,
+					to: _frontLanguage,
+					text: BackText);
+				FrontText = string.Join("", translations);
+			}
+			var updateImages = UpdateImages(_backLanguage, BackText);
+
+			await Task.WhenAll(UpdateTranslation(), updateImages);
 		}
 	}
 }

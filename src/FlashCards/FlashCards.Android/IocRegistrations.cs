@@ -7,6 +7,7 @@ using Flashcards.Models;
 using Flashcards.Services.DataAccess;
 using Flashcards.Services.DataAccess.Database;
 using Flashcards.Services.Http;
+using Flashcards.Settings;
 using Flashcards.SpacedRepetition.Interface;
 using Flashcards.SpacedRepetition.Leitner;
 using Flashcards.ViewModels;
@@ -27,8 +28,9 @@ namespace FlashCards.Droid
                 Assembly.GetAssembly(typeof(ITranslator)),
                 Assembly.GetAssembly(typeof(ISpacedRepetition)),
                 Assembly.GetAssembly(typeof(Algorithm.LeitnerRepetition)),
-				Assembly.GetAssembly(typeof(MainActivity))
-            };
+				Assembly.GetAssembly(typeof(MainActivity)),
+	            Assembly.GetAssembly(typeof(SettingsModule)),
+			};
             containerBuilder
                 .RegisterAssemblyTypes(assemblies)
                 .AsSelf()
@@ -52,6 +54,8 @@ namespace FlashCards.Droid
                     .CreateAsyncConnection(databasePath))
                 .As<SQLiteAsyncConnection>()
                 .SingleInstance();
+
+            containerBuilder.RegisterModule(new SettingsModule(assemblies));
         }
 
 	    public static IContainer DefaultContainer()

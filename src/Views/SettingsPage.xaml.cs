@@ -26,7 +26,9 @@ namespace Flashcards.Views
 		{
 			var time = ((TimePickerCell) sender).Time;
 
-			var dateTime = new DateTime(0, 0, 0, time.Hours, time.Minutes, time.Seconds);
+			var dateTime = new DateTime()
+				.AddHours(time.Hours)
+				.AddMinutes(time.Minutes);
 			_repetitionTimeSetting.Value = dateTime;
 			_notificationScheduler.Schedule(dateTime);
 		}
