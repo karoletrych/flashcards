@@ -12,10 +12,10 @@
     <ContentPage.Content>
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="30*"></RowDefinition>
                 <RowDefinition Height="20*"></RowDefinition>
-                <RowDefinition Height="40*"></RowDefinition>
-                <RowDefinition Height="10*"></RowDefinition>
+                <RowDefinition Height="20*"></RowDefinition>
+                <RowDefinition Height="45*"></RowDefinition>
+                <RowDefinition Height="15*"></RowDefinition>
             </Grid.RowDefinitions>
             <StackLayout
                     Spacing="0"
@@ -44,20 +44,19 @@
                 Padding="0">
                 <Image
                     Source="{Binding SelectedImageUri}"
-                    HeightRequest="250"
-                    Aspect="Fill" />
+                    Aspect="AspectFit" />
             </Frame>
 
             <controls:FlowListView
                 FlowColumnCount="3"
-                HasUnevenRows="false"
+                HasUnevenRows="True"
                 FlowItemsSource="{Binding ImageUris}"
-                FlowTappedBackgroundColor="LawnGreen"
                 FlowLastTappedItem="{Binding SelectedImageUri}"
                 Grid.Row="2">
                 <controls:FlowListView.FlowColumnTemplate>
                     <DataTemplate>
                         <Image
+                            HeightRequest="85"
                             Source="{Binding .}"
                             Aspect="Fill" />
                     </DataTemplate>
@@ -67,7 +66,6 @@
             <Button
                 Text="Next Flashcard"
                 Command="{Binding NextFlashcardCommand}"
-                VerticalOptions="End"
                 Grid.Row="3"/>
         </Grid>
     </ContentPage.Content>
