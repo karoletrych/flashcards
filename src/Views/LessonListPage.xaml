@@ -4,7 +4,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Flashcards.Views.LessonListPage"
              xmlns:customViews="clr-namespace:Flashcards.Views.CustomViews"
-             xmlns:viewModels="clr-namespace:Flashcards.ViewModels;assembly=ViewModels">
+             xmlns:viewModels="clr-namespace:Flashcards.ViewModels;assembly=ViewModels"
+             xmlns:views="clr-namespace:Flashcards.Views;assembly=Views">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <views:LanguageToFlagConverter x:Key="LanguageToFlag" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
 
     <ContentPage.ToolbarItems>
         <ToolbarItem Icon="ic_add_white_48dp.png" Command="{Binding AddLessonCommand}" />
@@ -50,7 +57,6 @@
         <StackLayout Grid.Row="1">
             <Label FontAttributes="Bold" FontSize="Large" Text="Lekcje" />
             <customViews:CommandListView
-
                 ItemsSource="{Binding Lessons}"
                 ItemClickCommand="{Binding PracticeLessonCommand}"
                 x:Name="LessonList">
@@ -74,16 +80,17 @@
 
                                 <Label Grid.Column="0" Text="{Binding Name}"
                                        Style="{DynamicResource ListItemTextStyle}" />
-                                <Label Grid.Column="1" Text="{Binding FrontLanguage}"
-                                       Style="{DynamicResource ListItemDetailTextStyle}" />
-                                <Label Grid.Column="2" Text="{Binding BackLanguage}"
-                                       Style="{DynamicResource ListItemDetailTextStyle}" />
+                                <Image Grid.Column="1" Source="{Binding FrontLanguage,
+                                        Converter={StaticResource LanguageToFlag}}"/>
+                                <Image Grid.Column="2" Source="{Binding BackLanguage,
+                                        Converter={StaticResource LanguageToFlag}}" />
                                 <StackLayout Grid.Column="3">
                                     <Label Text="{Binding LearnedFlashcardsRatioString}" />
                                     <ProgressBar Progress="{Binding LearnedFlashcardsRatio}" />
                                 </StackLayout>
                                 <Button Grid.Column="4"
-                                        Command="{Binding Path=BindingContext.EditLessonCommand, Source={x:Reference LessonList}}"
+                                        Command="{Binding Path=BindingContext.EditLessonCommand, 
+                                            Source={x:Reference LessonList}}"
                                         CommandParameter="{Binding .}"
                                         BorderColor="Transparent"
                                         BackgroundColor="Transparent"

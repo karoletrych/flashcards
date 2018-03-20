@@ -20,7 +20,9 @@ namespace Flashcards.Models
                     return "it";
                 case Language.Russian:
                     return "ru";
-                default:
+	            case Language.Norwegian:
+		            return "no";
+				default:
                     throw new ArgumentException($"{language}");
             }
         }
