@@ -29,8 +29,9 @@ namespace Flashcards.Views
 	    {
 		    try
 		    {
-			    var repetition = Container.Resolve<ViewModels.Repetition>();
-			    await repetition.Repeat(NavigationService);
+			    var repetition = Container.Resolve<Repetition>();
+			    var flashcardsToAsk = await Container.Resolve<RepetitionFlashcardsRetriever>().FlashcardsToAsk();
+			    await repetition.Repeat(NavigationService, flashcardsToAsk);
 		    }
 		    catch (Exception e)
 		    {

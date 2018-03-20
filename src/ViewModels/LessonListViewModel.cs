@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Flashcards.Models;
 using Flashcards.Services;
@@ -23,6 +24,7 @@ namespace Flashcards.ViewModels
         private readonly INavigationService _navigationService;
         private readonly ISpacedRepetition _spacedRepetition;
         private readonly IRepetition _repetition;
+        private readonly RepetitionFlashcardsRetriever _repetitionFlashcardsRetriever;
 
         public LessonListViewModel()
         {
@@ -35,7 +37,8 @@ namespace Flashcards.ViewModels
             IRepository<Flashcard> flashcardRepository,
             ExaminerBuilder examinerBuilder,
             ISpacedRepetition spacedRepetition,
-			IRepetition repetition)
+			IRepetition repetition,
+            RepetitionFlashcardsRetriever repetitionFlashcardsRetriever)
         {
             _lessonRepository = lessonRepository;
             _navigationService = navigationService;
@@ -44,6 +47,7 @@ namespace Flashcards.ViewModels
             _examinerBuilder = examinerBuilder;
             _spacedRepetition = spacedRepetition;
 	        _repetition = repetition;
+	        _repetitionFlashcardsRetriever = repetitionFlashcardsRetriever;
         }
 
         public ObservableCollection<LessonViewModel> Lessons { get; } = new ObservableCollection<LessonViewModel>();
@@ -92,21 +96,22 @@ namespace Flashcards.ViewModels
             get { return new Command(async () => { await _navigationService.NavigateAsync("SettingsPage"); }); }
         }
 
-        private int LearnedActiveRepetitions = 20;
-        private int TotalActiveRepetitions = 100;
+        private int _learnedFlashcards;
+        private int _totalActiveFlashcards;
 
-		public int RepetitionPendingFlashcards { get; private set; }
-        public string ActiveRepetitionsRatioString => LearnedActiveRepetitions + "/" + TotalActiveRepetitions;
-        public double ActiveRepetitionsRatio => (double) LearnedActiveRepetitions / TotalActiveRepetitions;
+	    private IEnumerable<Flashcard> _pendingRepetitionFlashcards = new List<Flashcard>();
+	    public int PendingRepetitionFlashcardsNumber => _pendingRepetitionFlashcards.Count();
+		public string ActiveRepetitionsRatioString => _learnedFlashcards + "/" + _totalActiveFlashcards;
+        public double ActiveRepetitionsRatio => (double) _learnedFlashcards / _totalActiveFlashcards;
 
 	    public ICommand RunRepetitionCommand =>
 		    new Command(async () =>
 			    {
 				    try
 				    {
-					    await _repetition.Repeat(_navigationService);
+					    await _repetition.Repeat(_navigationService, _pendingRepetitionFlashcards);
 				    }
-				    catch(InvalidOperationException e)
+				    catch(InvalidOperationException)
 				    {
 					    await _dialogService.DisplayAlertAsync("No flashcards", "No repetition flashcards for today", "OK");
 				    }
@@ -119,15 +124,33 @@ namespace Flashcards.ViewModels
 
         public async void OnNavigatedTo(NavigationParameters parameters)
         {
+	        _pendingRepetitionFlashcards = await _repetitionFlashcardsRetriever.FlashcardsToAsk();
+	        OnPropertyChanged(nameof(PendingRepetitionFlashcardsNumber));
+
+
+			var lessons = (await _lessonRepository.FindAll()).ToList();
+
+	        _learnedFlashcards =
+		        _totalActiveFlashcards =
+			        lessons.Where(l => l.AskInRepetitions).SelectMany(l => l.Flashcards).Count();
+	        _totalActiveFlashcards = lessons.SelectMany(l => l.Flashcards).Count();
+			OnPropertyChanged(nameof(ActiveRepetitionsRatio));
+			OnPropertyChanged(nameof(ActiveRepetitionsRatioString));
+
             Lessons.Clear();
-            var lessons = await _lessonRepository.FindAll();
             foreach (var lesson in lessons)
                 Lessons.Add(new LessonViewModel(lesson, _spacedRepetition.LearnedFlashcards));
         }
-#pragma warning disable 0067
-        public event PropertyChangedEventHandler PropertyChanged;
-#pragma warning restore 0067
 
+	    private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+	    {
+		    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName: propertyName));
+	    }
+
+
+#pragma warning disable 0067
+		public event PropertyChangedEventHandler PropertyChanged;
+#pragma warning restore 0067
 
         public class LessonViewModel
         {

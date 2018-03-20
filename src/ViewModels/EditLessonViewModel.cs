@@ -24,7 +24,10 @@ namespace Flashcards.ViewModels
 		{
 		}
 
-		public EditLessonViewModel(INavigationService navigationService, IRepository<Lesson> lessonRepository, IRepository<Flashcard> flashcardRepository)
+		public EditLessonViewModel(
+			INavigationService navigationService, 
+			IRepository<Lesson> lessonRepository, 
+			IRepository<Flashcard> flashcardRepository)
 		{
 			_navigationService = navigationService;
 			_lessonRepository = lessonRepository;
