@@ -68,7 +68,6 @@ module Models =
                         deck.Cards.Add(flashcard)
                         do! deckRepository.Update(deck) |> Async.AwaitTask
                     }
-                    // |> Async.StartImmediate  <- makes tests fail
                     |> Async.RunSynchronously
 
                 tableCreator.CreateTable<CardDeck>() |> sync

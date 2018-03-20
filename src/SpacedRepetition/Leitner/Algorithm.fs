@@ -55,26 +55,39 @@ module Algorithm =
             
     type SessionNumberSetting() =
         inherit Setting<int>() with
-            override this.Key with get () = ""
+            override this.Key with get () = "SessionNumber"
             override this.DefaultValue with get () = 0
 
+    type RepetitionDoneTodaySetting() =
+        inherit Setting<bool>() with
+            override this.Key with get () = "RepetitionDoneToday"
+            override this.DefaultValue with get () = false
+
      
-    type LeitnerRepetition(deckRepository : IRepository<Deck>, sessionNumberSetting : ISetting<int>) =
+    type LeitnerRepetition(
+                            deckRepository : IRepository<Deck>,
+                            sessionNumberSetting : ISetting<int>,
+                            repetitionDoneTodaySetting : ISetting<bool>) =
         member this.allDecks () = 
             deckRepository.FindAll()
             |> Async.AwaitTask
             |> Async.RunSynchronously
        
         interface ISpacedRepetition with 
-            member this.CurrentRepetitionFlashcards ()= 
-                let sessionNumber = sessionNumberSetting.Value
+            member this.CurrentRepetitionFlashcards () =
+                if repetitionDoneTodaySetting.Value 
+                then Task.FromResult Seq.empty
+                else
+                    let sessionNumber = sessionNumberSetting.Value
                 
-                let decks = this.allDecks()
-                decks
-                |> Seq.filter (fun (deck : Deck) -> 
-                                        (deck.DeckTitle |> Seq.map toInt |> Seq.contains sessionNumber || deck.DeckTitle = CurrentDeckTitle))
-                |> Seq.collect (fun deck -> deck.Cards)
-                |> Task.FromResult
+                    let decks = this.allDecks()
+                    decks
+                    |> Seq.filter (fun (deck : Deck) -> 
+                                            (deck.DeckTitle
+                                            |> Seq.map toInt 
+                                            |> Seq.contains sessionNumber || deck.DeckTitle = CurrentDeckTitle))
+                    |> Seq.collect (fun deck -> deck.Cards)
+                    |> Task.FromResult
                 
             member this.RearrangeFlashcards (results) =
                 let decks = this.allDecks()
@@ -95,8 +108,10 @@ module Algorithm =
 
                 deckRepository.UpdateAll(newDecks)
                 |> sync
+                repetitionDoneTodaySetting.Value <- true
 
             member this.Proceed () =
+                repetitionDoneTodaySetting.Value <- false
                 let sessionNumber = sessionNumberSetting.Value
                 if sessionNumber < 9
                 then 
