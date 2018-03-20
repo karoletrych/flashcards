@@ -7,9 +7,9 @@ using Xamarin.Forms;
 
 namespace Flashcards.Views
 {
-	public class Repetition : PrismApplication
+	public class RepetitionApp : PrismApplication
     {
-	    public Repetition(IPlatformInitializer platformInitializer) : base(platformInitializer)
+	    public RepetitionApp(IPlatformInitializer platformInitializer) : base(platformInitializer)
 	    {
 	    }
 
@@ -30,7 +30,7 @@ namespace Flashcards.Views
 		    try
 		    {
 			    var repetition = Container.Resolve<ViewModels.Repetition>();
-			    await repetition.Repeat();
+			    await repetition.Repeat(NavigationService);
 		    }
 		    catch (Exception e)
 		    {

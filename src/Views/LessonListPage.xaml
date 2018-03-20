@@ -7,42 +7,90 @@
              xmlns:viewModels="clr-namespace:Flashcards.ViewModels;assembly=ViewModels">
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Order="Primary" Text="Lessons"></ToolbarItem>
+        <ToolbarItem Order="Primary" Text="Lessons" />
         <ToolbarItem Icon="ic_add_white_48dp.png" Command="{Binding AddLessonCommand}" />
         <ToolbarItem Icon="ic_settings_white_48dp.png" Command="{Binding SettingsCommand}" />
     </ContentPage.ToolbarItems>
 
     <ContentPage.BindingContext>
-        <viewModels:LessonListViewModel/>
+        <viewModels:LessonListViewModel />
     </ContentPage.BindingContext>
 
+    <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="10*" />
+            <RowDefinition Height="90*" />
+        </Grid.RowDefinitions>
+
+        <Grid Row="0">
+            <Grid.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding RunRepetitionCommand}" />
+            </Grid.GestureRecognizers>
+            
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="40*" />
+                <ColumnDefinition Width="20*" />
+                <ColumnDefinition Width="20*" />
+                <ColumnDefinition Width="20*" />
+            </Grid.ColumnDefinitions>
+
+            <Label Grid.Column="0" Text="Powturki"
+                   Style="{DynamicResource ListItemTextStyle}" />
+            
+            <StackLayout Grid.Column="1">
+                <Label Text="{Binding ActiveRepetitionsRatioString}" />
+                <ProgressBar Progress="{Binding ActiveRepetitionsRatio}" />
+            </StackLayout>
+        </Grid>
+
+
         <customViews:CommandListView
-        ItemsSource="{Binding Lessons}"
-        ItemClickCommand="{Binding PracticeLessonCommand}"
-        x:Name="LessonList">
-        <customViews:CommandListView.ItemTemplate>
-            <DataTemplate>
-                <ViewCell>
-                    <ViewCell.ContextActions>
-                        <MenuItem
-                            Command="{Binding Path=BindingContext.EditLessonCommand, Source={x:Reference LessonList}}"
-                            CommandParameter="{Binding .}"
-                            Text="Edit" />
-                        <MenuItem
-                            Command="{Binding Path=BindingContext.DeleteLessonCommand, Source={x:Reference LessonList}}"
-                            CommandParameter="{Binding .}"
-                            Text="Delete" IsDestructive="True" />
-                    </ViewCell.ContextActions>
-                    <StackLayout Orientation="Horizontal">
-                        <Label Text="{Binding Name}"
-                               Style="{DynamicResource ListItemTextStyle}" />
-                        <Label Text="{Binding FrontLanguage}"
-                               Style="{DynamicResource ListItemDetailTextStyle}" />
-                        <Label Text="{Binding BackLanguage}"
-                               Style="{DynamicResource ListItemDetailTextStyle}" />
-                    </StackLayout>
-                </ViewCell>
-            </DataTemplate>
-        </customViews:CommandListView.ItemTemplate>
-    </customViews:CommandListView>
+            Grid.Row="1"
+            ItemsSource="{Binding Lessons}"
+            ItemClickCommand="{Binding PracticeLessonCommand}"
+            x:Name="LessonList">
+            <customViews:CommandListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <ViewCell.ContextActions>
+
+                            <MenuItem
+                                Command="{Binding Path=BindingContext.DeleteLessonCommand, Source={x:Reference LessonList}}"
+                                CommandParameter="{Binding .}"
+                                Text="Delete" IsDestructive="True" />
+                        </ViewCell.ContextActions>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="20*" />
+                                <ColumnDefinition Width="20*" />
+                                <ColumnDefinition Width="20*" />
+                                <ColumnDefinition Width="20*" />
+                                <ColumnDefinition Width="20*" />
+                            </Grid.ColumnDefinitions>
+
+                            <Label Grid.Column="0" Text="{Binding Name}"
+                                   Style="{DynamicResource ListItemTextStyle}" />
+                            <Label Grid.Column="1" Text="{Binding FrontLanguage}"
+                                   Style="{DynamicResource ListItemDetailTextStyle}" />
+                            <Label Grid.Column="2" Text="{Binding BackLanguage}"
+                                   Style="{DynamicResource ListItemDetailTextStyle}" />
+                            <StackLayout Grid.Column="3">
+                                <Label Text="{Binding LearnedFlashcardsRatioString}" />
+                                <ProgressBar Progress="{Binding LearnedFlashcardsRatio}" />
+                            </StackLayout>
+                            <Button Grid.Column="4"
+                                    Command="{Binding Path=BindingContext.EditLessonCommand, Source={x:Reference LessonList}}"
+                                    CommandParameter="{Binding .}"
+                                    BorderColor="Transparent"
+                                    BackgroundColor="Transparent"
+                                    Image="ic_settings_blue_light_36dp.png" />
+                        </Grid>
+                    </ViewCell>
+                </DataTemplate>
+            </customViews:CommandListView.ItemTemplate>
+        </customViews:CommandListView>
+    </Grid>
+
+
 </ContentPage>

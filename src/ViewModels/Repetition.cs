@@ -10,32 +10,30 @@ using Prism.Navigation;
 
 namespace Flashcards.ViewModels
 {
-    public class Repetition
+    public class Repetition : IRepetition
     {
         private readonly ISpacedRepetition _spacedRepetition;
-        private readonly INavigationService _navigationService;
         private readonly ExaminerBuilder _examinerBuilder;
         private readonly IRepository<Lesson> _lessonRepository;
-        private readonly ISetting<int> _maximumFlashcardsInLessonSetting;
-        private readonly ISetting<AskingMode> _repetitionAskingMode;
+        private readonly ISetting<int> _maximumFlashcardsInRepetitionSetting;
+        private readonly ISetting<AskingMode> _repetitionAskingModeSetting;
         
         
         public Repetition(ISpacedRepetition spacedRepetition,
-            INavigationService navigationService,
             ExaminerBuilder examinerBuilder,
             IRepository<Lesson> lessonRepository,
-            ISetting<int> maximumFlashcardsInLessonSetting,
-            ISetting<AskingMode> repetitionAskingMode)
+            ISetting<int> maximumFlashcardsInRepetitionSetting,
+            ISetting<AskingMode> repetitionAskingModeSetting
+	        )
         {
             _spacedRepetition = spacedRepetition;
-            _navigationService = navigationService;
             _examinerBuilder = examinerBuilder;
             _lessonRepository = lessonRepository;
-            _maximumFlashcardsInLessonSetting = maximumFlashcardsInLessonSetting;
-            _repetitionAskingMode = repetitionAskingMode;
+            _maximumFlashcardsInRepetitionSetting = maximumFlashcardsInRepetitionSetting;
+            _repetitionAskingModeSetting = repetitionAskingModeSetting;
         }
 
-        public async Task Repeat()
+        public async Task Repeat(INavigationService navigationService)
         {
             var repetitionFlashcards = await _spacedRepetition.CurrentRepetitionFlashcards();
             var activeLessons = await _lessonRepository
@@ -44,7 +42,7 @@ namespace Flashcards.ViewModels
             
             var flashcardsToAsk = repetitionFlashcards
                 .Intersect(activeFlashcards)
-                .Take(_maximumFlashcardsInLessonSetting.Value)
+                .Take(_maximumFlashcardsInRepetitionSetting.Value)
                 .ToList();
 
             if (!flashcardsToAsk.Any())
@@ -53,10 +51,10 @@ namespace Flashcards.ViewModels
             var examiner = _examinerBuilder
                 .WithFlashcards(flashcardsToAsk)
                 .WithRepeatingQuestions(true)
-                .WithAskingMode(_repetitionAskingMode.Value)
+                .WithAskingMode(_repetitionAskingModeSetting.Value)
                 .Build();
 
-            await _navigationService.NavigateAsync("NavigationPage/LessonListPage/AskingQuestionsPage",
+            await navigationService.NavigateAsync("NavigationPage/LessonListPage/AskingQuestionsPage",
                 new NavigationParameters
                 {
                     {

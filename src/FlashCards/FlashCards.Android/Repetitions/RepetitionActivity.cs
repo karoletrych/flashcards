@@ -23,7 +23,7 @@ namespace FlashCards.Droid.Repetitions
 
             Forms.Init(this, bundle);
 
-            LoadApplication(new Repetition(new AndroidPlatformInitializer(this)));
+            LoadApplication(new RepetitionApp(new AndroidPlatformInitializer(this)));
         }
     }
 }
