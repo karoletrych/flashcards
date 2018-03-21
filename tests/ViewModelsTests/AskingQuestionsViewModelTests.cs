@@ -13,7 +13,7 @@ namespace ViewModelsTests
     {
         private readonly AskingQuestionsViewModel _askingQuestionsViewModel;
         private readonly INavigationService _navigationService;
-	    private readonly Examiner _examiner;
+	    private readonly IRepeatingExaminer _examiner;
 
 	    public AskingQuestionsViewModelTests()
         {

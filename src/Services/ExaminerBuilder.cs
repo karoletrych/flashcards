@@ -29,7 +29,7 @@ namespace Flashcards.Services
             return this;
         }
 
-        public Examiner Build()
+        public IRepeatingExaminer Build()
         {
             if (_flashcards == null)
                 throw new InvalidOperationException();
@@ -39,14 +39,13 @@ namespace Flashcards.Services
             switch (_askingMode)
             {
                 case AskingMode.Front:
-                    return new Examiner(_flashcards.Select(flashcard => new Question(flashcard)), _repeatQuestions);
+                    return new RepeatingExaminer(_flashcards.Select(flashcard => new Question(flashcard)));
                 case AskingMode.Back:
-                    return new Examiner(_flashcards.Select(flashcard => new Question(Invert(flashcard))),
-                        _repeatQuestions);
+                    return new RepeatingExaminer(_flashcards.Select(flashcard => new Question(Invert(flashcard))));
                 case AskingMode.Random:
-                    return new Examiner(
+                    return new RepeatingExaminer(
                         _flashcards.Select(flashcard =>
-                            new Question(random.NextDouble() > 0.5 ? flashcard : Invert(flashcard))), _repeatQuestions);
+                            new Question(random.NextDouble() > 0.5 ? flashcard : Invert(flashcard))));
                 default:
                     throw new ArgumentOutOfRangeException();
             }

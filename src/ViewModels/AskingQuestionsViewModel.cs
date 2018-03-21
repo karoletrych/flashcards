@@ -16,7 +16,7 @@ namespace Flashcards.ViewModels
 		private readonly IPageDialogService _dialogService;
 		private readonly INavigationService _navigationService;
 
-		private Examiner _examiner;
+		private IRepeatingExaminer _examiner;
 		private bool _frontIsVisible;
 
 		private IList<StepItem> _questionStatuses = new List<StepItem>
@@ -43,9 +43,38 @@ namespace Flashcards.ViewModels
 
 		public bool BackIsVisible => !FrontIsVisible;
 
+		public string FrontText {get; private set;}
+		public string BackText { get; private set; }
+
+		public IList<StepItem> QuestionStatuses
+		{
+			get => _questionStatuses;
+			private set
+			{
+				_questionStatuses = value;
+				OnPropertyChanged();
+			}
+		}
+
+
+		public Uri ImageUri { get; set; }
+
+		public bool FrontIsVisible
+		{
+			get => _frontIsVisible;
+			private set
+			{
+				if (_frontIsVisible == value)
+					return;
+				_frontIsVisible = value;
+				OnPropertyChanged();
+				OnPropertyChanged(nameof(BackIsVisible));
+			}
+		}
+
 		public ICommand UserAnswerCommand => new Command<bool>(known =>
 		{
-			_examiner.Answer(isKnown: known);
+			_examiner.Answer(known: known);
 
 
 			FrontIsVisible = false;
@@ -62,36 +91,6 @@ namespace Flashcards.ViewModels
 		});
 
 
-		public IList<StepItem> QuestionStatuses
-		{
-			get => _questionStatuses;
-			private set
-			{
-				_questionStatuses = value;
-				OnPropertyChanged();
-			}
-		}
-
-		public string FrontText {get; private set;}
-
-		public string BackText { get; private set; }
-		
-
-		public bool FrontIsVisible
-		{
-			get => _frontIsVisible;
-			private set
-			{
-				if (_frontIsVisible == value)
-					return;
-				_frontIsVisible = value;
-				OnPropertyChanged();
-				OnPropertyChanged(nameof(BackIsVisible));
-			}
-		}
-
-		public Uri ImageUri { get; set; }
-
 		public void OnNavigatedTo(NavigationParameters parameters)
 		{
 		}
@@ -102,7 +101,7 @@ namespace Flashcards.ViewModels
 
 		public void OnNavigatingTo(NavigationParameters parameters)
 		{
-			_examiner = (Examiner) parameters["examiner"];
+			_examiner = (IRepeatingExaminer) parameters["examiner"];
 			ShowNextQuestionOrFinishAsking();
 		}
 
@@ -140,21 +139,34 @@ namespace Flashcards.ViewModels
 
 		private async void ShowNextQuestionOrFinishAsking()
 		{
-			if (_examiner.TryAskNextQuestion(out var question))
+			var question = _examiner.TryAskNextQuestion();
+			switch (question)
 			{
-				FrontText = question.Flashcard.Front;
-				BackText = question.Flashcard.Back;
-				ImageUri = question.Flashcard.ImageUrl != null
-					? new Uri(question.Flashcard.ImageUrl)
-					: null;
-			}
-			else
-			{
-				await _dialogService.DisplayAlertAsync("Koniec",
-					$"Znane: {_examiner.Questions.Count(x => x.Status == QuestionStatus.Known)} \n" +
-					$"Nieznane: {_examiner.Questions.Count(x => x.Status == QuestionStatus.Unknown)}",
-					"OK");
-				await _navigationService.GoBackAsync();
+				case RepeatingExaminer.NextSessionQuestion nextSessionQuestion:
+					await _dialogService.DisplayAlertAsync("Koniec sesji z pytaniami",
+						$"Znane: {_examiner.Questions.Count(x => x.Status == QuestionStatus.Known)} \n" +
+						$"Nieznane: {_examiner.Questions.Count(x => x.Status == QuestionStatus.Unknown)}",
+						"OK");
+					FrontText = nextSessionQuestion.Question.Front;
+					BackText = nextSessionQuestion.Question.Back;
+					ImageUri = nextSessionQuestion.Question.ImageUrl != null
+						? new Uri(nextSessionQuestion.Question.ImageUrl)
+						: null;
+					break;
+				case RepeatingExaminer.NoQuestions noQuestions:
+					await _dialogService.DisplayAlertAsync("Koniec",
+						$"Znane: {_examiner.Questions.Count(x => x.Status == QuestionStatus.Known)} \n" +
+						$"Nieznane: {_examiner.Questions.Count(x => x.Status == QuestionStatus.Unknown)}",
+						"OK");
+					await _navigationService.GoBackAsync();
+					break;
+				case RepeatingExaminer.SomeQuestion someQuestion:
+					FrontText = someQuestion.Question.Front;
+					BackText = someQuestion.Question.Back;
+					ImageUri = someQuestion.Question.ImageUrl != null
+						? new Uri(someQuestion.Question.ImageUrl)
+						: null;
+					break;
 			}
 		}
 

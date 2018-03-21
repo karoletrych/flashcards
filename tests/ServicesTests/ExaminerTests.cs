@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Flashcards.Models;
 using Flashcards.Services;
+using Flashcards.SpacedRepetition.Interface;
 using Xunit;
 
 namespace Flashcards.ServicesTests
@@ -11,7 +12,7 @@ namespace Flashcards.ServicesTests
     {
         public ExaminerTests()
         {
-            _examiner = new Examiner(_questions.Select(f=>new Question(f)), repeatFailedQuestions: false);
+            _examiner = new Examiner(_questions.Select(f=>new Question(f)));
         }
 
         private readonly Examiner _examiner;
@@ -47,9 +48,9 @@ namespace Flashcards.ServicesTests
             _examiner.TryAskNextQuestion(out var q2);
             _examiner.Answer(false);
 
-            Assert.Equal(q0.Flashcard, _questions[0]);
-            Assert.Equal(q1.Flashcard, _questions[1]);
-            Assert.Equal(q2.Flashcard, _questions[2]);
+            Assert.Equal(q0, _questions[0]);
+            Assert.Equal(q1, _questions[1]);
+            Assert.Equal(q2, _questions[2]);
         }
 
         [Fact]
@@ -76,5 +77,23 @@ namespace Flashcards.ServicesTests
                     _examiner.TryAskNextQuestion(out _);
                 });
         }
+
+	    [Fact]
+	    public async void QuestionResultsIsSet_WhenAllQuestionsAreAnswered()
+	    {
+		    _examiner.TryAskNextQuestion(out var _);
+		    _examiner.Answer(true);
+		    _examiner.TryAskNextQuestion(out var _);
+		    _examiner.Answer(false);
+		    _examiner.TryAskNextQuestion(out var _);
+		    _examiner.Answer(false);
+		    _examiner.TryAskNextQuestion(out var _);
+
+
+		    var questionResults = (await _examiner.QuestionResults.Task).ToList();
+		    Assert.True(questionResults[0].IsKnown);
+		    Assert.False(questionResults[1].IsKnown);
+		    Assert.False(questionResults[2].IsKnown);
+	    }
     }
 }

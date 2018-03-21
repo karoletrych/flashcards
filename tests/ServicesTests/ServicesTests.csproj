@@ -81,6 +81,7 @@
     <Compile Include="ImageUrlsProviderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ExaminerTests.cs" />
+    <Compile Include="RepeatingExaminerTests.cs" />
     <Compile Include="RepositoryTests.cs" />
     <Compile Include="TranslatorTests.cs" />
   </ItemGroup>
@@ -96,6 +97,10 @@
     <ProjectReference Include="..\..\src\Services\Services.csproj">
       <Project>{71E85B13-54C6-4A98-BC94-8379B3744844}</Project>
       <Name>Services</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\SpacedRepetition\Interface\Interface.csproj">
+      <Project>{FE8515BB-9A6A-453C-9309-B6BE2CE6C2CD}</Project>
+      <Name>Interface</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\src\Views\Views.csproj">
       <Project>{4DCD6756-8AE6-4567-A2B9-1B61165A1146}</Project>

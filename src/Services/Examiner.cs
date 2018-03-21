@@ -7,15 +7,13 @@ using Flashcards.SpacedRepetition.Interface;
 
 namespace Flashcards.Services
 {
-    public class Examiner
+    public class Examiner : IExaminer
     {
-        private readonly bool _repeatFailedQuestions;
         private readonly IList<Question> _askedQuestions = new List<Question>();
-        private readonly Queue<Question> _questionsToAsk;
+		private readonly Queue<Question> _questionsToAsk;
 
-        public Examiner(IEnumerable<Question> questions, bool repeatFailedQuestions)
+        public Examiner(IEnumerable<Question> questions)
         {
-            _repeatFailedQuestions = repeatFailedQuestions;
             _questionsToAsk = new Queue<Question>(questions);
         }
 
@@ -25,26 +23,28 @@ namespace Flashcards.Services
         public TaskCompletionSource<IEnumerable<QuestionResult>> QuestionResults { get; } 
             = new TaskCompletionSource<IEnumerable<QuestionResult>>();
 
-        public void Answer(bool isKnown)
+        public void Answer(bool known)
         {
-            _askedQuestions.Last().Status =
-                isKnown ? QuestionStatus.Known : QuestionStatus.Unknown;
-        }
+	        var question = _askedQuestions.Last();
+	        question.Status =
+		        known ? QuestionStatus.Known : QuestionStatus.Unknown;
+		}
 
-        public bool TryAskNextQuestion(out Question question)
+        public bool TryAskNextQuestion(out Flashcard flashcard)
         {
             if (_askedQuestions.Any() && _askedQuestions.Last().Status == QuestionStatus.NotAnswered)
                 throw new InvalidOperationException("Previous question has not been answered.");
 
             if (_questionsToAsk.Any())
             {
-                question = _questionsToAsk.Dequeue();
+                var question = _questionsToAsk.Dequeue();
                 _askedQuestions.Add(question);
+	            flashcard = question.Flashcard;
                 return true;
             }
 
-            QuestionResults.SetResult(_askedQuestions.Select(q => new QuestionResult(q.Flashcard, IsKnown(q.Status))));
-            question = null;
+			QuestionResults.SetResult(_askedQuestions.Select(q => new QuestionResult(q.Flashcard, IsKnown(q.Status))));
+	        flashcard = null;
             return false;
         }
 

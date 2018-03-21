@@ -60,19 +60,20 @@ namespace Flashcards.ViewModels
 		public ICommand AddLessonCommand =>
 			new Command(() => { _navigationService.NavigateAsync("AddLessonPage"); });
 
-		public ICommand PracticeLessonCommand => new Command<Lesson>(lesson =>
+		public ICommand PracticeLessonCommand => new Command<LessonViewModel>(async lesson =>
 		{
-			ExceptionHandler.HandleWithDialog(_dialogService, async () =>
-			{
-				var flashcards = await _flashcardRepository.Where(f => f.LessonId == lesson.Id);
-				var examiner = _examinerBuilder.WithFlashcards(flashcards).Build();
+			var flashcards = await _flashcardRepository.Where(f => f.LessonId == lesson.InternalLesson.Id);
+			var examiner = _examinerBuilder
+				.WithFlashcards(flashcards)
+				.WithRepeatingQuestions(true)
+				.WithAskingMode(lesson.InternalLesson.AskingMode)
+				.Build();
 
-				await _navigationService.NavigateAsync("AskingQuestionsPage", new NavigationParameters
+			await _navigationService.NavigateAsync("AskingQuestionsPage", new NavigationParameters
+			{
 				{
-					{
-						"examiner", examiner
-					}
-				});
+					"examiner", examiner
+				}
 			});
 		});
 
@@ -82,7 +83,7 @@ namespace Flashcards.ViewModels
 				await _navigationService.NavigateAsync("EditLessonPage", new NavigationParameters
 				{
 					{
-						"lessonId", lesson.Id
+						"lessonId", lesson.InternalLesson.Id
 					}
 				});
 			});
@@ -149,27 +150,25 @@ namespace Flashcards.ViewModels
 
 		public class LessonViewModel
 		{
-			public LessonViewModel(Lesson lesson, IEnumerable<Flashcard> learnedFlashcards)
+			public LessonViewModel(Lesson internalLesson, IEnumerable<Flashcard> learnedFlashcards)
 			{
-				var lessonFlashcardsCount = lesson.Flashcards.Count;
-				var learnedFlashcardsCount = lesson.Flashcards.Intersect(learnedFlashcards).Count();
+				var lessonFlashcardsCount = internalLesson.Flashcards.Count;
+				var learnedFlashcardsCount = internalLesson.Flashcards.Intersect(learnedFlashcards).Count();
 
-				Id = lesson.Id;
-				FrontLanguage = lesson.FrontLanguage;
-				BackLanguage = lesson.BackLanguage;
-				Name = lesson.Name;
+				FrontLanguage = internalLesson.FrontLanguage;
+				BackLanguage = internalLesson.BackLanguage;
+				Name = internalLesson.Name;
 				LearnedFlashcardsRatioString = learnedFlashcardsCount + "/" + lessonFlashcardsCount;
 				LearnedFlashcardsRatio = (double) learnedFlashcardsCount / lessonFlashcardsCount;
-				Lesson = lesson;
+				InternalLesson = internalLesson;
 			}
 
-			public string Id { get; }
 			public string Name { get; }
 			public Language BackLanguage { get; }
 			public Language FrontLanguage { get; }
 			public string LearnedFlashcardsRatioString { get; }
 			public double LearnedFlashcardsRatio { get; }
-			public Lesson Lesson { get; }
+			public Lesson InternalLesson { get; }
 		}
 	}
 }
