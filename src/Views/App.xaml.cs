@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using DLToolkit.Forms.Controls;
+using Flashcards.PlatformDependentTools;
 using Flashcards.Settings;
 using Flashcards.SpacedRepetition.Interface;
 using Flashcards.ViewModels;
@@ -44,7 +45,7 @@ namespace Flashcards.Views
 	        void InitializeSpacedRepetition()
 	        {
 		        var notificationScheduler = Container.Resolve<INotificationScheduler>();
-		        var repetitionTimeSetting = Container.Resolve<ISetting<DateTime>>();
+		        var repetitionTimeSetting = Container.Resolve<ISetting<TimeSpan>>();
 				notificationScheduler.Schedule(repetitionTimeSetting.Value);
 
 		        var initializers = Container.Resolve<IEnumerable<ISpacedRepetitionInitializer>>();

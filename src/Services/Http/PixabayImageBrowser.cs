@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Flashcards.Models;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Flashcards.Services.Http
@@ -19,7 +20,11 @@ namespace Flashcards.Services.Http
             _numberOfResults = numberOfResults;
         }
 
-        public async Task<IList<Uri>> Find(string query, Language queryLanguage)
+	    /// <exception cref="HttpRequestException">The request failed due to an underlying issue such as network connectivity, DNS failure, server certificate validation or timeout.</exception>
+	    /// <exception cref="JsonReaderException">
+	    ///                 <paramref name="json" /> is not valid JSON.
+	    ///             </exception>
+	    public async Task<IList<Uri>> Find(string query, Language queryLanguage)
         {
             var httpQuery =
                 new Uri("https://pixabay.com/api/?")

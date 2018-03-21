@@ -16,7 +16,8 @@ namespace Flashcards.Services.Http
 
         private readonly HttpClient _client = new HttpClient();
 
-        public async Task<IEnumerable<string>> Translate(Language from, Language to, string text)
+	    /// <exception cref="HttpRequestException">The request failed due to an underlying issue such as network connectivity, DNS failure, server certificate validation or timeout.</exception>
+	    public async Task<IEnumerable<string>> Translate(Language from, Language to, string text)
         {
             if (!text.Any())
                 return new List<string>();

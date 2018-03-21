@@ -1,4 +1,5 @@
 ﻿using System;
+using Flashcards.Services;
 using Flashcards.ViewModels;
 using Prism;
 using Prism.Autofac;
@@ -30,7 +31,7 @@ namespace Flashcards.Views
 		    try
 		    {
 			    var repetition = Container.Resolve<Repetition>();
-			    var flashcardsToAsk = await Container.Resolve<RepetitionFlashcardsRetriever>().FlashcardsToAsk();
+			    var flashcardsToAsk = await Container.Resolve<IRepetitionFlashcardsRetriever>().FlashcardsToAsk();
 			    await repetition.Repeat(NavigationService, flashcardsToAsk);
 		    }
 		    catch (Exception e)

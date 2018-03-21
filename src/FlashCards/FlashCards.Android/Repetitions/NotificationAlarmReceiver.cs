@@ -4,8 +4,8 @@ using Android.App;
 using Android.Content;
 using Android.Widget;
 using Autofac;
+using Flashcards.Services;
 using Flashcards.SpacedRepetition.Interface;
-using Flashcards.Views;
 
 namespace FlashCards.Droid.Repetitions
 {
@@ -17,10 +17,11 @@ namespace FlashCards.Droid.Repetitions
 			try
 			{
 				var container = IocRegistrations.DefaultContainer();
+				var flashcardsRetriever = container.Resolve<IRepetitionFlashcardsRetriever>();
 				var spacedRepetition = container.Resolve<ISpacedRepetition>();
 
 				spacedRepetition.Proceed();
-				var flashcards = await spacedRepetition.CurrentRepetitionFlashcards();
+				var flashcards = await flashcardsRetriever.FlashcardsToAsk();
 
 				if (flashcards.Any())
 				{

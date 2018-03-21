@@ -3,29 +3,55 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewModels="clr-namespace:Flashcards.ViewModels;assembly=ViewModels"
+             xmlns:converters="clr-namespace:Flashcards.Views.Converters;assembly=Views"
              x:Class="Flashcards.Views.AddLessonPage">
     <ContentPage.BindingContext>
         <viewModels:AddLessonViewModel />
     </ContentPage.BindingContext>
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:IntEnumConverter x:Key="IntEnum"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
     <ContentPage.Content>
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="85*"></RowDefinition>
-                <RowDefinition Height="15*"></RowDefinition>
+                <RowDefinition Height="85*" />
+                <RowDefinition Height="15*" />
             </Grid.RowDefinitions>
 
-            <StackLayout Grid.Row ="0">
-                <Entry Placeholder="Nazwa lekcji" Text="{Binding LessonName}" />
-                <StackLayout Orientation="Horizontal">
-                    <StackLayout Orientation="Horizontal" VerticalOptions="FillAndExpand">
+            <StackLayout Grid.Row="0">
+                <StackLayout>
+
+                    <Entry Placeholder="Nazwa lekcji"
+                            Text="{Binding LessonName}" />
+
+                    <StackLayout Orientation="Horizontal">
+                        <Label Text="Języki" 
+                               HorizontalOptions="StartAndExpand"/>
                         <Picker WidthRequest="100"
-                                ItemsSource="{Binding FrontLanguageNames}"
+                                ItemsSource="{Binding LanguageNames}"
                                 SelectedItem="{Binding SelectedFrontLanguage}" />
-                    </StackLayout>
-                    <Label Text="-" />
-                    <StackLayout Orientation="Horizontal" VerticalOptions="FillAndExpand">
-                        <Picker WidthRequest="100" ItemsSource="{Binding BackLanguageNames}"
+                        <Label Text="-" />
+                        <Picker WidthRequest="100" 
+                                ItemsSource="{Binding LanguageNames}"
                                 SelectedItem="{Binding SelectedBackLanguage}" />
+                    </StackLayout>
+
+                    <StackLayout Orientation="Horizontal">
+                        <Label Text="Powtórki"/>
+                        <Switch HorizontalOptions="EndAndExpand"
+                                IsToggled="{Binding AskInRepetitions}"
+                                WidthRequest="100" />
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal">
+                        <Label Text="Tryb pytania"/>
+                        <Picker HorizontalOptions="EndAndExpand"
+                                ItemsSource="{Binding AllAskingModes}"
+                                SelectedItem="{Binding AskingMode, Converter= {StaticResource IntEnum}}"
+                                WidthRequest="100" />
                     </StackLayout>
                 </StackLayout>
             </StackLayout>

@@ -1,4 +1,5 @@
 ﻿using System;
+using Flashcards.PlatformDependentTools;
 using Flashcards.Settings;
 using Flashcards.Views.CustomViews;
 using Xamarin.Forms;
@@ -8,29 +9,25 @@ namespace Flashcards.Views
 	public partial class SettingsPage : ContentPage
 	{
 		private readonly INotificationScheduler _notificationScheduler;
-		private readonly ISetting<DateTime> _repetitionTimeSetting;
+		private readonly ISetting<TimeSpan> _repetitionTimeSetting;
 
 		public SettingsPage (INotificationScheduler notificationScheduler, 
-			ISetting<DateTime> repetitionTimeSetting)
+			ISetting<TimeSpan> repetitionTimeSetting)
 		{
 			_notificationScheduler = notificationScheduler;
 			_repetitionTimeSetting = repetitionTimeSetting;
 			InitializeComponent();
 
-			var dateTime = _repetitionTimeSetting.Value;
-			TimePicker.Time = new TimeSpan(dateTime.Hour, dateTime.Minute, dateTime.Second);
-			TimePicker.TimeChanged += UpdatePeriod;
+			TimePicker.Time = _repetitionTimeSetting.Value;
+			TimePicker.TimeChanged += UpdateRepetitionTime;
 		}
 
-		private void UpdatePeriod(object sender, EventArgs e)
+		private void UpdateRepetitionTime(object sender, EventArgs e)
 		{
 			var time = ((TimePickerCell) sender).Time;
-
-			var dateTime = new DateTime()
-				.AddHours(time.Hours)
-				.AddMinutes(time.Minutes);
-			_repetitionTimeSetting.Value = dateTime;
-			_notificationScheduler.Schedule(dateTime);
+			
+			_repetitionTimeSetting.Value = time;
+			_notificationScheduler.Schedule(time);
 		}
 	}
 }

@@ -5,11 +5,12 @@
              x:Class="Flashcards.Views.LessonListPage"
              xmlns:customViews="clr-namespace:Flashcards.Views.CustomViews"
              xmlns:viewModels="clr-namespace:Flashcards.ViewModels;assembly=ViewModels"
-             xmlns:views="clr-namespace:Flashcards.Views;assembly=Views">
+             xmlns:views="clr-namespace:Flashcards.Views;assembly=Views"
+             xmlns:converters="clr-namespace:Flashcards.Views.Converters;assembly=Views">
 
     <ContentPage.Resources>
         <ResourceDictionary>
-            <views:LanguageToFlagConverter x:Key="LanguageToFlag" />
+            <converters:LanguageToFlagConverter x:Key="LanguageToFlag" />
         </ResourceDictionary>
     </ContentPage.Resources>
 
@@ -63,12 +64,6 @@
                 <customViews:CommandListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <ViewCell.ContextActions>
-                                <MenuItem
-                                    Command="{Binding Path=BindingContext.DeleteLessonCommand, Source={x:Reference LessonList}}"
-                                    CommandParameter="{Binding .}"
-                                    Text="Delete" IsDestructive="True" />
-                            </ViewCell.ContextActions>
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="20*" />

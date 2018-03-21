@@ -3,7 +3,7 @@ using System.Globalization;
 using Flashcards.Models;
 using Xamarin.Forms;
 
-namespace Flashcards.Views
+namespace Flashcards.Views.Converters
 {
     class LanguageToFlagConverter : IValueConverter
     {

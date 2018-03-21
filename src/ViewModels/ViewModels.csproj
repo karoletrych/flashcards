@@ -11,6 +11,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Models\Models.csproj" />
+    <ProjectReference Include="..\PlatformDependentTools\PlatformDependentTools.csproj" />
     <ProjectReference Include="..\Services\Services.csproj" />
     <ProjectReference Include="..\Settings\Settings.csproj">
       <Project>{D3AE7397-71D5-4954-B9F4-8128D21918AA}</Project>

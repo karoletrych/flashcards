@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Flashcards.Models;
+using Flashcards.PlatformDependentTools;
 using Flashcards.Services.DataAccess;
 using Flashcards.Services.Http;
 using Prism.Navigation;
@@ -15,11 +18,11 @@ namespace Flashcards.ViewModels
 	{
 		private const int ImagesNumber = 9;
 		private readonly IRepository<Flashcard> _flashcardRepository;
+		private readonly IRepository<Lesson> _lessonRepository;
 		private readonly IImageBrowser _imageBrowser;
-		private Language _frontLanguage;
-		private Language _backLanguage;
 		private readonly ITranslator _translator;
-		private string _lessonId;
+		private readonly IMessage _message;
+		private Lesson _lesson;
 
 		public AddFlashcardViewModel()
 		{
@@ -28,11 +31,15 @@ namespace Flashcards.ViewModels
 		public AddFlashcardViewModel(
 			ITranslator translator,
 			IRepository<Flashcard> flashcardRepository,
-			IImageBrowser imageBrowser)
+			IImageBrowser imageBrowser,
+			IRepository<Lesson> lessonRepository,
+			IMessage message)
 		{
 			_translator = translator;
 			_flashcardRepository = flashcardRepository;
 			_imageBrowser = imageBrowser;
+			_lessonRepository = lessonRepository;
+			_message = message;
 		}
 
 		public ObservableCollection<Uri> ImageUris { get; } = new ObservableCollection<Uri>(new Uri[ImagesNumber]);
@@ -45,11 +52,16 @@ namespace Flashcards.ViewModels
 
 		public ICommand NextFlashcardCommand => new Command(async () =>
 		{
+			if (!(await _lessonRepository.Where(l => l.Id == _lesson.Id)).Any())
+			{
+				await _lessonRepository.Insert(_lesson);
+			}
+
 			await _flashcardRepository.Insert(new Flashcard
 			{
 				Front = FrontText,
 				Back = BackText,
-				LessonId = _lessonId,
+				LessonId = _lesson.Id,
 				ImageUrl = SelectedImageUri?.AbsoluteUri
 			});
 
@@ -61,24 +73,30 @@ namespace Flashcards.ViewModels
 
 		public void OnNavigatedTo(NavigationParameters parameters)
 		{
-			_frontLanguage = (Language) parameters["frontLanguage"];
-			_backLanguage = (Language) parameters["backLanguage"];
-			_lessonId = (string) parameters["lessonId"];
+			_lesson = (Lesson) parameters["lesson"];
 		}
 
 		public void OnNavigatedFrom(NavigationParameters parameters)
 		{
-			parameters.Add("lessonId", _lessonId);
+			parameters.Add("lessonId", _lesson.Id);
 		}
 
+#pragma warning disable 0067
 		public event PropertyChangedEventHandler PropertyChanged;
-
+#pragma warning restore 0067
 
 		private async Task UpdateImages(Language language, string text)
 		{
-			var imageUris = await _imageBrowser.Find(text, language);
-			ImageUris.Clear();
-			foreach (var imageUri in imageUris) ImageUris.Add(imageUri);
+			try
+			{
+				var imageUris = await _imageBrowser.Find(text, language);
+				ImageUris.Clear();
+				foreach (var imageUri in imageUris) ImageUris.Add(imageUri);
+			}
+			catch (HttpRequestException e)
+			{
+				_message.LongAlert(e.ToString());
+			}
 		}
 
 		public async Task HandleFrontTextChangedByUser()
@@ -88,14 +106,22 @@ namespace Flashcards.ViewModels
 
 			async Task UpdateTranslation()
 			{
-				var translations = await _translator.Translate(
-					from: _frontLanguage,
-					to: _backLanguage,
-					text: FrontText);
-				BackText = string.Join("", translations);
+				try
+				{
+					var translations = await _translator.Translate(
+						from: _lesson.FrontLanguage,
+						to: _lesson.BackLanguage,
+						text: FrontText);
+					BackText = string.Join("", translations);
+				}
+				catch (HttpRequestException e)
+				{
+					_message.LongAlert(e.ToString());
+				}
+
 			}
 
-			var updateImages = UpdateImages(_frontLanguage, FrontText);
+			var updateImages = UpdateImages(_lesson.FrontLanguage, FrontText);
 
 			await Task.WhenAll(UpdateTranslation(), updateImages);
 		}
@@ -107,13 +133,17 @@ namespace Flashcards.ViewModels
 
 			async Task UpdateTranslation()
 			{
-				var translations = await _translator.Translate(
-					from: _backLanguage,
-					to: _frontLanguage,
-					text: BackText);
-				FrontText = string.Join("", translations);
+				try
+				{
+					var translations = await _translator.Translate(from: _lesson.BackLanguage, to: _lesson.FrontLanguage, text: BackText);
+					FrontText = string.Join("", translations);
+				}
+				catch (HttpRequestException e)
+				{
+					_message.LongAlert(e.ToString());
+				}
 			}
-			var updateImages = UpdateImages(_backLanguage, BackText);
+			var updateImages = UpdateImages(_lesson.BackLanguage, BackText);
 
 			await Task.WhenAll(UpdateTranslation(), updateImages);
 		}

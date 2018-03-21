@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Flashcards.Models;
+using Flashcards.PlatformDependentTools;
 using Flashcards.Services.DataAccess;
 using Flashcards.Services.Http;
 using Flashcards.ViewModels;
@@ -18,12 +19,16 @@ namespace ViewModelsTests
 
             var repository = Substitute.For<IRepository<Flashcard>>();
             var imageBrowser = Substitute.For<IImageBrowser>();
+            var lessonRepository = Substitute.For<IRepository<Lesson>>();
+            var message = Substitute.For<IMessage>();
 
             _viewModel = new AddFlashcardViewModel(
                 _translator,
                 repository,
-                imageBrowser
-            );
+                imageBrowser,
+                lessonRepository,
+				message
+			);
         }
 
         private readonly AddFlashcardViewModel _viewModel;

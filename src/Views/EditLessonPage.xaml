@@ -3,6 +3,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewModels="clr-namespace:Flashcards.ViewModels;assembly=ViewModels"
+             xmlns:converters="clr-namespace:Flashcards.Views.Converters;assembly=Views"
              x:Class="Flashcards.Views.EditLessonPage">
     <ContentPage.BindingContext>
         <viewModels:EditLessonViewModel />
@@ -11,33 +12,40 @@
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Dodaj fiszki" Command="{Binding AddFlashcardsCommand}" />
     </ContentPage.ToolbarItems>
+<!---->
+<!--    <ContentPage.Resources>-->
+<!--        <ResourceDictionary>-->
+<!--            <converters:IntEnumConverter x:Key="IntEnum"/>-->
+<!--        </ResourceDictionary>-->
+<!--    </ContentPage.Resources>-->
 
     <ContentPage.Content>
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="40*" />
-                <RowDefinition Height="60*" />
+                <RowDefinition Height="50*" />
+                <RowDefinition Height="10*" />
             </Grid.RowDefinitions>
 
             <StackLayout Grid.Row="0">
                 <StackLayout Orientation="Horizontal">
                     <Label Text="Nazwa" FontSize="Small" />
                     <Entry HorizontalOptions="EndAndExpand"
-                           Text="{Binding LessonName}"
+                           Text="{Binding LessonName, Mode=TwoWay}"
                            WidthRequest="100"
                            FontSize="Small" />
                 </StackLayout>
                 <StackLayout Orientation="Horizontal">
                     <Label Text="Powtórki" FontSize="Small" />
                     <Switch HorizontalOptions="EndAndExpand"
-                            IsToggled="{Binding AskInRepetitions}"
+                            IsToggled="{Binding AskInRepetitions, Mode=TwoWay}"
                             WidthRequest="100" />
                 </StackLayout>
                 <StackLayout Orientation="Horizontal">
                     <Label Text="Tryb pytania" FontSize="Small" />
                     <Picker HorizontalOptions="EndAndExpand"
                             ItemsSource="{Binding AllAskingModes}"
-                            SelectedItem="{Binding AskingMode}"
+                            SelectedItem="{Binding AskingMode, Mode=TwoWay}"
                             WidthRequest="100" />
                 </StackLayout>
             </StackLayout>
@@ -63,7 +71,8 @@
                                         HorizontalOptions="End"
                                         Image="ic_delete_red_dark_18dp.png"
                                         CommandParameter="{Binding Id}"
-                                        Command="{Binding Path=BindingContext.DeleteFlashcardCommand, Source={x:Reference FlashcardList}}"
+                                        Command="{Binding Path=BindingContext.DeleteFlashcardCommand,
+                                            Source={x:Reference FlashcardList}}"
                                         Grid.Column="2" />
                                 </Grid>
                             </ViewCell>
@@ -71,6 +80,7 @@
                     </ListView.ItemTemplate>
                 </ListView>
             </StackLayout>
+            <Button Grid.Row="2" Text ="Usuń lekcję" BackgroundColor="Red" Command="{Binding DeleteLessonCommand}" />
         </Grid>
     </ContentPage.Content>
 </ContentPage>

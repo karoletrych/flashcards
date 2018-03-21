@@ -3,86 +3,83 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
 using Flashcards.Models;
-using Flashcards.Services.DataAccess;
+using Flashcards.PlatformDependentTools;
 using Prism.Navigation;
 using Prism.Services;
 using Xamarin.Forms;
 
 namespace Flashcards.ViewModels
 {
-    public class AddLessonViewModel
-    {
-        private readonly IRepository<Lesson> _lessonRepository;
-        private readonly INavigationService _navigationService;
-        private readonly IPageDialogService _dialogService;
+	public class AddLessonViewModel
+	{
+		private readonly IMessage _message;
+		private readonly INavigationService _navigationService;
 
-	    public AddLessonViewModel()
-	    {
-		    
-	    }
+		public AddLessonViewModel()
+		{
+		}
 
-        public AddLessonViewModel(
-            INavigationService navigationService,
-            IPageDialogService pageDialogService,
-            IRepository<Lesson> lessonRepository) =>
-            (_navigationService, _dialogService, _lessonRepository) = 
-                (navigationService, pageDialogService, lessonRepository);
+		public AddLessonViewModel(
+			INavigationService navigationService,
+			IMessage message)
+		{
+			(_navigationService, _message) =
+				(navigationService, message);
+		}
 
-        public IList<string> FrontLanguageNames =>
-            Enum.GetNames(typeof(Language))
-                .OrderBy(language => language).ToList();
+		public IList<string> LanguageNames =>
+			Enum.GetNames(typeof(Language))
+				.OrderBy(language => language).ToList();
 
-        public IList<string> BackLanguageNames =>
-            Enum.GetNames(typeof(Language))
-                .OrderBy(language => language).ToList();
 
-        public string SelectedFrontLanguage { get; set; }
-        public string SelectedBackLanguage { get; set; }
-        public string LessonName { get; set; }
+		public string SelectedFrontLanguage { get; set; }
+		public string SelectedBackLanguage { get; set; }
+		public string LessonName { get; set; }
+		public IList<string> AllAskingModes => Enum.GetNames(typeof(AskingMode));
+		public bool AskInRepetitions { get; set; }
+		public AskingMode AskingMode { get; set; }
 
-	    public ICommand AddFlashcards => new Command(async () =>
-	    {
-		    var frontLanguage = SelectedFrontLanguage.ToLanguageEnum();
-		    var backLanguage = SelectedBackLanguage.ToLanguageEnum();
-		    var lessonId = Guid.NewGuid().ToString();
-		    if (string.IsNullOrWhiteSpace(LessonName))
-		    {
-			    await _dialogService.DisplayAlertAsync("Błąd", "Nazwa lekcji nie może być pusta", "OK");
+
+		public ICommand AddFlashcards => new Command(async () =>
+		{
+			if (string.IsNullOrWhiteSpace(LessonName))
+			{
+				_message.ShortAlert("Podaj nazwę lekcji");
 				return;
-		    }
-		    if (string.IsNullOrWhiteSpace(SelectedFrontLanguage))
-		    {
-			    await _dialogService.DisplayAlertAsync("Błąd", "Wybierz język frontu fiszek", "OK");
-			    return;
-			}
-		    if (string.IsNullOrWhiteSpace(SelectedBackLanguage))
-		    {
-			    await _dialogService.DisplayAlertAsync("Błąd", "Wybierz język tyłu fiszek", "OK");
-			    return;
 			}
 
-			var lesson = new Models.Lesson
-		    {
-			    Id = lessonId,
-			    Name = LessonName,
-			    BackLanguage = backLanguage,
-			    FrontLanguage = frontLanguage
-		    };
-		    await _lessonRepository.Insert(lesson);
+			if (string.IsNullOrWhiteSpace(SelectedFrontLanguage))
+			{
+				_message.ShortAlert("Wybierz język frontu fiszek");
+				return;
+			}
 
-		    await _navigationService.NavigateAsync("AddFlashcardPage",
-			    new NavigationParameters
-			    {
-				    {
-					    "frontLanguage", frontLanguage
-				    },
-				    {
-					    "backLanguage", backLanguage
-				    },
-				    {
-					    "lessonId", lessonId
-				    }
-			    });
-	    });
-    }
+			if (string.IsNullOrWhiteSpace(SelectedBackLanguage))
+			{
+				_message.ShortAlert("Wybierz język tyłu fiszek");
+				return;
+			}
+
+			var frontLanguage = SelectedFrontLanguage.ToLanguageEnum();
+			var backLanguage = SelectedBackLanguage.ToLanguageEnum();
+			var lessonId = Guid.NewGuid().ToString();
+			var lesson = new Lesson
+			{
+				Id = lessonId,
+				Name = LessonName,
+				BackLanguage = backLanguage,
+				FrontLanguage = frontLanguage,
+				AskingMode = AskingMode,
+				AskInRepetitions = AskInRepetitions
+			};
+
+			await _navigationService.NavigateAsync("AddFlashcardPage",
+				new NavigationParameters
+				{
+					{
+						"lesson", lesson
+					}
+				});
+		});
+	}
 }

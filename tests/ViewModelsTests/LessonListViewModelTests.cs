@@ -24,8 +24,8 @@ namespace ViewModelsTests
             var repetition = Substitute.For<IRepetition>();
 
 
-            _lessonListViewModel = new LessonListViewModel(lessonRepository, navigationService, pageDialogService,
-                flashcardRepository, new ExaminerBuilder(), spacedRepetition, repetition);
+//            _lessonListViewModel = new LessonListViewModel(lessonRepository, navigationService, pageDialogService,
+//                flashcardRepository, new ExaminerBuilder(), spacedRepetition, repetition, new Re);
         }
 
         [Fact]

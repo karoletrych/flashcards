@@ -6,9 +6,14 @@ using Flashcards.Services.DataAccess;
 using Flashcards.Settings;
 using Flashcards.SpacedRepetition.Interface;
 
-namespace Flashcards.ViewModels
+namespace Flashcards.Services
 {
-	public class RepetitionFlashcardsRetriever
+	public interface IRepetitionFlashcardsRetriever
+	{
+		Task<List<Flashcard>> FlashcardsToAsk();
+	}
+
+	class RepetitionFlashcardsRetriever : IRepetitionFlashcardsRetriever
 	{
 		private readonly IRepository<Lesson> _lessonRepository;
 		private readonly ISetting<int> _maximumFlashcardsInRepetitionSetting;

@@ -36,12 +36,17 @@ namespace LeitnerTests
 
 			_leitner = new LeitnerRepetition(
 				_deckRepository,
-				new MockSessionSetting());
+				new MockSessionSetting(),
+				new MockRepetitionTodaySetting());
 		}
 
 		private class MockSessionSetting : ISetting<int>
 		{
 			public int Value { get; set; }
+		}
+		private class MockRepetitionTodaySetting : ISetting<bool>
+		{
+			public bool Value { get; set; }
 		}
 
 		private const int FlashcardCount = 20;

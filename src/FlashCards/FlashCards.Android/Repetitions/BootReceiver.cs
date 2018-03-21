@@ -19,7 +19,7 @@ namespace FlashCards.Droid.Repetitions
 		{
 			var notificationScheduler = new NotificationAlarmScheduler(context);
 			var repetitionTime = 
-				IocRegistrations.DefaultContainer().ResolveNamed<ISetting<DateTime>>("RepetitionTimeSetting");
+				IocRegistrations.DefaultContainer().ResolveNamed<ISetting<TimeSpan>>("RepetitionTimeSetting");
 			notificationScheduler.Schedule(repetitionTime.Value);
 		}
 	}

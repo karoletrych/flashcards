@@ -4,6 +4,7 @@ using System.Reflection;
 using Autofac;
 using Flashcards.Droid;
 using Flashcards.Models;
+using Flashcards.PlatformDependentTools;
 using Flashcards.Services.DataAccess;
 using Flashcards.Services.DataAccess.Database;
 using Flashcards.Services.Http;
@@ -30,7 +31,9 @@ namespace FlashCards.Droid
                 Assembly.GetAssembly(typeof(Algorithm.LeitnerRepetition)),
 				Assembly.GetAssembly(typeof(MainActivity)),
 	            Assembly.GetAssembly(typeof(SettingsModule)),
+	            Assembly.GetAssembly(typeof(IMessage)),
 			};
+
             containerBuilder
                 .RegisterAssemblyTypes(assemblies)
                 .AsSelf()

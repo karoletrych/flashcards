@@ -16,9 +16,19 @@ namespace Flashcards.Views
             Device.OpenUri(new Uri("http://translate.yandex.com"));
         }
 
+	    private async void FrontEntry_OnUnfocused(object sender, EventArgs e)
+	    {
+		    await ((AddFlashcardViewModel)BindingContext).HandleFrontTextChangedByUser();
+	    }
+
 	    private async void FrontEntry_OnCompleted(object sender, EventArgs e)
 	    {
-		    await ((AddFlashcardViewModel) BindingContext).HandleFrontTextChangedByUser();
+		    await ((AddFlashcardViewModel)BindingContext).HandleFrontTextChangedByUser();
+	    }
+
+		private async void BackEntry_OnUnfocused(object sender, EventArgs e)
+	    {
+		    await ((AddFlashcardViewModel)BindingContext).HandleBackTextChangedByUser();
 	    }
 
 	    private async void BackEntry_OnCompleted(object sender, EventArgs e)

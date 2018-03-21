@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Flashcards.Models;
 using Flashcards.Services.DataAccess;
 using Prism.Navigation;
+using Prism.Services;
 using Xamarin.Forms;
 
 namespace Flashcards.ViewModels
@@ -16,9 +18,9 @@ namespace Flashcards.ViewModels
 		private readonly IRepository<Lesson> _lessonRepository;
 		private readonly INavigationService _navigationService;
 		private readonly IRepository<Flashcard> _flashcardRepository;
+		private readonly IPageDialogService _dialogService;
 
 		private Lesson _lesson;
-		public string LessonName { get; set; }
 
 		public EditLessonViewModel()
 		{
@@ -27,11 +29,13 @@ namespace Flashcards.ViewModels
 		public EditLessonViewModel(
 			INavigationService navigationService, 
 			IRepository<Lesson> lessonRepository, 
-			IRepository<Flashcard> flashcardRepository)
+			IRepository<Flashcard> flashcardRepository,
+			IPageDialogService dialogService)
 		{
 			_navigationService = navigationService;
 			_lessonRepository = lessonRepository;
 			_flashcardRepository = flashcardRepository;
+			_dialogService = dialogService;
 		}
 
 		public ObservableCollection<Flashcard> Flashcards { get; set; } =
@@ -41,20 +45,41 @@ namespace Flashcards.ViewModels
 			_navigationService.NavigateAsync("AddFlashcardPage", new NavigationParameters
 			{
 				{
-					"frontLanguage", _lesson.FrontLanguage
-				},
-				{
-					"backLanguage", _lesson.BackLanguage
-				},
-				{
-					"lessonId", _lesson.Id
+					"lesson", _lesson
 				}
 			}));
 
-		public string AskingMode { get; set; }
-		public IList<string> AllAskingModes => Enum.GetNames(typeof(AskingMode));
+		public string LessonName
+		{
+			get => _lesson?.Name ?? "";
+			set
+			{
+				_lesson.Name = value;
+				_lessonRepository.Update(_lesson);
+			}
+		}
 
-		public bool AskInRepetitions { get; set; }
+		public AskingMode AskingMode
+		{
+			get => _lesson?.AskingMode ?? default(AskingMode);
+			set
+			{
+				_lesson.AskingMode = value;
+				_lessonRepository.Update(_lesson);
+			}
+		}
+
+		public bool AskInRepetitions
+		{
+			get => _lesson?.AskInRepetitions ?? default(bool);
+			set
+			{
+				_lesson.AskInRepetitions = value;
+				_lessonRepository.Update(_lesson);
+			}
+		}
+
+		public IList<string> AllAskingModes => Enum.GetNames(typeof(AskingMode));
 
 		public ICommand DeleteFlashcardCommand => new Command<int>(async flashcardId =>
 		{
@@ -63,19 +88,34 @@ namespace Flashcards.ViewModels
 			Flashcards.Remove(flashcardToRemove);
 		});
 
+		public ICommand DeleteLessonCommand => new Command(async () =>
+		{
+			var sure = await _dialogService.DisplayAlertAsync("Warning", "Are you sure?", "Yes", "No");
+			if (sure)
+			{
+				await _lessonRepository.Delete(_lesson);
+				await _navigationService.GoBackAsync();
+			}
+		});
+
 		public async void OnNavigatedTo(NavigationParameters parameters)
 		{
 			var lessonId = (string)parameters["lessonId"];
 
 			_lesson = (await _lessonRepository.Where(lesson => lesson.Id == lessonId)).Single();
 
-			AskInRepetitions = _lesson.AskInRepetitions;
-			AskingMode = _lesson.AskingMode.ToString();
-			LessonName = _lesson.Name;
+			OnPropertyChanged(nameof(LessonName));
+			OnPropertyChanged(nameof(AskingMode));
+			OnPropertyChanged(nameof(AskInRepetitions));
 
 			Flashcards.Clear();
-			foreach (var flashcard in _lesson.Flashcards) Flashcards.Add(flashcard);
+			foreach (var flashcard in _lesson.Flashcards)
+				Flashcards.Add(flashcard);
+		}
 
+		private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+		{
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName: propertyName));
 		}
 
 		public void OnNavigatedFrom(NavigationParameters parameters)
