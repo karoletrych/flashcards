@@ -8,6 +8,7 @@ using System.Windows.Input;
 using Flashcards.Models;
 using Flashcards.Services;
 using Flashcards.Services.DataAccess;
+using Flashcards.Services.Examiner;
 using Flashcards.SpacedRepetition.Interface;
 using Prism.Navigation;
 using Prism.Services;

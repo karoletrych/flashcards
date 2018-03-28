@@ -1,4 +1,4 @@
-namespace Flashcards.Services
+namespace Flashcards.Services.Examiner
 {
     public enum QuestionStatus
     {

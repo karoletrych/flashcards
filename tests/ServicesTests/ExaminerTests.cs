@@ -2,8 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Flashcards.Models;
-using Flashcards.Services;
-using Flashcards.SpacedRepetition.Interface;
+using Flashcards.Services.Examiner;
 using Xunit;
 
 namespace Flashcards.ServicesTests
@@ -12,30 +11,28 @@ namespace Flashcards.ServicesTests
     {
         public ExaminerTests()
         {
-            _examiner = new Examiner(_questions.Select(f=>new Question(f)));
+            _examiner = new Examiner(_questions);
         }
 
         private readonly Examiner _examiner;
 
         private readonly IList<Flashcard> _questions = new[]
         {
-            new Flashcard{Front = "dog", Back = "pies"},
-            new Flashcard{Front = "cat", Back = "kot"},
-            new Flashcard{Front = "duck", Back = "kaczka"}
+            new Flashcard {Front = "dog", Back = "pies"},
+            new Flashcard {Front = "cat", Back = "kot"},
+            new Flashcard {Front = "duck", Back = "kaczka"}
         };
 
         [Fact]
-        public void WhenNoQuestions_FalseIsReturned()
+        public void AnsweringTwiceSameQuestion_CausesException()
         {
-
-            _examiner.TryAskNextQuestion(out _);
-            _examiner.Answer(true);
-            _examiner.TryAskNextQuestion(out _);
-            _examiner.Answer(false);
-            _examiner.TryAskNextQuestion(out _);
-            _examiner.Answer(false);
-
-            Assert.False(_examiner.TryAskNextQuestion(out _));
+            Assert.Throws<InvalidOperationException>(
+                () =>
+                {
+                    _examiner.TryAskNextQuestion(out _);
+                    _examiner.Answer(true);
+                    _examiner.Answer(false);
+                });
         }
 
         [Fact]
@@ -54,18 +51,28 @@ namespace Flashcards.ServicesTests
         }
 
         [Fact]
-        public void QuestionsStatusesCorrespondToAnswers()
+        public void QuestionResultsIsSet_WhenAllQuestionsAreAnswered()
         {
-            _examiner.TryAskNextQuestion(out _);
-            _examiner.Answer(true);
-            _examiner.TryAskNextQuestion(out _);
-            _examiner.Answer(false);
+            var raisedEvent = Assert.Raises<QuestionResultsEventArgs>(
+                h => _examiner.QuestionsAnswered += h,
+                h => _examiner.QuestionsAnswered -= h,
+                () =>
+                {
+                    _examiner.TryAskNextQuestion(out var _);
+                    _examiner.Answer(true);
+                    _examiner.TryAskNextQuestion(out var _);
+                    _examiner.Answer(false);
+                    _examiner.TryAskNextQuestion(out var _);
+                    _examiner.Answer(false);
+                    _examiner.TryAskNextQuestion(out var _);
+                });
 
-            var statuses = _examiner.Questions.Select(q => q.Status).ToList();
-            Assert.Equal(QuestionStatus.Known, statuses[0]);
-            Assert.Equal(QuestionStatus.Unknown, statuses[1]);
-            Assert.Equal(QuestionStatus.NotAnswered, statuses[2]);
+            var questionResults = raisedEvent.Arguments.Results.ToList();
+            Assert.True(questionResults[0].IsKnown);
+            Assert.False(questionResults[1].IsKnown);
+            Assert.False(questionResults[2].IsKnown);
         }
+
 
         [Fact]
         public void TrainingSetThrowsException_QuestionWasNotAnsweredAndNextIsAsked()
@@ -78,22 +85,17 @@ namespace Flashcards.ServicesTests
                 });
         }
 
-	    [Fact]
-	    public async void QuestionResultsIsSet_WhenAllQuestionsAreAnswered()
-	    {
-		    _examiner.TryAskNextQuestion(out var _);
-		    _examiner.Answer(true);
-		    _examiner.TryAskNextQuestion(out var _);
-		    _examiner.Answer(false);
-		    _examiner.TryAskNextQuestion(out var _);
-		    _examiner.Answer(false);
-		    _examiner.TryAskNextQuestion(out var _);
+        [Fact]
+        public void WhenNoQuestions_FalseIsReturned()
+        {
+            _examiner.TryAskNextQuestion(out _);
+            _examiner.Answer(true);
+            _examiner.TryAskNextQuestion(out _);
+            _examiner.Answer(false);
+            _examiner.TryAskNextQuestion(out _);
+            _examiner.Answer(false);
 
-
-		    var questionResults = (await _examiner.QuestionResults.Task).ToList();
-		    Assert.True(questionResults[0].IsKnown);
-		    Assert.False(questionResults[1].IsKnown);
-		    Assert.False(questionResults[2].IsKnown);
-	    }
+            Assert.False(_examiner.TryAskNextQuestion(out _));
+        }
     }
 }

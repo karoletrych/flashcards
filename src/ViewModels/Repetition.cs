@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Flashcards.Models;
 using Flashcards.Services;
+using Flashcards.Services.Examiner;
 using Flashcards.Settings;
 using Flashcards.SpacedRepetition.Interface;
 using Prism.Navigation;
@@ -42,9 +43,9 @@ namespace Flashcards.ViewModels
 						examiner
 					}
 				});
-			var results = await examiner.QuestionResults.Task;
-
-			_spacedRepetition.RearrangeFlashcards(results);
+			examiner.QuestionsAnswered +=
+				(obj, args) =>
+					_spacedRepetition.RearrangeFlashcards(args.Results);
 		}
 	}
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Flashcards.Models;
 
-namespace Flashcards.Services
+namespace Flashcards.Services.Examiner
 {
     public class ExaminerBuilder
     {
@@ -29,7 +29,7 @@ namespace Flashcards.Services
             return this;
         }
 
-        public IRepeatingExaminer Build()
+        public IExaminer Build()
         {
             if (_flashcards == null)
                 throw new InvalidOperationException();
@@ -39,13 +39,13 @@ namespace Flashcards.Services
             switch (_askingMode)
             {
                 case AskingMode.Front:
-                    return new RepeatingExaminer(_flashcards.Select(flashcard => new Question(flashcard)));
+                    return new RepeatingExaminer(_flashcards.Select(flashcard => new Question(flashcard)), new ExaminerBuilder());
                 case AskingMode.Back:
-                    return new RepeatingExaminer(_flashcards.Select(flashcard => new Question(Invert(flashcard))));
+                    return new RepeatingExaminer(_flashcards.Select(flashcard => new Question(Invert(flashcard))), new ExaminerBuilder());
                 case AskingMode.Random:
                     return new RepeatingExaminer(
                         _flashcards.Select(flashcard =>
-                            new Question(random.NextDouble() > 0.5 ? flashcard : Invert(flashcard))));
+                            random.NextDouble() > 0.5 ? flashcard : Invert(flashcard)), new ExaminerBuilder());
                 default:
                     throw new ArgumentOutOfRangeException();
             }

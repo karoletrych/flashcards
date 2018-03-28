@@ -5,18 +5,19 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Flashcards.Services;
+using Flashcards.Services.Examiner;
 using Prism.Navigation;
 using Prism.Services;
 using Xamarin.Forms;
 
 namespace Flashcards.ViewModels
 {
-	public class AskingQuestionsViewModel : INotifyPropertyChanged, INavigationAware
+	public class AskingQuestionsViewModel : INotifyPropertyChanged, INavigatedAware
 	{
 		private readonly IPageDialogService _dialogService;
 		private readonly INavigationService _navigationService;
 
-		private IRepeatingExaminer _examiner;
+		private IExaminer _examiner;
 		private bool _frontIsVisible;
 
 		private IList<StepItem> _questionStatuses = new List<StepItem>
@@ -78,7 +79,7 @@ namespace Flashcards.ViewModels
 
 
 			FrontIsVisible = false;
-			ShowNextQuestionOrFinishAsking();
+			ShowNextQuestion();
 
 			UpdateQuestionStatuses();
 		});
@@ -93,80 +94,41 @@ namespace Flashcards.ViewModels
 
 		public void OnNavigatedTo(NavigationParameters parameters)
 		{
+			_examiner = (IExaminer)parameters["examiner"];
+			_examiner.QuestionsAnswered +=
+				async (sender, args) =>
+				{
+					await _dialogService.DisplayAlertAsync("Koniec",
+						$"Znane: {args.Results.Count(x => x.IsKnown)} \n" +
+						$"Nieznane: {args.Results.Count(x => !x.IsKnown)}",
+						"OK");
+					if (args.Results.All(r => r.IsKnown))
+					{
+						await _navigationService.GoBackAsync();
+					}
+				};
+			ShowNextQuestion();
 		}
 
 		public void OnNavigatedFrom(NavigationParameters parameters)
 		{
 		}
 
-		public void OnNavigatingTo(NavigationParameters parameters)
-		{
-			_examiner = (IRepeatingExaminer) parameters["examiner"];
-			ShowNextQuestionOrFinishAsking();
-		}
-
 		public event PropertyChangedEventHandler PropertyChanged;
 
 		private void UpdateQuestionStatuses()
 		{
-			QuestionStatuses = _examiner.Questions.Select(question =>
-			{
-				switch (question.Status)
-				{
-					case QuestionStatus.Known:
-						return new StepItem
-						{
-							Color = Color.GreenYellow,
-							Value = 1
-						};
-					case QuestionStatus.Unknown:
-						return new StepItem
-						{
-							Color = Color.Red,
-							Value = 1
-						};
-					case QuestionStatus.NotAnswered:
-						return new StepItem
-						{
-							Color = Color.Gray,
-							Value = 1
-						};
-					default:
-						throw new ArgumentOutOfRangeException(nameof(question), question, null);
-				}
-			}).ToList();
 		}
 
-		private async void ShowNextQuestionOrFinishAsking()
+		private void ShowNextQuestion()
 		{
-			var question = _examiner.TryAskNextQuestion();
-			switch (question)
+			if (_examiner.TryAskNextQuestion(out var question))
 			{
-				case RepeatingExaminer.NextSessionQuestion nextSessionQuestion:
-					await _dialogService.DisplayAlertAsync("Koniec sesji z pytaniami",
-						$"Znane: {_examiner.Questions.Count(x => x.Status == QuestionStatus.Known)} \n" +
-						$"Nieznane: {_examiner.Questions.Count(x => x.Status == QuestionStatus.Unknown)}",
-						"OK");
-					FrontText = nextSessionQuestion.Question.Front;
-					BackText = nextSessionQuestion.Question.Back;
-					ImageUri = nextSessionQuestion.Question.ImageUrl != null
-						? new Uri(nextSessionQuestion.Question.ImageUrl)
-						: null;
-					break;
-				case RepeatingExaminer.NoQuestions noQuestions:
-					await _dialogService.DisplayAlertAsync("Koniec",
-						$"Znane: {_examiner.Questions.Count(x => x.Status == QuestionStatus.Known)} \n" +
-						$"Nieznane: {_examiner.Questions.Count(x => x.Status == QuestionStatus.Unknown)}",
-						"OK");
-					await _navigationService.GoBackAsync();
-					break;
-				case RepeatingExaminer.SomeQuestion someQuestion:
-					FrontText = someQuestion.Question.Front;
-					BackText = someQuestion.Question.Back;
-					ImageUri = someQuestion.Question.ImageUrl != null
-						? new Uri(someQuestion.Question.ImageUrl)
-						: null;
-					break;
+				FrontText = question.Front;
+				BackText = question.Back;
+				ImageUri = question.ImageUrl != null
+					? new Uri(question.ImageUrl)
+					: null;
 			}
 		}
 
