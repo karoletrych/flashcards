@@ -95,7 +95,7 @@ namespace Flashcards.ViewModels
 		public void OnNavigatedTo(NavigationParameters parameters)
 		{
 			_examiner = (IExaminer)parameters["examiner"];
-			_examiner.QuestionsAnswered +=
+			_examiner.SessionEnded +=
 				async (sender, args) =>
 				{
 					await _dialogService.DisplayAlertAsync("Koniec",

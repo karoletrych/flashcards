@@ -12,12 +12,12 @@
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Dodaj fiszki" Command="{Binding AddFlashcardsCommand}" />
     </ContentPage.ToolbarItems>
-<!---->
-<!--    <ContentPage.Resources>-->
-<!--        <ResourceDictionary>-->
-<!--            <converters:IntEnumConverter x:Key="IntEnum"/>-->
-<!--        </ResourceDictionary>-->
-<!--    </ContentPage.Resources>-->
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:IntEnumConverter x:Key="IntEnum"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
 
     <ContentPage.Content>
         <Grid>
@@ -45,7 +45,7 @@
                     <Label Text="Tryb pytania" FontSize="Small" />
                     <Picker HorizontalOptions="EndAndExpand"
                             ItemsSource="{Binding AllAskingModes}"
-                            SelectedItem="{Binding AskingMode, Mode=TwoWay}"
+                            SelectedIndex="{Binding AskingMode, Converter={StaticResource IntEnum}}"
                             WidthRequest="100" />
                 </StackLayout>
             </StackLayout>

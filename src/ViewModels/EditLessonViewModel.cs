@@ -54,8 +54,11 @@ namespace Flashcards.ViewModels
 			get => _lesson?.Name ?? "";
 			set
 			{
-				_lesson.Name = value;
-				_lessonRepository.Update(_lesson);
+				if (_lesson != null)
+				{
+					_lesson.Name = value;
+					_lessonRepository.Update(_lesson);
+				}
 			}
 		}
 
@@ -64,8 +67,11 @@ namespace Flashcards.ViewModels
 			get => _lesson?.AskingMode ?? default(AskingMode);
 			set
 			{
-				_lesson.AskingMode = value;
-				_lessonRepository.Update(_lesson);
+				if (_lesson != null && (int)value != -1) // prevents xamarin from setting default value when navigating back
+				{
+					_lesson.AskingMode = value;
+					_lessonRepository.Update(_lesson);
+				}
 			}
 		}
 

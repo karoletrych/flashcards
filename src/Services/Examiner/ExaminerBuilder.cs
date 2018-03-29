@@ -39,13 +39,13 @@ namespace Flashcards.Services.Examiner
             switch (_askingMode)
             {
                 case AskingMode.Front:
-                    return new RepeatingExaminer(_flashcards.Select(flashcard => new Question(flashcard)), new ExaminerBuilder());
+                    return new Examiner(_flashcards);
                 case AskingMode.Back:
-                    return new RepeatingExaminer(_flashcards.Select(flashcard => new Question(Invert(flashcard))), new ExaminerBuilder());
+                    return new Examiner(_flashcards.Select(flashcard => flashcard));
                 case AskingMode.Random:
-                    return new RepeatingExaminer(
+                    return new Examiner(
                         _flashcards.Select(flashcard =>
-                            random.NextDouble() > 0.5 ? flashcard : Invert(flashcard)), new ExaminerBuilder());
+                            random.NextDouble() > 0.5 ? flashcard : Invert(flashcard)));
                 default:
                     throw new ArgumentOutOfRangeException();
             }

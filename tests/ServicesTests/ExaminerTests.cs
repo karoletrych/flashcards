@@ -51,11 +51,11 @@ namespace Flashcards.ServicesTests
         }
 
         [Fact]
-        public void QuestionResultsIsSet_WhenAllQuestionsAreAnswered()
+        public void SessionEnded_IsRaised_WhenAllQuestionsAreAnswered()
         {
             var raisedEvent = Assert.Raises<QuestionResultsEventArgs>(
-                h => _examiner.QuestionsAnswered += h,
-                h => _examiner.QuestionsAnswered -= h,
+                h => _examiner.SessionEnded += h,
+                h => _examiner.SessionEnded -= h,
                 () =>
                 {
                     _examiner.TryAskNextQuestion(out var _);
@@ -73,8 +73,32 @@ namespace Flashcards.ServicesTests
             Assert.False(questionResults[2].IsKnown);
         }
 
+	    [Fact]
+	    public void SessionEnded_IsRaised_AfterEachSession()
+	    {
+		    var i = 0;
 
-        [Fact]
+		    _examiner.SessionEnded += (sender, args) => i++;
+
+			_examiner.TryAskNextQuestion(out var _);
+			_examiner.Answer(true);
+			_examiner.TryAskNextQuestion(out var _);
+			_examiner.Answer(false);
+			_examiner.TryAskNextQuestion(out var _);
+			_examiner.Answer(false);
+
+			_examiner.TryAskNextQuestion(out var _);
+			_examiner.Answer(true);
+			_examiner.TryAskNextQuestion(out var _);
+			_examiner.Answer(false);
+
+			_examiner.TryAskNextQuestion(out var _);
+			_examiner.Answer(true);
+
+			Assert.Equal(3, i);
+	    }
+
+		[Fact]
         public void TrainingSetThrowsException_QuestionWasNotAnsweredAndNextIsAsked()
         {
             Assert.Throws<InvalidOperationException>(
@@ -91,11 +115,29 @@ namespace Flashcards.ServicesTests
             _examiner.TryAskNextQuestion(out _);
             _examiner.Answer(true);
             _examiner.TryAskNextQuestion(out _);
-            _examiner.Answer(false);
+            _examiner.Answer(true);
             _examiner.TryAskNextQuestion(out _);
-            _examiner.Answer(false);
+            _examiner.Answer(true);
 
             Assert.False(_examiner.TryAskNextQuestion(out _));
         }
-    }
+
+	    [Fact]
+	    public void RepeatsUnknownQuestions()
+	    {
+		    _examiner.TryAskNextQuestion(out var failedQuestion);
+		    _examiner.Answer(false);
+		    _examiner.TryAskNextQuestion(out var _);
+		    _examiner.Answer(true);
+
+		    _examiner.TryAskNextQuestion(out var repeatedQuestion);
+
+		    Assert.Equal(
+			    failedQuestion.Id,
+			    repeatedQuestion.Id);
+
+
+		    _examiner.Answer(true);
+	    }
+	}
 }

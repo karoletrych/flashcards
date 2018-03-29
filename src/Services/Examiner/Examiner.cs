@@ -9,7 +9,7 @@ namespace Flashcards.Services.Examiner
     {
         private readonly IList<AnsweredQuestion> _answeredQuestions = new List<AnsweredQuestion>();
 		private readonly Queue<Flashcard> _questionsToAsk;
-	    private Flashcard _askedQuestion;
+	    private Flashcard _currentQuestion;
 
         public Examiner(IEnumerable<Flashcard> questions)
         {
@@ -19,37 +19,52 @@ namespace Flashcards.Services.Examiner
 	    /// <exception cref="InvalidOperationException">Question not asked.</exception>
 	    public void Answer(bool known)
         {
-	        if (_askedQuestion is null)
+	        if (_currentQuestion is null)
 		        throw new InvalidOperationException("Question not asked.");
 
-			_answeredQuestions.Add(new AnsweredQuestion(_askedQuestion, known));
+			_answeredQuestions.Add(new AnsweredQuestion(_currentQuestion, known));
+
+	        _currentQuestion = null;
+
+	        if (!_questionsToAsk.Any())
+	        {
+		        RaiseSessionEnded();
+		        ReloadQuestions();
+	        }
+
+	        void ReloadQuestions()
+	        {
+		        foreach (var answeredQuestion in _answeredQuestions.Where(q => !q.IsKnown))
+		        {
+			        _questionsToAsk.Enqueue(answeredQuestion.Flashcard);
+		        }
+		        _answeredQuestions.Clear();
+	        }
+
+	        void RaiseSessionEnded()
+	        {
+		        var eventArgs = new QuestionResultsEventArgs(new List<AnsweredQuestion>(_answeredQuestions));
+		        SessionEnded?.Invoke(this, eventArgs);
+	        }
 		}
 
 	    /// <exception cref="InvalidOperationException">Previous question has not been answered.</exception>
-
-	    public bool TryAskNextQuestion(out Flashcard flashcard)
+		public bool TryAskNextQuestion(out Flashcard flashcard)
         {
-            if (_askedQuestion != null)
+            if (_currentQuestion != null)
                 throw new InvalidOperationException("Previous question has not been answered.");
 
             if (_questionsToAsk.Any())
             {
                 flashcard = _questionsToAsk.Dequeue();
-	            _askedQuestion = flashcard;
+	            _currentQuestion = flashcard;
                 return true;
             }
 
-            RaiseQuestionsAnswered();
             flashcard = null;
             return false;
         }
 
-        private void RaiseQuestionsAnswered()
-        {
-            var eventArgs = new QuestionResultsEventArgs(_answeredQuestions);
-            QuestionsAnswered?.Invoke(this, eventArgs);
-        }
-
-        public event EventHandler<QuestionResultsEventArgs> QuestionsAnswered;
+	    public event EventHandler<QuestionResultsEventArgs> SessionEnded;
     }
 }

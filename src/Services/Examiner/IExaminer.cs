@@ -3,11 +3,11 @@ using Flashcards.Models;
 
 namespace Flashcards.Services.Examiner
 {
-	public interface IExaminer
+	public interface  IExaminer
 	{
 		void Answer(bool known);
 		bool TryAskNextQuestion(out Flashcard question);
 		
-		event EventHandler<QuestionResultsEventArgs> QuestionsAnswered;
+		event EventHandler<QuestionResultsEventArgs> SessionEnded;
 	}
 }

@@ -23,13 +23,13 @@
                     Grid.Row="0">
                     <Entry
                         FontSize="Small"
-                        Placeholder="Front"
+                        Placeholder="{Binding FrontLanguage}"
                         Text="{Binding FrontText, Mode = TwoWay}"
                         Completed="FrontEntry_OnCompleted"
                         Unfocused="FrontEntry_OnUnfocused"/>
                     <Entry
                         FontSize="Small"
-                        Placeholder="Back"
+                        Placeholder="{Binding BackLanguage}"
                         Text="{Binding BackText, Mode = TwoWay}"
                         Completed="BackEntry_OnCompleted" 
                         Unfocused="BackEntry_OnUnfocused"/>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -50,6 +51,9 @@ namespace Flashcards.ViewModels
 
 		public string BackText { get; set; }
 
+		public string FrontLanguage { get; private set; }
+		public string BackLanguage { get; private set; }
+
 		public ICommand NextFlashcardCommand => new Command(async () =>
 		{
 			if (!(await _lessonRepository.Where(l => l.Id == _lesson.Id)).Any())
@@ -74,6 +78,8 @@ namespace Flashcards.ViewModels
 		public void OnNavigatedTo(NavigationParameters parameters)
 		{
 			_lesson = (Lesson) parameters["lesson"];
+			FrontLanguage = _lesson.FrontLanguage.ToString();
+			BackLanguage = _lesson.BackLanguage.ToString();
 		}
 
 		public void OnNavigatedFrom(NavigationParameters parameters)
@@ -116,9 +122,8 @@ namespace Flashcards.ViewModels
 				}
 				catch (HttpRequestException e)
 				{
-					_message.LongAlert(e.ToString());
+					Debug.WriteLine(e.ToString());
 				}
-
 			}
 
 			var updateImages = UpdateImages(_lesson.FrontLanguage, FrontText);

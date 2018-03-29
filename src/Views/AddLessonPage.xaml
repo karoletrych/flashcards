@@ -50,7 +50,7 @@
                         <Label Text="Tryb pytania"/>
                         <Picker HorizontalOptions="EndAndExpand"
                                 ItemsSource="{Binding AllAskingModes}"
-                                SelectedItem="{Binding AskingMode, Converter= {StaticResource IntEnum}}"
+                                SelectedIndex="{Binding AskingMode, Converter= {StaticResource IntEnum}}"
                                 WidthRequest="100" />
                     </StackLayout>
                 </StackLayout>
