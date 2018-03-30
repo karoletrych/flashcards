@@ -5,8 +5,8 @@
              x:Class="Flashcards.Views.LessonListPage"
              xmlns:customViews="clr-namespace:Flashcards.Views.CustomViews"
              xmlns:viewModels="clr-namespace:Flashcards.ViewModels;assembly=ViewModels"
-             xmlns:views="clr-namespace:Flashcards.Views;assembly=Views"
-             xmlns:converters="clr-namespace:Flashcards.Views.Converters;assembly=Views">
+             xmlns:converters="clr-namespace:Flashcards.Views.Converters;assembly=Views"
+             xmlns:views="clr-namespace:Flashcards.Views;assembly=Views">
 
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -31,7 +31,7 @@
         </Grid.RowDefinitions>
         <Frame Grid.Row="0">
             <StackLayout>
-                <Label FontAttributes="Bold" FontSize="Large" Text="Powtórka" />
+                <Label FontAttributes="Bold" FontSize="Large" Text="{views:Translate Repetition}" />
                 <Grid>
 
                     <Grid.GestureRecognizers>
@@ -44,8 +44,7 @@
                     </Grid.ColumnDefinitions>
 
                     <Label Grid.Column="0"
-                           Text="{Binding PendingRepetitionFlashcardsNumber,
-                StringFormat='Flashcards for today: {0}'}"
+                           Text="{Binding PendingRepetitionFlashcardsNumber, StringFormat={views:Translate FlashcardsForToday}}"
                            Style="{DynamicResource ListItemTextStyle}" />
 
                     <StackLayout Grid.Column="1">
@@ -56,7 +55,7 @@
             </StackLayout>
         </Frame>
         <StackLayout Grid.Row="1">
-            <Label FontAttributes="Bold" FontSize="Large" Text="Lekcje" />
+            <Label FontAttributes="Bold" FontSize="Large" Text="{views:Translate Lessons}" />
             <customViews:CommandListView
                 ItemsSource="{Binding Lessons}"
                 ItemClickCommand="{Binding PracticeLessonCommand}"

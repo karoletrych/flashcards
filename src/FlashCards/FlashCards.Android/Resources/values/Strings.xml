@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="hello">Hello World, Click Me!</string>
-	<string name="app_name">FlashCards.Droid</string>
+  <string name="app_name">Flashcards</string>
+  <string name="time_for_repetition_primary">It\'s time for repetition</string>
+  <string name="time_for_repetition_secondary">It\'s time for repetition</string>
 </resources>

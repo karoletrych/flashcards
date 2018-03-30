@@ -8,7 +8,7 @@ using Xamarin.Forms.Platform.Android;
 namespace FlashCards.Droid.Repetitions
 {
     [Activity(
-        Label = "Flashcards",
+        Label = "@string/app_name",
         Icon = "@drawable/icon",
         Theme = "@style/MainTheme",
         ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]

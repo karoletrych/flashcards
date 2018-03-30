@@ -2,6 +2,7 @@
 using System.Linq;
 using Android.App;
 using Android.Content;
+using Android.Content.Res;
 using Android.Widget;
 using Autofac;
 using Flashcards.Services;
@@ -10,7 +11,7 @@ using Flashcards.SpacedRepetition.Interface;
 namespace FlashCards.Droid.Repetitions
 {
     [BroadcastReceiver(Enabled = true)]
-	public class NotificationAlarmReceiver : BroadcastReceiver
+	public class RepetitionNotification : BroadcastReceiver
     {
 	    public override async void OnReceive(Context context, Intent intent)
 		{
@@ -42,8 +43,8 @@ namespace FlashCards.Droid.Repetitions
 			    PendingIntent.GetActivity(context, 0, intent, PendingIntentFlags.OneShot);
 
 		    var builder = new Notification.Builder(context)
-			    .SetContentTitle("Czas na powtórkę")
-			    .SetContentText("Skąd to zwątpienie?")
+			    .SetContentTitle(context.Resources.GetString(Resource.String.time_for_repetition_primary))
+			    .SetContentText(context.Resources.GetString(Resource.String.time_for_repetition_secondary))
 			    .SetSmallIcon(Resource.Drawable.notification_icon)
 			    .SetContentIntent(pendingIntent)
 			    .SetAutoCancel(true)

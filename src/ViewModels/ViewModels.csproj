@@ -10,6 +10,7 @@
     <PackageReference Include="PropertyChanged.Fody" Version="2.2.9" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Localization\Localization.csproj" />
     <ProjectReference Include="..\Models\Models.csproj" />
     <ProjectReference Include="..\PlatformDependentTools\PlatformDependentTools.csproj" />
     <ProjectReference Include="..\Services\Services.csproj" />

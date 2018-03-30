@@ -96,7 +96,11 @@ namespace Flashcards.ViewModels
 
 		public ICommand DeleteLessonCommand => new Command(async () =>
 		{
-			var sure = await _dialogService.DisplayAlertAsync("Warning", "Are you sure?", "Yes", "No");
+			var sure = await _dialogService.DisplayAlertAsync(
+				Localization.AppResources.Warning, 
+				Localization.AppResources.AreYouSure, 
+				Localization.AppResources.Yes, 
+				Localization.AppResources.No);
 			if (sure)
 			{
 				await _lessonRepository.Delete(_lesson);

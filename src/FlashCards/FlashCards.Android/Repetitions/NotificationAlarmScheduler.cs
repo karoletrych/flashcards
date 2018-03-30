@@ -17,7 +17,7 @@ namespace FlashCards.Droid.Repetitions
 
 		public void Schedule(TimeSpan time)
 		{
-			var intent = new Intent(_context, typeof(NotificationAlarmReceiver));
+			var intent = new Intent(_context, typeof(RepetitionNotification));
 			intent.AddFlags(ActivityFlags.NewTask);
 
 			var pendingIntent = PendingIntent.GetBroadcast(_context, 0, intent, PendingIntentFlags.UpdateCurrent);

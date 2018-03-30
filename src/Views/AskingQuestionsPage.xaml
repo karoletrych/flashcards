@@ -5,6 +5,7 @@
              xmlns:system="clr-namespace:System;assembly=netstandard"
              xmlns:viewModels="clr-namespace:Flashcards.ViewModels;assembly=ViewModels"
              xmlns:customViews="clr-namespace:Flashcards.Views.CustomViews;assembly=Views"
+             xmlns:views="clr-namespace:Flashcards.Views;assembly=Views"
              x:Class="Flashcards.Views.AskingQuestionsPage">
     <ContentPage.BindingContext>
         <viewModels:AskingQuestionsViewModel/>
@@ -35,7 +36,7 @@
         <StackLayout Orientation="Horizontal" AbsoluteLayout.LayoutFlags="All"
                      AbsoluteLayout.LayoutBounds=".5,1,1,.1">
             <Button 
-                    Text="Pokaż"
+                    Text="{views:Translate Show}"
                     IsVisible="{Binding BackIsVisible}"
                     Command="{Binding ShowBackCommand}" 
                     HorizontalOptions="FillAndExpand"/>
@@ -46,7 +47,7 @@
                     <ColumnDefinition Width="0.5*"></ColumnDefinition>
                     <ColumnDefinition Width="0.5*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <Button Text="Wiedziałem"
+                <Button Text="{views:Translate Know}"
                         FontSize="10"
                         BackgroundColor="LawnGreen"
                         HorizontalOptions="FillAndExpand"
@@ -58,7 +59,7 @@
                     </Button.CommandParameter>
                 </Button>
 
-                <Button Text="Nie wiedziałem"
+                <Button Text="{views:Translate DontKnow}"
                         BackgroundColor="Red"
                         FontSize="10"
                         HorizontalOptions="FillAndExpand"

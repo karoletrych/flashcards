@@ -2,14 +2,15 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:customViews="clr-namespace:Flashcards.Views.CustomViews;assembly=Views"
+             xmlns:views="clr-namespace:Flashcards.Views;assembly=Views"
              x:Class="Flashcards.Views.SettingsPage">
     <ContentPage.Content>
         <TableView Intent="Settings">
             <TableRoot>
-                <TableSection Title="Powiadomienia">
+                <TableSection Title="{views:Translate Notifications}">
                     <customViews:TimePickerCell 
                         x:Name ="TimePicker"
-                        Label = "Godzina powiadomień"/>
+                        Label = "{views:Translate NotificationTime}"/>
                 </TableSection>
             </TableRoot>
         </TableView>

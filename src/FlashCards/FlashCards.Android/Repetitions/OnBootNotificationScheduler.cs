@@ -13,7 +13,7 @@ namespace FlashCards.Droid.Repetitions
 	{
 		Intent.ActionBootCompleted
 	})]
-	public class BootReceiver : BroadcastReceiver
+	public class OnBootNotificationScheduler : BroadcastReceiver
 	{
 		public override void OnReceive(Context context, Intent intent)
 		{

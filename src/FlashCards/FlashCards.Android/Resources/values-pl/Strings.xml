@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">Fiszki</string>
+  <string name="time_for_repetition_primary">Czas na powtórkę</string>
+  <string name="time_for_repetition_secondary">Czas na powtórkę</string>
+</resources>

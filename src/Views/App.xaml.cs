@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using DLToolkit.Forms.Controls;
+using Flashcards.Localization;
 using Flashcards.PlatformDependentTools;
 using Flashcards.Settings;
 using Flashcards.SpacedRepetition.Interface;
 using Flashcards.ViewModels;
-using Plugin.Settings.Abstractions;
 using Prism;
 using Prism.Ioc;
 using Xamarin.Forms;
@@ -34,13 +34,22 @@ namespace Flashcards.Views
 		protected override void OnInitialized()
         {
             InitializeComponent();
-
-            InitializeSpacedRepetition();
-
+	        InitializeLocales();
+			InitializeSpacedRepetition();
 	        FlowListView.Init();
 
 	        NavigationService.NavigateAsync("NavigationPage/LessonListPage");
 
+	        void InitializeLocales()
+	        {
+		        if (Device.RuntimePlatform == Device.iOS || Device.RuntimePlatform == Device.Android)
+		        {
+			        var localize = Container.Resolve<ILocalize>();
+			        var cultureInfo = localize.GetCurrentCultureInfo();
+			        AppResources.Culture = cultureInfo;
+			        localize.SetLocale(cultureInfo);
+		        }
+			}
 
 	        void InitializeSpacedRepetition()
 	        {

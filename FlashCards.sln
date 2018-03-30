@@ -34,7 +34,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeitnerTests", "tests\Leitn
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Settings", "src\Settings\Settings.csproj", "{D3AE7397-71D5-4954-B9F4-8128D21918AA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlatformDependentTools", "src\PlatformDependentTools\PlatformDependentTools.csproj", "{B62E7F04-8E69-4C69-A244-CFA35E72E1DD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlatformDependentTools", "src\PlatformDependentTools\PlatformDependentTools.csproj", "{B62E7F04-8E69-4C69-A244-CFA35E72E1DD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Localization", "src\Localization\Localization.csproj", "{0A31DF5F-6544-4FB8-B0BC-60FB79D12717}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -100,6 +102,10 @@ Global
 		{B62E7F04-8E69-4C69-A244-CFA35E72E1DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B62E7F04-8E69-4C69-A244-CFA35E72E1DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B62E7F04-8E69-4C69-A244-CFA35E72E1DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A31DF5F-6544-4FB8-B0BC-60FB79D12717}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A31DF5F-6544-4FB8-B0BC-60FB79D12717}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A31DF5F-6544-4FB8-B0BC-60FB79D12717}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A31DF5F-6544-4FB8-B0BC-60FB79D12717}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

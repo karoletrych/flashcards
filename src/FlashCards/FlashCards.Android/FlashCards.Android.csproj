@@ -86,12 +86,13 @@
     <Compile Include="AndroidPlatformInitializer.cs" />
     <Compile Include="IocRegistrations.cs" />
     <Compile Include="MainActivity.cs" />
-    <Compile Include="Repetitions\BootReceiver.cs" />
+    <Compile Include="Repetitions\OnBootNotificationScheduler.cs" />
     <Compile Include="Repetitions\RepetitionActivity.cs" />
-    <Compile Include="Repetitions\NotificationAlarmReceiver.cs" />
+    <Compile Include="Repetitions\RepetitionNotification.cs" />
     <Compile Include="Repetitions\NotificationAlarmScheduler.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tools\Localize.cs" />
     <Compile Include="Tools\ToastMessage.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -336,6 +337,17 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable-xxxhdpi\flag_sp.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\values\Strings.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\values-pl\Strings.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\values-pl\styles.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>

@@ -14,7 +14,7 @@ using Resource = FlashCards.Droid.Resource;
 namespace Flashcards.Droid
 {
 	[Activity(
-		Label = "Flashcards",
+		Label = "@string/app_name",
 		Icon = "@drawable/icon",
 		Theme = "@style/MainTheme",
 		MainLauncher = true,

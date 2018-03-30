@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
+using Flashcards.Localization;
 using Flashcards.Models;
 using Flashcards.PlatformDependentTools;
 using Prism.Navigation;
-using Prism.Services;
 using Xamarin.Forms;
 
 namespace Flashcards.ViewModels
@@ -44,19 +44,19 @@ namespace Flashcards.ViewModels
 		{
 			if (string.IsNullOrWhiteSpace(LessonName))
 			{
-				_message.ShortAlert("Podaj nazwę lekcji");
+				_message.ShortAlert(Localization.AppResources.InsertLessonName);
 				return;
 			}
 
 			if (string.IsNullOrWhiteSpace(SelectedFrontLanguage))
 			{
-				_message.ShortAlert("Wybierz język frontu fiszek");
+				_message.ShortAlert(AppResources.ChooseFrontLanguage);
 				return;
 			}
 
 			if (string.IsNullOrWhiteSpace(SelectedBackLanguage))
 			{
-				_message.ShortAlert("Wybierz język tyłu fiszek");
+				_message.ShortAlert(AppResources.ChooseBackLanguage);
 				return;
 			}
 
