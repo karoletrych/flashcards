@@ -232,6 +232,24 @@ namespace Flashcards.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No flashcards.
+        /// </summary>
+        public static string NoFlashcards {
+            get {
+                return ResourceManager.GetString("NoFlashcards", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No repetition flashcards for today.
+        /// </summary>
+        public static string NoRepetitionFlashcardsForToday {
+            get {
+                return ResourceManager.GetString("NoRepetitionFlashcardsForToday", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Notifications.
         /// </summary>
         public static string Notifications {

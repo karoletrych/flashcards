@@ -22,7 +22,7 @@ namespace Flashcards.Views
 			if (Text == null)
 				return string.Empty;
 
-			var translation = ResourceManager.GetString(Text, Flashcards.Localization.AppResources.Culture);
+			var translation = ResourceManager.GetString(Text, AppResources.Culture);
 			if (translation == null)
 			{
 #if DEBUG

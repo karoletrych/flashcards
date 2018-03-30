@@ -26,8 +26,7 @@ namespace ViewModelsTests
                 _translator,
                 repository,
                 imageBrowser,
-                lessonRepository,
-				message
+                lessonRepository
 			);
         }
 

@@ -9,17 +9,10 @@ namespace Flashcards.Services.Examiner
     {
         private AskingMode _askingMode;
         private IEnumerable<Flashcard> _flashcards;
-        private bool _repeatQuestions;
 
         public ExaminerBuilder WithFlashcards(IEnumerable<Flashcard> flashcards)
         {
             _flashcards = flashcards;
-            return this;
-        }
-
-        public ExaminerBuilder WithRepeatingQuestions(bool repeating)
-        {
-            _repeatQuestions = true;
             return this;
         }
 

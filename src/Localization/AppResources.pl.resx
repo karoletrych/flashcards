@@ -186,6 +186,12 @@
   <data name="No" xml:space="preserve">
     <value>Nie</value>
   </data>
+  <data name="NoFlashcards" xml:space="preserve">
+    <value>Brak fiszek</value>
+  </data>
+  <data name="NoRepetitionFlashcardsForToday" xml:space="preserve">
+    <value>Brak fiszek na dziś</value>
+  </data>
   <data name="Unknown" xml:space="preserve">
     <value>Nieznane</value>
   </data>

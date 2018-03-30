@@ -9,13 +9,13 @@ using Prism.Navigation;
 
 namespace Flashcards.ViewModels
 {
-	public class Repetition : IRepetition
+	public class Repetitor : IRepetitor
 	{
 		private readonly ExaminerBuilder _examinerBuilder;
 		private readonly ISetting<AskingMode> _repetitionAskingModeSetting;
 		private readonly ISpacedRepetition _spacedRepetition;
 
-		public Repetition(
+		public Repetitor(
 			ISpacedRepetition spacedRepetition,
 			ExaminerBuilder examinerBuilder,
 			ISetting<AskingMode> repetitionAskingModeSetting)
@@ -27,15 +27,15 @@ namespace Flashcards.ViewModels
 
 		public async Task Repeat(
 			INavigationService navigationService,
+			string askingQuestionsUri,
 			IEnumerable<Flashcard> flashcardsToAsk)
 		{
 			var examiner = _examinerBuilder
 				.WithFlashcards(flashcardsToAsk)
-				.WithRepeatingQuestions(true)
 				.WithAskingMode(_repetitionAskingModeSetting.Value)
 				.Build();
 
-			await navigationService.NavigateAsync("NavigationPage/LessonListPage/AskingQuestionsPage",
+			await navigationService.NavigateAsync(askingQuestionsUri,
 				new NavigationParameters
 				{
 					{
@@ -43,6 +43,7 @@ namespace Flashcards.ViewModels
 						examiner
 					}
 				});
+			// TODO: potential memory leak when user navigates back without ending first session
 			examiner.SessionEnded += ApplyResults;
 		}
 

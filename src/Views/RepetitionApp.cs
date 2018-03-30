@@ -28,9 +28,9 @@ namespace Flashcards.Views
 
 	    protected override async void OnInitialized()
 	    {
-			var repetition = Container.Resolve<Repetition>();
+			var repetition = Container.Resolve<IRepetitor>();
 			var flashcardsToAsk = await Container.Resolve<IRepetitionFlashcardsRetriever>().FlashcardsToAsk();
-			await repetition.Repeat(NavigationService, flashcardsToAsk);
+			await repetition.Repeat(NavigationService, "NavigationPage/LessonListPage/AskingQuestionsPage", flashcardsToAsk);
 	    }
     }
 }

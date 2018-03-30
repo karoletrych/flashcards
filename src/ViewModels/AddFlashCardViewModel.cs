@@ -7,7 +7,6 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Flashcards.Models;
-using Flashcards.PlatformDependentTools;
 using Flashcards.Services.DataAccess;
 using Flashcards.Services.Http;
 using Prism.Navigation;
@@ -22,7 +21,6 @@ namespace Flashcards.ViewModels
 		private readonly IRepository<Lesson> _lessonRepository;
 		private readonly IImageBrowser _imageBrowser;
 		private readonly ITranslator _translator;
-		private readonly IMessage _message;
 		private Lesson _lesson;
 
 		public AddFlashcardViewModel()
@@ -33,14 +31,12 @@ namespace Flashcards.ViewModels
 			ITranslator translator,
 			IRepository<Flashcard> flashcardRepository,
 			IImageBrowser imageBrowser,
-			IRepository<Lesson> lessonRepository,
-			IMessage message)
+			IRepository<Lesson> lessonRepository)
 		{
 			_translator = translator;
 			_flashcardRepository = flashcardRepository;
 			_imageBrowser = imageBrowser;
 			_lessonRepository = lessonRepository;
-			_message = message;
 		}
 
 		public ObservableCollection<Uri> ImageUris { get; } = new ObservableCollection<Uri>(new Uri[ImagesNumber]);
@@ -101,7 +97,7 @@ namespace Flashcards.ViewModels
 			}
 			catch (HttpRequestException e)
 			{
-				_message.LongAlert(e.ToString());
+				Debug.WriteLine(e.ToString());
 			}
 		}
 
@@ -145,7 +141,7 @@ namespace Flashcards.ViewModels
 				}
 				catch (HttpRequestException e)
 				{
-					_message.LongAlert(e.ToString());
+					Debug.WriteLine(e.ToString());
 				}
 			}
 			var updateImages = UpdateImages(_lesson.BackLanguage, BackText);

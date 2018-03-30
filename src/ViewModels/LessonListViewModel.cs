@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using Flashcards.Localization;
 using Flashcards.Models;
 using Flashcards.Services;
 using Flashcards.Services.DataAccess;
@@ -23,14 +24,11 @@ namespace Flashcards.ViewModels
 		private readonly IRepository<Flashcard> _flashcardRepository;
 		private readonly IRepository<Lesson> _lessonRepository;
 		private readonly INavigationService _navigationService;
-		private readonly IRepetition _repetition;
+		private readonly IRepetitor _repetitor;
 		private readonly IRepetitionFlashcardsRetriever _repetitionFlashcardsRetriever;
 		private readonly ISpacedRepetition _spacedRepetition;
 
-		private int _learnedFlashcards;
-
-		private IEnumerable<Flashcard> _pendingRepetitionFlashcards = new List<Flashcard>();
-		private int _totalActiveFlashcards;
+		private IEnumerable<Flashcard> PendingRepetitionFlashcards { get; set; } = new List<Flashcard>();
 
 		public LessonListViewModel()
 		{
@@ -43,7 +41,7 @@ namespace Flashcards.ViewModels
 			IRepository<Flashcard> flashcardRepository,
 			ExaminerBuilder examinerBuilder,
 			ISpacedRepetition spacedRepetition,
-			IRepetition repetition,
+			IRepetitor repetitor,
 			IRepetitionFlashcardsRetriever repetitionFlashcardsRetriever)
 		{
 			_lessonRepository = lessonRepository;
@@ -52,8 +50,40 @@ namespace Flashcards.ViewModels
 			_flashcardRepository = flashcardRepository;
 			_examinerBuilder = examinerBuilder;
 			_spacedRepetition = spacedRepetition;
-			_repetition = repetition;
+			_repetitor = repetitor;
 			_repetitionFlashcardsRetriever = repetitionFlashcardsRetriever;
+		}
+
+		public async void OnNavigatedTo(NavigationParameters parameters)
+		{
+			var lessons = (await _lessonRepository.FindAll()).ToList();
+
+			UpdateRepetitionDisplay();
+
+			UpdateLessons();
+
+			async void UpdateRepetitionDisplay()
+			{
+				PendingRepetitionFlashcards = await _repetitionFlashcardsRetriever.FlashcardsToAsk();
+				PendingRepetitionFlashcardsNumber = PendingRepetitionFlashcards.Count();
+
+				var learnedFlashcards = lessons
+					.Where(l => l.AskInRepetitions).SelectMany(l => l.Flashcards)
+					.Intersect(_spacedRepetition.LearnedFlashcards)
+					.Count();
+
+				var totalActiveFlashcards = lessons.SelectMany(l => l.Flashcards).Count();
+
+				ActiveRepetitionsRatio = (double) learnedFlashcards / totalActiveFlashcards;
+				ActiveRepetitionsRatioString = learnedFlashcards + "/" + totalActiveFlashcards;
+			}
+
+			void UpdateLessons()
+			{
+				Lessons.Clear();
+				foreach (var lesson in lessons)
+					Lessons.Add(new LessonViewModel(lesson, _spacedRepetition.LearnedFlashcards));
+			}
 		}
 
 		public ObservableCollection<LessonViewModel> Lessons { get; } = new ObservableCollection<LessonViewModel>();
@@ -66,7 +96,6 @@ namespace Flashcards.ViewModels
 			var flashcards = await _flashcardRepository.Where(f => f.LessonId == lesson.InternalLesson.Id);
 			var examiner = _examinerBuilder
 				.WithFlashcards(flashcards)
-				.WithRepeatingQuestions(true)
 				.WithAskingMode(lesson.InternalLesson.AskingMode)
 				.Build();
 
@@ -94,49 +123,27 @@ namespace Flashcards.ViewModels
 			get { return new Command(async () => { await _navigationService.NavigateAsync("SettingsPage"); }); }
 		}
 
-		public int PendingRepetitionFlashcardsNumber => _pendingRepetitionFlashcards.Count();
-		public string ActiveRepetitionsRatioString => _learnedFlashcards + "/" + _totalActiveFlashcards;
-		public double ActiveRepetitionsRatio => (double) _learnedFlashcards / _totalActiveFlashcards;
+		public int PendingRepetitionFlashcardsNumber { get; private set; }
+
+		public string ActiveRepetitionsRatioString { get; private set; }
+
+		public double ActiveRepetitionsRatio { get; private set; }
 
 		public ICommand RunRepetitionCommand =>
 			new Command(async () =>
 				{
-					try
-					{
-						await _repetition.Repeat(_navigationService, _pendingRepetitionFlashcards);
-					}
-					catch (InvalidOperationException)
-					{
-						await _dialogService.DisplayAlertAsync("No flashcards", "No repetition flashcards for today", "OK");
-					}
+					if(PendingRepetitionFlashcards.Any())
+						await _repetitor.Repeat(_navigationService, "AskingQuestionsPage", PendingRepetitionFlashcards);
+					else
+						await _dialogService.DisplayAlertAsync(
+							AppResources.NoFlashcards, 
+							AppResources.NoRepetitionFlashcardsForToday, 
+							"OK");
 				}
 			);
 
 		public void OnNavigatedFrom(NavigationParameters parameters)
 		{
-		}
-
-		public async void OnNavigatedTo(NavigationParameters parameters)
-		{
-			_pendingRepetitionFlashcards = await _repetitionFlashcardsRetriever.FlashcardsToAsk();
-			OnPropertyChanged(nameof(PendingRepetitionFlashcardsNumber));
-
-			var lessons = (await _lessonRepository.FindAll()).ToList();
-
-			_learnedFlashcards =
-				lessons
-					.Where(l => l.AskInRepetitions).SelectMany(l => l.Flashcards)
-					.Intersect(_spacedRepetition.LearnedFlashcards)
-					.Count();
-
-			_totalActiveFlashcards = 
-				lessons.SelectMany(l => l.Flashcards).Count();
-			OnPropertyChanged(nameof(ActiveRepetitionsRatio));
-			OnPropertyChanged(nameof(ActiveRepetitionsRatioString));
-
-			Lessons.Clear();
-			foreach (var lesson in lessons)
-				Lessons.Add(new LessonViewModel(lesson, _spacedRepetition.LearnedFlashcards));
 		}
 
 

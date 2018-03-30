@@ -186,6 +186,12 @@
   <data name="No" xml:space="preserve">
     <value>No</value>
   </data>
+  <data name="NoFlashcards" xml:space="preserve">
+    <value>No flashcards</value>
+  </data>
+  <data name="NoRepetitionFlashcardsForToday" xml:space="preserve">
+    <value>No repetition flashcards for today</value>
+  </data>
   <data name="Unknown" xml:space="preserve">
     <value>Unknown</value>
   </data>
