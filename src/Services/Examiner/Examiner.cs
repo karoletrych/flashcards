@@ -28,11 +28,12 @@ namespace Flashcards.Services.Examiner
 
 	        if (!_questionsToAsk.Any())
 	        {
-		        RaiseSessionEnded();
+		        var eventArgs = new QuestionResultsEventArgs(new List<AnsweredQuestion>(_answeredQuestions));
 		        ReloadQuestions();
-	        }
+		        SessionEnded?.Invoke(this, eventArgs);
+			}
 
-	        void ReloadQuestions()
+			void ReloadQuestions()
 	        {
 		        foreach (var answeredQuestion in _answeredQuestions.Where(q => !q.IsKnown))
 		        {
@@ -40,13 +41,7 @@ namespace Flashcards.Services.Examiner
 		        }
 		        _answeredQuestions.Clear();
 	        }
-
-	        void RaiseSessionEnded()
-	        {
-		        var eventArgs = new QuestionResultsEventArgs(new List<AnsweredQuestion>(_answeredQuestions));
-		        SessionEnded?.Invoke(this, eventArgs);
-	        }
-		}
+        }
 
 	    /// <exception cref="InvalidOperationException">Previous question has not been answered.</exception>
 		public bool TryAskNextQuestion(out Flashcard flashcard)
@@ -64,6 +59,8 @@ namespace Flashcards.Services.Examiner
             flashcard = null;
             return false;
         }
+
+	    public int NumberOfQuestion => _questionsToAsk.Count;
 
 	    public event EventHandler<QuestionResultsEventArgs> SessionEnded;
     }

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Flashcards.Models;
 using Flashcards.Services;
 using Flashcards.Services.Examiner;
@@ -6,6 +7,7 @@ using Flashcards.ViewModels;
 using NSubstitute;
 using Prism.Navigation;
 using Prism.Services;
+using Xamarin.Forms;
 using Xunit;
 
 namespace ViewModelsTests
@@ -16,14 +18,15 @@ namespace ViewModelsTests
         private readonly INavigationService _navigationService;
 	    private readonly IExaminer _examiner;
 
+	    private readonly Flashcard[] _flashcards = {
+		    new Flashcard {Front = "cat", Back = "kot"},
+		    new Flashcard {Front = "dog", Back = "pies"},
+		    new Flashcard {Front = "duck", Back = "kaczka"}
+	    };
+
 	    public AskingQuestionsViewModelTests()
         {
-            _examiner = new ExaminerBuilder().WithFlashcards(new[]
-            {
-                new Flashcard {Front = "cat", Back = "kot"},
-                new Flashcard {Front = "dog", Back = "pies"},
-                new Flashcard {Front = "duck", Back = "kaczka"}
-            }).Build();
+            _examiner = new ExaminerBuilder().WithFlashcards(_flashcards).Build();
 
             _navigationService = Substitute.For<INavigationService>();
             var dialogService = Substitute.For<IPageDialogService>();
@@ -41,22 +44,40 @@ namespace ViewModelsTests
             }));
         }
 
-        [Fact]
-        public async void ShowsFirstQuestionWithHiddenBack_AtStartup()
+	    [Fact]
+	    public async void At_startup_QuestionStatuses_has_number_of_gray_items_equal_to_number_of_flashcards()
+	    {
+		    await NavigateToViewModel();
+			Assert.Equal(_askingQuestionsViewModel.QuestionStatuses.Count, _flashcards.Length);
+			Assert.All(_askingQuestionsViewModel.QuestionStatuses, item => Assert.Equal(Color.Gray, item.Color));
+	    }
+
+	    [Fact]
+	    public async void After_answering_first_question_first_element_of_QuestionStatuses_is_changed()
+	    {
+		    await NavigateToViewModel();
+
+		    _askingQuestionsViewModel.ShowBackCommand.Execute(null);
+		    _askingQuestionsViewModel.UserAnswerCommand.Execute(true);
+			Assert.Equal(_askingQuestionsViewModel.QuestionStatuses.Count, _flashcards.Length);
+		    Assert.Equal(Color.LawnGreen, _askingQuestionsViewModel.QuestionStatuses.First().Color);
+	    }
+
+		[Fact]
+        public async void At_startup_first_question_with_hidden_back_is_displayed()
         {
             await NavigateToViewModel();
             Assert.Equal("cat", _askingQuestionsViewModel.FrontText);
             Assert.Equal("kot", _askingQuestionsViewModel.BackText);
-            Assert.False(_askingQuestionsViewModel.FrontIsVisible);
+            Assert.False(_askingQuestionsViewModel.BackIsVisible);
         }
 
         [Fact]
-		// todo: fix
         public async void AfterShowBackCommand_BackIsVisible()
         {
             await NavigateToViewModel();
             _askingQuestionsViewModel.ShowBackCommand.Execute(null);
-            Assert.True(_askingQuestionsViewModel.FrontIsVisible);
+            Assert.True(_askingQuestionsViewModel.BackIsVisible);
         }
 
         [Fact]
@@ -67,7 +88,7 @@ namespace ViewModelsTests
             _askingQuestionsViewModel.UserAnswerCommand.Execute(true);
             Assert.Equal("dog", _askingQuestionsViewModel.FrontText);
             Assert.Equal("pies", _askingQuestionsViewModel.BackText);
-            Assert.False(_askingQuestionsViewModel.FrontIsVisible);
+            Assert.False(_askingQuestionsViewModel.BackIsVisible);
         }
 
         [Fact]

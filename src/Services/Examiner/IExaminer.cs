@@ -7,7 +7,8 @@ namespace Flashcards.Services.Examiner
 	{
 		void Answer(bool known);
 		bool TryAskNextQuestion(out Flashcard question);
-		
+		int NumberOfQuestion { get; }
+
 		event EventHandler<QuestionResultsEventArgs> SessionEnded;
 	}
 }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Flashcards.ViewModels;
 using Xamarin.Forms;
 
@@ -10,13 +11,13 @@ namespace Flashcards.Views.CustomViews
         public static readonly BindableProperty StepItemsProperty =
             BindableProperty.Create(
                 propertyName: "StepItems",
-                returnType: typeof(IList<StepItem>),
+                returnType: typeof(ObservableCollection<ColorbarItem>),
                 declaringType: typeof(MulticolorBar),
-                defaultValue: new List<StepItem>());
+                defaultValue: new ObservableCollection<ColorbarItem>());
 
-        public IList<StepItem> StepItems
+        public ObservableCollection<ColorbarItem> StepItems
         {
-            get => (IList<StepItem>) GetValue(StepItemsProperty);
+            get => (ObservableCollection<ColorbarItem>) GetValue(StepItemsProperty);
             set => SetValue(StepItemsProperty, value);
         }
     }

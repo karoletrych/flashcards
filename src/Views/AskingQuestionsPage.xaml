@@ -10,17 +10,21 @@
     <ContentPage.BindingContext>
         <viewModels:AskingQuestionsViewModel/>
     </ContentPage.BindingContext>
-    <AbsoluteLayout>
-        <StackLayout>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20*"></RowDefinition>
+            <RowDefinition Height="60*"></RowDefinition>
+            <RowDefinition Height="20*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <StackLayout Grid.Row="0">
             <customViews:MulticolorBar
-                VerticalOptions="CenterAndExpand"
-                HeightRequest="50"
+                VerticalOptions="FillAndExpand"
+                HorizontalOptions="FillAndExpand"
                 StepItems="{Binding QuestionStatuses}" />
             <Label Text="{Binding QuestionStatuses.Count, StringFormat='0/{0}'}" />
         </StackLayout>
 
-        <StackLayout AbsoluteLayout.LayoutFlags="All"
-                     AbsoluteLayout.LayoutBounds=".5,.5,1,.5">
+        <StackLayout Grid.Row="1">
             <Image
                 BackgroundColor="Green"
                 HorizontalOptions="FillAndExpand"
@@ -28,21 +32,20 @@
                 Source ="{Binding ImageUri}"
                 Aspect="Fill"/>
             <StackLayout Orientation="Horizontal">
-                <Label IsVisible ="{Binding FrontIsVisible}" Text="{Binding FrontText}" />
-                <Label IsVisible ="{Binding BackIsVisible}" Text="{Binding BackText}" />
+                <Label IsVisible ="{Binding BackIsVisible}" Text="{Binding FrontText}" />
+                <Label IsVisible ="{Binding FrontIsVisible}" Text="{Binding BackText}" />
             </StackLayout>
         </StackLayout>
 
-        <StackLayout Orientation="Horizontal" AbsoluteLayout.LayoutFlags="All"
-                     AbsoluteLayout.LayoutBounds=".5,1,1,.1">
+        <StackLayout Orientation="Horizontal" Grid.Row="2">
             <Button 
                     Text="{views:Translate Show}"
-                    IsVisible="{Binding BackIsVisible}"
+                    IsVisible="{Binding FrontIsVisible}"
                     Command="{Binding ShowBackCommand}" 
                     HorizontalOptions="FillAndExpand"/>
 
             <Grid HorizontalOptions="FillAndExpand"
-                  IsVisible="{Binding FrontIsVisible}">
+                  IsVisible="{Binding BackIsVisible}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="0.5*"></ColumnDefinition>
                     <ColumnDefinition Width="0.5*"></ColumnDefinition>
@@ -73,6 +76,6 @@
             </Grid>
             
         </StackLayout>
-    </AbsoluteLayout>
+    </Grid>
 
 </ContentPage>

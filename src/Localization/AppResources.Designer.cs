@@ -133,6 +133,15 @@ namespace Flashcards.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to End of session.
+        /// </summary>
+        public static string EndOfSession {
+            get {
+                return ResourceManager.GetString("EndOfSession", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Flashcards:.
         /// </summary>
         public static string Flashcards_Colon {
