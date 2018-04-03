@@ -5,12 +5,15 @@
              xmlns:views="clr-namespace:Flashcards.Views;assembly=Views"
              x:Class="Flashcards.Views.SettingsPage">
     <ContentPage.Content>
-        <TableView Intent="Settings">
+        <TableView Intent="Settings" RowHeight="50">
             <TableRoot>
                 <TableSection Title="{views:Translate Notifications}">
                     <customViews:TimePickerCell 
                         x:Name ="TimePicker"
                         Label = "{views:Translate NotificationTime}"/>
+                    <customViews:PickerCell 
+                        x:Name ="AskingModePickerCell"
+                        Label = "{views:Translate RepetitionAskingMode}" />
                 </TableSection>
             </TableRoot>
         </TableView>

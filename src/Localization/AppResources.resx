@@ -204,4 +204,7 @@
   <data name="EndOfSession" xml:space="preserve">
     <value>End of session</value>
   </data>
+  <data name="RepetitionAskingMode" xml:space="preserve">
+    <value>Notification asking mode</value>
+  </data>
 </root>

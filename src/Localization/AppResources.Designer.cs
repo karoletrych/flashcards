@@ -286,6 +286,15 @@ namespace Flashcards.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Notification asking mode.
+        /// </summary>
+        public static string RepetitionAskingMode {
+            get {
+                return ResourceManager.GetString("RepetitionAskingMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Show.
         /// </summary>
         public static string Show {

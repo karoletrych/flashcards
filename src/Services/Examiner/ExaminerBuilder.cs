@@ -34,7 +34,7 @@ namespace Flashcards.Services.Examiner
                 case AskingMode.Front:
                     return new Examiner(_flashcards);
                 case AskingMode.Back:
-                    return new Examiner(_flashcards.Select(flashcard => flashcard));
+                    return new Examiner(_flashcards.Select(Invert));
                 case AskingMode.Random:
                     return new Examiner(
                         _flashcards.Select(flashcard =>

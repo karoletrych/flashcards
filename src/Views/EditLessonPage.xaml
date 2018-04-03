@@ -81,7 +81,10 @@
                     </ListView.ItemTemplate>
                 </ListView>
             </StackLayout>
-            <Button Grid.Row="2" Text ="{views:Translate DeleteLesson}" BackgroundColor="Red" Command="{Binding DeleteLessonCommand}" />
+            <Button Grid.Row="2" 
+                    Text ="{views:Translate DeleteLesson}" 
+                    BackgroundColor="Red" 
+                    Command="{Binding DeleteLessonCommand}" />
         </Grid>
     </ContentPage.Content>
 </ContentPage>

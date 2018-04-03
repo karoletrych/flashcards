@@ -43,7 +43,7 @@ namespace Flashcards.ViewModels
 						examiner
 					}
 				});
-			// TODO: potential memory leak when user navigates back without ending first session
+			// TODO: memory leak when user navigates back without ending first session
 			examiner.SessionEnded += ApplyResults;
 		}
 

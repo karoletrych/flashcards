@@ -36,7 +36,7 @@ namespace Flashcards.ViewModels
 		public string SelectedBackLanguage { get; set; }
 		public string LessonName { get; set; }
 		public IList<string> AllAskingModes => Enum.GetNames(typeof(AskingMode));
-		public bool AskInRepetitions { get; set; }
+		public bool AskInRepetitions { get; set; } = true;
 		public AskingMode AskingMode { get; set; }
 
 
