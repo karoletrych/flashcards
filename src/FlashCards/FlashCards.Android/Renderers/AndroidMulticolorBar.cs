@@ -15,7 +15,7 @@ namespace FlashCards.Droid.Renderers
 		}
 
 		private const int ProgressBarHeight = 50;
-		public IList<ColorbarItem> Items { private get; set; }
+		public IList<MulticolorbarItem> Items { private get; set; }
 
 		protected override void OnDraw(Canvas canvas)
 		{

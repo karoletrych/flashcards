@@ -1,24 +1,44 @@
-using System.Collections.Generic;
+using System;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using Flashcards.ViewModels;
 using Xamarin.Forms;
+using Xamarin.Forms.Internals;
 
 namespace Flashcards.Views.CustomViews
 {
-    [ContentProperty("StepItems")]
-    public sealed class MulticolorBar : View
-    {
-        public static readonly BindableProperty StepItemsProperty =
-            BindableProperty.Create(
-                propertyName: "StepItems",
-                returnType: typeof(ObservableCollection<ColorbarItem>),
-                declaringType: typeof(MulticolorBar),
-                defaultValue: new ObservableCollection<ColorbarItem>());
+	[ContentProperty("ItemsSource")]
+	public sealed class MulticolorBar : View
+	{
+		public static readonly BindableProperty ItemsSourceProperty =
+			BindableProperty.Create(
+				propertyName: nameof(ItemsSource),
+				returnType: typeof(ObservableCollection<MulticolorbarItem>),
+				declaringType: typeof(MulticolorBar),
+				defaultValue: new ObservableCollection<MulticolorbarItem>());
 
-        public ObservableCollection<ColorbarItem> StepItems
-        {
-            get => (ObservableCollection<ColorbarItem>) GetValue(StepItemsProperty);
-            set => SetValue(StepItemsProperty, value);
-        }
-    }
+		public MulticolorBar()
+		{
+			PropertyChanged += ItemsSourcePropertyChanged;
+		}
+
+		private void ItemsSourcePropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
+		{
+			if (propertyChangedEventArgs.PropertyName == nameof(ItemsSource))
+			{
+				if (ItemsSource is INotifyCollectionChanged itemsSource)
+					itemsSource.CollectionChanged += (s, args) => ColorbarItemsChanged?.Invoke(s, args);
+			}
+		}
+
+		public event EventHandler ColorbarItemsChanged;
+
+		public ObservableCollection<MulticolorbarItem> ItemsSource
+		{
+			get => (ObservableCollection<MulticolorbarItem>) GetValue(ItemsSourceProperty);
+			set => SetValue(ItemsSourceProperty, value);
+		}
+		
+	}
 }

@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -23,29 +22,37 @@ namespace Flashcards.ViewModels
 			_dialogService = dialogService;
 		}
 
-		private int _currentQuestionIndex = 0;
+		private int _currentQuestionIndex;
 
 		public void OnNavigatedTo(NavigationParameters parameters)
 		{
 			_examiner = (IExaminer)parameters["examiner"];
-			_examiner.SessionEnded += DisplayEndOfSessionAlert;
+
+			_examiner.SessionEnded +=
+				(sender, args) =>
+				{
+					DisplayEndOfSessionAlert(args);
+					ResetQuestionStatuses();
+				};
 
 			ResetQuestionStatuses();
-
-			ShowNextQuestion();
+			TryShowNextQuestion();
 		}
 
 		private void ResetQuestionStatuses()
 		{
+			_currentQuestionIndex = 0;
+
+			QuestionStatuses.Clear();
 			for (var i = 0; i < _examiner.NumberOfQuestion; ++i)
 			{
-				QuestionStatuses.Add(new ColorbarItem {Color = Color.Gray, Value = 1});
+				QuestionStatuses.Add(new MulticolorbarItem {Color = Color.Gray, Value = 1});
 			}
 
 			OnPropertyChanged(nameof(QuestionStatuses));
 		}
 
-		private async void DisplayEndOfSessionAlert(object sender, QuestionResultsEventArgs args)
+		private async void DisplayEndOfSessionAlert(QuestionResultsEventArgs args)
 		{
 			await _dialogService.DisplayAlertAsync(AppResources.EndOfSession,
 				$"{AppResources.Known}: {args.Results.Count(x => x.IsKnown)} \n" +
@@ -56,7 +63,6 @@ namespace Flashcards.ViewModels
 				await _navigationService.GoBackAsync();
 			}
 
-			ResetQuestionStatuses();
 		}
 
 		private readonly IPageDialogService _dialogService;
@@ -77,8 +83,8 @@ namespace Flashcards.ViewModels
 
 		public string BackText { get; private set; }
 
-		public ObservableCollection<ColorbarItem> QuestionStatuses { get; } = 
-			new ObservableCollection<ColorbarItem>();
+		public ObservableCollection<MulticolorbarItem> QuestionStatuses { get; } = 
+			new ObservableCollection<MulticolorbarItem>();
 
 		public Uri ImageUri { get; set; }
 
@@ -97,26 +103,26 @@ namespace Flashcards.ViewModels
 
 		public ICommand UserAnswerCommand => new Command<bool>(known =>
 		{
-			_examiner.Answer(known: known);
-
 			QuestionStatuses[_currentQuestionIndex] =
 				known
-					? new ColorbarItem {Color = Color.LawnGreen, Value = 1}
-					: new ColorbarItem {Color = Color.Red, Value = 1};
+					? new MulticolorbarItem { Color = Color.LawnGreen, Value = 1 }
+					: new MulticolorbarItem { Color = Color.Red, Value = 1 };
+
+
 			OnPropertyChanged(nameof(QuestionStatuses));
 
 
 			BackIsVisible = false;
-			ShowNextQuestion();
 
-			UpdateQuestionStatuses();
+			++_currentQuestionIndex;
+
+			_examiner.Answer(known: known);
+			TryShowNextQuestion();
 		});
 
 		public ICommand ShowBackCommand => new Command(() =>
 		{
 			BackIsVisible = true;
-
-			UpdateQuestionStatuses();
 		});
 
 
@@ -126,11 +132,7 @@ namespace Flashcards.ViewModels
 
 		public event PropertyChangedEventHandler PropertyChanged;
 
-		private void UpdateQuestionStatuses()
-		{
-		}
-
-		private void ShowNextQuestion()
+		private void TryShowNextQuestion()
 		{
 			if (_examiner.TryAskNextQuestion(out var question))
 			{

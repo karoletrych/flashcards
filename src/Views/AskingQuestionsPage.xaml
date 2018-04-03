@@ -20,7 +20,7 @@
             <customViews:MulticolorBar
                 VerticalOptions="FillAndExpand"
                 HorizontalOptions="FillAndExpand"
-                StepItems="{Binding QuestionStatuses}" />
+                ItemsSource="{Binding QuestionStatuses}" />
             <Label Text="{Binding QuestionStatuses.Count, StringFormat='0/{0}'}" />
         </StackLayout>
 

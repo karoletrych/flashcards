@@ -187,7 +187,7 @@ namespace Flashcards.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Languagees.
+        ///   Looks up a localized string similar to Languages.
         /// </summary>
         public static string Languages {
             get {

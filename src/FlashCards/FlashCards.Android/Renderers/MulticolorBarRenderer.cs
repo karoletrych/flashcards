@@ -33,7 +33,8 @@ namespace FlashCards.Droid.Renderers
 
 			if (e.NewElement != null)
 			{
-				_multicolorBar.Items = e.NewElement.StepItems;
+				_multicolorBar.Items = e.NewElement.ItemsSource;
+				e.NewElement.ColorbarItemsChanged += (s,args) => Invalidate();
 			}
 		}
 
