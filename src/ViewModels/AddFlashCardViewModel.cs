@@ -11,6 +11,7 @@ using Flashcards.Models;
 using Flashcards.PlatformDependentTools;
 using Flashcards.Services.DataAccess;
 using Flashcards.Services.Http;
+using Java.Net;
 using Prism.Navigation;
 using Prism.Services;
 using Xamarin.Forms;
@@ -104,20 +105,12 @@ namespace Flashcards.ViewModels
 
 		private async Task UpdateImages(Language language, string text)
 		{
-			try
+			await Try(async () =>
 			{
 				var imageUris = await _imageBrowser.Find(text, language);
 				ImageUris.Clear();
 				foreach (var imageUri in imageUris) ImageUris.Add(imageUri);
-			}
-			catch (HttpRequestException e)
-			{
-				Debug.WriteLine(e.ToString());
-			}
-			catch(Exception e)
-			{
-				await _dialogService.DisplayAlertAsync("Error", e.ToString(), "OK");
-			}
+			});
 		}
 
 		public async Task HandleFrontTextChangedByUser()
@@ -127,22 +120,14 @@ namespace Flashcards.ViewModels
 
 			async Task UpdateTranslation()
 			{
-				try
+				await Try(async () =>
 				{
 					var translations = await _translator.Translate(
 						from: _lesson.FrontLanguage,
 						to: _lesson.BackLanguage,
 						text: FrontText);
 					BackText = string.Join("", translations);
-				}
-				catch (HttpRequestException e)
-				{
-					Debug.WriteLine(e.ToString());
-				}
-				catch (Exception e)
-				{
-					await _dialogService.DisplayAlertAsync("Error", e.ToString(), "OK");
-				}
+				});
 			}
 
 			var updateImages = UpdateImages(_lesson.FrontLanguage, FrontText);
@@ -157,23 +142,36 @@ namespace Flashcards.ViewModels
 
 			async Task UpdateTranslation()
 			{
-				try
+				await Try(async () =>
 				{
-					var translations = await _translator.Translate(from: _lesson.BackLanguage, to: _lesson.FrontLanguage, text: BackText);
+					var translations =
+						await _translator.Translate(from: _lesson.BackLanguage, to: _lesson.FrontLanguage, text: BackText);
 					FrontText = string.Join("", translations);
-				}
-				catch (HttpRequestException e)
-				{
-					Debug.WriteLine(e.ToString());
-				}
-				catch (Exception e)
-				{
-					await _dialogService.DisplayAlertAsync("Error", e.ToString(), "OK");
-				}
+				});
 			}
 			var updateImages = UpdateImages(_lesson.BackLanguage, BackText);
 
 			await Task.WhenAll(UpdateTranslation(), updateImages);
+		}
+
+		private async Task Try(Func<Task> action)
+		{
+			try
+			{
+				await action();
+			}
+			catch (HttpRequestException e)
+			{
+				Debug.WriteLine(e.ToString());
+			}
+			catch (UnknownHostException e)
+			{
+				Debug.WriteLine(e.ToString());
+			}
+			catch (Exception e)
+			{
+				await _dialogService.DisplayAlertAsync("Error", e.ToString(), "OK");
+			}
 		}
 	}
 }
