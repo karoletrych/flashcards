@@ -11,9 +11,12 @@
                     <customViews:TimePickerCell 
                         x:Name ="TimePicker"
                         Label = "{views:Translate NotificationTime}"/>
-                    <customViews:PickerCell 
+                </TableSection>
+                <TableSection Title="{views:Translate Repetitions}">
+                <customViews:PickerCell 
                         x:Name ="AskingModePickerCell"
                         Label = "{views:Translate RepetitionAskingMode}" />
+
                     <EntryCell
                         x:Name ="MaximumFlashcards"
                         Keyboard="Numeric"

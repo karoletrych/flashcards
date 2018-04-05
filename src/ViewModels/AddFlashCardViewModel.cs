@@ -6,7 +6,9 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Flashcards.Localization;
 using Flashcards.Models;
+using Flashcards.PlatformDependentTools;
 using Flashcards.Services.DataAccess;
 using Flashcards.Services.Http;
 using Prism.Navigation;
@@ -19,6 +21,7 @@ namespace Flashcards.ViewModels
 		private const int ImagesNumber = 9;
 		private readonly IRepository<Flashcard> _flashcardRepository;
 		private readonly IRepository<Lesson> _lessonRepository;
+		private readonly IMessage _message;
 		private readonly IImageBrowser _imageBrowser;
 		private readonly ITranslator _translator;
 		private Lesson _lesson;
@@ -31,12 +34,14 @@ namespace Flashcards.ViewModels
 			ITranslator translator,
 			IRepository<Flashcard> flashcardRepository,
 			IImageBrowser imageBrowser,
-			IRepository<Lesson> lessonRepository)
+			IRepository<Lesson> lessonRepository,
+			IMessage message)
 		{
 			_translator = translator;
 			_flashcardRepository = flashcardRepository;
 			_imageBrowser = imageBrowser;
 			_lessonRepository = lessonRepository;
+			_message = message;
 		}
 
 		public ObservableCollection<Uri> ImageUris { get; } = new ObservableCollection<Uri>(new Uri[ImagesNumber]);
@@ -52,6 +57,12 @@ namespace Flashcards.ViewModels
 
 		public ICommand NextFlashcardCommand => new Command(async () =>
 		{
+			if (FrontText == string.Empty || BackText == string.Empty)
+			{
+				_message.ShortAlert(AppResources.FlashcardCannotBeEmpty);
+				return;
+			}
+
 			if (!(await _lessonRepository.Where(l => l.Id == _lesson.Id)).Any())
 			{
 				await _lessonRepository.Insert(_lesson);

@@ -204,10 +204,16 @@
   <data name="EndOfSession" xml:space="preserve">
     <value>Koniec sesji</value>
   </data>
+  <data name="FlashcardCannotBeEmpty" xml:space="preserve">
+    <value>Fiszka nie może być pusta</value>
+  </data>
   <data name="MaximumFlashcardsInSingleRepetition" xml:space="preserve">
     <value>Maksimum fiszek w powtórce</value>
   </data>
   <data name="RepetitionAskingMode" xml:space="preserve">
     <value>Tryb pytania powtórek</value>
+  </data>
+  <data name="Repetitions" xml:space="preserve">
+    <value>Powtórki</value>
   </data>
 </root>

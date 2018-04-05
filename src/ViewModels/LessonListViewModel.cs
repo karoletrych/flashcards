@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Flashcards.Localization;
 using Flashcards.Models;
@@ -59,7 +58,6 @@ namespace Flashcards.ViewModels
 			var lessons = (await _lessonRepository.FindAll()).ToList();
 
 			UpdateRepetitionDisplay();
-
 			UpdateLessons();
 
 			async void UpdateRepetitionDisplay()
@@ -68,11 +66,15 @@ namespace Flashcards.ViewModels
 				PendingRepetitionFlashcardsNumber = PendingRepetitionFlashcards.Count();
 
 				var learnedFlashcards = lessons
-					.Where(l => l.AskInRepetitions).SelectMany(l => l.Flashcards)
+					.Where(l => l.AskInRepetitions)
+					.SelectMany(l => l.Flashcards)
 					.Intersect(_spacedRepetition.LearnedFlashcards)
 					.Count();
 
-				var totalActiveFlashcards = lessons.SelectMany(l => l.Flashcards).Count();
+				var totalActiveFlashcards = lessons
+					.Where(l => l.AskInRepetitions)
+					.SelectMany(l => l.Flashcards)
+					.Count();
 
 				ActiveRepetitionsRatio = (double) learnedFlashcards / totalActiveFlashcards;
 				ActiveRepetitionsRatioString = learnedFlashcards + "/" + totalActiveFlashcards;
@@ -150,11 +152,6 @@ namespace Flashcards.ViewModels
 #pragma warning disable 0067
 		public event PropertyChangedEventHandler PropertyChanged;
 #pragma warning restore 0067
-
-		private void OnPropertyChanged([CallerMemberName] string propertyName = null)
-		{
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName: propertyName));
-		}
 
 		public class LessonViewModel
 		{

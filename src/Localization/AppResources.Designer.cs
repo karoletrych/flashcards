@@ -142,6 +142,15 @@ namespace Flashcards.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Flashcard cannot be empty.
+        /// </summary>
+        public static string FlashcardCannotBeEmpty {
+            get {
+                return ResourceManager.GetString("FlashcardCannotBeEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Flashcards:.
         /// </summary>
         public static string Flashcards_Colon {
@@ -295,11 +304,20 @@ namespace Flashcards.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Notification asking mode.
+        ///   Looks up a localized string similar to Repetition asking mode.
         /// </summary>
         public static string RepetitionAskingMode {
             get {
                 return ResourceManager.GetString("RepetitionAskingMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Repetitions.
+        /// </summary>
+        public static string Repetitions {
+            get {
+                return ResourceManager.GetString("Repetitions", resourceCulture);
             }
         }
         

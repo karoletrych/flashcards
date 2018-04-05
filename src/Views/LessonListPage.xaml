@@ -29,15 +29,13 @@
             <RowDefinition Height="20*" />
             <RowDefinition Height="80*" />
         </Grid.RowDefinitions>
-        <Frame Grid.Row="0">
+        <Frame Grid.Row="0" Padding="0">
+            <Frame.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding RunRepetitionCommand}" />
+            </Frame.GestureRecognizers>
             <StackLayout>
                 <Label FontAttributes="Bold" FontSize="Large" Text="{views:Translate Repetition}" />
                 <Grid>
-
-                    <Grid.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding RunRepetitionCommand}" />
-                    </Grid.GestureRecognizers>
-
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="50*" />
                         <ColumnDefinition Width="50*" />

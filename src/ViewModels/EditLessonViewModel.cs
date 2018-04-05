@@ -13,7 +13,7 @@ using Xamarin.Forms;
 
 namespace Flashcards.ViewModels
 {
-	public class EditLessonViewModel : INavigatedAware, INotifyPropertyChanged
+	public class EditLessonViewModel : INavigatingAware, INotifyPropertyChanged
 	{
 		private readonly IRepository<Lesson> _lessonRepository;
 		private readonly INavigationService _navigationService;
@@ -51,7 +51,7 @@ namespace Flashcards.ViewModels
 
 		public string LessonName
 		{
-			get => _lesson?.Name ?? "";
+			get => _lesson?.Name ?? string.Empty;
 			set
 			{
 				if (_lesson != null)
@@ -108,19 +108,8 @@ namespace Flashcards.ViewModels
 			}
 		});
 
-		public async void OnNavigatedTo(NavigationParameters parameters)
+		public void OnNavigatedTo(NavigationParameters parameters)
 		{
-			var lessonId = (string)parameters["lessonId"];
-
-			_lesson = (await _lessonRepository.Where(lesson => lesson.Id == lessonId)).Single();
-
-			OnPropertyChanged(nameof(LessonName));
-			OnPropertyChanged(nameof(AskingMode));
-			OnPropertyChanged(nameof(AskInRepetitions));
-
-			Flashcards.Clear();
-			foreach (var flashcard in _lesson.Flashcards)
-				Flashcards.Add(flashcard);
 		}
 
 		private void OnPropertyChanged([CallerMemberName] string propertyName = null)
@@ -135,5 +124,18 @@ namespace Flashcards.ViewModels
 #pragma warning disable 0067
 		public event PropertyChangedEventHandler PropertyChanged;
 #pragma warning restore 0067
+		public void OnNavigatingTo(NavigationParameters parameters)
+		{
+			var lessonId = (string)parameters["lessonId"];
+			_lesson = (_lessonRepository.Where(lesson => lesson.Id == lessonId).Result).Single();
+
+			OnPropertyChanged(nameof(LessonName));
+			OnPropertyChanged(nameof(AskingMode));
+			OnPropertyChanged(nameof(AskInRepetitions));
+
+			Flashcards.Clear();
+			foreach (var flashcard in _lesson.Flashcards)
+				Flashcards.Add(flashcard);
+		}
 	}
 }
