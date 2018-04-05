@@ -50,27 +50,26 @@
                     <ColumnDefinition Width="0.5*"></ColumnDefinition>
                     <ColumnDefinition Width="0.5*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <Button Text="{views:Translate Know}"
-                        FontSize="10"
-                        BackgroundColor="LawnGreen"
-                        HorizontalOptions="FillAndExpand"
-                        VerticalOptions="CenterAndExpand"
-                        Command="{Binding UserAnswerCommand}"
-                        Grid.Column="0">
-                    <Button.CommandParameter>
-                        <system:Boolean>True</system:Boolean>
-                    </Button.CommandParameter>
-                </Button>
-
                 <Button Text="{views:Translate DontKnow}"
                         BackgroundColor="Red"
                         FontSize="10"
                         HorizontalOptions="FillAndExpand"
                         VerticalOptions="CenterAndExpand"
                         Command="{Binding UserAnswerCommand}"
-                        Grid.Column="1">
+                        Grid.Column="0">
                     <Button.CommandParameter>
                         <system:Boolean>False</system:Boolean>
+                    </Button.CommandParameter>
+                </Button>
+                <Button Text="{views:Translate Know}"
+                        FontSize="10"
+                        BackgroundColor="LawnGreen"
+                        HorizontalOptions="FillAndExpand"
+                        VerticalOptions="CenterAndExpand"
+                        Command="{Binding UserAnswerCommand}"
+                        Grid.Column="1">
+                    <Button.CommandParameter>
+                        <system:Boolean>True</system:Boolean>
                     </Button.CommandParameter>
                 </Button>
             </Grid>

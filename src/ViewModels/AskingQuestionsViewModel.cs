@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Flashcards.Localization;
 using Flashcards.Services.Examiner;
@@ -29,9 +30,9 @@ namespace Flashcards.ViewModels
 			_examiner = (IExaminer)parameters["examiner"];
 
 			_examiner.SessionEnded +=
-				(sender, args) =>
+				async (sender, args) =>
 				{
-					DisplayEndOfSessionAlert(args);
+					await DisplayEndOfSessionAlert(args);
 					ResetQuestionStatuses();
 				};
 
@@ -53,7 +54,7 @@ namespace Flashcards.ViewModels
 			OnPropertyChanged(nameof(QuestionsProgress));
 		}
 
-		private async void DisplayEndOfSessionAlert(QuestionResultsEventArgs args)
+		private async Task DisplayEndOfSessionAlert(QuestionResultsEventArgs args)
 		{
 			await _dialogService.DisplayAlertAsync(AppResources.EndOfSession,
 				$"{AppResources.Known}: {args.Results.Count(x => x.IsKnown)} \n" +
@@ -108,10 +109,6 @@ namespace Flashcards.ViewModels
 				known
 					? new MulticolorbarItem { Color = Color.LawnGreen, Value = 1 }
 					: new MulticolorbarItem { Color = Color.Red, Value = 1 };
-
-
-			OnPropertyChanged(nameof(QuestionStatuses));
-
 
 			BackIsVisible = false;
 

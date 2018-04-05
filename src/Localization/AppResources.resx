@@ -130,7 +130,7 @@
     <value>Delete Lesson</value>
   </data>
   <data name="DontKnow" xml:space="preserve">
-    <value>Didn't knew it</value>
+    <value>I didn't know</value>
   </data>
   <data name="FlashcardsForToday" xml:space="preserve">
     <value>Flashcards for today: {0}</value>
@@ -139,7 +139,7 @@
     <value>Flashcards:</value>
   </data>
   <data name="Know" xml:space="preserve">
-    <value>Knew it</value>
+    <value>I knew</value>
   </data>
   <data name="Languages" xml:space="preserve">
     <value>Languages</value>

@@ -124,7 +124,7 @@ namespace Flashcards.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Didn&apos;t knew it.
+        ///   Looks up a localized string similar to I didn&apos;t know.
         /// </summary>
         public static string DontKnow {
             get {
@@ -178,7 +178,7 @@ namespace Flashcards.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Knew it.
+        ///   Looks up a localized string similar to I knew.
         /// </summary>
         public static string Know {
             get {
