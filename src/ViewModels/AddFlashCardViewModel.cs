@@ -12,6 +12,7 @@ using Flashcards.PlatformDependentTools;
 using Flashcards.Services.DataAccess;
 using Flashcards.Services.Http;
 using Prism.Navigation;
+using Prism.Services;
 using Xamarin.Forms;
 
 namespace Flashcards.ViewModels
@@ -22,6 +23,7 @@ namespace Flashcards.ViewModels
 		private readonly IRepository<Flashcard> _flashcardRepository;
 		private readonly IRepository<Lesson> _lessonRepository;
 		private readonly IMessage _message;
+		private readonly IPageDialogService _dialogService;
 		private readonly IImageBrowser _imageBrowser;
 		private readonly ITranslator _translator;
 		private Lesson _lesson;
@@ -35,13 +37,15 @@ namespace Flashcards.ViewModels
 			IRepository<Flashcard> flashcardRepository,
 			IImageBrowser imageBrowser,
 			IRepository<Lesson> lessonRepository,
-			IMessage message)
+			IMessage message,
+			IPageDialogService dialogService)
 		{
 			_translator = translator;
 			_flashcardRepository = flashcardRepository;
 			_imageBrowser = imageBrowser;
 			_lessonRepository = lessonRepository;
 			_message = message;
+			_dialogService = dialogService;
 		}
 
 		public ObservableCollection<Uri> ImageUris { get; } = new ObservableCollection<Uri>(new Uri[ImagesNumber]);
@@ -110,6 +114,10 @@ namespace Flashcards.ViewModels
 			{
 				Debug.WriteLine(e.ToString());
 			}
+			catch(Exception e)
+			{
+				await _dialogService.DisplayAlertAsync("Error", e.ToString(), "OK");
+			}
 		}
 
 		public async Task HandleFrontTextChangedByUser()
@@ -130,6 +138,10 @@ namespace Flashcards.ViewModels
 				catch (HttpRequestException e)
 				{
 					Debug.WriteLine(e.ToString());
+				}
+				catch (Exception e)
+				{
+					await _dialogService.DisplayAlertAsync("Error", e.ToString(), "OK");
 				}
 			}
 
@@ -153,6 +165,10 @@ namespace Flashcards.ViewModels
 				catch (HttpRequestException e)
 				{
 					Debug.WriteLine(e.ToString());
+				}
+				catch (Exception e)
+				{
+					await _dialogService.DisplayAlertAsync("Error", e.ToString(), "OK");
 				}
 			}
 			var updateImages = UpdateImages(_lesson.BackLanguage, BackText);
