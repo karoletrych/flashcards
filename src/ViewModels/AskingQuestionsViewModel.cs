@@ -22,7 +22,7 @@ namespace Flashcards.ViewModels
 			_dialogService = dialogService;
 		}
 
-		private int _currentQuestionIndex;
+		public int CurrentQuestionNumber { get; private set; } = 0;
 
 		public void OnNavigatedTo(NavigationParameters parameters)
 		{
@@ -41,7 +41,7 @@ namespace Flashcards.ViewModels
 
 		private void ResetQuestionStatuses()
 		{
-			_currentQuestionIndex = 0;
+			CurrentQuestionNumber = 0;
 
 			QuestionStatuses.Clear();
 			for (var i = 0; i < _examiner.NumberOfQuestion; ++i)
@@ -50,6 +50,7 @@ namespace Flashcards.ViewModels
 			}
 
 			OnPropertyChanged(nameof(QuestionStatuses));
+			OnPropertyChanged(nameof(QuestionsProgress));
 		}
 
 		private async void DisplayEndOfSessionAlert(QuestionResultsEventArgs args)
@@ -103,7 +104,7 @@ namespace Flashcards.ViewModels
 
 		public ICommand UserAnswerCommand => new Command<bool>(known =>
 		{
-			QuestionStatuses[_currentQuestionIndex] =
+			QuestionStatuses[CurrentQuestionNumber] =
 				known
 					? new MulticolorbarItem { Color = Color.LawnGreen, Value = 1 }
 					: new MulticolorbarItem { Color = Color.Red, Value = 1 };
@@ -114,7 +115,7 @@ namespace Flashcards.ViewModels
 
 			BackIsVisible = false;
 
-			++_currentQuestionIndex;
+			++CurrentQuestionNumber;
 
 			_examiner.Answer(known: known);
 			TryShowNextQuestion();
@@ -125,6 +126,7 @@ namespace Flashcards.ViewModels
 			BackIsVisible = true;
 		});
 
+		public string QuestionsProgress => CurrentQuestionNumber + "/" + QuestionStatuses.Count;
 
 		public void OnNavigatedFrom(NavigationParameters parameters)
 		{

@@ -214,6 +214,15 @@ namespace Flashcards.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Maximum flashcards in single repetition.
+        /// </summary>
+        public static string MaximumFlashcardsInSingleRepetition {
+            get {
+                return ResourceManager.GetString("MaximumFlashcardsInSingleRepetition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Name.
         /// </summary>
         public static string Name {

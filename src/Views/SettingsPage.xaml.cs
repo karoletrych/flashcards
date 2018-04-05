@@ -12,17 +12,25 @@ namespace Flashcards.Views
 		private readonly INotificationScheduler _notificationScheduler;
 		private readonly ISetting<TimeSpan> _repetitionTimeSetting;
 		private readonly ISetting<AskingMode> _repetitionAskingModeSetting;
+		private readonly ISetting<int> _maximumFlashcardsInRepetitionSetting;
 
 		public SettingsPage (INotificationScheduler notificationScheduler, 
 			ISetting<TimeSpan> repetitionTimeSetting,
-			ISetting<AskingMode> repetitionAskingModeSetting)
+			ISetting<AskingMode> repetitionAskingModeSetting,
+			ISetting<int> maximumFlashcardsInRepetitionSetting)
 		{
 			InitializeComponent();
 
 			_notificationScheduler = notificationScheduler;
 			_repetitionTimeSetting = repetitionTimeSetting;
 			_repetitionAskingModeSetting = repetitionAskingModeSetting;
+			_maximumFlashcardsInRepetitionSetting = maximumFlashcardsInRepetitionSetting;
 
+			Initialize();
+		}
+
+		private void Initialize()
+		{
 			TimePicker.Time = _repetitionTimeSetting.Value;
 			TimePicker.TimeChanged += UpdateRepetitionTime;
 
@@ -33,6 +41,7 @@ namespace Flashcards.Views
 			};
 			picker.SelectedIndexChanged += AskingMode_SelectedIndexChanged;
 			AskingModePickerCell.Picker = picker;
+			MaximumFlashcards.Text = _maximumFlashcardsInRepetitionSetting.Value.ToString();
 		}
 
 		private void UpdateRepetitionTime(object sender, EventArgs e)
@@ -48,6 +57,12 @@ namespace Flashcards.Views
 			var selectedMode = (AskingMode)((Picker) sender).SelectedIndex;
 
 			_repetitionAskingModeSetting.Value = selectedMode;
+		}
+
+		private void MaximumFlashcards_OnCompleted(object sender, EventArgs e)
+		{
+			var entryCell = (EntryCell) sender;
+			_maximumFlashcardsInRepetitionSetting.Value = int.Parse(entryCell.Text);
 		}
 	}
 }

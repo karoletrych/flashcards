@@ -204,6 +204,9 @@
   <data name="EndOfSession" xml:space="preserve">
     <value>Koniec sesji</value>
   </data>
+  <data name="MaximumFlashcardsInSingleRepetition" xml:space="preserve">
+    <value>Maksimum fiszek w powtórce</value>
+  </data>
   <data name="RepetitionAskingMode" xml:space="preserve">
     <value>Tryb pytania powtórek</value>
   </data>
