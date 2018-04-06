@@ -49,6 +49,12 @@
                             SelectedIndex="{Binding AskingMode, Converter={StaticResource IntEnum}}"
                             WidthRequest="100" />
                 </StackLayout>
+                <StackLayout Orientation="Horizontal">
+                    <Label Text="{views:Translate ShuffleFlashcards}" FontSize="Small" />
+                    <Switch HorizontalOptions="EndAndExpand"
+                            IsToggled="{Binding ShuffleFlashcards, Mode=TwoWay}"
+                            WidthRequest="100" />
+                </StackLayout>
             </StackLayout>
             <StackLayout Grid.Row="1">
                 <Label Text="{views:Translate Flashcards_Colon}" FontAttributes="Bold" />

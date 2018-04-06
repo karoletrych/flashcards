@@ -24,7 +24,7 @@ namespace Flashcards.Services.DataAccess.Database
             var connection = new SQLiteConnection(databasePath,
                 SqliteOpenFlags);
 
-            connection.CreateTable<Flashcard>();
+			connection.CreateTable<Flashcard>();
             connection.CreateTable<Lesson>();
 
             return connection;

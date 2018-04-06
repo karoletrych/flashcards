@@ -13,11 +13,13 @@ namespace Flashcards.Views
 		private readonly ISetting<TimeSpan> _repetitionTimeSetting;
 		private readonly ISetting<AskingMode> _repetitionAskingModeSetting;
 		private readonly ISetting<int> _maximumFlashcardsInRepetitionSetting;
+		private readonly ISetting<bool> _shuffleRepetitionsSetting;
 
 		public SettingsPage (INotificationScheduler notificationScheduler, 
 			ISetting<TimeSpan> repetitionTimeSetting,
 			ISetting<AskingMode> repetitionAskingModeSetting,
-			ISetting<int> maximumFlashcardsInRepetitionSetting)
+			ISetting<int> maximumFlashcardsInRepetitionSetting,
+			ISetting<bool> shuffleRepetitionsSetting)
 		{
 			InitializeComponent();
 
@@ -25,6 +27,7 @@ namespace Flashcards.Views
 			_repetitionTimeSetting = repetitionTimeSetting;
 			_repetitionAskingModeSetting = repetitionAskingModeSetting;
 			_maximumFlashcardsInRepetitionSetting = maximumFlashcardsInRepetitionSetting;
+			_shuffleRepetitionsSetting = shuffleRepetitionsSetting;
 
 			Initialize();
 		}
@@ -32,16 +35,20 @@ namespace Flashcards.Views
 		private void Initialize()
 		{
 			TimePicker.Time = _repetitionTimeSetting.Value;
-			TimePicker.TimeChanged += UpdateRepetitionTime;
 
 			var picker = new Picker
 			{
 				ItemsSource = Enum.GetNames(typeof(AskingMode)),
 				SelectedIndex = (int) _repetitionAskingModeSetting.Value
 			};
-			picker.SelectedIndexChanged += AskingMode_SelectedIndexChanged;
 			AskingModePickerCell.Picker = picker;
 			MaximumFlashcards.Text = _maximumFlashcardsInRepetitionSetting.Value.ToString();
+			Shuffle.On = _shuffleRepetitionsSetting.Value;
+
+			TimePicker.TimeChanged += UpdateRepetitionTime;
+			picker.SelectedIndexChanged += AskingMode_SelectedIndexChanged;
+			Shuffle.OnChanged += Shuffle_OnChanged;
+			MaximumFlashcards.Completed += MaximumFlashcards_OnCompleted;
 		}
 
 		private void UpdateRepetitionTime(object sender, EventArgs e)
@@ -63,6 +70,12 @@ namespace Flashcards.Views
 		{
 			var entryCell = (EntryCell) sender;
 			_maximumFlashcardsInRepetitionSetting.Value = int.Parse(entryCell.Text);
+		}
+
+		private void Shuffle_OnChanged(object sender, ToggledEventArgs e)
+		{
+			var shuffle = (SwitchCell) sender;
+			_shuffleRepetitionsSetting.Value = shuffle.On;
 		}
 	}
 }

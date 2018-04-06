@@ -216,4 +216,7 @@
   <data name="Repetitions" xml:space="preserve">
     <value>Repetitions</value>
   </data>
+  <data name="ShuffleFlashcards" xml:space="preserve">
+    <value>Shuffle flashcards</value>
+  </data>
 </root>

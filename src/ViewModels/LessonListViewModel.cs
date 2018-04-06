@@ -27,7 +27,7 @@ namespace Flashcards.ViewModels
 		private readonly IRepetitionFlashcardsRetriever _repetitionFlashcardsRetriever;
 		private readonly ISpacedRepetition _spacedRepetition;
 
-		private ICollection<Flashcard> PendingRepetitionFlashcards { get; set; } = new List<Flashcard>();
+		private IEnumerable<Flashcard> PendingRepetitionFlashcards { get; set; } = new List<Flashcard>();
 
 		public LessonListViewModel()
 		{
@@ -99,6 +99,7 @@ namespace Flashcards.ViewModels
 			var examiner = _examinerBuilder
 				.WithFlashcards(flashcards)
 				.WithAskingMode(lesson.InternalLesson.AskingMode)
+				.WithShuffling(lesson.InternalLesson.Shuffle)
 				.Build();
 
 			await _navigationService.NavigateAsync("AskingQuestionsPage", new NavigationParameters

@@ -10,6 +10,6 @@ namespace Flashcards.ViewModels
         Task Repeat(
 	        INavigationService navigationService, 
 	        string askingQuestionsPageRelativeUri, 
-	        ICollection<Flashcard> flashcardsToAsk);
+	        IEnumerable<Flashcard> flashcardsToAsk);
     }
 }

@@ -22,6 +22,7 @@ namespace Flashcards.Models
 
 	    public AskingMode AskingMode { get; set; }
 	    public bool AskInRepetitions { get; set; }
+	    public bool Shuffle { get; set; }
     }
 
     public class Flashcard : IEquatable<Flashcard>

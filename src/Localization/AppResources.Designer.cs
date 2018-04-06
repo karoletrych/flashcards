@@ -331,6 +331,15 @@ namespace Flashcards.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Shuffle flashcards.
+        /// </summary>
+        public static string ShuffleFlashcards {
+            get {
+                return ResourceManager.GetString("ShuffleFlashcards", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unknown.
         /// </summary>
         public static string Unknown {

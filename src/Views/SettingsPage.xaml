@@ -20,8 +20,10 @@
                     <EntryCell
                         x:Name ="MaximumFlashcards"
                         Keyboard="Numeric"
-                        Label = "{views:Translate MaximumFlashcardsInSingleRepetition}" 
-                        Completed="MaximumFlashcards_OnCompleted"/>
+                        Label = "{views:Translate MaximumFlashcardsInSingleRepetition}"/>
+                    <SwitchCell 
+                        x:Name="Shuffle" 
+                        Text="{views:Translate ShuffleFlashcards}"/>
                 </TableSection>
             </TableRoot>
         </TableView>

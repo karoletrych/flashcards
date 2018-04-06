@@ -85,6 +85,17 @@ namespace Flashcards.ViewModels
 			}
 		}
 
+		public bool ShuffleFlashcards
+		{
+			get => _lesson?.Shuffle ?? default(bool);
+			set
+			{
+				_lesson.Shuffle = value;
+				_lessonRepository.Update(_lesson);
+			}
+		}
+
+
 		public IList<string> AllAskingModes => Enum.GetNames(typeof(AskingMode));
 
 		public ICommand DeleteFlashcardCommand => new Command<int>(async flashcardId =>
@@ -108,6 +119,7 @@ namespace Flashcards.ViewModels
 			}
 		});
 
+		
 		public void OnNavigatedTo(NavigationParameters parameters)
 		{
 		}
@@ -132,6 +144,8 @@ namespace Flashcards.ViewModels
 			OnPropertyChanged(nameof(LessonName));
 			OnPropertyChanged(nameof(AskingMode));
 			OnPropertyChanged(nameof(AskInRepetitions));
+			OnPropertyChanged(nameof(ShuffleFlashcards));
+
 
 			Flashcards.Clear();
 			foreach (var flashcard in _lesson.Flashcards)

@@ -13,26 +13,30 @@ namespace Flashcards.ViewModels
 	{
 		private readonly ExaminerBuilder _examinerBuilder;
 		private readonly ISetting<AskingMode> _repetitionAskingModeSetting;
+		private readonly ISetting<bool> _shuffleRepetitionsSetting;
 		private readonly ISpacedRepetition _spacedRepetition;
 
 		public Repetitor(
 			ISpacedRepetition spacedRepetition,
 			ExaminerBuilder examinerBuilder,
-			ISetting<AskingMode> repetitionAskingModeSetting)
+			ISetting<AskingMode> repetitionAskingModeSetting,
+			ISetting<bool> shuffleRepetitionsSetting)
 		{
 			_spacedRepetition = spacedRepetition;
 			_examinerBuilder = examinerBuilder;
 			_repetitionAskingModeSetting = repetitionAskingModeSetting;
+			_shuffleRepetitionsSetting = shuffleRepetitionsSetting;
 		}
 
 		public async Task Repeat(
 			INavigationService navigationService,
 			string askingQuestionsUri,
-			ICollection<Flashcard> flashcardsToAsk)
+			IEnumerable<Flashcard> flashcardsToAsk)
 		{
 			var examiner = _examinerBuilder
 				.WithFlashcards(flashcardsToAsk)
 				.WithAskingMode(_repetitionAskingModeSetting.Value)
+				.WithShuffling(_shuffleRepetitionsSetting.Value)
 				.Build();
 
 			await navigationService.NavigateAsync(askingQuestionsUri,

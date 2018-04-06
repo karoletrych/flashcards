@@ -20,4 +20,10 @@ namespace Flashcards.SpacedRepetition.Interface
 		protected override string Key => "MaximumNumberOfFlashcardsInRepetition";
 		protected override int DefaultValue => 20;
 	}
+
+	internal class ShuffleRepetitionsSetting : Setting<bool>
+	{
+		protected override string Key => "ShuffleRepetitions";
+		protected override bool DefaultValue => true;
+	}
 }
