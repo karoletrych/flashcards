@@ -1,6 +1,5 @@
 ﻿using Android.Content;
 using Android.Speech.Tts;
-using Flashcards.Droid;
 using Flashcards.PlatformDependentTools;
 
 namespace FlashCards.Droid.Tools
