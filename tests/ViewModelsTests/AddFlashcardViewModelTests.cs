@@ -6,6 +6,7 @@ using Flashcards.Services.Http;
 using Flashcards.ViewModels;
 using NSubstitute;
 using Prism.Navigation;
+using Prism.Services;
 using Xunit;
 
 namespace ViewModelsTests
@@ -21,12 +22,15 @@ namespace ViewModelsTests
             var imageBrowser = Substitute.For<IImageBrowser>();
             var lessonRepository = Substitute.For<IRepository<Lesson>>();
             var message = Substitute.For<IMessage>();
+	        var pageDialogService = Substitute.For<IPageDialogService>();
 
             _viewModel = new AddFlashcardViewModel(
                 _translator,
                 repository,
                 imageBrowser,
-                lessonRepository
+                lessonRepository,
+				message,
+				pageDialogService
 			);
         }
 

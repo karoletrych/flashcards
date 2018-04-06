@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using Android.Content;
 using Android.Graphics;
 using Flashcards.Views.CustomViews;
@@ -29,13 +30,19 @@ namespace FlashCards.Droid.Renderers
 
 			if (e.OldElement != null)
 			{
+				e.OldElement.ColorbarItemsChanged -= OnInvalidate;
 			}
 
 			if (e.NewElement != null)
 			{
 				_multicolorBar.Items = e.NewElement.ItemsSource;
-				e.NewElement.ColorbarItemsChanged += (s,args) => Invalidate();
+				e.NewElement.ColorbarItemsChanged += OnInvalidate;
 			}
+		}
+
+		private void OnInvalidate(object sender, EventArgs e)
+		{
+			Invalidate();
 		}
 
 		protected override void OnDraw(Canvas canvas)

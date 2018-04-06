@@ -3,6 +3,7 @@ using Android.App;
 using Android.App.Job;
 using Android.Content.PM;
 using Android.OS;
+using FFImageLoading.Forms.Droid;
 using Flashcards.Views;
 using FlashCards.Droid;
 using Java.Util;
@@ -29,6 +30,8 @@ namespace Flashcards.Droid
 			base.OnCreate(bundle);
 
 			AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+			CachedImageRenderer.Init(enableFastRenderer: true);
+
 
 			Forms.Init(this, bundle);
 			LoadApplication(new App(new AndroidPlatformInitializer(this)));

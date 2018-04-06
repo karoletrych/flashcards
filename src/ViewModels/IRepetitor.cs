@@ -7,6 +7,9 @@ namespace Flashcards.ViewModels
 {
     public interface IRepetitor
     {
-        Task Repeat(INavigationService navigationService, string askingQuestionsPageRelativeUri, IEnumerable<Flashcard> flashcardsToAsk);
+        Task Repeat(
+	        INavigationService navigationService, 
+	        string askingQuestionsPageRelativeUri, 
+	        ICollection<Flashcard> flashcardsToAsk);
     }
 }

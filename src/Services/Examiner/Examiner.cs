@@ -28,9 +28,15 @@ namespace Flashcards.Services.Examiner
 
 	        if (!_questionsToAsk.Any())
 	        {
-		        var eventArgs = new QuestionResultsEventArgs(new List<AnsweredQuestion>(_answeredQuestions));
+		        var answeredQuestions = new List<AnsweredQuestion>(_answeredQuestions);
+
 		        ReloadQuestions();
-		        SessionEnded?.Invoke(this, eventArgs);
+
+				var eventArgs = new QuestionResultsEventArgs(
+			        answeredQuestions,
+			        _questionsToAsk.Count);
+
+				SessionEnded?.Invoke(this, eventArgs);
 			}
 
 			void ReloadQuestions()
@@ -60,8 +66,7 @@ namespace Flashcards.Services.Examiner
             return false;
         }
 
-	    public int NumberOfQuestion => _questionsToAsk.Count;
-
 	    public event EventHandler<QuestionResultsEventArgs> SessionEnded;
+	    public int QuestionsCount => _questionsToAsk.Count;
     }
 }

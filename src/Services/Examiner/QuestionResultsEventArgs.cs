@@ -5,11 +5,13 @@ namespace Flashcards.Services.Examiner
 {
     public class QuestionResultsEventArgs : EventArgs
     {
-        public QuestionResultsEventArgs(IList<AnsweredQuestion> results)
+        public QuestionResultsEventArgs(IList<AnsweredQuestion> results, int numberOfQuestionsInNextSession)
         {
-            Results = results;
+	        Results = results;
+	        NumberOfQuestionsInNextSession = numberOfQuestionsInNextSession;
         }
         
         public IList<AnsweredQuestion> Results { get; }
+	    public int NumberOfQuestionsInNextSession { get; }
     }
 }

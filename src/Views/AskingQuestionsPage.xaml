@@ -6,6 +6,7 @@
              xmlns:viewModels="clr-namespace:Flashcards.ViewModels;assembly=ViewModels"
              xmlns:customViews="clr-namespace:Flashcards.Views.CustomViews;assembly=Views"
              xmlns:views="clr-namespace:Flashcards.Views;assembly=Views"
+             xmlns:forms="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              x:Class="Flashcards.Views.AskingQuestionsPage">
     <ContentPage.BindingContext>
         <viewModels:AskingQuestionsViewModel/>
@@ -25,15 +26,14 @@
         </StackLayout>
 
         <StackLayout Grid.Row="1">
-            <Image
-                BackgroundColor="Green"
+            <forms:CachedImage
                 HorizontalOptions="FillAndExpand"
                 VerticalOptions="FillAndExpand" 
                 Source ="{Binding ImageUri}"
                 Aspect="Fill"/>
             <StackLayout Orientation="Horizontal">
-                <Label IsVisible ="{Binding BackIsVisible}" Text="{Binding FrontText}" />
-                <Label IsVisible ="{Binding FrontIsVisible}" Text="{Binding BackText}" />
+                <Label IsVisible ="{Binding BackIsVisible}" Text="{Binding FrontText}" FontSize="Large"/>
+                <Label IsVisible ="{Binding FrontIsVisible}" Text="{Binding BackText}" FontSize="Large"/>
             </StackLayout>
         </StackLayout>
 
@@ -42,9 +42,11 @@
                     Text="{views:Translate Show}"
                     IsVisible="{Binding FrontIsVisible}"
                     Command="{Binding ShowBackCommand}" 
-                    HorizontalOptions="FillAndExpand"/>
+                    HorizontalOptions="FillAndExpand"
+                    FontSize="Large"/>
 
             <Grid HorizontalOptions="FillAndExpand"
+                  VerticalOptions="FillAndExpand"
                   IsVisible="{Binding BackIsVisible}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="0.5*"></ColumnDefinition>
@@ -52,9 +54,9 @@
                 </Grid.ColumnDefinitions>
                 <Button Text="{views:Translate DontKnow}"
                         BackgroundColor="Red"
-                        FontSize="10"
+                        FontSize="Large"
                         HorizontalOptions="FillAndExpand"
-                        VerticalOptions="CenterAndExpand"
+                        VerticalOptions="FillAndExpand"
                         Command="{Binding UserAnswerCommand}"
                         Grid.Column="0">
                     <Button.CommandParameter>
@@ -62,10 +64,10 @@
                     </Button.CommandParameter>
                 </Button>
                 <Button Text="{views:Translate Know}"
-                        FontSize="10"
+                        FontSize="Large"
                         BackgroundColor="LawnGreen"
                         HorizontalOptions="FillAndExpand"
-                        VerticalOptions="CenterAndExpand"
+                        VerticalOptions="FillAndExpand"
                         Command="{Binding UserAnswerCommand}"
                         Grid.Column="1">
                     <Button.CommandParameter>

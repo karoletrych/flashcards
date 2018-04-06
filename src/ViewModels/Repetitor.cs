@@ -28,7 +28,7 @@ namespace Flashcards.ViewModels
 		public async Task Repeat(
 			INavigationService navigationService,
 			string askingQuestionsUri,
-			IEnumerable<Flashcard> flashcardsToAsk)
+			ICollection<Flashcard> flashcardsToAsk)
 		{
 			var examiner = _examinerBuilder
 				.WithFlashcards(flashcardsToAsk)

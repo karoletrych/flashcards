@@ -27,7 +27,7 @@ namespace Flashcards.ViewModels
 		private readonly IRepetitionFlashcardsRetriever _repetitionFlashcardsRetriever;
 		private readonly ISpacedRepetition _spacedRepetition;
 
-		private IEnumerable<Flashcard> PendingRepetitionFlashcards { get; set; } = new List<Flashcard>();
+		private ICollection<Flashcard> PendingRepetitionFlashcards { get; set; } = new List<Flashcard>();
 
 		public LessonListViewModel()
 		{

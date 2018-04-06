@@ -28,43 +28,34 @@ namespace Flashcards.ViewModels
 		public void OnNavigatedTo(NavigationParameters parameters)
 		{
 			_examiner = (IExaminer)parameters["examiner"];
-
 			_examiner.SessionEnded +=
 				async (sender, args) =>
 				{
-					await DisplayEndOfSessionAlert(args);
-					ResetQuestionStatuses();
+					await _dialogService.DisplayAlertAsync(AppResources.EndOfSession,
+						$"{AppResources.Known}: {args.Results.Count(x => x.IsKnown)} \n" +
+						$"{AppResources.Unknown}: {args.Results.Count(x => !x.IsKnown)}",
+						"OK");
+					if (!args.Results.All(r => r.IsKnown))
+						ResetQuestionStatuses(args.NumberOfQuestionsInNextSession);
+					else
+						await _navigationService.GoBackAsync();
 				};
 
-			ResetQuestionStatuses();
+			ResetQuestionStatuses(_examiner.QuestionsCount);
 			TryShowNextQuestion();
 		}
 
-		private void ResetQuestionStatuses()
+		private void ResetQuestionStatuses(int questionsCount)
 		{
 			CurrentQuestionNumber = 0;
 
 			QuestionStatuses.Clear();
-			for (var i = 0; i < _examiner.NumberOfQuestion; ++i)
+			for (var i = 0; i < questionsCount; ++i)
 			{
 				QuestionStatuses.Add(new MulticolorbarItem {Color = Color.Gray, Value = 1});
 			}
 
-			OnPropertyChanged(nameof(QuestionStatuses));
 			OnPropertyChanged(nameof(QuestionsProgress));
-		}
-
-		private async Task DisplayEndOfSessionAlert(QuestionResultsEventArgs args)
-		{
-			await _dialogService.DisplayAlertAsync(AppResources.EndOfSession,
-				$"{AppResources.Known}: {args.Results.Count(x => x.IsKnown)} \n" +
-				$"{AppResources.Unknown}: {args.Results.Count(x => !x.IsKnown)}",
-				"OK");
-			if (args.Results.All(r => r.IsKnown))
-			{
-				await _navigationService.GoBackAsync();
-			}
-
 		}
 
 		private readonly IPageDialogService _dialogService;
