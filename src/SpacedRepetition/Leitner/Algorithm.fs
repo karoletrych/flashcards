@@ -106,7 +106,7 @@ module Algorithm =
                         sessionNumberSetting.Value
                         decks
 
-                deckRepository.UpdateAll(newDecks)
+                deckRepository.InsertOrReplaceAll(newDecks)
                 |> sync
                 repetitionDoneTodaySetting.Value <- true
 

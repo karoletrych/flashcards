@@ -50,7 +50,7 @@ namespace Flashcards.Services.DataAccess.Database
 		}
 
 
-		public async Task UpdateAll(IEnumerable<T> entities)
+		public async Task InsertOrReplaceAll(IEnumerable<T> entities)
 		{
 			await _dbConnection.InsertOrReplaceAllWithChildrenAsync(entities)
 				.ConfigureAwait(false);

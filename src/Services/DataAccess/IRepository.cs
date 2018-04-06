@@ -13,7 +13,7 @@ namespace Flashcards.Services.DataAccess
 	    event EventHandler<T> ObjectInserted;
 		Task Insert(T entity);
 
-        Task UpdateAll(IEnumerable<T> entities);
+        Task InsertOrReplaceAll(IEnumerable<T> entities);
         Task Update(T entity);
 
         Task Delete(T entity);

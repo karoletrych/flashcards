@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Flashcards.Localization;
+using Flashcards.PlatformDependentTools;
 using Flashcards.Services.Examiner;
 using Prism.Navigation;
 using Prism.Services;
@@ -17,10 +18,12 @@ namespace Flashcards.ViewModels
 	{
 		public AskingQuestionsViewModel(
 			INavigationService navigationService,
-			IPageDialogService dialogService)
+			IPageDialogService dialogService,
+			ITextToSpeech textToSpeech)
 		{
 			_navigationService = navigationService;
 			_dialogService = dialogService;
+			_textToSpeech = textToSpeech;
 		}
 
 		public int CurrentQuestionNumber { get; private set; } = 0;
@@ -59,6 +62,7 @@ namespace Flashcards.ViewModels
 		}
 
 		private readonly IPageDialogService _dialogService;
+		private readonly ITextToSpeech _textToSpeech;
 
 		private readonly INavigationService _navigationService;
 
@@ -115,6 +119,13 @@ namespace Flashcards.ViewModels
 		});
 
 		public string QuestionsProgress => CurrentQuestionNumber + "/" + QuestionStatuses.Count;
+
+		public ICommand SpeakCommand => new Command(() =>
+		{
+			_textToSpeech.Speak(FrontIsVisible
+				? FrontText
+				: BackText);
+		});
 
 		public void OnNavigatedFrom(NavigationParameters parameters)
 		{

@@ -51,7 +51,7 @@ namespace Flashcards.Services.DataAccess.Database
 			return Task.CompletedTask;
 		}
 
-		public Task UpdateAll(IEnumerable<T> entities)
+		public Task InsertOrReplaceAll(IEnumerable<T> entities)
 		{
 			_dbConnection.InsertOrReplaceAllWithChildren(entities, true);
 			return Task.CompletedTask;

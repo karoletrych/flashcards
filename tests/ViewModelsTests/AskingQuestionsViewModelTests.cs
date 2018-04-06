@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using Flashcards.Models;
+using Flashcards.PlatformDependentTools;
 using Flashcards.Services;
 using Flashcards.Services.Examiner;
 using Flashcards.ViewModels;
@@ -30,8 +31,8 @@ namespace ViewModelsTests
 
             _navigationService = Substitute.For<INavigationService>();
             var dialogService = Substitute.For<IPageDialogService>();
-
-            _askingQuestionsViewModel = new AskingQuestionsViewModel(_navigationService, dialogService);
+	        var textToSpeech = Substitute.For<ITextToSpeech>();
+	        _askingQuestionsViewModel = new AskingQuestionsViewModel(_navigationService, dialogService, textToSpeech);
         }
 
         private async Task NavigateToViewModel()

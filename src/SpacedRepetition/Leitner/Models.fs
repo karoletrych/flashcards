@@ -73,7 +73,7 @@ module Models =
                 tableCreator.CreateTable<CardDeck>() |> sync
                 tableCreator.CreateTable<Deck>() |> sync
                 if deckRepository.FindAll() |> syncT |> Seq.isEmpty then
-                    deckRepository.UpdateAll(deckTitles 
+                    deckRepository.InsertOrReplaceAll(deckTitles 
                                              |> List.mapi (fun id title -> 
                                                         Deck(DeckTitle = title, Cards = List<Flashcard>(), Id = id)))
                                              |> sync
