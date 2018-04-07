@@ -40,8 +40,7 @@ namespace ViewModelsTests
 	        _lessonListViewModel = new LessonListViewModel(
 	            _lessonRepository, 
 	            _navigationService, 
-	            _pageDialogService,
-                flashcardRepository, 
+	            _pageDialogService, 
 				new ExaminerBuilder(),
 	            spacedRepetition, 
 	            _repetitor,

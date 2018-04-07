@@ -41,9 +41,12 @@
                         <ColumnDefinition Width="50*" />
                     </Grid.ColumnDefinitions>
 
-                    <Label Grid.Column="0"
-                           Text="{Binding PendingRepetitionQuestionsNumber, StringFormat={views:Translate FlashcardsForToday}}"
-                           Style="{DynamicResource ListItemTextStyle}" />
+                    <StackLayout Grid.Column="0" Orientation="Horizontal">
+                        <Label 
+                               Text="{Binding PendingRepetitionQuestionsNumber, StringFormat={views:Translate FlashcardsForToday}}"
+                               Style="{DynamicResource ListItemTextStyle}" />
+                        <Image IsVisible ="{Binding NoPendingRepetitions}" Source="ic_check_green_light_48dp.png" />
+                    </StackLayout>
 
                     <StackLayout Grid.Column="1">
                         <Label Text="{Binding ActiveRepetitionsRatioString}" />

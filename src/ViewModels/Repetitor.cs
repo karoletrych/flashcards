@@ -1,9 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Flashcards.Models;
 using Flashcards.Services.Examiner;
-using Flashcards.Settings;
 using Flashcards.SpacedRepetition.Interface;
 using Prism.Navigation;
 
@@ -38,8 +36,17 @@ namespace Flashcards.ViewModels
 		private void ApplyResults(object obj, QuestionResultsEventArgs args)
 		{
 			var questionResults = args.Results.Select(r =>
-				new QuestionResult(r.Question, r.IsKnown));
-			_spacedRepetition.RearrangeFlashcards(questionResults);
+				new QuestionResult(r.Question.InternalFlashcard, r.IsKnown));
+			try
+			{
+				_spacedRepetition.RearrangeFlashcards(questionResults);
+
+			}
+			catch (AggregateException e)
+			{
+				var x = e.Flatten();
+				throw;
+			}
 
 			((Examiner) obj).SessionEnded -= ApplyResults; 
 		}

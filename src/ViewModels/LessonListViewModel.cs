@@ -20,7 +20,6 @@ namespace Flashcards.ViewModels
 	{
 		private readonly IPageDialogService _dialogService;
 		private readonly ExaminerBuilder _examinerBuilder;
-		private readonly IRepository<Flashcard> _flashcardRepository;
 		private readonly IRepository<Lesson> _lessonRepository;
 		private readonly INavigationService _navigationService;
 		private readonly IRepetitor _repetitor;
@@ -28,6 +27,10 @@ namespace Flashcards.ViewModels
 		private readonly ISpacedRepetition _spacedRepetition;
 
 		private IExaminer PendingRepetitionExaminer { get; set; }
+		public int PendingRepetitionQuestionsNumber { get; private set; }
+		public bool NoPendingRepetitions => PendingRepetitionQuestionsNumber == 0;
+		public string ActiveRepetitionsRatioString { get; private set; }
+		public double ActiveRepetitionsRatio { get; private set; }
 
 		public LessonListViewModel()
 		{
@@ -37,7 +40,6 @@ namespace Flashcards.ViewModels
 			IRepository<Lesson> lessonRepository,
 			INavigationService navigationService,
 			IPageDialogService dialogService,
-			IRepository<Flashcard> flashcardRepository,
 			ExaminerBuilder examinerBuilder,
 			ISpacedRepetition spacedRepetition,
 			IRepetitor repetitor,
@@ -46,7 +48,6 @@ namespace Flashcards.ViewModels
 			_lessonRepository = lessonRepository;
 			_navigationService = navigationService;
 			_dialogService = dialogService;
-			_flashcardRepository = flashcardRepository;
 			_examinerBuilder = examinerBuilder;
 			_spacedRepetition = spacedRepetition;
 			_repetitor = repetitor;
@@ -125,11 +126,7 @@ namespace Flashcards.ViewModels
 			get { return new Command(async () => { await _navigationService.NavigateAsync("SettingsPage"); }); }
 		}
 
-		public int PendingRepetitionQuestionsNumber { get; private set; }
 
-		public string ActiveRepetitionsRatioString { get; private set; }
-
-		public double ActiveRepetitionsRatio { get; private set; }
 
 		public ICommand RunRepetitionCommand =>
 			new Command(async () =>

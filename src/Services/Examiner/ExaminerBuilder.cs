@@ -59,8 +59,8 @@ namespace Flashcards.Services.Examiner
 					Front = question.Back,
 					Back = question.Front,
 					ImageUrl = question.ImageUrl,
-					Id = question.Id,
-					LessonId = question.LessonId
+					Id = question.InternalFlashcard.Id,
+					LessonId = question.InternalFlashcard.LessonId
 				};
 				return new Question(
 					frontLanguage: question.BackLanguage, 

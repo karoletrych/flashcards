@@ -28,13 +28,13 @@
         <StackLayout Grid.Row="1">
             <forms:CachedImage
                 HorizontalOptions="FillAndExpand"
-                VerticalOptions="FillAndExpand" 
+                VerticalOptions="FillAndExpand"
                 Source ="{Binding ImageUri}"
                 Aspect="Fill"/>
             <StackLayout Orientation="Horizontal">
                 <Label IsVisible ="{Binding FrontIsVisible}" Text="{Binding FrontText}" FontSize="Large"/>
                 <Label IsVisible ="{Binding BackIsVisible}" Text="{Binding BackText}" FontSize="Large"/>
-                <Button Command="{Binding SpeakCommand}" BackgroundColor ="Transparent"  Image="ic_speak_blue_dark_48dp.png"/>
+                <Button Command="{Binding SpeakCommand}" BackgroundColor ="Transparent" Image="ic_speak_blue_dark_48dp.png"/>
                 <Button Command="{Binding RotateCommand}" BackgroundColor="Transparent" IsVisible ="{Binding Revealed}" Image="ic_rotate_blue_dark_48dp.png"/>
             </StackLayout>
         </StackLayout>

@@ -2,17 +2,19 @@ using Flashcards.Models;
 
 namespace Flashcards.Services.Examiner
 {
-	public class Question : Flashcard
+	public class Question
 	{
 		public Language FrontLanguage { get; }
 		public Language BackLanguage { get; }
+		public Flashcard InternalFlashcard { get; }
+		public string Front => InternalFlashcard.Front;
+		public string Back => InternalFlashcard.Back;
+		public string ImageUrl => InternalFlashcard.ImageUrl;
 
 		public Question(Flashcard flashcard, Language frontLanguage, Language backLanguage)
 		{
-			Id = flashcard.Id;
-			Front = flashcard.Front;
-			Back = flashcard.Back;
-			ImageUrl = flashcard.ImageUrl;
+			InternalFlashcard = flashcard;
+			
 			FrontLanguage = frontLanguage;
 			BackLanguage = backLanguage;
 		}
