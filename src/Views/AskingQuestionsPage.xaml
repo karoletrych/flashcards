@@ -34,21 +34,22 @@
             <StackLayout Orientation="Horizontal">
                 <Label IsVisible ="{Binding FrontIsVisible}" Text="{Binding FrontText}" FontSize="Large"/>
                 <Label IsVisible ="{Binding BackIsVisible}" Text="{Binding BackText}" FontSize="Large"/>
-                <Button Command="{Binding SpeakCommand}"></Button>
+                <Button Command="{Binding SpeakCommand}" BackgroundColor ="Transparent"  Image="ic_speak_blue_dark_48dp.png"/>
+                <Button Command="{Binding RotateCommand}" BackgroundColor="Transparent" IsVisible ="{Binding Revealed}" Image="ic_rotate_blue_dark_48dp.png"/>
             </StackLayout>
         </StackLayout>
 
         <StackLayout Orientation="Horizontal" Grid.Row="2">
             <Button 
                     Text="{views:Translate Show}"
-                    IsVisible="{Binding FrontIsVisible}"
+                    IsVisible="{Binding NotRevealed}"
                     Command="{Binding ShowBackCommand}" 
                     HorizontalOptions="FillAndExpand"
                     FontSize="Large"/>
 
             <Grid HorizontalOptions="FillAndExpand"
                   VerticalOptions="FillAndExpand"
-                  IsVisible="{Binding BackIsVisible}">
+                  IsVisible="{Binding Revealed}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="0.5*"></ColumnDefinition>
                     <ColumnDefinition Width="0.5*"></ColumnDefinition>

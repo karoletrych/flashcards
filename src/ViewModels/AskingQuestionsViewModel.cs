@@ -81,6 +81,9 @@ namespace Flashcards.ViewModels
 		public bool FrontIsVisible => !BackIsVisible;
 
 		public string FrontText { get; private set; }
+		public bool Revealed { get; private set; }
+		public bool NotRevealed => !Revealed;
+
 
 		public string BackText { get; private set; }
 
@@ -120,6 +123,7 @@ namespace Flashcards.ViewModels
 		public ICommand ShowBackCommand => new Command(() =>
 		{
 			BackIsVisible = true;
+			Revealed = true;
 		});
 
 		public string QuestionsProgress => CurrentQuestionNumber + "/" + QuestionStatuses.Count;
@@ -132,6 +136,8 @@ namespace Flashcards.ViewModels
 				_textToSpeech.Speak(BackText, new CultureInfo(_backLanguage.Tag()));
 		});
 
+		public ICommand RotateCommand => new Command(() => { BackIsVisible = !BackIsVisible; });
+
 		public void OnNavigatedFrom(NavigationParameters parameters)
 		{
 		}
@@ -142,6 +148,7 @@ namespace Flashcards.ViewModels
 		{
 			if (_examiner.TryAskNextQuestion(out var question))
 			{
+				Revealed = false;
 				FrontText = question.Front;
 				BackText = question.Back;
 				_frontLanguage = question.FrontLanguage;
