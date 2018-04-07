@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Flashcards.Models;
 using Flashcards.PlatformDependentTools;
@@ -19,17 +20,21 @@ namespace ViewModelsTests
         private readonly INavigationService _navigationService;
 	    private readonly IExaminer _examiner;
 
-	    private readonly Lesson _lesson = new Lesson
-	    {
-			Flashcards = {
-		    new Flashcard {Front = "cat", Back = "kot"},
-		    new Flashcard {Front = "dog", Back = "pies"},
-		    new Flashcard {Front = "duck", Back = "kaczka"}
-	    }};
+	    private readonly Lesson _lesson; 
 
 	    public AskingQuestionsViewModelTests()
         {
-            _examiner = new ExaminerBuilder().WithLessons(new[] {_lesson }).Build();
+			_lesson = new Lesson
+	        {
+		        Flashcards = new List<Flashcard>
+		        {
+			        new Flashcard {Front = "cat", Back = "kot"},
+			        new Flashcard {Front = "dog", Back = "pies"},
+			        new Flashcard {Front = "duck", Back = "kaczka"}
+		        }
+	        };
+
+			_examiner = new ExaminerBuilder().WithLessons(new[] {_lesson }).Build();
 
             _navigationService = Substitute.For<INavigationService>();
             var dialogService = Substitute.For<IPageDialogService>();

@@ -11,7 +11,7 @@ using Flashcards.Models;
 using Flashcards.PlatformDependentTools;
 using Flashcards.Services.DataAccess;
 using Flashcards.Services.Http;
-using Java.Net;
+//using Java.Net;
 using Prism.Navigation;
 using Prism.Services;
 using Xamarin.Forms;
@@ -166,10 +166,10 @@ namespace Flashcards.ViewModels
 			{
 				Debug.WriteLine(e.ToString());
 			}
-			catch (UnknownHostException e)
-			{
-				Debug.WriteLine(e.ToString());
-			}
+//			catch (UnknownHostException e)
+//			{
+//				Debug.WriteLine(e.ToString());
+//			}
 			catch (Exception e)
 			{
 				await _dialogService.DisplayAlertAsync("Error", e.ToString(), "OK");

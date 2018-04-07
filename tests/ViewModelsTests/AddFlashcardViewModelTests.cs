@@ -59,11 +59,12 @@ namespace ViewModelsTests
         [Fact]
         private async void WhenSecondTextIsModifiedByUser_FirstDoesNotChange()
         {
-            _viewModel.OnNavigatedTo(
+	        var lesson = new Lesson { FrontLanguage = Language.Polish, BackLanguage = Language.English };
+
+			_viewModel.OnNavigatedTo(
                 new NavigationParameters
                 {
-                    {"frontLanguage", Language.Polish},
-                    {"backLanguage", Language.English}
+                    {"lesson", lesson},
                 });
             
             _translator
