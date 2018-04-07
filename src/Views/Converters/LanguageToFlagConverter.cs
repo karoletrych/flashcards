@@ -10,7 +10,7 @@ namespace Flashcards.Views.Converters
 	    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 	    {
 		    var language = (Language)value;
-		    var acronym = language.Acronym();
+		    var acronym = language.Tag();
 		    var path = "flag_" + acronym + ".png";
 		    return path;
 	    }

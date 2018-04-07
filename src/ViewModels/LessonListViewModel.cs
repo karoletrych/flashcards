@@ -24,10 +24,10 @@ namespace Flashcards.ViewModels
 		private readonly IRepository<Lesson> _lessonRepository;
 		private readonly INavigationService _navigationService;
 		private readonly IRepetitor _repetitor;
-		private readonly IRepetitionFlashcardsRetriever _repetitionFlashcardsRetriever;
+		private readonly IRepetitionExaminerBuilder _repetitionExaminerBuilder;
 		private readonly ISpacedRepetition _spacedRepetition;
 
-		private IEnumerable<Flashcard> PendingRepetitionFlashcards { get; set; } = new List<Flashcard>();
+		private IExaminer PendingRepetitionExaminer { get; set; }
 
 		public LessonListViewModel()
 		{
@@ -41,7 +41,7 @@ namespace Flashcards.ViewModels
 			ExaminerBuilder examinerBuilder,
 			ISpacedRepetition spacedRepetition,
 			IRepetitor repetitor,
-			IRepetitionFlashcardsRetriever repetitionFlashcardsRetriever)
+			IRepetitionExaminerBuilder repetitionExaminerBuilder)
 		{
 			_lessonRepository = lessonRepository;
 			_navigationService = navigationService;
@@ -50,7 +50,7 @@ namespace Flashcards.ViewModels
 			_examinerBuilder = examinerBuilder;
 			_spacedRepetition = spacedRepetition;
 			_repetitor = repetitor;
-			_repetitionFlashcardsRetriever = repetitionFlashcardsRetriever;
+			_repetitionExaminerBuilder = repetitionExaminerBuilder;
 		}
 
 		public async void OnNavigatedTo(NavigationParameters parameters)
@@ -62,8 +62,8 @@ namespace Flashcards.ViewModels
 
 			async void UpdateRepetitionDisplay()
 			{
-				PendingRepetitionFlashcards = await _repetitionFlashcardsRetriever.FlashcardsToAsk();
-				PendingRepetitionFlashcardsNumber = PendingRepetitionFlashcards.Count();
+				PendingRepetitionExaminer = (await _repetitionExaminerBuilder.Examiner());
+				PendingRepetitionQuestionsNumber = PendingRepetitionExaminer.QuestionsCount;
 
 				var learnedFlashcards = lessons
 					.Where(l => l.AskInRepetitions)
@@ -95,9 +95,8 @@ namespace Flashcards.ViewModels
 
 		public ICommand PracticeLessonCommand => new Command<LessonViewModel>(async lesson =>
 		{
-			var flashcards = await _flashcardRepository.Where(f => f.LessonId == lesson.InternalLesson.Id);
 			var examiner = _examinerBuilder
-				.WithFlashcards(flashcards)
+				.WithLessons(new []{lesson.InternalLesson})
 				.WithAskingMode(lesson.InternalLesson.AskingMode)
 				.WithShuffling(lesson.InternalLesson.Shuffle)
 				.Build();
@@ -126,7 +125,7 @@ namespace Flashcards.ViewModels
 			get { return new Command(async () => { await _navigationService.NavigateAsync("SettingsPage"); }); }
 		}
 
-		public int PendingRepetitionFlashcardsNumber { get; private set; }
+		public int PendingRepetitionQuestionsNumber { get; private set; }
 
 		public string ActiveRepetitionsRatioString { get; private set; }
 
@@ -135,8 +134,8 @@ namespace Flashcards.ViewModels
 		public ICommand RunRepetitionCommand =>
 			new Command(async () =>
 				{
-					if(PendingRepetitionFlashcards.Any())
-						await _repetitor.Repeat(_navigationService, "AskingQuestionsPage", PendingRepetitionFlashcards);
+					if(PendingRepetitionQuestionsNumber > 0)
+						await _repetitor.Repeat(_navigationService, "AskingQuestionsPage", PendingRepetitionExaminer);
 					else
 						await _dialogService.DisplayAlertAsync(
 							AppResources.NoFlashcards, 

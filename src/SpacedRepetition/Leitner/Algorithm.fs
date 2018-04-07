@@ -122,7 +122,7 @@ module Algorithm =
             member this.LearnedFlashcards 
                 with get () =
                     let cards = 
-                        deckRepository.Where(fun deck -> deck.DeckTitle = RetiredDeckTitle)
+                        deckRepository.FindWhere(fun deck -> deck.DeckTitle = RetiredDeckTitle)
                         |> Async.AwaitTask
                         |> Async.RunSynchronously
                         |> Seq.exactlyOne

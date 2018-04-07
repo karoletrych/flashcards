@@ -1,12 +1,11 @@
 using System;
-using Flashcards.Models;
 
 namespace Flashcards.Services.Examiner
 {
 	public interface IExaminer
 	{
 		void Answer(bool known);
-		bool TryAskNextQuestion(out Flashcard question);
+		bool TryAskNextQuestion(out Question question);
 
 		event EventHandler<QuestionResultsEventArgs> SessionEnded;
 		int QuestionsCount { get; }

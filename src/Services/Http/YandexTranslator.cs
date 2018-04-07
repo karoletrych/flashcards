@@ -25,7 +25,7 @@ namespace Flashcards.Services.Http
             var request = new Uri("https://translate.yandex.net/api/v1.5/tr.json/translate")
                 .AddQuery("key", YandexKey)
                 .AddQuery("text", text)
-                .AddQuery("lang", $"{@from.Acronym()}-{to.Acronym()}")
+                .AddQuery("lang", $"{@from.Tag()}-{to.Tag()}")
                 .ToString();
 
             var response = await _client.GetStringAsync(request);

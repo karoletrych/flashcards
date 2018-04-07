@@ -68,18 +68,20 @@ namespace Flashcards.ViewModels
 				return;
 			}
 
-			if (!(await _lessonRepository.Where(l => l.Id == _lesson.Id)).Any())
+			if (!(await _lessonRepository.FindWhere(l => l.Id == _lesson.Id)).Any())
 			{
 				await _lessonRepository.Insert(_lesson);
 			}
 
-			await _flashcardRepository.Insert(new Flashcard
+			var flashcard = new Flashcard
 			{
 				Front = FrontText,
 				Back = BackText,
 				LessonId = _lesson.Id,
 				ImageUrl = SelectedImageUri?.AbsoluteUri
-			});
+			};
+
+			var doNotAwait = _flashcardRepository.Insert(flashcard);
 
 			FrontText = "";
 			BackText = "";

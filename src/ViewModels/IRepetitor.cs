@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using Flashcards.Models;
+﻿using System.Threading.Tasks;
+using Flashcards.Services.Examiner;
 using Prism.Navigation;
 
 namespace Flashcards.ViewModels
@@ -10,6 +9,6 @@ namespace Flashcards.ViewModels
         Task Repeat(
 	        INavigationService navigationService, 
 	        string askingQuestionsPageRelativeUri, 
-	        IEnumerable<Flashcard> flashcardsToAsk);
+	        IExaminer examiner);
     }
 }

@@ -32,7 +32,7 @@ namespace Flashcards.Services.Http
                     .AddQuery("q", query)
                     // ReSharper disable once ImpureMethodCallOnReadonlyValueField
                     .AddQuery("per_page", _numberOfResults.ToString())
-                    .AddQuery("lang", queryLanguage.Acronym())
+                    .AddQuery("lang", queryLanguage.Tag())
                     .ToString();
 
             var response = await _httpClient.GetStringAsync(httpQuery);

@@ -55,7 +55,7 @@ namespace Flashcards.ServicesTests
             _flashcardRepository.Insert(flashcard2);
             _flashcardRepository.Insert(flashcard);
 
-            var matchingFlashcards = _flashcardRepository.Where(f => f.LessonId == "1").Result;
+            var matchingFlashcards = _flashcardRepository.FindWhere(f => f.LessonId == "1").Result;
 
             Assert.Equal(2, matchingFlashcards.Count());
         }
@@ -66,7 +66,7 @@ namespace Flashcards.ServicesTests
             var lesson = new Lesson { FrontLanguage = Language.English, BackLanguage = Language.Polish, Id = "1" };
             _lessonRepository.Insert(lesson);
 
-            var matchingFlashcards = _flashcardRepository.Where(f => f.LessonId == "1").Result;
+            var matchingFlashcards = _flashcardRepository.FindWhere(f => f.LessonId == "1").Result;
 
             Assert.Empty(matchingFlashcards);
         }

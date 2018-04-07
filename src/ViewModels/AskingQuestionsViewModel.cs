@@ -1,11 +1,13 @@
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Flashcards.Localization;
+using Flashcards.Models;
 using Flashcards.PlatformDependentTools;
 using Flashcards.Services.Examiner;
 using Prism.Navigation;
@@ -69,6 +71,8 @@ namespace Flashcards.ViewModels
 		private IExaminer _examiner;
 
 		private bool _backIsVisible;
+		private Language _frontLanguage;
+		private Language _backLanguage;
 
 		public AskingQuestionsViewModel()
 		{
@@ -122,9 +126,10 @@ namespace Flashcards.ViewModels
 
 		public ICommand SpeakCommand => new Command(() =>
 		{
-			_textToSpeech.Speak(FrontIsVisible
-				? FrontText
-				: BackText);
+			if(FrontIsVisible)
+				_textToSpeech.Speak(FrontText, new CultureInfo(_frontLanguage.Tag()));
+			else
+				_textToSpeech.Speak(BackText, new CultureInfo(_backLanguage.Tag()));
 		});
 
 		public void OnNavigatedFrom(NavigationParameters parameters)
@@ -139,6 +144,8 @@ namespace Flashcards.ViewModels
 			{
 				FrontText = question.Front;
 				BackText = question.Back;
+				_frontLanguage = question.FrontLanguage;
+				_backLanguage = question.BackLanguage;
 				ImageUri = question.ImageUrl != null
 					? new Uri(question.ImageUrl)
 					: null;

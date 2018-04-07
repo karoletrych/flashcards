@@ -8,12 +8,12 @@ namespace Flashcards.Services.Examiner
     public class Examiner : IExaminer
     {
         private readonly IList<AnsweredQuestion> _answeredQuestions = new List<AnsweredQuestion>();
-		private readonly Queue<Flashcard> _questionsToAsk;
-	    private Flashcard _currentQuestion;
+		private readonly Queue<Question> _questionsToAsk;
+	    private Question _currentQuestion;
 
-        public Examiner(IEnumerable<Flashcard> questions)
+        public Examiner(IEnumerable<Question> questions)
         {
-            _questionsToAsk = new Queue<Flashcard>(questions);
+            _questionsToAsk = new Queue<Question>(questions);
         }
 
 	    /// <exception cref="InvalidOperationException">Question not asked.</exception>
@@ -43,26 +43,26 @@ namespace Flashcards.Services.Examiner
 	        {
 		        foreach (var answeredQuestion in _answeredQuestions.Where(q => !q.IsKnown))
 		        {
-			        _questionsToAsk.Enqueue(answeredQuestion.Flashcard);
+			        _questionsToAsk.Enqueue(answeredQuestion.Question);
 		        }
 		        _answeredQuestions.Clear();
 	        }
         }
 
 	    /// <exception cref="InvalidOperationException">Previous question has not been answered.</exception>
-		public bool TryAskNextQuestion(out Flashcard flashcard)
+		public bool TryAskNextQuestion(out Question question)
         {
             if (_currentQuestion != null)
                 throw new InvalidOperationException("Previous question has not been answered.");
 
             if (_questionsToAsk.Any())
             {
-                flashcard = _questionsToAsk.Dequeue();
-	            _currentQuestion = flashcard;
+                question = _questionsToAsk.Dequeue();
+	            _currentQuestion = question;
                 return true;
             }
 
-            flashcard = null;
+            question = null;
             return false;
         }
 

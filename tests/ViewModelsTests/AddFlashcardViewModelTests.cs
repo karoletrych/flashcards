@@ -17,7 +17,6 @@ namespace ViewModelsTests
         {
             _translator = Substitute.For<ITranslator>();
 
-
             var repository = Substitute.For<IRepository<Flashcard>>();
             var imageBrowser = Substitute.For<IImageBrowser>();
             var lessonRepository = Substitute.For<IRepository<Lesson>>();
@@ -41,11 +40,11 @@ namespace ViewModelsTests
         [Fact]
         private async void WhenFrontTextIsChanged_BackTextTranslationAppears()
         {
+	        var lesson = new Lesson {FrontLanguage = Language.English, BackLanguage = Language.Polish};
             _viewModel.OnNavigatedTo(
                 new NavigationParameters
                 {
-                    {"frontLanguage", Language.English},
-                    {"backLanguage", Language.Polish}
+                    {"lesson", lesson},
                 });
             
             _translator

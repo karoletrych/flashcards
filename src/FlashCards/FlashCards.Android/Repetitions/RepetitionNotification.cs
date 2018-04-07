@@ -18,13 +18,12 @@ namespace FlashCards.Droid.Repetitions
 			try
 			{
 				var container = IocRegistrations.DefaultContainer();
-				var flashcardsRetriever = container.Resolve<IRepetitionFlashcardsRetriever>();
+				var repeatingExaminer = await container.Resolve<IRepetitionExaminerBuilder>().Examiner();
 				var spacedRepetition = container.Resolve<ISpacedRepetition>();
 
 				spacedRepetition.Proceed();
-				var flashcards = await flashcardsRetriever.FlashcardsToAsk();
 
-				if (flashcards.Any())
+				if (repeatingExaminer.QuestionsCount > 0)
 				{
 					ShowNotification(context);
 				}

@@ -77,7 +77,7 @@ namespace LeitnerTests
 		private IEnumerable<Flashcard> Flashcards(string deck)
 		{
 			return _deckRepository
-				.Where(cd => cd.DeckTitle == deck)
+				.FindWhere(cd => cd.DeckTitle == deck)
 				.Result
 				.Single()
 				.Cards;
@@ -126,11 +126,11 @@ namespace LeitnerTests
 			_leitner.RearrangeFlashcards(flashcards.Select(Known));
 
 			var session0DeckCards =
-				_deckRepository.Where(cd => cd.DeckTitle == "0259").Result;
+				_deckRepository.FindWhere(cd => cd.DeckTitle == "0259").Result;
 			Assert.NotEmpty(session0DeckCards);
 
 			var currentDeckCards =
-				_deckRepository.Where(cd => cd.DeckTitle == CurrentDeckTitle).Result.Single().Cards;
+				_deckRepository.FindWhere(cd => cd.DeckTitle == CurrentDeckTitle).Result.Single().Cards;
 			Assert.Empty(currentDeckCards);
 		}
 

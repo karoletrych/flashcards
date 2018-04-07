@@ -42,7 +42,7 @@
                     </Grid.ColumnDefinitions>
 
                     <Label Grid.Column="0"
-                           Text="{Binding PendingRepetitionFlashcardsNumber, StringFormat={views:Translate FlashcardsForToday}}"
+                           Text="{Binding PendingRepetitionQuestionsNumber, StringFormat={views:Translate FlashcardsForToday}}"
                            Style="{DynamicResource ListItemTextStyle}" />
 
                     <StackLayout Grid.Column="1">

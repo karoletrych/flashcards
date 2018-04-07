@@ -32,8 +32,8 @@
                 Source ="{Binding ImageUri}"
                 Aspect="Fill"/>
             <StackLayout Orientation="Horizontal">
-                <Label IsVisible ="{Binding BackIsVisible}" Text="{Binding FrontText}" FontSize="Large"/>
-                <Label IsVisible ="{Binding FrontIsVisible}" Text="{Binding BackText}" FontSize="Large"/>
+                <Label IsVisible ="{Binding FrontIsVisible}" Text="{Binding FrontText}" FontSize="Large"/>
+                <Label IsVisible ="{Binding BackIsVisible}" Text="{Binding BackText}" FontSize="Large"/>
                 <Button Command="{Binding SpeakCommand}"></Button>
             </StackLayout>
         </StackLayout>

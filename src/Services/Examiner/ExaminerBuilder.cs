@@ -5,69 +5,73 @@ using Flashcards.Models;
 
 namespace Flashcards.Services.Examiner
 {
-    public class ExaminerBuilder
-    {
-        private AskingMode _askingMode;
-        private IEnumerable<Flashcard> _flashcards;
-	    private bool _shuffle = false;
-
-        public ExaminerBuilder WithFlashcards(IEnumerable<Flashcard> flashcards)
-        {
-            _flashcards = flashcards;
-            return this;
-        }
-
-        public ExaminerBuilder WithAskingMode(AskingMode askingMode)
-        {
-            _askingMode = askingMode;
-            return this;
-        }
-
-	    public ExaminerBuilder WithShuffling(bool shuffle)
-	    {
-		    _shuffle = shuffle;
-		    return this;
-	    }
+	public class ExaminerBuilder
+	{
 		private static readonly Random Rnd = new Random();
+		private AskingMode _askingMode;
+		private IEnumerable<Question> _questions;
+		private bool _shuffle;
+		private int _maximum = Int32.MaxValue;
+
+		public ExaminerBuilder WithLessons(IEnumerable<Lesson> lessons)
+		{
+			_questions = lessons.SelectMany(l =>
+				l.Flashcards.Select(f => new Question(f, l.FrontLanguage, l.BackLanguage)));
+			return this;
+		}
+
+		public ExaminerBuilder WithAskingMode(AskingMode askingMode)
+		{
+			_askingMode = askingMode;
+			return this;
+		}
+
+		public ExaminerBuilder WithShuffling(bool shuffle)
+		{
+			_shuffle = shuffle;
+			return this;
+		}
+
+		public ExaminerBuilder WithMaximumFlashcards(int maximum)
+		{
+			_maximum = maximum;
+			return this;
+		}
+
 		public IExaminer Build()
-        {
+		{
+			if (_questions == null)
+				throw new InvalidOperationException();
 
-			if (_flashcards == null)
-                throw new InvalidOperationException();
-	        var flashcardList = _flashcards.ToList();
+			return (_shuffle ? _questions.Shuffle() : _questions)
+				.Take(_maximum)
+				.Pipe(
+					questions => 
+					_askingMode == AskingMode.Front ? new Examiner(questions) :
+					_askingMode == AskingMode.Back ? new Examiner(questions.Select(Invert)) :
+					_askingMode == AskingMode.Random ? new Examiner(questions.Select(Random)) :
+					throw new ArgumentOutOfRangeException());
 
-	        if (_shuffle)
-		        flashcardList.Shuffle();
+			Question Invert(Question question)
+			{
+				var invertedFlashcard = new Flashcard
+				{
+					Front = question.Back,
+					Back = question.Front,
+					ImageUrl = question.ImageUrl,
+					Id = question.Id,
+					LessonId = question.LessonId
+				};
+				return new Question(
+					frontLanguage: question.BackLanguage, 
+					backLanguage: question.FrontLanguage,
+					flashcard: invertedFlashcard);
+			}
 
-            switch (_askingMode)
-            {
-                case AskingMode.Front:
-                    return new Examiner(flashcardList);
-                case AskingMode.Back:
-                    return new Examiner(flashcardList.Select(Invert));
-                case AskingMode.Random:
-                    return new Examiner(flashcardList.Select(Random));
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-
-	        Flashcard Invert(Flashcard flashcard)
-	        {
-		        return new Flashcard
-		        {
-			        Back = flashcard.Front,
-			        Front = flashcard.Back,
-			        Id = flashcard.Id,
-			        ImageUrl = flashcard.ImageUrl,
-			        LessonId = flashcard.LessonId
-		        };
-	        }
-
-	        Flashcard Random(Flashcard flashcard)
-	        {
-		        return Rnd.NextDouble() > 0.5 ? flashcard : Invert(flashcard);
-	        }
-
+			Question Random(Question question)
+			{
+				return Rnd.NextDouble() > 0.5 ? question : Invert(question);
+			}
 		}
 	}
 }

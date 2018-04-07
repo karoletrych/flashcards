@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Flashcards.Services.Examiner
 {
@@ -7,8 +8,9 @@ namespace Flashcards.Services.Examiner
     {
 	    private static readonly Random Rng = new Random();
 
-	    public static void Shuffle<T>(this IList<T> list)
+	    public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> enumerable)
 	    {
+		    var list = enumerable.ToList();
 		    var n = list.Count;
 		    while (n > 1)
 		    {
@@ -18,6 +20,8 @@ namespace Flashcards.Services.Examiner
 			    list[k] = list[n];
 			    list[n] = value;
 		    }
+
+		    return list;
 	    }
 	}
 }

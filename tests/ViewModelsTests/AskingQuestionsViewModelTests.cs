@@ -19,15 +19,17 @@ namespace ViewModelsTests
         private readonly INavigationService _navigationService;
 	    private readonly IExaminer _examiner;
 
-	    private readonly Flashcard[] _flashcards = {
+	    private readonly Lesson _lesson = new Lesson
+	    {
+			Flashcards = {
 		    new Flashcard {Front = "cat", Back = "kot"},
 		    new Flashcard {Front = "dog", Back = "pies"},
 		    new Flashcard {Front = "duck", Back = "kaczka"}
-	    };
+	    }};
 
 	    public AskingQuestionsViewModelTests()
         {
-            _examiner = new ExaminerBuilder().WithFlashcards(_flashcards).Build();
+            _examiner = new ExaminerBuilder().WithLessons(new[] {_lesson }).Build();
 
             _navigationService = Substitute.For<INavigationService>();
             var dialogService = Substitute.For<IPageDialogService>();
@@ -49,7 +51,7 @@ namespace ViewModelsTests
 	    public async void At_startup_QuestionStatuses_has_number_of_gray_items_equal_to_number_of_flashcards()
 	    {
 		    await NavigateToViewModel();
-			Assert.Equal(_askingQuestionsViewModel.QuestionStatuses.Count, _flashcards.Length);
+			Assert.Equal(_askingQuestionsViewModel.QuestionStatuses.Count, _lesson.Flashcards.Count);
 			Assert.All(_askingQuestionsViewModel.QuestionStatuses, item => Assert.Equal(Color.Gray, item.Color));
 	    }
 
@@ -60,7 +62,7 @@ namespace ViewModelsTests
 
 		    _askingQuestionsViewModel.ShowBackCommand.Execute(null);
 		    _askingQuestionsViewModel.UserAnswerCommand.Execute(true);
-			Assert.Equal(_askingQuestionsViewModel.QuestionStatuses.Count, _flashcards.Length);
+			Assert.Equal(_askingQuestionsViewModel.QuestionStatuses.Count, _lesson.Flashcards.Count);
 		    Assert.Equal(Color.LawnGreen, _askingQuestionsViewModel.QuestionStatuses.First().Color);
 	    }
 

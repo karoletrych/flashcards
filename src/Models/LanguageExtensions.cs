@@ -4,7 +4,7 @@ namespace Flashcards.Models
 {
     public static class LanguageExtensions
     {
-        public static string Acronym(this Language language)
+        public static string Tag(this Language language)
         {
             switch (language)
             {

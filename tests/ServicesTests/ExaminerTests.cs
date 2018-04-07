@@ -16,12 +16,13 @@ namespace Flashcards.ServicesTests
 
         private readonly Examiner _examiner;
 
-        private readonly IList<Flashcard> _questions = new[]
+        private readonly IList<Question> _questions = new[]
         {
             new Flashcard {Front = "dog", Back = "pies"},
             new Flashcard {Front = "cat", Back = "kot"},
             new Flashcard {Front = "duck", Back = "kaczka"}
-        };
+        }
+	    .Select(f=> new Question(f, Language.English, Language.Polish)).ToList();
 
         [Fact]
         public void AnsweringTwiceSameQuestion_CausesException()
@@ -129,12 +130,14 @@ namespace Flashcards.ServicesTests
 		    _examiner.Answer(false);
 		    _examiner.TryAskNextQuestion(out var _);
 		    _examiner.Answer(true);
+		    _examiner.TryAskNextQuestion(out var _);
+		    _examiner.Answer(true);
 
-		    _examiner.TryAskNextQuestion(out var repeatedQuestion);
+			_examiner.TryAskNextQuestion(out var repeatedQuestion);
 
 		    Assert.Equal(
-			    failedQuestion.Id,
-			    repeatedQuestion.Id);
+			    failedQuestion.Front,
+			    repeatedQuestion.Front);
 
 
 		    _examiner.Answer(true);
