@@ -33,27 +33,27 @@
                     <Label Text="{views:Translate Name}" FontSize="Small" />
                     <Entry HorizontalOptions="EndAndExpand"
                            Text="{Binding LessonName, Mode=TwoWay}"
-                           WidthRequest="100"
+                           WidthRequest="200"
                            FontSize="Small" />
                 </StackLayout>
                 <StackLayout Orientation="Horizontal">
                     <Label Text="{views:Translate AskInRepetitions}" FontSize="Small" />
                     <Switch HorizontalOptions="EndAndExpand"
                             IsToggled="{Binding AskInRepetitions, Mode=TwoWay}"
-                            WidthRequest="100" />
+                            WidthRequest="200" />
                 </StackLayout>
                 <StackLayout Orientation="Horizontal">
                     <Label Text="{views:Translate AskingMode}" FontSize="Small" />
                     <Picker HorizontalOptions="EndAndExpand"
                             ItemsSource="{Binding AllAskingModes}"
                             SelectedIndex="{Binding AskingMode, Converter={StaticResource IntEnum}}"
-                            WidthRequest="100" />
+                            WidthRequest="200" />
                 </StackLayout>
                 <StackLayout Orientation="Horizontal">
                     <Label Text="{views:Translate ShuffleFlashcards}" FontSize="Small" />
                     <Switch HorizontalOptions="EndAndExpand"
                             IsToggled="{Binding ShuffleFlashcards, Mode=TwoWay}"
-                            WidthRequest="100" />
+                            WidthRequest="200" />
                 </StackLayout>
             </StackLayout>
             <StackLayout Grid.Row="1">

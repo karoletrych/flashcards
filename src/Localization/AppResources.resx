@@ -219,4 +219,13 @@
   <data name="ShuffleFlashcards" xml:space="preserve">
     <value>Shuffle flashcards</value>
   </data>
+  <data name="AskingMode_Back" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="AskingMode_Front" xml:space="preserve">
+    <value>Front</value>
+  </data>
+  <data name="AskingMode_Random" xml:space="preserve">
+    <value>Random</value>
+  </data>
 </root>

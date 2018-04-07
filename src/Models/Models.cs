@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Windows.Input;
 using SQLite;
 using SQLiteNetExtensions.Attributes;
 
@@ -69,6 +68,8 @@ namespace Flashcards.Models
 		Back,
 		Random
 	}
+
+	
 
 	public enum Language
     {

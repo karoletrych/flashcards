@@ -88,6 +88,33 @@ namespace Flashcards.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Back.
+        /// </summary>
+        public static string AskingMode_Back {
+            get {
+                return ResourceManager.GetString("AskingMode_Back", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Front.
+        /// </summary>
+        public static string AskingMode_Front {
+            get {
+                return ResourceManager.GetString("AskingMode_Front", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Random.
+        /// </summary>
+        public static string AskingMode_Random {
+            get {
+                return ResourceManager.GetString("AskingMode_Random", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ask in repetititons.
         /// </summary>
         public static string AskInRepetitions {

@@ -96,7 +96,11 @@ namespace Flashcards.ViewModels
 		}
 
 
-		public IList<string> AllAskingModes => Enum.GetNames(typeof(AskingMode));
+		public IEnumerable<string> AllAskingModes => 
+			Enum.GetValues(typeof(AskingMode))
+				.Cast<AskingMode>()
+				.Select(x=>x.Localize())
+				.ToList();
 
 		public ICommand DeleteFlashcardCommand => new Command<int>(async flashcardId =>
 		{
