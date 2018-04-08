@@ -228,4 +228,7 @@
   <data name="AskingMode_Random" xml:space="preserve">
     <value>Random</value>
   </data>
+  <data name="RepetitionStreak" xml:space="preserve">
+    <value>Repetition streak: {0} days</value>
+  </data>
 </root>

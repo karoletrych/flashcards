@@ -2263,7 +2263,7 @@ namespace FlashCards.Droid
 			public const int ic_audiotrack_light = 2130837604;
 			
 			// aapt resource value: 0x7f020065
-			public const int ic_check_green_light_48dp = 2130837605;
+			public const int ic_check_green_light_24dp = 2130837605;
 			
 			// aapt resource value: 0x7f020066
 			public const int ic_delete_red_dark_18dp = 2130837606;

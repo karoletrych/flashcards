@@ -36,7 +36,8 @@ namespace LeitnerTests
 			_leitner = new LeitnerRepetition(
 				_deckRepository,
 				new MockSessionSetting(),
-				new MockRepetitionTodaySetting());
+				new MockRepetitionTodaySetting(),
+				new M);
 		}
 
 		private class MockSessionSetting : ISetting<int>

@@ -349,6 +349,15 @@ namespace Flashcards.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Repetition streak: {0} days.
+        /// </summary>
+        public static string RepetitionStreak {
+            get {
+                return ResourceManager.GetString("RepetitionStreak", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Show.
         /// </summary>
         public static string Show {

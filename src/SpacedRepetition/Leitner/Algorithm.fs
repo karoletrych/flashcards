@@ -63,11 +63,17 @@ module Algorithm =
             override this.Key with get () = "RepetitionDoneToday"
             override this.DefaultValue with get () = false
 
+    type StreakDaysSetting() =
+        inherit Setting<int>() with
+            override this.Key with get () = "StreakDaysSetting"
+            override this.DefaultValue with get () = 0
+
      
     type LeitnerRepetition(
                             deckRepository : IRepository<Deck>,
                             sessionNumberSetting : ISetting<int>,
-                            repetitionDoneTodaySetting : ISetting<bool>) =
+                            repetitionDoneTodaySetting : ISetting<bool>,
+                            streakDaysSetting : ISetting<int>) =
         member this.allDecks () = 
             deckRepository.FindAll()
             |> Async.AwaitTask
@@ -108,10 +114,17 @@ module Algorithm =
 
                 deckRepository.InsertOrReplaceAll(newDecks)
                 |> sync
+
                 repetitionDoneTodaySetting.Value <- true
+                streakDaysSetting.Value <- streakDaysSetting.Value + 1
+
 
             member this.Proceed () =
+                if not repetitionDoneTodaySetting.Value
+                    then streakDaysSetting.Value <- 0
+
                 repetitionDoneTodaySetting.Value <- false
+
                 let sessionNumber = sessionNumberSetting.Value
                 if sessionNumber < 9
                 then 

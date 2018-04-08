@@ -9,6 +9,7 @@ using Flashcards.Models;
 using Flashcards.Services;
 using Flashcards.Services.DataAccess;
 using Flashcards.Services.Examiner;
+using Flashcards.Settings;
 using Flashcards.SpacedRepetition.Interface;
 using Prism.Navigation;
 using Prism.Services;
@@ -25,12 +26,14 @@ namespace Flashcards.ViewModels
 		private readonly IRepetitor _repetitor;
 		private readonly IRepetitionExaminerBuilder _repetitionExaminerBuilder;
 		private readonly ISpacedRepetition _spacedRepetition;
+		private readonly ISetting<int> _streakDaysSetting;
 
 		private IExaminer PendingRepetitionExaminer { get; set; }
 		public int PendingRepetitionQuestionsNumber { get; private set; }
 		public bool NoPendingRepetitions => PendingRepetitionQuestionsNumber == 0;
 		public string ActiveRepetitionsRatioString { get; private set; }
 		public double ActiveRepetitionsRatio { get; private set; }
+		public int RepetitionStreakDays { get; private set; }
 
 		public LessonListViewModel()
 		{
@@ -43,7 +46,8 @@ namespace Flashcards.ViewModels
 			ExaminerBuilder examinerBuilder,
 			ISpacedRepetition spacedRepetition,
 			IRepetitor repetitor,
-			IRepetitionExaminerBuilder repetitionExaminerBuilder)
+			IRepetitionExaminerBuilder repetitionExaminerBuilder,
+			ISetting<int> streakDaysSetting)
 		{
 			_lessonRepository = lessonRepository;
 			_navigationService = navigationService;
@@ -52,6 +56,7 @@ namespace Flashcards.ViewModels
 			_spacedRepetition = spacedRepetition;
 			_repetitor = repetitor;
 			_repetitionExaminerBuilder = repetitionExaminerBuilder;
+			_streakDaysSetting = streakDaysSetting;
 		}
 
 		public async void OnNavigatedTo(NavigationParameters parameters)
@@ -79,6 +84,7 @@ namespace Flashcards.ViewModels
 
 				ActiveRepetitionsRatio = (double) learnedFlashcards / totalActiveFlashcards;
 				ActiveRepetitionsRatioString = learnedFlashcards + "/" + totalActiveFlashcards;
+				RepetitionStreakDays = _streakDaysSetting.Value;
 			}
 
 			void UpdateLessons()

@@ -228,4 +228,7 @@
   <data name="AskingMode_Random" xml:space="preserve">
     <value>Losowo</value>
   </data>
+  <data name="RepetitionStreak" xml:space="preserve">
+    <value>Dzień z rzędu: {0}</value>
+  </data>
 </root>
