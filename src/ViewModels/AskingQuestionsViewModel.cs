@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using Flashcards.Localization;
 using Flashcards.Models;
@@ -21,24 +20,30 @@ namespace Flashcards.ViewModels
 		public AskingQuestionsViewModel(
 			INavigationService navigationService,
 			IPageDialogService dialogService,
-			ITextToSpeech textToSpeech)
+			ITextToSpeech textToSpeech,
+			Func<IExaminer, CorrectAnswersRatioTracker> correctAnswerRatioTrackerFactory)
 		{
 			_navigationService = navigationService;
 			_dialogService = dialogService;
 			_textToSpeech = textToSpeech;
+			_correctAnswerRatioTrackerFactory = correctAnswerRatioTrackerFactory;
 		}
 
 		public int CurrentQuestionNumber { get; private set; } = 0;
+		private CorrectAnswersRatioTracker _correctAnswersRatioTracker;
 
 		public void OnNavigatedTo(NavigationParameters parameters)
 		{
 			_examiner = (IExaminer)parameters["examiner"];
+			_correctAnswersRatioTracker = _correctAnswerRatioTrackerFactory(_examiner);
+
 			_examiner.SessionEnded +=
 				async (sender, args) =>
 				{
 					await _dialogService.DisplayAlertAsync(AppResources.EndOfSession,
 						$"{AppResources.Known}: {args.Results.Count(x => x.IsKnown)} \n" +
-						$"{AppResources.Unknown}: {args.Results.Count(x => !x.IsKnown)}",
+						$"{AppResources.Unknown}: {args.Results.Count(x => !x.IsKnown)}\n" +
+						_correctAnswersRatioTracker.Progress + "%",
 						"OK");
 					if (!args.Results.All(r => r.IsKnown))
 						ResetQuestionStatuses(args.NumberOfQuestionsInNextSession);
@@ -65,6 +70,7 @@ namespace Flashcards.ViewModels
 
 		private readonly IPageDialogService _dialogService;
 		private readonly ITextToSpeech _textToSpeech;
+		private readonly Func<IExaminer, CorrectAnswersRatioTracker> _correctAnswerRatioTrackerFactory;
 
 		private readonly INavigationService _navigationService;
 
