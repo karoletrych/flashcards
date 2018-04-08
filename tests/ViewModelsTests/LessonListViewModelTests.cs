@@ -5,6 +5,7 @@ using Flashcards.Models;
 using Flashcards.Services;
 using Flashcards.Services.DataAccess;
 using Flashcards.Services.Examiner;
+using Flashcards.Settings;
 using Flashcards.SpacedRepetition.Interface;
 using Flashcards.ViewModels;
 using NSubstitute;
@@ -33,18 +34,18 @@ namespace ViewModelsTests
             var spacedRepetition = Substitute.For<ISpacedRepetition>();
             _repetitor = Substitute.For<IRepetitor>();
             _repetitionExaminerBuilder = Substitute.For<IRepetitionExaminerBuilder>();
+	        var streakDaysSetting = Substitute.For<ISetting<int>>();
 
 
-	        
-	        _pageDialogService = pageDialogService;
+			_pageDialogService = pageDialogService;
 	        _lessonListViewModel = new LessonListViewModel(
 	            _lessonRepository, 
 	            _navigationService, 
 	            _pageDialogService, 
-				new ExaminerBuilder(),
 	            spacedRepetition, 
 	            _repetitor,
-				_repetitionExaminerBuilder);
+				_repetitionExaminerBuilder,
+				streakDaysSetting);
         }
 
         [Fact]

@@ -104,6 +104,10 @@
       <Project>{71E85B13-54C6-4A98-BC94-8379B3744844}</Project>
       <Name>Services</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\src\Settings\Settings.csproj">
+      <Project>{D3AE7397-71D5-4954-B9F4-8128D21918AA}</Project>
+      <Name>Settings</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\SpacedRepetition\Interface\Interface.csproj">
       <Project>{FE8515BB-9A6A-453C-9309-B6BE2CE6C2CD}</Project>
       <Name>Interface</Name>

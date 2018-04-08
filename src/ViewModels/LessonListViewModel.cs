@@ -43,7 +43,6 @@ namespace Flashcards.ViewModels
 			IRepository<Lesson> lessonRepository,
 			INavigationService navigationService,
 			IPageDialogService dialogService,
-			ExaminerBuilder examinerBuilder,
 			ISpacedRepetition spacedRepetition,
 			IRepetitor repetitor,
 			IRepetitionExaminerBuilder repetitionExaminerBuilder,
@@ -52,7 +51,6 @@ namespace Flashcards.ViewModels
 			_lessonRepository = lessonRepository;
 			_navigationService = navigationService;
 			_dialogService = dialogService;
-			_examinerBuilder = examinerBuilder;
 			_spacedRepetition = spacedRepetition;
 			_repetitor = repetitor;
 			_repetitionExaminerBuilder = repetitionExaminerBuilder;

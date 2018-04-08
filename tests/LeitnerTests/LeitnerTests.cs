@@ -11,6 +11,8 @@ using static Flashcards.SpacedRepetition.Leitner.Algorithm;
 
 namespace LeitnerTests
 {
+	
+
 	public class LeitnerTests
 	{
 		public LeitnerTests(ITestOutputHelper output)
@@ -37,7 +39,7 @@ namespace LeitnerTests
 				_deckRepository,
 				new MockSessionSetting(),
 				new MockRepetitionTodaySetting(),
-				new M);
+				new MockStreakDaysSetting());
 		}
 
 		private class MockSessionSetting : ISetting<int>
@@ -47,6 +49,10 @@ namespace LeitnerTests
 		private class MockRepetitionTodaySetting : ISetting<bool>
 		{
 			public bool Value { get; set; }
+		}
+		private class MockStreakDaysSetting : ISetting<int>
+		{
+			public int Value { get; set; }
 		}
 
 		private const int FlashcardCount = 20;

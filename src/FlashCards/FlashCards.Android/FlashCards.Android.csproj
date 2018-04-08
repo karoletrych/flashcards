@@ -37,6 +37,7 @@
     <AndroidTlsProvider>btls</AndroidTlsProvider>
     <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
     <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
+    <AndroidEnableMultiDex>false</AndroidEnableMultiDex>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>false</DebugSymbols>
@@ -48,12 +49,19 @@
     <AndroidManagedSymbols>true</AndroidManagedSymbols>
     <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
     <AotAssemblies>false</AotAssemblies>
-    <EnableLLVM>false</EnableLLVM>
+    <AndroidLinkMode>SdkOnly</AndroidLinkMode>
+    <EnableLLVM>true</EnableLLVM>
     <BundleAssemblies>false</BundleAssemblies>
+    <AndroidAotMode>Normal</AndroidAotMode>
+    <AndroidAotAdditionalArguments>no-write-symbols, nodebug</AndroidAotAdditionalArguments>
     <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
-    <AndroidSupportedAbis>armeabi-v7a;x86</AndroidSupportedAbis>
+    <MandroidExtraArgs>--aot=full</MandroidExtraArgs>
+    <AndroidSupportedAbis>
+    </AndroidSupportedAbis>
     <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
     <AndroidTlsProvider>btls</AndroidTlsProvider>
+    <AndroidEnableMultiDex>true</AndroidEnableMultiDex>
+    <AndroidBuildApplicationPackage>true</AndroidBuildApplicationPackage>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Mono.Android" />
