@@ -56,6 +56,8 @@ namespace Flashcards.Views
 		        var notificationScheduler = Container.Resolve<INotificationScheduler>();
 		        var repetitionTimeSetting = Container.Resolve<ISetting<TimeSpan>>();
 				notificationScheduler.Schedule(repetitionTimeSetting.Value);
+		        var incrementRepetitionScheduler = Container.Resolve<IIncrementRepetitionDaysScheduler>();
+				incrementRepetitionScheduler.Schedule(TimeSpan.Zero);
 
 		        var initializers = Container.Resolve<IEnumerable<ISpacedRepetitionInitializer>>();
 		        foreach (var spacedRepetitionInitializer in initializers)

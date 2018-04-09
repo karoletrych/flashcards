@@ -63,7 +63,8 @@ module Models =
                 let insertIntoDeck (flashcard : Flashcard) = 
                     async {
                         let! decks =
-                            (deckRepository.FindWhere(fun d -> d.DeckTitle = CurrentDeckTitle)) |> Async.AwaitTask
+                            (deckRepository.FindWhere(fun d -> d.DeckTitle = CurrentDeckTitle)) 
+                            |> Async.AwaitTask
                         let deck = decks |> Seq.exactlyOne
                         deck.Cards.Add(flashcard)
                         do! deckRepository.Update(deck) |> Async.AwaitTask

@@ -25,6 +25,7 @@ namespace Flashcards.Views.CustomViews
 				}
 
 				_picker = value;
+				_picker.HorizontalOptions = LayoutOptions.End;
 				_layout.Children.Add(_picker);
 
 			}
@@ -36,6 +37,7 @@ namespace Flashcards.Views.CustomViews
 			_label = new Label()
 			{
 				VerticalOptions = LayoutOptions.Center,
+				HorizontalOptions = LayoutOptions.Start,
 				FontSize = 15
 			};
 			_layout = new StackLayout()

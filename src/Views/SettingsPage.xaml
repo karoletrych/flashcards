@@ -1,4 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8"?>
+
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:customViews="clr-namespace:Flashcards.Views.CustomViews;assembly=Views"
@@ -8,22 +9,22 @@
         <TableView Intent="Settings" RowHeight="50">
             <TableRoot>
                 <TableSection Title="{views:Translate Notifications}">
-                    <customViews:TimePickerCell 
-                        x:Name ="TimePicker"
-                        Label = "{views:Translate NotificationTime}"/>
+                    <customViews:TimePickerCell
+                        x:Name="TimePicker"
+                        Label="{views:Translate NotificationTime}" />
                 </TableSection>
                 <TableSection Title="{views:Translate Repetitions}">
-                <customViews:PickerCell 
-                        x:Name ="AskingModePickerCell"
-                        Label = "{views:Translate RepetitionAskingMode}" />
+                    <customViews:PickerCell
+                        x:Name="AskingModePickerCell"
+                        Label="{views:Translate RepetitionAskingMode}" />
 
                     <EntryCell
-                        x:Name ="MaximumFlashcards"
+                        x:Name="MaximumFlashcards"
                         Keyboard="Numeric"
-                        Label = "{views:Translate MaximumFlashcardsInSingleRepetition}"/>
-                    <SwitchCell 
-                        x:Name="Shuffle" 
-                        Text="{views:Translate ShuffleFlashcards}"/>
+                        Label="{views:Translate MaximumFlashcardsInSingleRepetition}" />
+                    <SwitchCell
+                        x:Name="Shuffle"
+                        Text="{views:Translate ShuffleFlashcards}" />
                 </TableSection>
             </TableRoot>
         </TableView>

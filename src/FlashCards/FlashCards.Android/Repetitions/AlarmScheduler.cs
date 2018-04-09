@@ -1,28 +1,32 @@
 using System;
+using System.Threading;
 using Android.App;
 using Android.Content;
-using Flashcards.PlatformDependentTools;
 using Java.Util;
 
 namespace FlashCards.Droid.Repetitions
 {
-	public class NotificationAlarmScheduler : INotificationScheduler
+	public class AlarmScheduler
 	{
 		private readonly Context _context;
+		private static int _requestCode = 0;
 
-		public NotificationAlarmScheduler(Context context)
+		public AlarmScheduler(Context context)
 		{
 			_context = context;
 		}
 
-		public void Schedule(TimeSpan time)
+		public void Schedule(TimeSpan time, Type broadcastReceiverType)
 		{
-			var intent = new Intent(_context, typeof(RepetitionNotification));
+			var intent = new Intent(_context, broadcastReceiverType);
 			intent.AddFlags(ActivityFlags.NewTask);
 
-			var pendingIntent = PendingIntent.GetBroadcast(_context, 0, intent, PendingIntentFlags.UpdateCurrent);
+			var pendingIntent = PendingIntent.GetBroadcast(_context, _requestCode, intent, PendingIntentFlags.UpdateCurrent);
+			Interlocked.Increment(ref _requestCode);
+
 			var alarmManager = (AlarmManager) _context.GetSystemService(Context.AlarmService);
-			alarmManager.SetInexactRepeating(AlarmType.Rtc,
+			alarmManager.SetInexactRepeating(
+				AlarmType.Rtc,
 				AlarmTimeInMillis(time),
 				AlarmManager.IntervalDay,
 				pendingIntent);

@@ -100,7 +100,7 @@ namespace Flashcards.ViewModels
 
 		public ICommand PracticeLessonCommand => new Command<LessonViewModel>(async lesson =>
 		{
-			var examiner = _examinerBuilder
+			var examiner = new ExaminerBuilder()
 				.WithLessons(new []{lesson.InternalLesson})
 				.WithAskingMode(lesson.InternalLesson.AskingMode)
 				.WithShuffling(lesson.InternalLesson.Shuffle)

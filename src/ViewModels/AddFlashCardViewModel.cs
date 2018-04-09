@@ -20,7 +20,7 @@ namespace Flashcards.ViewModels
 {
 	public class AddFlashcardViewModel : INotifyPropertyChanged, INavigatedAware
 	{
-		private const int ImagesNumber = 9;
+		private const int ImagesLimit = 30;
 		private readonly IRepository<Flashcard> _flashcardRepository;
 		private readonly IRepository<Lesson> _lessonRepository;
 		private readonly IMessage _message;
@@ -49,7 +49,7 @@ namespace Flashcards.ViewModels
 			_dialogService = dialogService;
 		}
 
-		public ObservableCollection<Uri> ImageUris { get; } = new ObservableCollection<Uri>(new Uri[ImagesNumber]);
+		public ObservableCollection<Uri> ImageUris { get; } = new ObservableCollection<Uri>(new Uri[ImagesLimit]);
 
 		public Uri SelectedImageUri { get; set; }
 
@@ -109,7 +109,7 @@ namespace Flashcards.ViewModels
 		{
 			await Try(async () =>
 			{
-				var imageUris = await _imageBrowser.Find(text, language);
+				var imageUris = await _imageBrowser.Find(text, language, ImagesLimit);
 				ImageUris.Clear();
 				foreach (var imageUri in imageUris) ImageUris.Add(imageUri);
 			});

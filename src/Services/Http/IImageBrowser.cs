@@ -13,6 +13,6 @@ namespace Flashcards.Services.Http
 	    /// <exception cref="JsonReaderException">
 	    ///                 <paramref name="json" /> is not valid JSON.
 	    ///             </exception>
-		Task<IList<Uri>> Find(string query, Language queryLanguage);
+		Task<IList<Uri>> Find(string query, Language queryLanguage, int numberOfResults);
     }
 }

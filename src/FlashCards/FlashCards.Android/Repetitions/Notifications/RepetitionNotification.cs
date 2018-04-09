@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Linq;
 using Android.App;
 using Android.Content;
-using Android.Content.Res;
 using Android.Widget;
 using Autofac;
 using Flashcards.Services;
-using Flashcards.SpacedRepetition.Interface;
 
-namespace FlashCards.Droid.Repetitions
+namespace FlashCards.Droid.Repetitions.Notifications
 {
     [BroadcastReceiver(Enabled = true)]
 	public class RepetitionNotification : BroadcastReceiver
@@ -19,9 +16,6 @@ namespace FlashCards.Droid.Repetitions
 			{
 				var container = IocRegistrations.DefaultContainer();
 				var repeatingExaminer = await container.Resolve<IRepetitionExaminerBuilder>().Examiner();
-				var spacedRepetition = container.Resolve<ISpacedRepetition>();
-
-				spacedRepetition.Proceed();
 
 				if (repeatingExaminer.QuestionsCount > 0)
 				{

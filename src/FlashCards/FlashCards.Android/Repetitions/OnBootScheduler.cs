@@ -1,10 +1,10 @@
 ﻿using System;
 using Android.App;
 using Android.Content;
-using Android.Widget;
 using Autofac;
 using Flashcards.Settings;
-using Flashcards.Views;
+using FlashCards.Droid.Repetitions.IncrementRepetition;
+using FlashCards.Droid.Repetitions.Notifications;
 
 namespace FlashCards.Droid.Repetitions
 {
@@ -13,14 +13,17 @@ namespace FlashCards.Droid.Repetitions
 	{
 		Intent.ActionBootCompleted
 	})]
-	public class OnBootNotificationScheduler : BroadcastReceiver
+	public class OnBootScheduler : BroadcastReceiver
 	{
 		public override void OnReceive(Context context, Intent intent)
 		{
-			var notificationScheduler = new NotificationAlarmScheduler(context);
+			var alarmScheduler = new AlarmScheduler(context);
+
 			var repetitionTime = 
 				IocRegistrations.DefaultContainer().ResolveNamed<ISetting<TimeSpan>>("RepetitionTimeSetting");
-			notificationScheduler.Schedule(repetitionTime.Value);
+
+			alarmScheduler.Schedule(repetitionTime.Value, typeof(RepetitionNotification));
+			alarmScheduler.Schedule(TimeSpan.Zero, typeof(IncrementRepetitionDayReceiver));
 		}
 	}
 }

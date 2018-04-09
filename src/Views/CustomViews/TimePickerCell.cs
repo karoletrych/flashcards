@@ -14,9 +14,12 @@ namespace Flashcards.Views.CustomViews
 			_label = new Label
 			{
 				VerticalOptions = LayoutOptions.Center,
+				HorizontalOptions = LayoutOptions.Start,
 				FontSize = 15
 			};
 
+			_timePicker.HorizontalOptions = LayoutOptions.End;
+			
 			View = new StackLayout
 			{
 				Orientation = StackOrientation.Horizontal,

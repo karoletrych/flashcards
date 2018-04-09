@@ -5,7 +5,7 @@ using Flashcards.Views;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
-namespace FlashCards.Droid.Repetitions
+namespace FlashCards.Droid.Repetitions.Notifications
 {
     [Activity(
         Label = "@string/app_name",
