@@ -94,6 +94,7 @@
     <Compile Include="MainActivity.cs" />
     <Compile Include="Renderers\AndroidMulticolorBar.cs" />
     <Compile Include="Renderers\MulticolorBarRenderer.cs" />
+    <Compile Include="Repetitions\AlarmsInitializer.cs" />
     <Compile Include="Repetitions\IncrementRepetition\IncrementRepetitionDayReceiver.cs" />
     <Compile Include="Repetitions\Notifications\NotificationScheduler.cs" />
     <Compile Include="Repetitions\OnBootScheduler.cs" />

@@ -53,14 +53,11 @@ namespace Flashcards.Views
 
 	        void InitializeSpacedRepetition()
 	        {
-		        var notificationScheduler = Container.Resolve<INotificationScheduler>();
-		        var repetitionTimeSetting = Container.Resolve<ISetting<TimeSpan>>();
-				notificationScheduler.Schedule(repetitionTimeSetting.Value);
-		        var incrementRepetitionScheduler = Container.Resolve<IIncrementRepetitionDaysScheduler>();
-				incrementRepetitionScheduler.Schedule(TimeSpan.Zero);
+		        var alarmsInitializer = Container.Resolve<IAlarmsInitializer>();
+				alarmsInitializer.Initialize();
 
-		        var initializers = Container.Resolve<IEnumerable<ISpacedRepetitionInitializer>>();
-		        foreach (var spacedRepetitionInitializer in initializers)
+		        var spacedRepetitionInitializers = Container.Resolve<IEnumerable<ISpacedRepetitionInitializer>>();
+		        foreach (var spacedRepetitionInitializer in spacedRepetitionInitializers)
 		        {
 			        spacedRepetitionInitializer.Initialize();
 		        }

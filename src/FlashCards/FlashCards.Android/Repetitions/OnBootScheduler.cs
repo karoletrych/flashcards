@@ -1,10 +1,7 @@
-﻿using System;
-using Android.App;
+﻿using Android.App;
 using Android.Content;
 using Autofac;
-using Flashcards.Settings;
-using FlashCards.Droid.Repetitions.IncrementRepetition;
-using FlashCards.Droid.Repetitions.Notifications;
+using Flashcards.PlatformDependentTools;
 
 namespace FlashCards.Droid.Repetitions
 {
@@ -17,13 +14,7 @@ namespace FlashCards.Droid.Repetitions
 	{
 		public override void OnReceive(Context context, Intent intent)
 		{
-			var alarmScheduler = new AlarmScheduler(context);
-
-			var repetitionTime = 
-				IocRegistrations.DefaultContainer().ResolveNamed<ISetting<TimeSpan>>("RepetitionTimeSetting");
-
-			alarmScheduler.Schedule(repetitionTime.Value, typeof(RepetitionNotification));
-			alarmScheduler.Schedule(TimeSpan.Zero, typeof(IncrementRepetitionDayReceiver));
+			IocRegistrations.DefaultContainer().Resolve<IAlarmsInitializer>().Initialize();
 		}
 	}
 }

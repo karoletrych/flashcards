@@ -36,7 +36,8 @@ namespace Flashcards.ServicesTests
                 });
         }
 
-        [Fact]
+
+	    [Fact]
         public void AsksCorrectQuestions()
         {
             _examiner.TryAskNextQuestion(out var q0);

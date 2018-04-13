@@ -20,7 +20,6 @@ namespace Flashcards.ViewModels
 	public class LessonListViewModel : INotifyPropertyChanged, INavigatedAware
 	{
 		private readonly IPageDialogService _dialogService;
-		private readonly ExaminerBuilder _examinerBuilder;
 		private readonly IRepository<Lesson> _lessonRepository;
 		private readonly INavigationService _navigationService;
 		private readonly IRepetitor _repetitor;

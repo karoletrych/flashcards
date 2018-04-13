@@ -70,7 +70,7 @@ namespace Flashcards.Services.Examiner
 
 			Question Random(Question question)
 			{
-				return Rnd.NextDouble() > 0.5 ? question : Invert(question);
+				return Rnd.NextDouble() >= 0.5D ? question : Invert(question);
 			}
 		}
 	}
