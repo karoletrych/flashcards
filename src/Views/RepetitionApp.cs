@@ -17,7 +17,7 @@ namespace Flashcards.Views
 	    protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
 	        containerRegistry.RegisterForNavigation<NavigationPage>();
-	        containerRegistry.RegisterForNavigation<LessonListPage, LessonListViewModel>();
+	        containerRegistry.RegisterForNavigation<MainPage, LessonListViewModel>();
 	        containerRegistry.RegisterForNavigation<AddLessonPage, AddLessonViewModel>();
 	        containerRegistry.RegisterForNavigation<AddFlashcardPage, AddFlashcardViewModel>();
 	        containerRegistry.RegisterForNavigation<AskingQuestionsPage, AskingQuestionsViewModel>();
@@ -29,7 +29,7 @@ namespace Flashcards.Views
 	    {
 			var repetition = Container.Resolve<IRepetitor>();
 			var flashcardsToAsk = await Container.Resolve<IRepetitionExaminerBuilder>().Examiner();
-			await repetition.Repeat(NavigationService, "NavigationPage/LessonListPage/AskingQuestionsPage", flashcardsToAsk);
+			await repetition.Repeat(NavigationService, "NavigationPage/MainPage/AskingQuestionsPage", flashcardsToAsk);
 	    }
     }
 }

@@ -40,6 +40,7 @@ namespace Flashcards.ViewModels
 			_examiner.SessionEnded +=
 				async (sender, args) =>
 				{
+					_canAnswer = false;
 					await _dialogService.DisplayAlertAsync(AppResources.EndOfSession,
 						$"{AppResources.Known}: {args.Results.Count(x => x.IsKnown)} \n" +
 						$"{AppResources.Unknown}: {args.Results.Count(x => !x.IsKnown)}\n" +
@@ -49,6 +50,7 @@ namespace Flashcards.ViewModels
 						ResetQuestionStatuses(args.NumberOfQuestionsInNextSession);
 					else
 						await _navigationService.GoBackAsync();
+					_canAnswer = true;
 				};
 
 			ResetQuestionStatuses(_examiner.QuestionsCount);
@@ -79,6 +81,7 @@ namespace Flashcards.ViewModels
 		private bool _backIsVisible;
 		private Language _frontLanguage;
 		private Language _backLanguage;
+		private bool _canAnswer = true;
 
 		public AskingQuestionsViewModel()
 		{
@@ -110,7 +113,7 @@ namespace Flashcards.ViewModels
 				OnPropertyChanged(nameof(FrontIsVisible));
 			}
 		}
-
+		
 		public ICommand UserAnswerCommand => new Command<bool>(known =>
 		{
 			QuestionStatuses[CurrentQuestionNumber] =
@@ -124,7 +127,7 @@ namespace Flashcards.ViewModels
 
 			_examiner.Answer(known: known);
 			TryShowNextQuestion();
-		});
+		}, b => _canAnswer);
 
 		public ICommand ShowBackCommand => new Command(() =>
 		{

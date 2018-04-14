@@ -70,6 +70,15 @@ namespace Flashcards.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add lesson.
+        /// </summary>
+        public static string AddLesson {
+            get {
+                return ResourceManager.GetString("AddLesson", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure?.
         /// </summary>
         public static string AreYouSure {

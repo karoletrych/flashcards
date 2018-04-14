@@ -2,9 +2,9 @@ using Xamarin.Forms;
 
 namespace Flashcards.Views
 {
-    public partial class LessonListPage : ContentPage
+    public partial class MainPage : ContentPage
     {
-        public LessonListPage()
+        public MainPage()
         {
             InitializeComponent();
         }

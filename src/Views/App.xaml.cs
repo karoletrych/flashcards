@@ -23,7 +23,7 @@ namespace Flashcards.Views
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
             containerRegistry.RegisterForNavigation<NavigationPage>();
-            containerRegistry.RegisterForNavigation<LessonListPage, LessonListViewModel>();
+            containerRegistry.RegisterForNavigation<MainPage, MainViewModel>();
             containerRegistry.RegisterForNavigation<AddLessonPage, AddLessonViewModel>();
             containerRegistry.RegisterForNavigation<AddFlashcardPage, AddFlashcardViewModel>();
 			containerRegistry.RegisterForNavigation<AskingQuestionsPage, AskingQuestionsViewModel>();
@@ -38,7 +38,7 @@ namespace Flashcards.Views
 			InitializeSpacedRepetition();
 	        FlowListView.Init();
 
-	        NavigationService.NavigateAsync("NavigationPage/LessonListPage");
+	        NavigationService.NavigateAsync("NavigationPage/MainPage");
 
 	        void InitializeLocales()
 	        {

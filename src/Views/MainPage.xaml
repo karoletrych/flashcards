@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<forms:ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Flashcards.Views.MainPage"
+             xmlns:customViews="clr-namespace:Flashcards.Views.CustomViews"
+             xmlns:viewModels="clr-namespace:Flashcards.ViewModels;assembly=ViewModels"
+             xmlns:views="clr-namespace:Flashcards.Views;assembly=Views"
+             xmlns:forms="clr-namespace:Xamarin.Forms;assembly=Xamarin.Forms.Core">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Icon="ic_settings_white_48dp.png" Command="{Binding SettingsCommand}" />
+    </ContentPage.ToolbarItems>
+
+    <ContentPage.BindingContext>
+        <viewModels:MainViewModel />
+    </ContentPage.BindingContext>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20*" />
+            <RowDefinition Height="80*" />
+        </Grid.RowDefinitions>
+        <views:RepetitionView Grid.Row="0" BindingContext="{Binding RepetitionViewModel}"/>
+        <views:LessonListView Grid.Row="1" BindingContext="{Binding LessonListViewModel}"/>
+    </Grid>
+</forms:ContentPage>

@@ -1,65 +1,18 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Flashcards.Views.LessonListPage"
-             xmlns:customViews="clr-namespace:Flashcards.Views.CustomViews"
-             xmlns:viewModels="clr-namespace:Flashcards.ViewModels;assembly=ViewModels"
              xmlns:converters="clr-namespace:Flashcards.Views.Converters;assembly=Views"
-             xmlns:views="clr-namespace:Flashcards.Views;assembly=Views">
-
-    <ContentPage.Resources>
+             xmlns:customViews="clr-namespace:Flashcards.Views.CustomViews;assembly=Views"
+             xmlns:views="clr-namespace:Flashcards.Views;assembly=Views"
+             x:Class="Flashcards.Views.LessonListView">
+    <ContentView.Resources>
         <ResourceDictionary>
             <converters:LanguageToFlagConverter x:Key="LanguageToFlag" />
         </ResourceDictionary>
-    </ContentPage.Resources>
+    </ContentView.Resources>
 
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Icon="ic_add_white_48dp.png" Command="{Binding AddLessonCommand}" />
-        <ToolbarItem Icon="ic_settings_white_48dp.png" Command="{Binding SettingsCommand}" />
-    </ContentPage.ToolbarItems>
-
-    <ContentPage.BindingContext>
-        <viewModels:LessonListViewModel />
-    </ContentPage.BindingContext>
-
-    <Grid>
-
-        <Grid.RowDefinitions>
-            <RowDefinition Height="20*" />
-            <RowDefinition Height="80*" />
-        </Grid.RowDefinitions>
-        <Frame Grid.Row="0" Padding="0">
-            <Frame.GestureRecognizers>
-                <TapGestureRecognizer Command="{Binding RunRepetitionCommand}" />
-            </Frame.GestureRecognizers>
-            <StackLayout>
-                <Label FontAttributes="Bold" FontSize="Large" Text="{views:Translate Repetition}" />
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="50*" />
-                        <ColumnDefinition Width="50*" />
-                    </Grid.ColumnDefinitions>
-
-                    <StackLayout Grid.Column="0">
-                        <StackLayout  Orientation="Horizontal">
-                            <Label 
-                                Text="{Binding PendingRepetitionQuestionsNumber, StringFormat={views:Translate FlashcardsForToday}}"
-                                Style="{DynamicResource ListItemTextStyle}" />
-                            <Image IsVisible ="{Binding NoPendingRepetitions}" Source="ic_check_green_light_24dp.png" />
-                        </StackLayout>
-                        <Label Text="{Binding RepetitionStreakDays, StringFormat={views:Translate RepetitionStreak}}"></Label>
-                    </StackLayout>
-
-
-                    <StackLayout Grid.Column="1">
-                        <Label Text="{Binding ActiveRepetitionsRatioString}" />
-                        <ProgressBar Progress="{Binding ActiveRepetitionsRatio}" />
-                    </StackLayout>
-                </Grid>
-            </StackLayout>
-        </Frame>
-        <StackLayout Grid.Row="1">
+    <ContentView.Content>
+        <StackLayout>
             <Label FontAttributes="Bold" FontSize="Large" Text="{views:Translate Lessons}" />
             <customViews:CommandListView
                 ItemsSource="{Binding Lessons}"
@@ -99,8 +52,7 @@
                     </DataTemplate>
                 </customViews:CommandListView.ItemTemplate>
             </customViews:CommandListView>
+            <Button Text="{views:Translate AddLesson}" Command="{Binding AddLessonCommand}"></Button>
         </StackLayout>
-    </Grid>
-
-
-</ContentPage>
+    </ContentView.Content>
+</ContentView>

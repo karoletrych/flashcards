@@ -231,4 +231,7 @@
   <data name="RepetitionStreak" xml:space="preserve">
     <value>Dzień z rzędu: {0}</value>
   </data>
+  <data name="AddLesson" xml:space="preserve">
+    <value>Dodaj lekcję</value>
+  </data>
 </root>

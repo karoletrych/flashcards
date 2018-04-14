@@ -231,4 +231,7 @@
   <data name="RepetitionStreak" xml:space="preserve">
     <value>Repetition streak: {0} days</value>
   </data>
+  <data name="AddLesson" xml:space="preserve">
+    <value>Add lesson</value>
+  </data>
 </root>
