@@ -22,7 +22,7 @@ namespace FlashCards.Droid.Repetitions
 		{
 			var alarmScheduler = new AlarmScheduler(_context);
 
-			alarmScheduler.Schedule(_repetitionTimeSetting.Value, typeof(RepetitionNotification));
+			alarmScheduler.Schedule(_repetitionTimeSetting .Value, typeof(RepetitionNotification));
 			alarmScheduler.Schedule(TimeSpan.Zero, typeof(IncrementRepetitionDayReceiver));
 		}
 	}

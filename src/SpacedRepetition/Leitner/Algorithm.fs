@@ -68,11 +68,11 @@ module Algorithm =
             override this.Key with get () = "StreakDaysSetting"
             override this.DefaultValue with get () = 0
 
-    type SessionNumber(
-                        repetitionDoneTodaySetting : ISetting<bool>,
-                        sessionNumberSetting : ISetting<int>,
-                        streakDaysSetting : ISetting<int>) = 
-        interface ISessionNumber with
+    type RepetitionSession(
+                            repetitionDoneTodaySetting : ISetting<bool>,
+                            sessionNumberSetting : ISetting<int>,
+                            streakDaysSetting : ISetting<int>) = 
+        interface IRepetitionSession with
             member this.Increment() =
                 if not repetitionDoneTodaySetting.Value
                     then streakDaysSetting.Value <- 0
@@ -85,6 +85,7 @@ module Algorithm =
                     sessionNumberSetting.Value <- sessionNumber + 1;
                 else 
                     sessionNumberSetting.Value <- 0;
+            override this.Value with get () = sessionNumberSetting.Value
 
      
     type LeitnerRepetition(

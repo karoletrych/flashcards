@@ -1,18 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Flashcards.Models;
+﻿using Flashcards.Models;
 using Flashcards.Services;
 using Flashcards.Services.DataAccess;
-using Flashcards.Services.Examiner;
 using Flashcards.Settings;
 using Flashcards.SpacedRepetition.Interface;
 using Flashcards.ViewModels;
 using NSubstitute;
-using NSubstitute.Core.Arguments;
 using Prism.Navigation;
 using Prism.Services;
-using Xunit;
 
 namespace ViewModelsTests
 {
@@ -41,11 +35,7 @@ namespace ViewModelsTests
 	        _lessonListViewModel = new LessonListViewModel(
 	            _lessonRepository, 
 	            _navigationService, 
-	            _pageDialogService, 
-	            spacedRepetition, 
-	            _repetitor,
-				_repetitionExaminerBuilder,
-				streakDaysSetting);
+	            spacedRepetition);
         }
 
 	}

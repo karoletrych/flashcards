@@ -26,7 +26,7 @@ namespace Flashcards.ViewModels
 		{
 		}
 
-		public ObservableCollection<Flashcard> Flashcards { get; set; }
+		public ObservableCollection<Flashcard> Flashcards { get; set; } = new ObservableCollection<Flashcard>();
 
 		public ICommand DeleteFlashcardCommand => new Command<int>(async flashcardId =>
 		{
@@ -52,7 +52,8 @@ namespace Flashcards.ViewModels
 		{
 			_lesson = (Lesson) parameters["lesson"];
 			var flashcards = await _flashcardRepository.FindWhere(f => f.LessonId == _lesson.Id);
-			foreach (var flashcard in flashcards) Flashcards.Add(flashcard);
+
+			Flashcards.SynchronizeWith(flashcards);
 		}
 
 		public event PropertyChangedEventHandler PropertyChanged;

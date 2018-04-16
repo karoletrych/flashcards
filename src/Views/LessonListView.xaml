@@ -4,56 +4,69 @@
              xmlns:converters="clr-namespace:Flashcards.Views.Converters;assembly=Views"
              xmlns:customViews="clr-namespace:Flashcards.Views.CustomViews;assembly=Views"
              xmlns:views="clr-namespace:Flashcards.Views;assembly=Views"
+             xmlns:viewModels="clr-namespace:Flashcards.ViewModels;assembly=ViewModels"
              x:Class="Flashcards.Views.LessonListView">
     <ContentView.Resources>
         <ResourceDictionary>
             <converters:LanguageToFlagConverter x:Key="LanguageToFlag" />
         </ResourceDictionary>
     </ContentView.Resources>
-
+    <ContentView.BindingContext>
+        <viewModels:LessonListViewModel />
+    </ContentView.BindingContext>
 
     <ContentView.Content>
-        <StackLayout>
-            <Label FontAttributes="Bold" FontSize="Large" Text="{views:Translate Lessons}" />
-            <customViews:CommandListView
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="80*"></RowDefinition>
+                <RowDefinition Height="20*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <StackLayout>
+                <Label FontAttributes="Bold" FontSize="Large" Text="{views:Translate Lessons}" />
+                <customViews:CommandListView
                 ItemsSource="{Binding Lessons}"
                 ItemClickCommand="{Binding PracticeLessonCommand}"
                 x:Name="LessonList">
-                <customViews:CommandListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="20*" />
-                                    <ColumnDefinition Width="15*" />
-                                    <ColumnDefinition Width="15*" />
-                                    <ColumnDefinition Width="30*" />
-                                    <ColumnDefinition Width="20*" />
-                                </Grid.ColumnDefinitions>
+                    <customViews:CommandListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="20*" />
+                                        <ColumnDefinition Width="15*" />
+                                        <ColumnDefinition Width="15*" />
+                                        <ColumnDefinition Width="30*" />
+                                        <ColumnDefinition Width="20*" />
+                                    </Grid.ColumnDefinitions>
 
-                                <Label Grid.Column="0" Text="{Binding Name}"
+                                    <Label Grid.Column="0" Text="{Binding Name}"
                                        Style="{DynamicResource ListItemTextStyle}" />
-                                <Image Grid.Column="1" Source="{Binding FrontLanguage,
+                                    <Image Grid.Column="1" Source="{Binding FrontLanguage,
                                         Converter={StaticResource LanguageToFlag}}"/>
-                                <Image Grid.Column="2" Source="{Binding BackLanguage,
+                                    <Image Grid.Column="2" Source="{Binding BackLanguage,
                                         Converter={StaticResource LanguageToFlag}}" />
-                                <StackLayout Grid.Column="3">
-                                    <Label Text="{Binding LearnedFlashcardsRatioString}" />
-                                    <ProgressBar Progress="{Binding LearnedFlashcardsRatio}" />
-                                </StackLayout>
-                                <Button Grid.Column="4"
+                                    <StackLayout Grid.Column="3">
+                                        <Label Text="{Binding LearnedFlashcardsRatioString}" />
+                                        <ProgressBar Progress="{Binding LearnedFlashcardsRatio}" />
+                                    </StackLayout>
+                                    <Button Grid.Column="4"
                                         Command="{Binding Path=BindingContext.EditLessonCommand, 
                                             Source={x:Reference LessonList}}"
                                         CommandParameter="{Binding .}"
                                         BorderColor="Transparent"
                                         BackgroundColor="Transparent"
                                         Image="ic_settings_blue_light_36dp.png" />
-                            </Grid>
-                        </ViewCell>
-                    </DataTemplate>
-                </customViews:CommandListView.ItemTemplate>
-            </customViews:CommandListView>
-            <Button Text="{views:Translate AddLesson}" Command="{Binding AddLessonCommand}"></Button>
-        </StackLayout>
+                                </Grid> 
+                            </ViewCell>
+                        </DataTemplate>
+                    </customViews:CommandListView.ItemTemplate>
+                </customViews:CommandListView>
+            </StackLayout>
+            
+            <Button 
+                Text="{views:Translate AddLesson}" 
+                Command="{Binding AddLessonCommand}" 
+                Grid.Row="1"/>
+        </Grid>
     </ContentView.Content>
 </ContentView>

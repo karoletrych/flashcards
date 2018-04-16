@@ -35,14 +35,19 @@ namespace LeitnerTests
 				flashcardRepository.Insert(card);
 			}
 
+			var repetitionDoneTodaySetting = new MockRepetitionTodaySetting();
+			var sessionNumberSetting = new MockSessionNumberSetting();
+			var streakDaysSetting = new MockStreakDaysSetting();
 			_leitner = new LeitnerRepetition(
 				_deckRepository,
-				new MockSessionSetting(),
-				new MockRepetitionTodaySetting(),
-				new MockStreakDaysSetting());
+				sessionNumberSetting,
+				repetitionDoneTodaySetting,
+				streakDaysSetting);
+
+			_repetitionSession = new RepetitionSession(repetitionDoneTodaySetting, sessionNumberSetting, streakDaysSetting);
 		}
 
-		private class MockSessionSetting : ISetting<int>
+		private class MockSessionNumberSetting : ISetting<int>
 		{
 			public int Value { get; set; }
 		}
@@ -80,6 +85,7 @@ namespace LeitnerTests
 
 		private Repository<Deck> _deckRepository;
 		private readonly ISpacedRepetition _leitner;
+		private readonly IRepetitionSession _repetitionSession;
 
 		private IEnumerable<Flashcard> Flashcards(string deck)
 		{
@@ -102,10 +108,10 @@ namespace LeitnerTests
 			{
 				var flashcards = _leitner.CurrentRepetitionFlashcards().Result.ToList();
 				_leitner.SubmitRepetitionResults(flashcards.Select(Known));
-				_leitner.Proceed();
+				_repetitionSession.Increment();
 				_output.WriteLine($"session: {i}");
 				foreach (var deck in _deckRepository.FindAll().Result)
-					_output.WriteLine(deck.DeckTitle + ": " + deck.Cards.Count());
+					_output.WriteLine(deck.DeckTitle + ": " + deck.Cards.Count);
 				_output.WriteLine("");
 			}
 
@@ -119,7 +125,7 @@ namespace LeitnerTests
 		{
 			var flashcards = _leitner.CurrentRepetitionFlashcards().Result;
 			_leitner.SubmitRepetitionResults(flashcards.Select(Known));
-			_leitner.Proceed();
+			_repetitionSession.Increment(); 
 			
 			var rearrangedFlashcards = _leitner.CurrentRepetitionFlashcards().Result;
 

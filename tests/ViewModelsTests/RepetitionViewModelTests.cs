@@ -3,25 +3,39 @@ using System.Linq;
 using System.Threading.Tasks;
 using Flashcards.Models;
 using Flashcards.Services;
+using Flashcards.Services.DataAccess;
 using Flashcards.Services.Examiner;
 using Flashcards.Settings;
+using Flashcards.SpacedRepetition.Interface;
 using Flashcards.ViewModels;
 using NSubstitute;
 using Prism.Navigation;
+using Prism.Services;
 using Xunit;
 
 namespace ViewModelsTests
 {
 	public class RepetitionViewModelTests
 	{
-		private RepetitionViewModel _sut;
+		private readonly RepetitionViewModel _sut;
+		private readonly IRepository<Lesson> _lessonRepository;
+		private readonly IRepetitionExaminerBuilder _repetitionExaminerBuilder;
+		private readonly IPageDialogService _pageDialogService;
+		private readonly IRepetitor _repetitor;
+		private readonly INavigationService _navigationService;
+		private readonly ISpacedRepetition _spacedRepetition;
 
 		public RepetitionViewModelTests()
 		{
 			var setting = Substitute.For<ISetting<int>>();
-			var repetitionExaminerBuilder = Substitute.For<IRepetitionExaminerBuilder>();
+			_repetitionExaminerBuilder = Substitute.For<IRepetitionExaminerBuilder>();
+			_lessonRepository = Substitute.For<IRepository<Lesson>>();
+			_pageDialogService = Substitute.For<IPageDialogService>();
+			_repetitor = Substitute.For<IRepetitor>();
+			_navigationService = Substitute.For<INavigationService>();
+			_spacedRepetition = Substitute.For<ISpacedRepetition>();
 
-			_sut = new RepetitionViewModel(setting);
+			_sut = new RepetitionViewModel(setting, _repetitionExaminerBuilder, _lessonRepository, _spacedRepetition, _repetitor, _navigationService, _pageDialogService);
 		}
 
 		[Fact]
@@ -31,8 +45,8 @@ namespace ViewModelsTests
 			var examiner = Task.FromResult(new Examiner(new List<Question>()) as IExaminer);
 			_repetitionExaminerBuilder.Examiner().Returns(examiner);
 
-			_lessonListViewModel.OnNavigatedTo(new NavigationParameters());
-			_lessonListViewModel.RunRepetitionCommand.Execute(null);
+			_sut.OnNavigatedTo(new NavigationParameters());
+			_sut.RunRepetitionCommand.Execute(null);
 
 			_pageDialogService
 				.Received()
@@ -56,8 +70,8 @@ namespace ViewModelsTests
 			_repetitionExaminerBuilder.Examiner()
 				.Returns(Task.FromResult(repeatingExaminer));
 
-			_lessonListViewModel.OnNavigatedTo(new NavigationParameters());
-			_lessonListViewModel.RunRepetitionCommand.Execute(null);
+			_sut.OnNavigatedTo(new NavigationParameters());
+			_sut.RunRepetitionCommand.Execute(null);
 
 			_repetitor
 				.Received()

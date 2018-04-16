@@ -5,7 +5,6 @@ using Flashcards.Localization;
 using Flashcards.PlatformDependentTools;
 using Flashcards.Settings;
 using Flashcards.SpacedRepetition.Interface;
-using Flashcards.ViewModels;
 using Prism;
 using Prism.Ioc;
 using Xamarin.Forms;
@@ -14,7 +13,7 @@ using Xamarin.Forms.Xaml;
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace Flashcards.Views
 {
-    public partial class App
+	public partial class App
     {
         public App(IPlatformInitializer platformInitializer) : base(platformInitializer)
         {
@@ -22,15 +21,10 @@ namespace Flashcards.Views
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            containerRegistry.RegisterForNavigation<NavigationPage>();
-            containerRegistry.RegisterForNavigation<MainPage, MainViewModel>();
-            containerRegistry.RegisterForNavigation<AddFlashcardPage, AddFlashcardViewModel>();
-			containerRegistry.RegisterForNavigation<AskingQuestionsPage, AskingQuestionsViewModel>();
-			containerRegistry.RegisterForNavigation<EditLessonPage, EditLessonViewModel>();
-			containerRegistry.RegisterForNavigation<SettingsPage>();
+	        ViewModelMappings.RegisterTypes(containerRegistry);
         }
 
-		protected override void OnInitialized()
+	    protected override void OnInitialized()
         {
             InitializeComponent();
 	        InitializeLocales();

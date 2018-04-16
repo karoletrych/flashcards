@@ -14,7 +14,7 @@
 
     <ContentPage.Content>
             <ListView x:Name="FlashcardList"
-                      VerticalOptions="CenterAndExpand"
+                      VerticalOptions="Fill"
                       ItemsSource="{Binding Flashcards}"
                       HasUnevenRows="True">
                 <ListView.ItemTemplate>

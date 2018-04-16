@@ -25,5 +25,33 @@ namespace Flashcards.ViewModels
 		public string LearnedFlashcardsRatioString { get; }
 		public double LearnedFlashcardsRatio { get; }
 		public Lesson InternalLesson { get; }
+
+		protected bool Equals(LessonViewModel other)
+		{
+			return string.Equals(Name, other.Name) && string.Equals(LearnedFlashcardsRatioString, other.LearnedFlashcardsRatioString) && LearnedFlashcardsRatio.Equals(other.LearnedFlashcardsRatio);
+		}
+
+		public override bool Equals(object obj)
+		{
+			if (ReferenceEquals(null, obj)) return false;
+			if (ReferenceEquals(this, obj)) return true;
+			if (obj.GetType() != this.GetType()) return false;
+			return Equals((LessonViewModel) obj);
+		}
+
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				var hashCode = (Name != null
+					? Name.GetHashCode()
+					: 0);
+				hashCode = (hashCode * 397) ^ (LearnedFlashcardsRatioString != null
+					           ? LearnedFlashcardsRatioString.GetHashCode()
+					           : 0);
+				hashCode = (hashCode * 397) ^ LearnedFlashcardsRatio.GetHashCode();
+				return hashCode;
+			}
+		}
 	}
 }

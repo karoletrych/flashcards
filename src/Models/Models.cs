@@ -22,6 +22,26 @@ namespace Flashcards.Models
 	    public AskingMode AskingMode { get; set; }
 	    public bool AskInRepetitions { get; set; }
 	    public bool Shuffle { get; set; }
+
+	    protected bool Equals(Lesson other)
+	    {
+		    return string.Equals(Id, other.Id);
+	    }
+
+	    public override bool Equals(object obj)
+	    {
+		    if (ReferenceEquals(null, obj)) return false;
+		    if (ReferenceEquals(this, obj)) return true;
+		    if (obj.GetType() != this.GetType()) return false;
+		    return Equals((Lesson) obj);
+	    }
+
+	    public override int GetHashCode()
+	    {
+		    return (Id != null
+			    ? Id.GetHashCode()
+			    : 0);
+	    }
     }
 
     public class Flashcard : IEquatable<Flashcard>

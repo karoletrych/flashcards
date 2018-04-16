@@ -1,7 +1,8 @@
 ﻿namespace Flashcards.SpacedRepetition.Interface
 {
-	public interface ISessionNumber
+	public interface IRepetitionSession
 	{
 		void Increment();
+		int Value { get; }
 	}
 }

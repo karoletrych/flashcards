@@ -6,36 +6,37 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Flashcards.Models;
+using Flashcards.PlatformDependentTools;
 using Flashcards.Services.DataAccess;
 using Prism.Navigation;
-using Prism.Services;
 using Xamarin.Forms;
 
 namespace Flashcards.ViewModels
 {
-	public class EditLessonViewModel : INavigatingAware, INotifyPropertyChanged
-	{
+    public class AddLessonViewModel : INavigatingAware, INotifyPropertyChanged
+    {
 		private readonly IRepository<Lesson> _lessonRepository;
 		private readonly INavigationService _navigationService;
-		private readonly IPageDialogService _dialogService;
+		private readonly IMessage _message;
 
 		private Lesson _lesson;
 
-		public EditLessonViewModel()
+		public AddLessonViewModel()
 		{
 		}
 
-		public EditLessonViewModel(
-			INavigationService navigationService, 
-			IRepository<Lesson> lessonRepository, 
-			IPageDialogService dialogService)
+		public AddLessonViewModel(
+			INavigationService navigationService,
+			IRepository<Lesson> lessonRepository,
+			IMessage message)
 		{
 			_navigationService = navigationService;
 			_lessonRepository = lessonRepository;
-			_dialogService = dialogService;
+			_message = message;
 		}
 
-		public ObservableCollection<Flashcard> Flashcards => new ObservableCollection<Flashcard>();
+		public ObservableCollection<Flashcard> Flashcards { get; set; } =
+			new ObservableCollection<Flashcard>();
 
 		public string LessonName
 		{
@@ -83,28 +84,19 @@ namespace Flashcards.ViewModels
 			}
 		}
 
-
-		public IEnumerable<string> AllAskingModes => 
+		public IEnumerable<string> AllAskingModes =>
 			Enum.GetValues(typeof(AskingMode))
 				.Cast<AskingMode>()
-				.Select(x=>x.Localize())
+				.Select(x => x.Localize())
 				.ToList();
 
+		public IList<string> LanguageNames =>
+			Enum.GetNames(typeof(Language))
+				.OrderBy(language => language)
+				.ToList();
 
-
-		public ICommand DeleteLessonCommand => new Command(async () =>
-		{
-			var sure = await _dialogService.DisplayAlertAsync(
-				Localization.AppResources.Warning, 
-				Localization.AppResources.AreYouSure, 
-				Localization.AppResources.Yes, 
-				Localization.AppResources.No);
-			if (sure)
-			{
-				await _lessonRepository.Delete(_lesson);
-				await _navigationService.GoBackAsync();
-			}
-		});
+		public Language SelectedFrontLanguage { get; set; }
+		public Language SelectedBackLanguage { get; set; }
 
 		public ICommand FlashcardListCommand => new Command(() =>
 			_navigationService.NavigateAsync(
@@ -133,8 +125,14 @@ namespace Flashcards.ViewModels
 #pragma warning restore 0067
 		public void OnNavigatingTo(NavigationParameters parameters)
 		{
-			var lessonId = (string)parameters["lessonId"];
-			_lesson = _lessonRepository.FindWhere(lesson => lesson.Id == lessonId).Result.Single();
+			_lesson = new Lesson
+			{
+				Id = Guid.NewGuid().ToString(),
+				AskInRepetitions = true,
+				AskingMode = AskingMode.Front,
+				Shuffle = true,
+				Flashcards = new List<Flashcard>()
+			};
 
 			OnPropertyChanged(nameof(LessonName));
 			OnPropertyChanged(nameof(AskingMode));

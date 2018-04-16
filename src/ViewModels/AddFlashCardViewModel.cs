@@ -11,7 +11,6 @@ using Flashcards.Models;
 using Flashcards.PlatformDependentTools;
 using Flashcards.Services.DataAccess;
 using Flashcards.Services.Http;
-//using Java.Net;
 using Prism.Navigation;
 using Prism.Services;
 using Xamarin.Forms;
@@ -89,6 +88,9 @@ namespace Flashcards.ViewModels
 			SelectedImageUri = null;
 		});
 
+		public ICommand ClearFront => new Command(() => FrontText = string.Empty);
+		public ICommand ClearBack => new Command(() => BackText = string.Empty);
+
 		public void OnNavigatedTo(NavigationParameters parameters)
 		{
 			_lesson = (Lesson) parameters["lesson"];
@@ -98,7 +100,7 @@ namespace Flashcards.ViewModels
 
 		public void OnNavigatedFrom(NavigationParameters parameters)
 		{
-			parameters.Add("lessonId", _lesson.Id);
+			parameters.Add("lesson", _lesson);
 		}
 
 #pragma warning disable 0067
@@ -166,13 +168,17 @@ namespace Flashcards.ViewModels
 			{
 				Debug.WriteLine(e.ToString());
 			}
-//			catch (UnknownHostException e)
-//			{
-//				Debug.WriteLine(e.ToString());
-//			}
 			catch (Exception e)
 			{
-				await _dialogService.DisplayAlertAsync("Error", e.ToString(), "OK");
+				var message = e.ToString();
+				// workaround for not compiling unit tests when referencing Mono.Android
+				if (message.StartsWith("Java.Net.UnknownHostException")) 
+				{
+					Debug.WriteLine(message);
+					return;
+				}
+
+				await _dialogService.DisplayAlertAsync("Error", message, "OK");
 			}
 		}
 	}

@@ -37,15 +37,19 @@ namespace Flashcards.ViewModels
 		public async void OnNavigatedTo(NavigationParameters parameters)
 		{
 			var lessons = (await _lessonRepository.FindAll()).ToList();
-			Lessons.Clear();
-			foreach (var lesson in lessons)
-				Lessons.Add(new LessonViewModel(lesson, _spacedRepetition.LearnedFlashcards));
+
+			Lessons.SynchronizeWith(
+				lessons,
+				l => new LessonViewModel(l, _spacedRepetition.LearnedFlashcards));
 		}
 
 		public ObservableCollection<LessonViewModel> Lessons { get; } = new ObservableCollection<LessonViewModel>();
 
 		public ICommand AddLessonCommand =>
-			new Command(() => { _navigationService.NavigateAsync("EditLessonPage"); });
+			new Command(() =>
+			{
+				_navigationService.NavigateAsync("AddLessonPage");
+			});
 
 
 		public ICommand PracticeLessonCommand => new Command<LessonViewModel>(async lesson =>
