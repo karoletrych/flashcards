@@ -45,7 +45,8 @@ namespace Flashcards.ViewModels
 		public ObservableCollection<LessonViewModel> Lessons { get; } = new ObservableCollection<LessonViewModel>();
 
 		public ICommand AddLessonCommand =>
-			new Command(() => { _navigationService.NavigateAsync("AddLessonPage"); });
+			new Command(() => { _navigationService.NavigateAsync("EditLessonPage"); });
+
 
 		public ICommand PracticeLessonCommand => new Command<LessonViewModel>(async lesson =>
 		{

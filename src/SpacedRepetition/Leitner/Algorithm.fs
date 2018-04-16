@@ -68,6 +68,24 @@ module Algorithm =
             override this.Key with get () = "StreakDaysSetting"
             override this.DefaultValue with get () = 0
 
+    type SessionNumber(
+                        repetitionDoneTodaySetting : ISetting<bool>,
+                        sessionNumberSetting : ISetting<int>,
+                        streakDaysSetting : ISetting<int>) = 
+        interface ISessionNumber with
+            member this.Increment() =
+                if not repetitionDoneTodaySetting.Value
+                    then streakDaysSetting.Value <- 0
+
+                repetitionDoneTodaySetting.Value <- false
+
+                let sessionNumber = sessionNumberSetting.Value
+                if sessionNumber < 9
+                then 
+                    sessionNumberSetting.Value <- sessionNumber + 1;
+                else 
+                    sessionNumberSetting.Value <- 0;
+
      
     type LeitnerRepetition(
                             deckRepository : IRepository<Deck>,
@@ -95,7 +113,7 @@ module Algorithm =
                     |> Seq.collect (fun deck -> deck.Cards)
                     |> Task.FromResult
                 
-            member this.RearrangeFlashcards (results) =
+            member this.SubmitRepetitionResults (results) =
                 let decks = this.allDecks()
                 let cardsWithDecks = 
                     let parentDeck (card : Flashcard) = 
@@ -118,20 +136,6 @@ module Algorithm =
                 repetitionDoneTodaySetting.Value <- true
                 streakDaysSetting.Value <- streakDaysSetting.Value + 1
 
-
-            member this.Proceed () =
-                if not repetitionDoneTodaySetting.Value
-                    then streakDaysSetting.Value <- 0
-
-                repetitionDoneTodaySetting.Value <- false
-
-                let sessionNumber = sessionNumberSetting.Value
-                if sessionNumber < 9
-                then 
-                    sessionNumberSetting.Value <- sessionNumber + 1;
-                else 
-                    sessionNumberSetting.Value <- 0;
-                    
             member this.LearnedFlashcards 
                 with get () =
                     let cards = 

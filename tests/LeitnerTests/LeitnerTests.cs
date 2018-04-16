@@ -101,7 +101,7 @@ namespace LeitnerTests
 			for (var i = 0; i < 20; ++i)
 			{
 				var flashcards = _leitner.CurrentRepetitionFlashcards().Result.ToList();
-				_leitner.RearrangeFlashcards(flashcards.Select(Known));
+				_leitner.SubmitRepetitionResults(flashcards.Select(Known));
 				_leitner.Proceed();
 				_output.WriteLine($"session: {i}");
 				foreach (var deck in _deckRepository.FindAll().Result)
@@ -118,7 +118,7 @@ namespace LeitnerTests
 		public void AnsweringCorrectlyAllFlashcards_DecreasesNumberOfFlashcardsInTheNextSession()
 		{
 			var flashcards = _leitner.CurrentRepetitionFlashcards().Result;
-			_leitner.RearrangeFlashcards(flashcards.Select(Known));
+			_leitner.SubmitRepetitionResults(flashcards.Select(Known));
 			_leitner.Proceed();
 			
 			var rearrangedFlashcards = _leitner.CurrentRepetitionFlashcards().Result;
@@ -130,7 +130,7 @@ namespace LeitnerTests
 		public void AnsweringCorrectlyAllFlashcards_MovesThemToDeckBeginningWithSessionNumber()
 		{
 			var flashcards = _leitner.CurrentRepetitionFlashcards().Result;
-			_leitner.RearrangeFlashcards(flashcards.Select(Known));
+			_leitner.SubmitRepetitionResults(flashcards.Select(Known));
 
 			var session0DeckCards =
 				_deckRepository.FindWhere(cd => cd.DeckTitle == "0259").Result;

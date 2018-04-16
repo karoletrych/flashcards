@@ -11,6 +11,7 @@
         </ResourceDictionary>
     </ContentView.Resources>
 
+
     <ContentView.Content>
         <StackLayout>
             <Label FontAttributes="Bold" FontSize="Large" Text="{views:Translate Lessons}" />

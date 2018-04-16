@@ -17,7 +17,6 @@ namespace Flashcards.ViewModels
 	{
 		private readonly IRepository<Lesson> _lessonRepository;
 		private readonly INavigationService _navigationService;
-		private readonly IRepository<Flashcard> _flashcardRepository;
 		private readonly IPageDialogService _dialogService;
 
 		private Lesson _lesson;
@@ -29,25 +28,15 @@ namespace Flashcards.ViewModels
 		public EditLessonViewModel(
 			INavigationService navigationService, 
 			IRepository<Lesson> lessonRepository, 
-			IRepository<Flashcard> flashcardRepository,
 			IPageDialogService dialogService)
 		{
 			_navigationService = navigationService;
 			_lessonRepository = lessonRepository;
-			_flashcardRepository = flashcardRepository;
 			_dialogService = dialogService;
 		}
 
 		public ObservableCollection<Flashcard> Flashcards { get; set; } =
 			new ObservableCollection<Flashcard>();
-
-		public ICommand AddFlashcardsCommand => new Command(() =>
-			_navigationService.NavigateAsync("AddFlashcardPage", new NavigationParameters
-			{
-				{
-					"lesson", _lesson
-				}
-			}));
 
 		public string LessonName
 		{
@@ -102,12 +91,7 @@ namespace Flashcards.ViewModels
 				.Select(x=>x.Localize())
 				.ToList();
 
-		public ICommand DeleteFlashcardCommand => new Command<int>(async flashcardId =>
-		{
-			var flashcardToRemove = new Flashcard{Id = flashcardId};
-			await _flashcardRepository.Delete(flashcardToRemove);
-			Flashcards.Remove(flashcardToRemove);
-		});
+
 
 		public ICommand DeleteLessonCommand => new Command(async () =>
 		{
@@ -123,7 +107,23 @@ namespace Flashcards.ViewModels
 			}
 		});
 
-		
+		public IList<string> LanguageNames => 
+			Enum.GetNames(typeof(Language))
+				.OrderBy(language => language)
+				.ToList();
+
+		public Language SelectedFrontLanguage { get; set; }
+		public Language SelectedBackLanguage { get; set; }
+
+		public ICommand FlashcardListCommand => new Command(() =>
+			_navigationService.NavigateAsync(
+				"FlashcardListPage",
+				new NavigationParameters
+				{
+					{"lesson", _lesson}
+				}));
+
+
 		public void OnNavigatedTo(NavigationParameters parameters)
 		{
 		}
@@ -143,13 +143,25 @@ namespace Flashcards.ViewModels
 		public void OnNavigatingTo(NavigationParameters parameters)
 		{
 			var lessonId = (string)parameters["lessonId"];
-			_lesson = (_lessonRepository.FindWhere(lesson => lesson.Id == lessonId).Result).Single();
+			if (lessonId == null)
+			{
+				_lesson = new Lesson
+				{
+					Id = Guid.NewGuid().ToString(),
+					AskInRepetitions = true,
+					AskingMode = AskingMode.Front,
+					Shuffle = true,
+				};
+			}
+			else
+			{
+				_lesson = _lessonRepository.FindWhere(lesson => lesson.Id == lessonId).Result.Single();
+			}
 
 			OnPropertyChanged(nameof(LessonName));
 			OnPropertyChanged(nameof(AskingMode));
 			OnPropertyChanged(nameof(AskInRepetitions));
 			OnPropertyChanged(nameof(ShuffleFlashcards));
-
 
 			Flashcards.Clear();
 			foreach (var flashcard in _lesson.Flashcards)

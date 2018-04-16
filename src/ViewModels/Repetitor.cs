@@ -39,7 +39,7 @@ namespace Flashcards.ViewModels
 				new QuestionResult(r.Question.InternalFlashcard, r.IsKnown));
 			try
 			{
-				_spacedRepetition.RearrangeFlashcards(questionResults);
+				_spacedRepetition.SubmitRepetitionResults(questionResults);
 
 			}
 			catch (AggregateException e)

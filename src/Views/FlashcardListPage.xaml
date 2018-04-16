@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:Flashcards.ViewModels;assembly=ViewModels"
+             xmlns:views="clr-namespace:Flashcards.Views;assembly=Views"
+             x:Class="Flashcards.Views.FlashcardListPage">
+    <ContentPage.BindingContext>
+        <viewModels:FlashcardListViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="{views:Translate AddFlashcards}" Command="{Binding AddFlashcardsCommand}" />
+    </ContentPage.ToolbarItems>
+
+    <ContentPage.Content>
+            <ListView x:Name="FlashcardList"
+                      VerticalOptions="CenterAndExpand"
+                      ItemsSource="{Binding Flashcards}"
+                      HasUnevenRows="True">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell Height="30">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="40*" />
+                                    <ColumnDefinition Width="40*" />
+                                    <ColumnDefinition Width="20*" />
+                                </Grid.ColumnDefinitions>
+                                <Label Text="{Binding Front}" Grid.Column="0" />
+                                <Label Text="{Binding Back}" Grid.Column="1" />
+                                <Button
+                                    BackgroundColor="Transparent"
+                                    HorizontalOptions="End"
+                                    Image="ic_delete_red_dark_18dp.png"
+                                    CommandParameter="{Binding Id}"
+                                    Command="{Binding Path=BindingContext.DeleteFlashcardCommand,
+                                            Source={x:Reference FlashcardList}}"
+                                    Grid.Column="2" />
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+    </ContentPage.Content>
+</ContentPage>

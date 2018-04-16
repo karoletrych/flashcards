@@ -234,4 +234,7 @@
   <data name="AddLesson" xml:space="preserve">
     <value>Add lesson</value>
   </data>
+  <data name="Flashcards" xml:space="preserve">
+    <value>Flashcards</value>
+  </data>
 </root>

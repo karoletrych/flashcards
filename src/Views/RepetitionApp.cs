@@ -17,8 +17,7 @@ namespace Flashcards.Views
 	    protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
 	        containerRegistry.RegisterForNavigation<NavigationPage>();
-	        containerRegistry.RegisterForNavigation<MainPage, LessonListViewModel>();
-	        containerRegistry.RegisterForNavigation<AddLessonPage, AddLessonViewModel>();
+	        containerRegistry.RegisterForNavigation<MainPage, MainViewModel>();
 	        containerRegistry.RegisterForNavigation<AddFlashcardPage, AddFlashcardViewModel>();
 	        containerRegistry.RegisterForNavigation<AskingQuestionsPage, AskingQuestionsViewModel>();
 	        containerRegistry.RegisterForNavigation<EditLessonPage, EditLessonViewModel>();

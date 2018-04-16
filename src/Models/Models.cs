@@ -73,8 +73,8 @@ namespace Flashcards.Models
 
 	public enum Language
     {
-        German,
-        English,
+	    English,
+		German,
         Polish,
         French,
         Italian,

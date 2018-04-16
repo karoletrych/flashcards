@@ -10,9 +10,6 @@
         <viewModels:EditLessonViewModel />
     </ContentPage.BindingContext>
 
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Text="{views:Translate AddFlashcards}" Command="{Binding AddFlashcardsCommand}" />
-    </ContentPage.ToolbarItems>
 
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -23,8 +20,8 @@
     <ContentPage.Content>
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="30*" />
-                <RowDefinition Height="60*" />
+                <RowDefinition Height="50*" />
+                <RowDefinition Height="40*" />
                 <RowDefinition Height="10*" />
             </Grid.RowDefinitions>
 
@@ -35,6 +32,17 @@
                            Text="{Binding LessonName, Mode=TwoWay}"
                            WidthRequest="200"
                            FontSize="Small" />
+                </StackLayout>
+                <StackLayout Orientation="Horizontal">
+                    <Label Text="{views:Translate Languages}" 
+                           HorizontalOptions="StartAndExpand"/>
+                    <Picker WidthRequest="100"
+                            ItemsSource="{Binding LanguageNames}"
+                            SelectedIndex="{Binding SelectedFrontLanguage, Converter={StaticResource IntEnum}}" />
+                    <Label Text="-" />
+                    <Picker WidthRequest="100" 
+                            ItemsSource="{Binding LanguageNames}"
+                            SelectedIndex="{Binding SelectedBackLanguage, Converter={StaticResource IntEnum}}" />
                 </StackLayout>
                 <StackLayout Orientation="Horizontal">
                     <Label Text="{views:Translate AskInRepetitions}" FontSize="Small" />
@@ -56,37 +64,7 @@
                             WidthRequest="200" />
                 </StackLayout>
             </StackLayout>
-            <StackLayout Grid.Row="1">
-                <Label Text="{views:Translate Flashcards_Colon}" FontAttributes="Bold" />
-                <ListView x:Name="FlashcardList"
-                          VerticalOptions="CenterAndExpand"
-                          ItemsSource="{Binding Flashcards}"
-                          HasUnevenRows="True">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <ViewCell Height="30">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="40*" />
-                                        <ColumnDefinition Width="40*" />
-                                        <ColumnDefinition Width="20*" />
-                                    </Grid.ColumnDefinitions>
-                                    <Label Text="{Binding Front}" Grid.Column="0" />
-                                    <Label Text="{Binding Back}" Grid.Column="1" />
-                                    <Button
-                                        BackgroundColor="Transparent"
-                                        HorizontalOptions="End"
-                                        Image="ic_delete_red_dark_18dp.png"
-                                        CommandParameter="{Binding Id}"
-                                        Command="{Binding Path=BindingContext.DeleteFlashcardCommand,
-                                            Source={x:Reference FlashcardList}}"
-                                        Grid.Column="2" />
-                                </Grid>
-                            </ViewCell>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-            </StackLayout>
+            <Button Grid.Row="1" Text="{views:Translate Flashcards}" Command="{Binding FlashcardListCommand}"></Button>
             <Button Grid.Row="2" 
                     Text ="{views:Translate DeleteLesson}" 
                     BackgroundColor="Red" 

@@ -187,6 +187,15 @@ namespace Flashcards.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Flashcards.
+        /// </summary>
+        public static string Flashcards {
+            get {
+                return ResourceManager.GetString("Flashcards", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Flashcards:.
         /// </summary>
         public static string Flashcards_Colon {
