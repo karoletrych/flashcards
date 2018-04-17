@@ -52,9 +52,9 @@ namespace Flashcards.ViewModels
 
 		public Uri SelectedImageUri { get; set; }
 
-		public string FrontText { get; set; }
+		public string FrontText { get; set; } = string.Empty;
 
-		public string BackText { get; set; }
+		public string BackText { get; set; } = string.Empty;
 
 		public string FrontLanguage { get; private set; }
 		public string BackLanguage { get; private set; }

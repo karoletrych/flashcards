@@ -27,16 +27,11 @@ namespace Flashcards.ViewModels
 
 		public AddLessonViewModel(
 			INavigationService navigationService,
-			IRepository<Lesson> lessonRepository,
 			IMessage message)
 		{
 			_navigationService = navigationService;
-			_lessonRepository = lessonRepository;
 			_message = message;
 		}
-
-		public ObservableCollection<Flashcard> Flashcards { get; set; } =
-			new ObservableCollection<Flashcard>();
 
 		public string LessonName
 		{
@@ -46,7 +41,6 @@ namespace Flashcards.ViewModels
 				if (_lesson != null)
 				{
 					_lesson.Name = value;
-					_lessonRepository.Update(_lesson);
 				}
 			}
 		}
@@ -59,7 +53,6 @@ namespace Flashcards.ViewModels
 				if (_lesson != null && (int)value != -1) // prevents xamarin from setting default value when navigating back
 				{
 					_lesson.AskingMode = value;
-					_lessonRepository.Update(_lesson);
 				}
 			}
 		}
@@ -67,21 +60,13 @@ namespace Flashcards.ViewModels
 		public bool AskInRepetitions
 		{
 			get => _lesson?.AskInRepetitions ?? default(bool);
-			set
-			{
-				_lesson.AskInRepetitions = value;
-				_lessonRepository.Update(_lesson);
-			}
+			set => _lesson.AskInRepetitions = value;
 		}
 
 		public bool ShuffleFlashcards
 		{
 			get => _lesson?.Shuffle ?? default(bool);
-			set
-			{
-				_lesson.Shuffle = value;
-				_lessonRepository.Update(_lesson);
-			}
+			set => _lesson.Shuffle = value;
 		}
 
 		public IEnumerable<string> AllAskingModes =>
@@ -92,11 +77,27 @@ namespace Flashcards.ViewModels
 
 		public IList<string> LanguageNames =>
 			Enum.GetNames(typeof(Language))
-				.OrderBy(language => language)
 				.ToList();
 
-		public Language SelectedFrontLanguage { get; set; }
-		public Language SelectedBackLanguage { get; set; }
+	    public Language SelectedFrontLanguage
+	    {
+		    get => _lesson?.FrontLanguage ?? default(Language);
+		    set
+		    {
+			    if (_lesson != null && (int) value != -1)
+				    _lesson.FrontLanguage = value;
+		    }
+	    }
+
+	    public Language SelectedBackLanguage
+	    {
+		    get => _lesson?.BackLanguage ?? default(Language);
+		    set
+		    {
+			    if (_lesson != null && (int)value != -1)
+					_lesson.BackLanguage = value;
+		    }
+	    }
 
 		public ICommand FlashcardListCommand => new Command(() =>
 			_navigationService.NavigateAsync(
@@ -138,10 +139,6 @@ namespace Flashcards.ViewModels
 			OnPropertyChanged(nameof(AskingMode));
 			OnPropertyChanged(nameof(AskInRepetitions));
 			OnPropertyChanged(nameof(ShuffleFlashcards));
-
-			Flashcards.Clear();
-			foreach (var flashcard in _lesson.Flashcards)
-				Flashcards.Add(flashcard);
 		}
 	}
 }

@@ -1,11 +1,8 @@
-using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
-using Flashcards.Localization;
 using Flashcards.Models;
-using Flashcards.Services;
 using Flashcards.Services.DataAccess;
 using Flashcards.Services.Examiner;
 using Flashcards.SpacedRepetition.Interface;
@@ -54,10 +51,12 @@ namespace Flashcards.ViewModels
 
 		public ICommand PracticeLessonCommand => new Command<LessonViewModel>(async lesson =>
 		{
+			var loadedLesson = _lessonRepository.FindWhere(l => l.Id == lesson.InternalLesson.Id).Result.Single();
+
 			var examiner = new ExaminerBuilder()
-				.WithLessons(new []{lesson.InternalLesson})
-				.WithAskingMode(lesson.InternalLesson.AskingMode)
-				.WithShuffling(lesson.InternalLesson.Shuffle)
+				.WithLessons(new []{ loadedLesson })
+				.WithAskingMode(loadedLesson.AskingMode)
+				.WithShuffling(loadedLesson.Shuffle)
 				.Build();
 
 			await _navigationService.NavigateAsync("AskingQuestionsPage", new NavigationParameters

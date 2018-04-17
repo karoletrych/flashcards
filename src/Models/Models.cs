@@ -94,13 +94,13 @@ namespace Flashcards.Models
 	public enum Language
     {
 	    English,
+	    French,
 		German,
-        Polish,
-        French,
-        Italian,
-        Spanish,
+	    Italian,
+		Polish,
+	    Norwegian,
+	    Russian,
+		Spanish,
         Swedish,
-        Norwegian,
-        Russian
     }
 }

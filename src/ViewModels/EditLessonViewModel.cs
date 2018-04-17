@@ -35,8 +35,6 @@ namespace Flashcards.ViewModels
 			_dialogService = dialogService;
 		}
 
-		public ObservableCollection<Flashcard> Flashcards => new ObservableCollection<Flashcard>();
-
 		public string LessonName
 		{
 			get => _lesson?.Name ?? string.Empty;
@@ -84,10 +82,10 @@ namespace Flashcards.ViewModels
 		}
 
 
-		public IEnumerable<string> AllAskingModes => 
+		public IEnumerable<string> AllAskingModes =>
 			Enum.GetValues(typeof(AskingMode))
 				.Cast<AskingMode>()
-				.Select(x=>x.Localize())
+				.Select(x => x.Localize())
 				.ToList();
 
 
@@ -140,10 +138,6 @@ namespace Flashcards.ViewModels
 			OnPropertyChanged(nameof(AskingMode));
 			OnPropertyChanged(nameof(AskInRepetitions));
 			OnPropertyChanged(nameof(ShuffleFlashcards));
-
-			Flashcards.Clear();
-			foreach (var flashcard in _lesson.Flashcards)
-				Flashcards.Add(flashcard);
 		}
 	}
 }
