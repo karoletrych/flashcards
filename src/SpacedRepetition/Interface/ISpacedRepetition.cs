@@ -9,6 +9,6 @@ namespace Flashcards.SpacedRepetition.Interface
         Task<IEnumerable<Flashcard>> CurrentRepetitionFlashcards();
 	    IEnumerable<Flashcard> LearnedFlashcards { get; }
 
-        void SubmitRepetitionResults(IEnumerable<QuestionResult> questionResults);
+        Task SubmitRepetitionResults(IEnumerable<QuestionResult> questionResults);
     }
 }

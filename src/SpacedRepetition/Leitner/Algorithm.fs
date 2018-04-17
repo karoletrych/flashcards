@@ -115,27 +115,32 @@ module Algorithm =
                     |> Task.FromResult
                 
             member this.SubmitRepetitionResults (results) =
-                let decks = this.allDecks()
-                let cardsWithDecks = 
-                    let parentDeck (card : Flashcard) = 
-                        decks 
-                        |> Seq.find(fun deck -> 
-                            deck.Cards 
-                            |> Seq.exists (fun c -> c.Id = card.Id))
-                    results
-                    |> Seq.map (fun result -> 
-                                    (result.Flashcard, result.IsKnown, parentDeck result.Flashcard))
-                let newDecks = 
-                    rearrangeCards 
-                        cardsWithDecks
-                        sessionNumberSetting.Value
-                        decks
+                async {
+                    let decks = this.allDecks()
+                    let cardsWithDecks = 
+                        let parentDeck (card : Flashcard) = 
+                            decks 
+                            |> Seq.find(fun deck -> 
+                                deck.Cards 
+                                |> Seq.exists (fun c -> c.Id = card.Id))
+                        results
+                        |> Seq.map (fun result -> 
+                                        (result.Flashcard, result.IsKnown, parentDeck result.Flashcard))
+                    let newDecks = 
+                        rearrangeCards 
+                            cardsWithDecks
+                            sessionNumberSetting.Value
+                            decks
 
-                deckRepository.InsertOrReplaceAll(newDecks)
-                |> sync
+                    deckRepository.InsertOrReplaceAll(newDecks)
+                    |> sync
 
-                repetitionDoneTodaySetting.Value <- true
-                streakDaysSetting.Value <- streakDaysSetting.Value + 1
+                    repetitionDoneTodaySetting.Value <- true
+                    streakDaysSetting.Value <- streakDaysSetting.Value + 1
+                }
+                |> Async.StartAsTask
+                |> (fun t -> t :> Task)
+
 
             member this.LearnedFlashcards 
                 with get () =

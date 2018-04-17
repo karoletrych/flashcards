@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Android.Content;
 using Android.Graphics;
@@ -31,7 +32,7 @@ namespace FlashCards.Droid.Renderers
 				var (a, r, g, b) = ConvertColorToInteger(stepItem.Color);
 				paint.SetARGB(a, r, g, b);
 				var fraction = (double)stepItem.Value / totalLength;
-				var stepItemWidth = (int)(fraction * Width);
+				var stepItemWidth = (int)Math.Round(fraction * Width);
 				var stepItemRectangle = new Rect(left: barEnd, right: barEnd + stepItemWidth, top: 0,
 					bottom: ProgressBarHeight);
 				canvas.DrawRect(stepItemRectangle, paint);

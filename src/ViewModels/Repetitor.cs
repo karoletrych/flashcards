@@ -29,26 +29,17 @@ namespace Flashcards.ViewModels
 						examiner
 					}
 				});
-			// TODO: memory leak when user navigates back without ending first session
 			examiner.SessionEnded += ApplyResults;
 		}
 
-		private void ApplyResults(object obj, QuestionResultsEventArgs args)
+		private async void ApplyResults(object obj, QuestionResultsEventArgs args)
 		{
+			((Examiner)obj).SessionEnded -= ApplyResults;
+
 			var questionResults = args.Results.Select(r =>
 				new QuestionResult(r.Question.InternalFlashcard, r.IsKnown));
-			try
-			{
-				_spacedRepetition.SubmitRepetitionResults(questionResults);
 
-			}
-			catch (AggregateException e)
-			{
-				var x = e.Flatten();
-				throw;
-			}
-
-			((Examiner) obj).SessionEnded -= ApplyResults; 
+			await _spacedRepetition.SubmitRepetitionResults(questionResults);
 		}
 	}
 }

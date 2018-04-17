@@ -11,8 +11,6 @@ using static Flashcards.SpacedRepetition.Leitner.Algorithm;
 
 namespace LeitnerTests
 {
-	
-
 	public class LeitnerTests
 	{
 		public LeitnerTests(ITestOutputHelper output)
@@ -102,12 +100,12 @@ namespace LeitnerTests
 		}
 
 		[Fact]
-		public void After10CorrectSessions_AllCardsAreInRetiredDeck()
+		public async void After10CorrectSessions_AllCardsAreInRetiredDeck()
 		{
 			for (var i = 0; i < 20; ++i)
 			{
 				var flashcards = _leitner.CurrentRepetitionFlashcards().Result.ToList();
-				_leitner.SubmitRepetitionResults(flashcards.Select(Known));
+				await _leitner.SubmitRepetitionResults(flashcards.Select(Known));
 				_repetitionSession.Increment();
 				_output.WriteLine($"session: {i}");
 				foreach (var deck in _deckRepository.FindAll().Result)
@@ -121,10 +119,10 @@ namespace LeitnerTests
 		}
 
 		[Fact]
-		public void AnsweringCorrectlyAllFlashcards_DecreasesNumberOfFlashcardsInTheNextSession()
+		public async void AnsweringCorrectlyAllFlashcards_DecreasesNumberOfFlashcardsInTheNextSession()
 		{
 			var flashcards = _leitner.CurrentRepetitionFlashcards().Result;
-			_leitner.SubmitRepetitionResults(flashcards.Select(Known));
+			await _leitner.SubmitRepetitionResults(flashcards.Select(Known));
 			_repetitionSession.Increment(); 
 			
 			var rearrangedFlashcards = _leitner.CurrentRepetitionFlashcards().Result;
@@ -133,10 +131,10 @@ namespace LeitnerTests
 		}
 
 		[Fact]
-		public void AnsweringCorrectlyAllFlashcards_MovesThemToDeckBeginningWithSessionNumber()
+		public async void AnsweringCorrectlyAllFlashcards_MovesThemToDeckBeginningWithSessionNumber()
 		{
 			var flashcards = _leitner.CurrentRepetitionFlashcards().Result;
-			_leitner.SubmitRepetitionResults(flashcards.Select(Known));
+			await _leitner.SubmitRepetitionResults(flashcards.Select(Known));
 
 			var session0DeckCards =
 				_deckRepository.FindWhere(cd => cd.DeckTitle == "0259").Result;
