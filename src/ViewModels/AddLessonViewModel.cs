@@ -8,6 +8,7 @@ using System.Windows.Input;
 using Flashcards.Models;
 using Flashcards.PlatformDependentTools;
 using Flashcards.Services.DataAccess;
+using Flashcards.ViewModels.Tools;
 using Prism.Navigation;
 using Xamarin.Forms;
 

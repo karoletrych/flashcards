@@ -29,5 +29,10 @@ namespace Flashcards.Services.DataAccess.Database
 
             return connection;
         }
+
+	    public SQLiteConnection CreateInMemoryConnection()
+	    {
+		    return CreateConnection(":memory:");
+	    }
     }
 }

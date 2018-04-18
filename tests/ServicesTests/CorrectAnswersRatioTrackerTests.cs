@@ -20,7 +20,8 @@ namespace Flashcards.ServicesTests
 				new Question(new Flashcard(), Language.English, Language.Polish)
 			});
 
-			_tracker = new CorrectAnswersRatioTracker(_examiner);
+			_tracker = new CorrectAnswersRatioTracker();
+			_examiner.SessionEnded += _tracker.UpdateProgress;
 		}
 
 		private void Answer(bool answer, int times)

@@ -2,7 +2,7 @@
 using Flashcards.Services.Examiner;
 using Prism.Navigation;
 
-namespace Flashcards.ViewModels
+namespace Flashcards.ViewModels.Tools
 {
     public interface IRepetitor
     {

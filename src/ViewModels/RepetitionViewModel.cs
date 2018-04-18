@@ -8,6 +8,7 @@ using Flashcards.Services.DataAccess;
 using Flashcards.Services.Examiner;
 using Flashcards.Settings;
 using Flashcards.SpacedRepetition.Interface;
+using Flashcards.ViewModels.Tools;
 using Prism.Navigation;
 using Prism.Services;
 using Xamarin.Forms;
@@ -71,7 +72,7 @@ namespace Flashcards.ViewModels
 
 		public async void OnNavigatedTo(NavigationParameters parameters)
 		{
-			PendingRepetitionExaminer = await _repetitionExaminerBuilder.Examiner();
+			PendingRepetitionExaminer = await _repetitionExaminerBuilder.BuildExaminer();
 			PendingRepetitionQuestionsNumber = PendingRepetitionExaminer.QuestionsCount;
 
 			var activeLessons = (await _lessonRepository.FindWhere(l => l.AskInRepetitions)).ToList();

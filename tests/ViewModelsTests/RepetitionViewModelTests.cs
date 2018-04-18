@@ -8,6 +8,7 @@ using Flashcards.Services.Examiner;
 using Flashcards.Settings;
 using Flashcards.SpacedRepetition.Interface;
 using Flashcards.ViewModels;
+using Flashcards.ViewModels.Tools;
 using NSubstitute;
 using Prism.Navigation;
 using Prism.Services;
@@ -41,9 +42,9 @@ namespace ViewModelsTests
 		[Fact]
 		public void Dialog_is_displayed_when_repetition_is_tapped_and_there_are_no_flashcards_to_repeat()
 		{
-			_lessonRepository.FindAll().Returns(new Lesson[] { });
+			_lessonRepository.GetAllWithChildren(false).Returns(new Lesson[] { });
 			var examiner = Task.FromResult(new Examiner(new List<Question>()) as IExaminer);
-			_repetitionExaminerBuilder.Examiner().Returns(examiner);
+			_repetitionExaminerBuilder.BuildExaminer().Returns(examiner);
 
 			_sut.OnNavigatedTo(new NavigationParameters());
 			_sut.RunRepetitionCommand.Execute(null);
@@ -65,9 +66,9 @@ namespace ViewModelsTests
 				new Lesson {Id = "2", Flashcards = new List<Flashcard>{f2}}
 			};
 
-			_lessonRepository.FindAll().Returns(lessons);
+			_lessonRepository.GetAllWithChildren(false).Returns(lessons);
 			var repeatingExaminer = (IExaminer)new Examiner(questions);
-			_repetitionExaminerBuilder.Examiner()
+			_repetitionExaminerBuilder.BuildExaminer()
 				.Returns(Task.FromResult(repeatingExaminer));
 
 			_sut.OnNavigatedTo(new NavigationParameters());

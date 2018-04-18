@@ -33,7 +33,7 @@ namespace ViewModelsTests
 			var dialogService = Substitute.For<IPageDialogService>();
 			var textToSpeech = Substitute.For<ITextToSpeech>();
 			_askingQuestionsViewModel =
-				new AskingQuestionsViewModel(_navigationService, dialogService, textToSpeech, examiner => new CorrectAnswersRatioTracker(examiner));
+				new AskingQuestionsViewModel(_navigationService, dialogService, textToSpeech, examiner => new CorrectAnswersRatioTracker());
 		}
 
 		private readonly AskingQuestionsViewModel _askingQuestionsViewModel;

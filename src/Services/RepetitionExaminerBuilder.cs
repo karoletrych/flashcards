@@ -11,10 +11,10 @@ namespace Flashcards.Services
 {
 	public interface IRepetitionExaminerBuilder
 	{
-		Task<IExaminer> Examiner();
+		Task<IExaminer> BuildExaminer();
 	}
-
-	class RepetitionExaminerBuilder : IRepetitionExaminerBuilder
+	 
+	public class RepetitionExaminerBuilder : IRepetitionExaminerBuilder
 	{
 		private readonly IRepository<Lesson> _lessonRepository;
 		private readonly ISetting<int> _maximumFlashcardsInRepetitionSetting;
@@ -36,7 +36,7 @@ namespace Flashcards.Services
 			_shuffleRepetitionsSetting = shuffleRepetitionsSetting;
 		}
 
-		public async Task<IExaminer> Examiner()
+		public async Task<IExaminer> BuildExaminer()
 		{
 			var flashcardsToRepeat = await _spacedRepetition.CurrentRepetitionFlashcards();
 			var activeLessons = await _lessonRepository

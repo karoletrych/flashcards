@@ -15,7 +15,7 @@ namespace FlashCards.Droid.Repetitions.Notifications
 			try
 			{
 				var container = IocRegistrations.DefaultContainer();
-				var repeatingExaminer = await container.Resolve<IRepetitionExaminerBuilder>().Examiner();
+				var repeatingExaminer = await container.Resolve<IRepetitionExaminerBuilder>().BuildExaminer();
 
 				if (repeatingExaminer.QuestionsCount > 0)
 				{

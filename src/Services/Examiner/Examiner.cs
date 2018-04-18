@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Flashcards.Models;
 
 namespace Flashcards.Services.Examiner
 {
@@ -68,5 +67,12 @@ namespace Flashcards.Services.Examiner
 
 	    public event EventHandler<QuestionResultsEventArgs> SessionEnded;
 	    public int QuestionsCount => _questionsToAsk.Count;
+
+	    public void Dispose()
+	    {
+			Disposed?.Invoke(this, EventArgs.Empty);
+	    }
+
+	    public event EventHandler Disposed;
     }
 }

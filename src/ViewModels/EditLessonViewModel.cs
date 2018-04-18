@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Flashcards.Models;
 using Flashcards.Services.DataAccess;
+using Flashcards.ViewModels.Tools;
 using Prism.Navigation;
 using Prism.Services;
 using Xamarin.Forms;

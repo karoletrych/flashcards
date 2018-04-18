@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using Flashcards.ViewModels;
+using Flashcards.ViewModels.Tools;
 using Xamarin.Forms;
 using Xamarin.Forms.Internals;
 

@@ -2,9 +2,9 @@
 using Flashcards.Localization;
 using Flashcards.Models;
 
-namespace Flashcards.ViewModels
+namespace Flashcards.ViewModels.Tools
 {
-	public static class AskingModeLocalization
+	public static class AskingModeLocalizationExtension
 	{
 		public static string Localize(this AskingMode askingMode)
 		{

@@ -4,11 +4,13 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Flashcards.Localization;
 using Flashcards.Models;
 using Flashcards.PlatformDependentTools;
 using Flashcards.Services.Examiner;
+using Flashcards.ViewModels.Tools;
 using Prism.Navigation;
 using Prism.Services;
 using Xamarin.Forms;
@@ -35,26 +37,43 @@ namespace Flashcards.ViewModels
 		public void OnNavigatedTo(NavigationParameters parameters)
 		{
 			_examiner = (IExaminer)parameters["examiner"];
-			_correctAnswersRatioTracker = _correctAnswerRatioTrackerFactory(_examiner);
 
-			_examiner.SessionEnded +=
-				async (sender, args) =>
-				{
-					_canAnswer = false;
-					await _dialogService.DisplayAlertAsync(AppResources.EndOfSession,
-						$"{AppResources.Known}: {args.Results.Count(x => x.IsKnown)} \n" +
-						$"{AppResources.Unknown}: {args.Results.Count(x => !x.IsKnown)}\n" +
-						_correctAnswersRatioTracker.Progress + "%",
-						"OK");
-					if (!args.Results.All(r => r.IsKnown))
-						ResetQuestionStatuses(args.NumberOfQuestionsInNextSession);
-					else
-						await _navigationService.GoBackAsync();
-					_canAnswer = true;
-				};
+			SubscribeToSessionEnded();
 
 			ResetQuestionStatuses(_examiner.QuestionsCount);
 			TryShowNextQuestion();
+		}
+
+		private async void HandleSessionEnd(object sender, QuestionResultsEventArgs args)
+		{
+			_canAnswer = false;
+			await _dialogService.DisplayAlertAsync(AppResources.EndOfSession,
+				$"{AppResources.Known}: {args.Results.Count(x => x.IsKnown)} \n" +
+				$"{AppResources.Unknown}: {args.Results.Count(x => !x.IsKnown)}\n" +
+				_correctAnswersRatioTracker.Progress + "%",
+				"OK");
+			if (!args.Results.All(r => r.IsKnown))
+				ResetQuestionStatuses(args.NumberOfQuestionsInNextSession);
+			else
+			{
+				UnsubscribeFromSessionEnded();
+				await _navigationService.GoBackAsync();
+			}
+
+			_canAnswer = true;
+		}
+
+		private void SubscribeToSessionEnded()
+		{
+			_correctAnswersRatioTracker = _correctAnswerRatioTrackerFactory(_examiner);
+			_examiner.SessionEnded += HandleSessionEnd;
+			_examiner.SessionEnded += _correctAnswersRatioTracker.UpdateProgress;
+		}
+
+		private void UnsubscribeFromSessionEnded()
+		{
+			_examiner.SessionEnded -= HandleSessionEnd;
+			_examiner.SessionEnded -= _correctAnswersRatioTracker.UpdateProgress;
 		}
 
 		private void ResetQuestionStatuses(int questionsCount)

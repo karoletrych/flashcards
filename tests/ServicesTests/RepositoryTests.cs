@@ -23,8 +23,8 @@ namespace Flashcards.ServicesTests
         [Fact]
         public void FindAll_EmptyRepository()
         {
-            var flashcards = _flashcardRepository.FindAll().Result;
-            var lessons = _lessonRepository.FindAll().Result;
+            var flashcards = _flashcardRepository.GetAllWithChildren(false).Result;
+            var lessons = _lessonRepository.GetAllWithChildren(false).Result;
 
             Assert.Empty(flashcards);
             Assert.Empty(lessons);
@@ -38,8 +38,8 @@ namespace Flashcards.ServicesTests
             _lessonRepository.Insert(lesson);
             _flashcardRepository.Insert(flashcard);
 
-            var lessons = _lessonRepository.FindAll().Result;
-            var flashcards = _flashcardRepository.FindAll().Result;
+            var lessons = _lessonRepository.GetAllWithChildren(false).Result;
+            var flashcards = _flashcardRepository.GetAllWithChildren(false).Result;
 
             Assert.NotEmpty(lessons);
             Assert.NotEmpty(flashcards);
@@ -89,8 +89,8 @@ namespace Flashcards.ServicesTests
             await _lessonRepository.Insert(lesson);
 
             await _lessonRepository.Delete(lesson);
-            Assert.Empty(_lessonRepository.FindAll().Result);
-            Assert.Empty(_flashcardRepository.FindAll().Result);
+            Assert.Empty(_lessonRepository.GetAllWithChildren(false).Result);
+            Assert.Empty(_flashcardRepository.GetAllWithChildren(false).Result);
         }
 
         [Fact]
@@ -109,12 +109,12 @@ namespace Flashcards.ServicesTests
 	            Id = "1"
 			};
             await _lessonRepository.Insert(lesson);
-            var lessonRef = _lessonRepository.FindAll().Result.Single();
+            var lessonRef = _lessonRepository.GetAllWithChildren(false).Result.Single();
 
 
             await _lessonRepository.Delete(lesson);
-            Assert.Empty(_lessonRepository.FindAll().Result);
-            Assert.Empty(_flashcardRepository.FindAll().Result);
+            Assert.Empty(_lessonRepository.GetAllWithChildren(false).Result);
+            Assert.Empty(_flashcardRepository.GetAllWithChildren(false).Result);
         }
     }
 }

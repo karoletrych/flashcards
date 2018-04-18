@@ -17,13 +17,34 @@ namespace Flashcards.Services.DataAccess.Database
 			_dbConnection = dbConnection;
 		}
 
-		public async Task<IEnumerable<T>> FindAll()
+		public async Task<IEnumerable<T>> GetAllWithChildren(bool recursive)
 		{
 			var list = await _dbConnection
-				.GetAllWithChildrenAsync<T>(recursive: true)
+				.GetAllWithChildrenAsync<T>(recursive: recursive)
 				.ConfigureAwait(false);
 			return list
 				.AsEnumerable();
+		}
+
+		public async Task<IEnumerable<T>> Table()
+		{
+			var list = await _dbConnection
+				.Table<T>()
+				.ToListAsync()
+				.ConfigureAwait(false);
+
+			return list
+				.AsEnumerable();
+		}
+
+		public async Task<int> Count(Expression<Func<T, bool>> predicate)
+		{
+			var count = await _dbConnection
+				.Table<T>()
+				.Where(predicate)
+				.CountAsync()
+				.ConfigureAwait(false);
+			return count;
 		}
 
 		public async Task<IEnumerable<T>> FindWhere(Expression<Func<T, bool>> predicate)

@@ -94,7 +94,7 @@ module Algorithm =
                             repetitionDoneTodaySetting : ISetting<bool>,
                             streakDaysSetting : ISetting<int>) =
         member this.allDecks () = 
-            deckRepository.FindAll()
+            deckRepository.GetAllWithChildren(true)
             |> Async.AwaitTask
             |> Async.RunSynchronously
        

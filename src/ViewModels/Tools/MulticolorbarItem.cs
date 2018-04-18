@@ -1,6 +1,6 @@
 using Xamarin.Forms;
 
-namespace Flashcards.ViewModels
+namespace Flashcards.ViewModels.Tools
 {
     public class MulticolorbarItem
     {

@@ -1,11 +1,10 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Flashcards.Services.Examiner;
 using Flashcards.SpacedRepetition.Interface;
 using Prism.Navigation;
 
-namespace Flashcards.ViewModels
+namespace Flashcards.ViewModels.Tools
 {
 	public class Repetitor : IRepetitor
 	{
@@ -29,12 +28,19 @@ namespace Flashcards.ViewModels
 						examiner
 					}
 				});
-			examiner.SessionEnded += ApplyResults;
+
+			examiner.SessionEnded += SubmitResults;
+			examiner.Disposed += UnsubscribeResultsSubmit;
 		}
 
-		private async void ApplyResults(object obj, QuestionResultsEventArgs args)
+		private void UnsubscribeResultsSubmit(object obj, System.EventArgs e)
 		{
-			((Examiner)obj).SessionEnded -= ApplyResults;
+			((Examiner)(obj)).SessionEnded -= SubmitResults;
+		}
+
+		private async void SubmitResults(object obj, QuestionResultsEventArgs args)
+		{
+			((Examiner)obj).SessionEnded -= SubmitResults;
 
 			var questionResults = args.Results.Select(r =>
 				new QuestionResult(r.Question.InternalFlashcard, r.IsKnown));

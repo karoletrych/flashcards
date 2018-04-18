@@ -1,5 +1,6 @@
 ﻿using Flashcards.Services;
 using Flashcards.ViewModels;
+using Flashcards.ViewModels.Tools;
 using Prism;
 using Prism.Autofac;
 using Prism.Ioc;
@@ -22,7 +23,7 @@ namespace Flashcards.Views
 	    protected override async void OnInitialized()
 	    {
 			var repetition = Container.Resolve<IRepetitor>();
-			var flashcardsToAsk = await Container.Resolve<IRepetitionExaminerBuilder>().Examiner();
+			var flashcardsToAsk = await Container.Resolve<IRepetitionExaminerBuilder>().BuildExaminer();
 			await repetition.Repeat(NavigationService, "NavigationPage/MainPage/AskingQuestionsPage", flashcardsToAsk);
 	    }
     }

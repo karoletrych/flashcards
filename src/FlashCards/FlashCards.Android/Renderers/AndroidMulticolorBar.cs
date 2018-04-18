@@ -5,6 +5,7 @@ using Android.Content;
 using Android.Graphics;
 using Android.Views;
 using Flashcards.ViewModels;
+using Flashcards.ViewModels.Tools;
 using Color = Xamarin.Forms.Color;
 
 namespace FlashCards.Droid.Renderers

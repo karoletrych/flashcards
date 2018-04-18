@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 
-namespace Flashcards.ViewModels
+namespace Flashcards.ViewModels.Tools
 {
 	internal static class SynchronizeExtension
 	{

@@ -64,7 +64,7 @@ namespace LeitnerTests
 		{
 			var sqliteConnection =
 				new DatabaseConnectionFactory()
-					.CreateConnection(":memory:");
+					.CreateInMemoryConnection();
 
 			_deckRepository = new Repository<Deck>(sqliteConnection);
 			var flashcardRepository = new Repository<Flashcard>(sqliteConnection);
@@ -108,7 +108,7 @@ namespace LeitnerTests
 				await _leitner.SubmitRepetitionResults(flashcards.Select(Known));
 				_repetitionSession.Increment();
 				_output.WriteLine($"session: {i}");
-				foreach (var deck in _deckRepository.FindAll().Result)
+				foreach (var deck in _deckRepository.GetAllWithChildren(true).Result)
 					_output.WriteLine(deck.DeckTitle + ": " + deck.Cards.Count);
 				_output.WriteLine("");
 			}

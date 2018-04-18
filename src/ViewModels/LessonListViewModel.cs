@@ -6,6 +6,7 @@ using Flashcards.Models;
 using Flashcards.Services.DataAccess;
 using Flashcards.Services.Examiner;
 using Flashcards.SpacedRepetition.Interface;
+using Flashcards.ViewModels.Tools;
 using Prism.Navigation;
 using Xamarin.Forms;
 
@@ -33,7 +34,7 @@ namespace Flashcards.ViewModels
 
 		public async void OnNavigatedTo(NavigationParameters parameters)
 		{
-			var lessons = (await _lessonRepository.FindAll()).ToList();
+			var lessons = (await _lessonRepository.GetAllWithChildren(true)).ToList();
 
 			Lessons.SynchronizeWith(
 				lessons,
