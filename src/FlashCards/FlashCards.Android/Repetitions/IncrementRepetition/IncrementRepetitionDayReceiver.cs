@@ -10,8 +10,8 @@ namespace FlashCards.Droid.Repetitions.IncrementRepetition
 		public override void OnReceive(Context context, Intent intent)
 		{
 			var container = IocRegistrations.DefaultContainer();
-			var spacedRepetition = container.Resolve<IRepetitionSession>();
-			spacedRepetition.Increment();
+			var repetitionSession = container.Resolve<IRepetitionSession>();
+			repetitionSession.Increment();
 		}
 	}
 }

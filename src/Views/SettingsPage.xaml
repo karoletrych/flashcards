@@ -25,6 +25,7 @@
                     <SwitchCell
                         x:Name="Shuffle"
                         Text="{views:Translate ShuffleFlashcards}" />
+                    <SwitchCell x:Name="Done" Text="Repetitions done today" />
                 </TableSection>
             </TableRoot>
         </TableView>

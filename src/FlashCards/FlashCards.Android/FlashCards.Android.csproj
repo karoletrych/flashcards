@@ -101,7 +101,6 @@
     <Compile Include="Repetitions\Notifications\RepetitionActivity.cs" />
     <Compile Include="Repetitions\Notifications\RepetitionNotification.cs" />
     <Compile Include="Repetitions\AlarmScheduler.cs" />
-    <Compile Include="Repetitions\IncrementRepetition\IncrementRepetitionDayAlarmScheduler.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tools\Localize.cs" />
