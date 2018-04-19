@@ -13,10 +13,34 @@ namespace LeitnerTests
 {
 	public class LeitnerTests
 	{
+		private const int FlashcardCount = 100;
+
 		public LeitnerTests(ITestOutputHelper output)
 		{
+			Repository<Flashcard> flashcardRepository;
+
+			void InitializeSpacedRepetitionModule()
+			{
+				var sqliteConnection =
+					new DatabaseConnectionFactory()
+						.CreateInMemoryConnection();
+
+				_deckRepository = new Repository<Deck>(sqliteConnection);
+				flashcardRepository = new Repository<Flashcard>(sqliteConnection);
+				_cardDeckRepository = new Repository<CardDeck>(sqliteConnection);
+				var tableCreator = new TableCreator(sqliteConnection);
+
+				ISpacedRepetitionInitializer leitnerInitializer =
+					new LeitnerInitializer(
+						flashcardRepository,
+						_deckRepository,
+						_cardDeckRepository,
+						tableCreator);
+				leitnerInitializer.Initialize();
+			}
+
 			_output = output;
-			var flashcardRepository = InitializeSpacedRepetitionModule();
+			InitializeSpacedRepetitionModule();
 
 			var cards = Enumerable
 				.Range(1, FlashcardCount)
@@ -25,8 +49,7 @@ namespace LeitnerTests
 					{
 						Id = cardId,
 						LessonId = "1"
-					})
-				.ToList();
+					});
 
 			foreach (var card in cards)
 			{
@@ -38,6 +61,7 @@ namespace LeitnerTests
 			var streakDaysSetting = new MockStreakDaysSetting();
 			_leitner = new LeitnerRepetition(
 				_deckRepository,
+				_cardDeckRepository,
 				sessionNumberSetting,
 				repetitionDoneTodaySetting,
 				streakDaysSetting);
@@ -49,34 +73,15 @@ namespace LeitnerTests
 		{
 			public int Value { get; set; }
 		}
+
 		private class MockRepetitionTodaySetting : ISetting<bool>
 		{
 			public bool Value { get; set; }
 		}
+
 		private class MockStreakDaysSetting : ISetting<int>
 		{
 			public int Value { get; set; }
-		}
-
-		private const int FlashcardCount = 20;
-
-		private Repository<Flashcard> InitializeSpacedRepetitionModule()
-		{
-			var sqliteConnection =
-				new DatabaseConnectionFactory()
-					.CreateInMemoryConnection();
-
-			_deckRepository = new Repository<Deck>(sqliteConnection);
-			var flashcardRepository = new Repository<Flashcard>(sqliteConnection);
-			var tableCreator = new TableCreator(sqliteConnection);
-
-			ISpacedRepetitionInitializer leitnerInitializer =
-				new LeitnerInitializer(
-					flashcardRepository,
-					_deckRepository,
-					tableCreator);
-			leitnerInitializer.Initialize();
-			return flashcardRepository;
 		}
 
 		private readonly ITestOutputHelper _output;
@@ -84,6 +89,7 @@ namespace LeitnerTests
 		private Repository<Deck> _deckRepository;
 		private readonly ISpacedRepetition _leitner;
 		private readonly IRepetitionSession _repetitionSession;
+		private Repository<CardDeck> _cardDeckRepository;
 
 		private IEnumerable<Flashcard> Flashcards(string deck)
 		{
@@ -108,7 +114,7 @@ namespace LeitnerTests
 				await _leitner.SubmitRepetitionResults(flashcards.Select(Known));
 				_repetitionSession.Increment();
 				_output.WriteLine($"session: {i}");
-				foreach (var deck in _deckRepository.GetAllWithChildren(true).Result)
+				foreach (var deck in _deckRepository.GetAllWithChildren(null, true).Result)
 					_output.WriteLine(deck.DeckTitle + ": " + deck.Cards.Count);
 				_output.WriteLine("");
 			}

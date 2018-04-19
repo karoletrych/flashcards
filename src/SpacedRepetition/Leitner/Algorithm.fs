@@ -14,44 +14,42 @@ module Algorithm =
     let isDigit (i : int) (c : char) = 
         System.Char.IsDigit(c) 
         && c|> toInt = i 
+    
+    type MoveOperation = {
+        Flashcard : Flashcard;
+        SourceDeck : string;
+        DestinationDeck : string;
+    }
 
     // https://en.wikipedia.org/wiki/Leitner_system
     let rearrangeCards 
-        results 
-        sessionNumber 
-        (decks : Deck seq)= 
+        repetitionResults 
+        sessionNumber =
             let deckBeginningWithSession session = 
-                decks
+                deckTitles
                 |> Seq.pick (fun d -> 
-                    match d.DeckTitle with
+                    match d with
                     | digits when digits.[0] |> isDigit sessionNumber ->
                         Some d
                     | _ -> 
                         None)
-            let findDeck deckName (decks : Deck seq) : Deck = 
-                decks
-                |> Seq.find (fun d -> d.DeckTitle = deckName)
-            results
-            |> Seq.iter (fun (card, known, deck : Deck) ->
+            repetitionResults
+            |> Seq.choose (fun (card, known, deck : Deck) ->
                 match deck.DeckTitle with
                 // If a learner is successful at a card from Deck Current,
                 // it gets transferred into the progress deck that begins with 
                 // that session's number.
                 | CurrentDeckTitle when known ->
-                    deck.Cards.Remove(card) |> ignore
-                    (deckBeginningWithSession sessionNumber).Cards.Add(card)
+                    Some {Flashcard = card; SourceDeck = deck.DeckTitle; DestinationDeck = deckBeginningWithSession sessionNumber}
                 // If a learner has difficulty with a card during a subsequent review, 
                 // the card is returned to Deck Current; 
                 | _ when not known ->
-                    deck.Cards.Remove(card) |> ignore
-                    (decks |> findDeck CurrentDeckTitle).Cards.Add(card)
+                    Some {Flashcard = card; SourceDeck = deck.DeckTitle; DestinationDeck = CurrentDeckTitle}
                 // When a learner is successful at a card during a session that matches 
                 // the last number on the deck that card goes into Deck Retired
                 | deckTitle when known && (deckTitle |> Seq.last |> toInt) = sessionNumber ->
-                    deck.Cards.Remove(card) |> ignore
-                    (decks |> findDeck RetiredDeckTitle).Cards.Add(card)
-                | _ -> ())
-            decks
+                    Some {Flashcard = card; SourceDeck = deck.DeckTitle; DestinationDeck = RetiredDeckTitle}
+                | _ -> None)
             
     type SessionNumberSetting() =
         inherit Setting<int>() with
@@ -90,11 +88,12 @@ module Algorithm =
      
     type LeitnerRepetition(
                             deckRepository : IRepository<Deck>,
+                            cardDeckRepository : IRepository<CardDeck>,
                             sessionNumberSetting : ISetting<int>,
                             repetitionDoneTodaySetting : ISetting<bool>,
                             streakDaysSetting : ISetting<int>) =
         member this.allDecks () = 
-            deckRepository.GetAllWithChildren(true)
+            deckRepository.GetAllWithChildren(null, true)
             |> Async.AwaitTask
             |> Async.RunSynchronously
        
@@ -126,14 +125,26 @@ module Algorithm =
                         results
                         |> Seq.map (fun result -> 
                                         (result.Flashcard, result.IsKnown, parentDeck result.Flashcard))
-                    let newDecks = 
+                    let decksMoveOperations = 
                         rearrangeCards 
                             cardsWithDecks
                             sessionNumberSetting.Value
-                            decks
 
-                    deckRepository.InsertOrReplaceAll(newDecks)
-                    |> sync
+                    let decksMap = 
+                        deckRepository.GetAllWithChildren(null, false) 
+                        |> Async.AwaitTask 
+                        |> Async.RunSynchronously
+                        |> Seq.map (fun d -> (d.DeckTitle, d.Id))
+                        |> Map.ofSeq
+
+                    decksMoveOperations
+                    |> Seq.iter (fun m ->
+                        let sourceId = decksMap.[m.SourceDeck]
+                        let destinationId = decksMap.[m.DestinationDeck]
+                        let toRemove = cardDeckRepository.Single(fun cd -> cd.CardId = m.Flashcard.Id && cd.DeckId = sourceId) |> Async.AwaitTask |> Async.RunSynchronously
+                        cardDeckRepository.Delete(toRemove) |> sync
+                        cardDeckRepository.Insert(CardDeck(CardId = m.Flashcard.Id, DeckId = destinationId)) |> sync
+                        )
 
                     repetitionDoneTodaySetting.Value <- true
                     streakDaysSetting.Value <- streakDaysSetting.Value + 1
@@ -145,7 +156,7 @@ module Algorithm =
             member this.LearnedFlashcards 
                 with get () =
                     let cards = 
-                        deckRepository.FindWhere(fun deck -> deck.DeckTitle = RetiredDeckTitle)
+                        deckRepository.GetAllWithChildren((fun deck -> deck.DeckTitle = RetiredDeckTitle),  true)
                         |> Async.AwaitTask
                         |> Async.RunSynchronously
                         |> Seq.exactlyOne

@@ -75,7 +75,7 @@ namespace Flashcards.ServicesTests
 
 
 			IRepository<Lesson> lessonRepository = new Repository<Lesson>(new DatabaseConnectionFactory().CreateInMemoryConnection());
-			lessonRepository.InsertOrReplaceAll(lessons);
+			lessonRepository.InsertOrReplaceAllWithChildren(lessons);
 			_spacedRepetition = Substitute.For<ISpacedRepetition>();
 
 			_maximumFlashcardsInRepetitionSetting = Substitute.For<ISetting<int>>();

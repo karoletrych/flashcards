@@ -57,24 +57,28 @@ module Models =
      type LeitnerInitializer
          (flashcardRepository : IRepository<Flashcard>,
           deckRepository : IRepository<Deck>,
-           tableCreator : ITableCreator) =
+          cardDeckRepository : IRepository<CardDeck>,
+          tableCreator : ITableCreator) =
+        let deckCurrentId = 
+            lazy(
+                let decks =
+                    (deckRepository.GetAllWithChildren((fun d -> d.DeckTitle = CurrentDeckTitle), false)) 
+                    |> Async.AwaitTask 
+                    |> Async.RunSynchronously
+                decks |> Seq.exactlyOne |> (fun d -> d.Id)
+            )
+
         interface ISpacedRepetitionInitializer with
             member this.Initialize() =
                 let insertIntoDeck (flashcard : Flashcard) = 
-                    async {
-                        let! decks =
-                            (deckRepository.FindWhere(fun d -> d.DeckTitle = CurrentDeckTitle)) 
-                            |> Async.AwaitTask
-                        let deck = decks |> Seq.exactlyOne
-                        deck.Cards.Add(flashcard)
-                        do! deckRepository.Update(deck) |> Async.AwaitTask
-                    }
+                    cardDeckRepository.Insert(CardDeck(CardId = flashcard.Id, DeckId = deckCurrentId.Value))                        
+                    |> Async.AwaitTask
                     |> Async.RunSynchronously
 
                 tableCreator.CreateTable<CardDeck>() |> sync
                 tableCreator.CreateTable<Deck>() |> sync
-                if deckRepository.GetAllWithChildren(false) |> syncT |> Seq.isEmpty then
-                    deckRepository.InsertOrReplaceAll(deckTitles 
+                if deckRepository.GetAllWithChildren(null, false) |> syncT |> Seq.isEmpty then
+                    deckRepository.InsertOrReplaceAllWithChildren(deckTitles 
                                              |> List.mapi (fun id title -> 
                                                         Deck(DeckTitle = title, Cards = List<Flashcard>(), Id = id)))
                                              |> sync

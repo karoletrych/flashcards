@@ -23,8 +23,8 @@ namespace Flashcards.ServicesTests
         [Fact]
         public void FindAll_EmptyRepository()
         {
-            var flashcards = _flashcardRepository.GetAllWithChildren(false).Result;
-            var lessons = _lessonRepository.GetAllWithChildren(false).Result;
+            var flashcards = _flashcardRepository.GetAllWithChildren(null, false).Result;
+            var lessons = _lessonRepository.GetAllWithChildren(null, false).Result;
 
             Assert.Empty(flashcards);
             Assert.Empty(lessons);
@@ -35,11 +35,11 @@ namespace Flashcards.ServicesTests
         {
             var lesson = new Lesson {FrontLanguage = Language.English, BackLanguage = Language.Polish, Id = "1"};
             var flashcard = new Flashcard {Front = "cat", Back = "kot", LessonId = "1"};
-            _lessonRepository.Insert(lesson);
-            _flashcardRepository.Insert(flashcard);
+            _lessonRepository.InsertWithChildren(lesson);
+            _flashcardRepository.InsertWithChildren(flashcard);
 
-            var lessons = _lessonRepository.GetAllWithChildren(false).Result;
-            var flashcards = _flashcardRepository.GetAllWithChildren(false).Result;
+            var lessons = _lessonRepository.GetAllWithChildren(null, false).Result;
+            var flashcards = _flashcardRepository.GetAllWithChildren(null, false).Result;
 
             Assert.NotEmpty(lessons);
             Assert.NotEmpty(flashcards);
@@ -51,11 +51,11 @@ namespace Flashcards.ServicesTests
             var lesson = new Lesson { FrontLanguage = Language.English, BackLanguage = Language.Polish, Id = "1" };
             var flashcard = new Flashcard { Front = "cat", Back = "kot", LessonId = "1"};
             var flashcard2 = new Flashcard { Front = "dog", Back = "pies", LessonId = "1" };
-            _lessonRepository.Insert(lesson);
-            _flashcardRepository.Insert(flashcard2);
-            _flashcardRepository.Insert(flashcard);
+            _lessonRepository.InsertWithChildren(lesson);
+            _flashcardRepository.InsertWithChildren(flashcard2);
+            _flashcardRepository.InsertWithChildren(flashcard);
 
-            var matchingFlashcards = _flashcardRepository.FindWhere(f => f.LessonId == "1").Result;
+            var matchingFlashcards = _flashcardRepository.GetAllWithChildren(f => f.LessonId == "1", false).Result;
 
             Assert.Equal(2, matchingFlashcards.Count());
         }
@@ -64,9 +64,9 @@ namespace Flashcards.ServicesTests
         public void FindMatching_EmptyResults()
         {
             var lesson = new Lesson { FrontLanguage = Language.English, BackLanguage = Language.Polish, Id = "1" };
-            _lessonRepository.Insert(lesson);
+            _lessonRepository.InsertWithChildren(lesson);
 
-            var matchingFlashcards = _flashcardRepository.FindWhere(f => f.LessonId == "1").Result;
+            var matchingFlashcards = _flashcardRepository.GetAllWithChildren(f => f.LessonId == "1", false).Result;
 
             Assert.Empty(matchingFlashcards);
         }
@@ -86,11 +86,11 @@ namespace Flashcards.ServicesTests
                 },
 	            Id = "1"
 			};
-            await _lessonRepository.Insert(lesson);
+            await _lessonRepository.InsertWithChildren(lesson);
 
             await _lessonRepository.Delete(lesson);
-            Assert.Empty(_lessonRepository.GetAllWithChildren(false).Result);
-            Assert.Empty(_flashcardRepository.GetAllWithChildren(false).Result);
+            Assert.Empty(_lessonRepository.GetAllWithChildren(null, false).Result);
+            Assert.Empty(_flashcardRepository.GetAllWithChildren(null, false).Result);
         }
 
         [Fact]
@@ -108,13 +108,13 @@ namespace Flashcards.ServicesTests
                 },
 	            Id = "1"
 			};
-            await _lessonRepository.Insert(lesson);
-            var lessonRef = _lessonRepository.GetAllWithChildren(false).Result.Single();
+            await _lessonRepository.InsertWithChildren(lesson);
+            var lessonRef = _lessonRepository.GetAllWithChildren(null, false).Result.Single();
 
 
             await _lessonRepository.Delete(lesson);
-            Assert.Empty(_lessonRepository.GetAllWithChildren(false).Result);
-            Assert.Empty(_flashcardRepository.GetAllWithChildren(false).Result);
+            Assert.Empty(_lessonRepository.GetAllWithChildren(null, false).Result);
+            Assert.Empty(_flashcardRepository.GetAllWithChildren(null, false).Result);
         }
     }
 }

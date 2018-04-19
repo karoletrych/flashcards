@@ -40,7 +40,7 @@ namespace Flashcards.Services
 		{
 			var flashcardsToRepeat = await _spacedRepetition.CurrentRepetitionFlashcards();
 			var activeLessons = await _lessonRepository
-				.FindWhere(lesson => lesson.AskInRepetitions);
+				.GetAllWithChildren(lesson => lesson.AskInRepetitions, true);
 			var lessons = activeLessons
 				.Select(lesson => WithFlashcards(lesson,
 					lesson.Flashcards.Where(f => flashcardsToRepeat.Contains(f)).ToList()));

@@ -67,9 +67,9 @@ namespace Flashcards.ViewModels
 				return;
 			}
 
-			if (!(await _lessonRepository.FindWhere(l => l.Id == _lesson.Id)).Any())
+			if (!(await _lessonRepository.GetAllWithChildren(l => l.Id == _lesson.Id, true)).Any())
 			{
-				await _lessonRepository.Insert(_lesson);
+				await _lessonRepository.InsertWithChildren(_lesson);
 			}
 
 			var flashcard = new Flashcard
@@ -80,7 +80,7 @@ namespace Flashcards.ViewModels
 				ImageUrl = SelectedImageUri?.AbsoluteUri
 			};
 
-			var doNotAwait = _flashcardRepository.Insert(flashcard);
+			var doNotAwait = _flashcardRepository.InsertWithChildren(flashcard);
 
 			FrontText = "";
 			BackText = "";

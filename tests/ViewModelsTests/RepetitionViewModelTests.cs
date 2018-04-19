@@ -42,7 +42,7 @@ namespace ViewModelsTests
 		[Fact]
 		public void Dialog_is_displayed_when_repetition_is_tapped_and_there_are_no_flashcards_to_repeat()
 		{
-			_lessonRepository.GetAllWithChildren(false).Returns(new Lesson[] { });
+			_lessonRepository.GetAllWithChildren(null, false).Returns(new Lesson[] { });
 			var examiner = Task.FromResult(new Examiner(new List<Question>()) as IExaminer);
 			_repetitionExaminerBuilder.BuildExaminer().Returns(examiner);
 
@@ -66,7 +66,7 @@ namespace ViewModelsTests
 				new Lesson {Id = "2", Flashcards = new List<Flashcard>{f2}}
 			};
 
-			_lessonRepository.GetAllWithChildren(false).Returns(lessons);
+			_lessonRepository.GetAllWithChildren(null, false).Returns(lessons);
 			var repeatingExaminer = (IExaminer)new Examiner(questions);
 			_repetitionExaminerBuilder.BuildExaminer()
 				.Returns(Task.FromResult(repeatingExaminer));

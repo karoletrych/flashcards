@@ -133,7 +133,7 @@ namespace Flashcards.ViewModels
 		public void OnNavigatingTo(NavigationParameters parameters)
 		{
 			var lessonId = (string)parameters["lessonId"];
-			_lesson = _lessonRepository.FindWhere(lesson => lesson.Id == lessonId).Result.Single();
+			_lesson = _lessonRepository.GetAllWithChildren(lesson => lesson.Id == lessonId, false).Result.Single();
 
 			OnPropertyChanged(nameof(LessonName));
 			OnPropertyChanged(nameof(AskingMode));

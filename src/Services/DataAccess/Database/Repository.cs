@@ -17,10 +17,10 @@ namespace Flashcards.Services.DataAccess.Database
 			_dbConnection = dbConnection;
 		}
 
-		public Task<IEnumerable<T>> GetAllWithChildren(bool recursive)
+		public Task<IEnumerable<T>> GetAllWithChildren(Expression<Func<T,bool>> predicate, bool recursive)
 		{
 			var list = _dbConnection
-				.GetAllWithChildren<T>(recursive: recursive)
+				.GetAllWithChildren(predicate, recursive: recursive)
 				.ToList();
 			return Task.FromResult(list.AsEnumerable());
 		}
@@ -31,6 +31,16 @@ namespace Flashcards.Services.DataAccess.Database
 				.Table<T>()
 				.ToList();
 			return Task.FromResult(list.AsEnumerable());
+		}
+
+		public Task<T> Single(Expression<Func<T, bool>> predicate)
+		{
+			var list = _dbConnection
+				.Table<T>()
+				.Where(predicate)
+				.Take(1)
+				.ToList();
+			return Task.FromResult(list.Single());
 		}
 
 		public Task<int> Count(Expression<Func<T, bool>> predicate)
@@ -53,9 +63,18 @@ namespace Flashcards.Services.DataAccess.Database
 
 		public event EventHandler<T> ObjectInserted;
 
-		public Task Insert(T entity)
+		public Task InsertWithChildren(T entity)
 		{
 			_dbConnection.InsertWithChildren(entity, true);
+
+			ObjectInserted?.Invoke(this, entity);
+
+			return Task.CompletedTask;
+		}
+
+		public Task Insert(T entity)
+		{
+			_dbConnection.Insert(entity);
 
 			ObjectInserted?.Invoke(this, entity);
 
@@ -68,7 +87,13 @@ namespace Flashcards.Services.DataAccess.Database
 			return Task.CompletedTask;
 		}
 
-		public Task InsertOrReplaceAll(IEnumerable<T> entities)
+		public Task UpdateWithChildren(T entity)
+		{
+			_dbConnection.UpdateWithChildren(entity);
+			return Task.CompletedTask;
+		}
+
+		public Task InsertOrReplaceAllWithChildren(IEnumerable<T> entities)
 		{
 			_dbConnection.InsertOrReplaceAllWithChildren(entities, true);
 			return Task.CompletedTask;

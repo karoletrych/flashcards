@@ -52,7 +52,7 @@ namespace Flashcards.ViewModels
 		public async void OnNavigatedTo(NavigationParameters parameters)
 		{
 			_lesson = (Lesson) parameters["lesson"];
-			var flashcards = await _flashcardRepository.FindWhere(f => f.LessonId == _lesson.Id);
+			var flashcards = await _flashcardRepository.GetAllWithChildren(f => f.LessonId == _lesson.Id, false);
 
 			Flashcards.SynchronizeWith(flashcards);
 		}

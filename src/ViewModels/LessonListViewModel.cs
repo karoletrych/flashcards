@@ -34,7 +34,7 @@ namespace Flashcards.ViewModels
 
 		public async void OnNavigatedTo(NavigationParameters parameters)
 		{
-			var lessons = (await _lessonRepository.GetAllWithChildren(true)).ToList();
+			var lessons = (await _lessonRepository.GetAllWithChildren(null, true)).ToList();
 
 			Lessons.SynchronizeWith(
 				lessons,
@@ -52,7 +52,7 @@ namespace Flashcards.ViewModels
 
 		public ICommand PracticeLessonCommand => new Command<LessonViewModel>(async lesson =>
 		{
-			var loadedLesson = _lessonRepository.FindWhere(l => l.Id == lesson.InternalLesson.Id).Result.Single();
+			var loadedLesson = _lessonRepository.GetAllWithChildren(l => l.Id == lesson.InternalLesson.Id, true).Result.Single();
 
 			var examiner = new ExaminerBuilder()
 				.WithLessons(new []{ loadedLesson })

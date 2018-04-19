@@ -7,17 +7,19 @@ namespace Flashcards.Services.DataAccess
 {
     public interface IRepository<T> where T : new()
     {
-        Task<IEnumerable<T>> GetAllWithChildren(bool recursive);
-        Task<IEnumerable<T>> FindWhere(Expression<Func<T, bool>> predicate);
+        Task<IEnumerable<T>> GetAllWithChildren(Expression<Func<T,bool>> predicate, bool recursive);
 	    Task<IEnumerable<T>> Table();
+	    Task<T> Single(Expression<Func<T, bool>> predicate);
 		Task<int> Count(Expression<Func<T, bool>> predicate);
 
 		event EventHandler<T> ObjectInserted;
-		Task Insert(T entity);
+		Task InsertWithChildren(T entity);
 
-        Task InsertOrReplaceAll(IEnumerable<T> entities);
+        Task InsertOrReplaceAllWithChildren(IEnumerable<T> entities);
         Task Update(T entity);
+        Task UpdateWithChildren(T entity);
 
         Task Delete(T entity);
+	    Task Insert(T entity);
     }
 }

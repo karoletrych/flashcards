@@ -17,10 +17,10 @@ namespace Flashcards.Services.DataAccess.Database
 			_dbConnection = dbConnection;
 		}
 
-		public async Task<IEnumerable<T>> GetAllWithChildren(bool recursive)
+		public async Task<IEnumerable<T>> GetAllWithChildren(Expression<Func<T, bool>> predicate, bool recursive)
 		{
 			var list = await _dbConnection
-				.GetAllWithChildrenAsync<T>(recursive: recursive)
+				.GetAllWithChildrenAsync(predicate, recursive: recursive)
 				.ConfigureAwait(false);
 			return list
 				.AsEnumerable();
@@ -37,6 +37,18 @@ namespace Flashcards.Services.DataAccess.Database
 				.AsEnumerable();
 		}
 
+		public async Task<T> Single(Expression<Func<T, bool>> predicate)
+		{
+			var list = await _dbConnection
+				.Table<T>()
+				.Where(predicate)
+				.Take(1)
+				.ToListAsync()
+				.ConfigureAwait(false);
+
+			return list.Single();
+		}
+
 		public async Task<int> Count(Expression<Func<T, bool>> predicate)
 		{
 			var count = await _dbConnection
@@ -47,17 +59,9 @@ namespace Flashcards.Services.DataAccess.Database
 			return count;
 		}
 
-		public async Task<IEnumerable<T>> FindWhere(Expression<Func<T, bool>> predicate)
-		{
-			var list = await _dbConnection
-				.GetAllWithChildrenAsync(predicate, recursive: true)
-				.ConfigureAwait(false);
-			return list.AsEnumerable();
-		}
-
 		public event EventHandler<T> ObjectInserted;
 
-		public async Task Insert(T entity)
+		public async Task InsertWithChildren(T entity)
 		{
 			await _dbConnection.InsertWithChildrenAsync(entity, recursive: true)
 				.ConfigureAwait(false);
@@ -70,11 +74,20 @@ namespace Flashcards.Services.DataAccess.Database
 			await _dbConnection.InsertOrReplaceWithChildrenAsync(entity, recursive:true).ConfigureAwait(false);
 		}
 
+		public async Task UpdateWithChildren(T entity)
+		{
+			await _dbConnection.UpdateWithChildrenAsync(entity).ConfigureAwait(false);
+		}
 
-		public async Task InsertOrReplaceAll(IEnumerable<T> entities)
+		public async Task InsertOrReplaceAllWithChildren(IEnumerable<T> entities)
 		{
 			await _dbConnection.InsertOrReplaceAllWithChildrenAsync(entities)
 				.ConfigureAwait(false);
+		}
+
+		public async Task Insert(T entity)
+		{
+			await _dbConnection.InsertAsync(entity).ConfigureAwait(false);
 		}
 
 		public async Task Delete(T entity)
