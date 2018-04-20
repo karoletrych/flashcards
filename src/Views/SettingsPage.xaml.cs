@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using Flashcards.Models;
 using Flashcards.PlatformDependentTools;
 using Flashcards.Settings;
@@ -7,6 +8,18 @@ using Xamarin.Forms;
 
 namespace Flashcards.Views
 {
+	public class ExportParameters
+	{
+		public ExportParameters(string databasePath, string exportPath)
+		{
+			DatabasePath = databasePath;
+			ExportPath = exportPath;
+		}
+
+		public string DatabasePath { get; }
+		public string ExportPath { get; }
+	}
+
 	public partial class SettingsPage : ContentPage
 	{
 		private readonly INotificationScheduler _notificationScheduler;
@@ -15,13 +28,19 @@ namespace Flashcards.Views
 		private readonly ISetting<int> _maximumFlashcardsInRepetitionSetting;
 		private readonly ISetting<bool> _shuffleRepetitionsSetting;
 		private readonly ISetting<bool> _repetitionDoneTodaySetting;
+		private readonly ISetting<int> _sessionNumberSetting;
+		private readonly ExportParameters _exportParameters;
+		private readonly IMessage _message;
 
 		public SettingsPage (INotificationScheduler notificationScheduler, 
 			ISetting<TimeSpan> repetitionTimeSetting,
 			ISetting<AskingMode> repetitionAskingModeSetting,
 			ISetting<int> maximumFlashcardsInRepetitionSetting,
 			ISetting<bool> shuffleRepetitionsSetting,
-			ISetting<bool> repetitionDoneTodaySetting)
+			ISetting<bool> repetitionDoneTodaySetting,
+			ISetting<int> sessionNumberSetting,
+			ExportParameters exportParameters,
+			IMessage message)
 		{
 			InitializeComponent();
 
@@ -31,6 +50,9 @@ namespace Flashcards.Views
 			_maximumFlashcardsInRepetitionSetting = maximumFlashcardsInRepetitionSetting;
 			_shuffleRepetitionsSetting = shuffleRepetitionsSetting;
 			_repetitionDoneTodaySetting = repetitionDoneTodaySetting;
+			_sessionNumberSetting = sessionNumberSetting;
+			_exportParameters = exportParameters;
+			_message = message;
 
 			Initialize();
 		}
@@ -48,12 +70,15 @@ namespace Flashcards.Views
 			MaximumFlashcards.Text = _maximumFlashcardsInRepetitionSetting.Value.ToString();
 			Shuffle.On = _shuffleRepetitionsSetting.Value;
 			Done.On = _repetitionDoneTodaySetting.Value;
+			SessionNumber.Text = _sessionNumberSetting.Value.ToString();
 
 			TimePicker.TimeChanged += UpdateRepetitionTime;
 			picker.SelectedIndexChanged += AskingMode_SelectedIndexChanged;
 			Shuffle.OnChanged += Shuffle_OnChanged;
 			Done.OnChanged += Done_OnChanged;
 			MaximumFlashcards.Completed += MaximumFlashcards_OnCompleted;
+			SessionNumber.Completed += SessionNumber_OnCompleted;
+
 		}
 
 		private void UpdateRepetitionTime(object sender, EventArgs e)
@@ -87,6 +112,26 @@ namespace Flashcards.Views
 		{
 			var done = (SwitchCell)sender;
 			_repetitionDoneTodaySetting.Value = done.On;
+		}
+
+		private void SessionNumber_OnCompleted(object sender, EventArgs e)
+		{
+			var done = (EntryCell)sender;
+			_sessionNumberSetting.Value = int.Parse(done.Text);
+		}
+
+		private void ExportButton_OnClicked(object sender, EventArgs e)
+		{
+			var fileName = Path.GetFileName(_exportParameters.DatabasePath);
+
+			var fileNameWithDateTime =
+				Path.GetFileNameWithoutExtension(fileName) + DateTime.Now + Path.GetExtension(fileName);
+
+			var exportFilePath = Path.Combine(_exportParameters.ExportPath, fileNameWithDateTime);
+
+			File.Copy(_exportParameters.DatabasePath, exportFilePath);
+
+			_message.LongAlert($"Exported to: {exportFilePath}");
 		}
 	}
 }

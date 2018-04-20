@@ -129,6 +129,7 @@ module Algorithm =
                         rearrangeCards 
                             cardsWithDecks
                             sessionNumberSetting.Value
+                        |> Seq.toList
 
                     let decksMap = 
                         deckRepository.GetAllWithChildren(null, false) 

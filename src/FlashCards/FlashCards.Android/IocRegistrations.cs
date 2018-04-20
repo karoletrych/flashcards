@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using Autofac;
+using Autofac.Core;
 using Flashcards.Droid;
 using Flashcards.Models;
 using Flashcards.PlatformDependentTools;
@@ -51,13 +53,17 @@ namespace FlashCards.Droid
             var databasePath = Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.Personal),
                 "database.db3");
-            containerBuilder
+
+	        var exportPath = Android.OS.Environment.ExternalStorageDirectory.AbsolutePath;
+
+	        containerBuilder.Register(_ => new ExportParameters(databasePath, exportPath));
+
+			containerBuilder
                 .Register(ctx => ctx
                     .Resolve<DatabaseConnectionFactory>()
                     .CreateAsyncConnection(databasePath))
                 .As<SQLiteAsyncConnection>()
                 .SingleInstance();
-
             containerBuilder.RegisterModule(new SettingsModule(assemblies));
         }
 

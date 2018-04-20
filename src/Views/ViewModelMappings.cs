@@ -16,7 +16,6 @@ namespace Flashcards.Views
 			containerRegistry.RegisterForNavigation<AddLessonPage, AddLessonViewModel>();
 			containerRegistry.RegisterForNavigation<FlashcardListPage, FlashcardListViewModel>();
 
-
 			containerRegistry.RegisterForNavigation<SettingsPage>();
 		}
 	}
