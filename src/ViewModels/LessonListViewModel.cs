@@ -7,6 +7,7 @@ using Flashcards.Services.DataAccess;
 using Flashcards.Services.Examiner;
 using Flashcards.SpacedRepetition.Interface;
 using Flashcards.ViewModels.Tools;
+using Prism.Commands;
 using Prism.Navigation;
 using Xamarin.Forms;
 
@@ -43,12 +44,18 @@ namespace Flashcards.ViewModels
 
 		public ObservableCollection<LessonViewModel> Lessons { get; } = new ObservableCollection<LessonViewModel>();
 
-		public ICommand AddLessonCommand =>
-			new Command(() =>
-			{
-				_navigationService.NavigateAsync("AddLessonPage");
-			});
+		public bool CanNavigate { get; set; } = true;
 
+		public ICommand AddLessonCommand =>
+			new DelegateCommand(AddLesson)
+				.ObservesCanExecute(() => CanNavigate);
+
+		async void AddLesson()
+		{
+			CanNavigate = false;
+			await _navigationService.NavigateAsync("AddLessonPage");
+			CanNavigate = true;
+		}
 
 		public ICommand PracticeLessonCommand => new Command<LessonViewModel>(async lesson =>
 		{

@@ -1,23 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Flashcards.Models;
 using Flashcards.PlatformDependentTools;
-using Flashcards.Services.DataAccess;
 using Flashcards.ViewModels.Tools;
+using Prism.Commands;
 using Prism.Navigation;
-using Xamarin.Forms;
 
 namespace Flashcards.ViewModels
 {
     public class AddLessonViewModel : INavigatingAware, INotifyPropertyChanged
     {
-		private readonly IRepository<Lesson> _lessonRepository;
-		private readonly INavigationService _navigationService;
+	    private readonly INavigationService _navigationService;
 		private readonly IMessage _message;
 
 		private Lesson _lesson;
@@ -100,13 +97,23 @@ namespace Flashcards.ViewModels
 		    }
 	    }
 
-		public ICommand FlashcardListCommand => new Command(() =>
-			_navigationService.NavigateAsync(
-				"FlashcardListPage",
-				new NavigationParameters
-				{
-					{"lesson", _lesson}
-				}));
+
+	    public bool CanNavigate { get; set; } = true;
+		public ICommand FlashcardListCommand => new DelegateCommand(FlashcardList).ObservesCanExecute(() => CanNavigate);
+
+	    private async void FlashcardList()
+	    {
+		    CanNavigate = false;
+		    await _navigationService.NavigateAsync(
+			    "FlashcardListPage",
+			    new NavigationParameters
+			    {
+				    {
+					    "lesson", _lesson
+				    }
+			    });
+		    CanNavigate = true;
+	    }
 
 
 		public void OnNavigatedTo(NavigationParameters parameters)

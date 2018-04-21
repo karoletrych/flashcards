@@ -32,7 +32,6 @@ namespace Flashcards.Services.DataAccess.Database
 				.Table<T>()
 				.ToListAsync()
 				.ConfigureAwait(false);
-
 			return list
 				.AsEnumerable();
 		}

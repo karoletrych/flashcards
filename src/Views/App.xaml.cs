@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using DLToolkit.Forms.Controls;
 using Flashcards.Localization;
 using Flashcards.PlatformDependentTools;
-using Flashcards.Settings;
 using Flashcards.SpacedRepetition.Interface;
 using Prism;
 using Prism.Ioc;
@@ -52,7 +51,7 @@ namespace Flashcards.Views
 		        var spacedRepetitionInitializers = Container.Resolve<IEnumerable<ISpacedRepetitionInitializer>>();
 		        foreach (var spacedRepetitionInitializer in spacedRepetitionInitializers)
 		        {
-			        spacedRepetitionInitializer.Initialize();
+				    spacedRepetitionInitializer.Initialize();
 		        }
 	        }
         }
