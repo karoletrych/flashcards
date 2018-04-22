@@ -25,14 +25,6 @@ namespace Flashcards.Services.DataAccess.Database
 			return Task.FromResult(list.AsEnumerable());
 		}
 
-		public Task<IEnumerable<T>> Table()
-		{
-			var list = _dbConnection
-				.Table<T>()
-				.ToList();
-			return Task.FromResult(list.AsEnumerable());
-		}
-
 		public Task<T> Single(Expression<Func<T, bool>> predicate)
 		{
 			var list = _dbConnection
@@ -41,15 +33,6 @@ namespace Flashcards.Services.DataAccess.Database
 				.Take(1)
 				.ToList();
 			return Task.FromResult(list.Single());
-		}
-
-		public Task<int> Count(Expression<Func<T, bool>> predicate)
-		{
-			var count = 
-				_dbConnection.Table<T>()
-					.Where(predicate)
-					.Count();
-			return Task.FromResult(count);
 		}
 
 		public Task<IEnumerable<T>> FindWhere(Expression<Func<T, bool>> predicate)
@@ -84,12 +67,6 @@ namespace Flashcards.Services.DataAccess.Database
 		public Task Update(T entity)
 		{
 			_dbConnection.InsertOrReplaceWithChildren(entity, true);
-			return Task.CompletedTask;
-		}
-
-		public Task UpdateWithChildren(T entity)
-		{
-			_dbConnection.UpdateWithChildren(entity);
 			return Task.CompletedTask;
 		}
 

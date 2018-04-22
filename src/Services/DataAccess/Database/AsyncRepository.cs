@@ -26,16 +26,6 @@ namespace Flashcards.Services.DataAccess.Database
 				.AsEnumerable();
 		}
 
-		public async Task<IEnumerable<T>> Table()
-		{
-			var list = await _dbConnection
-				.Table<T>()
-				.ToListAsync()
-				.ConfigureAwait(false);
-			return list
-				.AsEnumerable();
-		}
-
 		public async Task<T> Single(Expression<Func<T, bool>> predicate)
 		{
 			var list = await _dbConnection
@@ -46,16 +36,6 @@ namespace Flashcards.Services.DataAccess.Database
 				.ConfigureAwait(false);
 
 			return list.Single();
-		}
-
-		public async Task<int> Count(Expression<Func<T, bool>> predicate)
-		{
-			var count = await _dbConnection
-				.Table<T>()
-				.Where(predicate)
-				.CountAsync()
-				.ConfigureAwait(false);
-			return count;
 		}
 
 		public event EventHandler<T> ObjectInserted;
@@ -71,11 +51,6 @@ namespace Flashcards.Services.DataAccess.Database
 		public async Task Update(T entity)
 		{
 			await _dbConnection.InsertOrReplaceWithChildrenAsync(entity, recursive:true).ConfigureAwait(false);
-		}
-
-		public async Task UpdateWithChildren(T entity)
-		{
-			await _dbConnection.UpdateWithChildrenAsync(entity).ConfigureAwait(false);
 		}
 
 		public async Task InsertOrReplaceAllWithChildren(IEnumerable<T> entities)
