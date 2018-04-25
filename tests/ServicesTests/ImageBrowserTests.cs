@@ -1,11 +1,10 @@
-﻿using System.Linq;
-using Flashcards.Models;
+﻿using Flashcards.Models;
 using Flashcards.Services.Http;
 using Xunit;
 
 namespace Flashcards.ServicesTests
 {
-    public class ImageUrlsProviderTests
+    public class ImageBrowserTests
     {
         [Fact]
         public void Test()
@@ -13,7 +12,7 @@ namespace Flashcards.ServicesTests
             var imageUrlsProvider = new PixabayImageBrowser();
 
             var urls = imageUrlsProvider.Find("pies", Language.Polish).Result;
-            Assert.Equal(9, urls.Count());
+            Assert.Equal(9, urls.Count);
         }
     }
 }

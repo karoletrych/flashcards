@@ -61,6 +61,12 @@ namespace FlashCards.Droid
 		        .InstancePerDependency()
 		        .AsImplementedInterfaces();
 
+	        containerBuilder.RegisterType<MultipleWordsImageBrowser>()
+		        .WithParameter(new ResolvedParameter(
+			        (info, context) => info.ParameterType == typeof(IImageBrowser),
+			        (info, context) => context.Resolve<PixabayImageBrowser>()))
+		        .AsImplementedInterfaces();
+
 	        var exportPath = Android.OS.Environment.ExternalStorageDirectory.AbsolutePath;
 
 	        containerBuilder.Register(_ => new ExportParameters(databasePath, exportPath));

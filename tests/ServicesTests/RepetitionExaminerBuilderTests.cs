@@ -74,7 +74,10 @@ namespace Flashcards.ServicesTests
 				.Concat(_activeFlashcards2.AsEnumerable());
 
 
-			IRepository<Lesson> lessonRepository = new Repository<Lesson>(new DatabaseConnectionFactory().CreateInMemoryConnection());
+
+			new DatabaseConnectionFactory().CreateInMemoryConnection();
+			IRepository<Lesson> lessonRepository = new Repository<Lesson>(
+				() => new Connection(new DatabaseConnectionFactory().CreateInMemoryConnection()));
 			lessonRepository.InsertOrReplaceAllWithChildren(lessons);
 			_spacedRepetition = Substitute.For<ISpacedRepetition>();
 
