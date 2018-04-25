@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Flashcards.Models;
 using Flashcards.PlatformDependentTools;
+using Flashcards.Services.DataAccess.Database;
 using Flashcards.Settings;
 using Flashcards.Views.CustomViews;
 using Xamarin.Forms;
@@ -31,6 +34,7 @@ namespace Flashcards.Views
 		private readonly ISetting<int> _sessionNumberSetting;
 		private readonly ExportParameters _exportParameters;
 		private readonly IMessage _message;
+		private readonly IDisconnect _disconnect;
 
 		public SettingsPage (INotificationScheduler notificationScheduler, 
 			ISetting<TimeSpan> repetitionTimeSetting,
@@ -40,7 +44,8 @@ namespace Flashcards.Views
 			ISetting<bool> repetitionDoneTodaySetting,
 			ISetting<int> sessionNumberSetting,
 			ExportParameters exportParameters,
-			IMessage message)
+			IMessage message,
+			IDisconnect disconnect)
 		{
 			InitializeComponent();
 
@@ -53,6 +58,7 @@ namespace Flashcards.Views
 			_sessionNumberSetting = sessionNumberSetting;
 			_exportParameters = exportParameters;
 			_message = message;
+			_disconnect = disconnect;
 
 			Initialize();
 		}
@@ -66,6 +72,7 @@ namespace Flashcards.Views
 				ItemsSource = Enum.GetNames(typeof(AskingMode)),
 				SelectedIndex = (int) _repetitionAskingModeSetting.Value
 			};
+
 			AskingModePickerCell.Picker = picker;
 			MaximumFlashcards.Text = _maximumFlashcardsInRepetitionSetting.Value.ToString();
 			Shuffle.On = _shuffleRepetitionsSetting.Value;
@@ -79,6 +86,13 @@ namespace Flashcards.Views
 			MaximumFlashcards.Completed += MaximumFlashcards_OnCompleted;
 			SessionNumber.Completed += SessionNumber_OnCompleted;
 
+			var strings = Directory.GetFiles(_exportParameters.ExportPath);
+			var importPickerItemsSource = 
+				strings
+				.Where(p => p.Contains("database"))
+				.ToList();
+			ImportPicker.ItemsSource = 
+				importPickerItemsSource;
 		}
 
 		private void UpdateRepetitionTime(object sender, EventArgs e)
@@ -132,6 +146,18 @@ namespace Flashcards.Views
 			File.Copy(_exportParameters.DatabasePath, exportFilePath);
 
 			_message.LongAlert($"Exported to: {exportFilePath}");
+		}
+
+		private void ImportButton_OnClicked(object sender, EventArgs e)
+		{
+			if(ImportPicker.SelectedItem == null)
+				return;
+
+			_disconnect.Disconnect();
+
+			File.Copy(ImportPicker.SelectedItem.ToString(), _exportParameters.DatabasePath, true);
+
+			_message.ShortAlert("Imported database");
 		}
 	}
 }

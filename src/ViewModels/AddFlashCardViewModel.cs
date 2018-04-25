@@ -69,7 +69,7 @@ namespace Flashcards.ViewModels
 
 			if (!(await _lessonRepository.GetAllWithChildren(l => l.Id == _lesson.Id, true)).Any())
 			{
-				await _lessonRepository.InsertWithChildren(_lesson);
+				await _lessonRepository.Insert(_lesson);
 			}
 
 			var flashcard = new Flashcard
@@ -80,7 +80,7 @@ namespace Flashcards.ViewModels
 				ImageUrl = SelectedImageUri?.AbsoluteUri
 			};
 
-			var doNotAwait = _flashcardRepository.InsertWithChildren(flashcard);
+			var doNotAwait = _flashcardRepository.Insert(flashcard);
 
 			FrontText = "";
 			BackText = "";

@@ -34,7 +34,14 @@
                     </TableSection>
                 </TableRoot>
             </TableView>
-            <Button Text="Export database" Clicked="ExportButton_OnClicked"/>
+            <StackLayout>
+                <Button Text="Export database" Clicked="ExportButton_OnClicked"/>
+                <StackLayout Orientation="Horizontal">
+                    <Picker x:Name ="ImportPicker" WidthRequest="250"/>
+                    <Button Text="Import database" Clicked="ImportButton_OnClicked" HorizontalOptions="Fill"/>
+                </StackLayout>
+            </StackLayout>
+
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

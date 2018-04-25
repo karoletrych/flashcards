@@ -41,29 +41,30 @@ namespace FlashCards.Droid
                 .AsSelf()
                 .AsImplementedInterfaces();
 
+	        var databasePath = Path.Combine(
+		        Environment.GetFolderPath(Environment.SpecialFolder.Personal),
+		        "database.db3");
+
+			containerBuilder.RegisterType<ConnectionProvider>()
+		        .WithParameter(new TypedParameter(typeof(string), databasePath))
+		        .AsImplementedInterfaces()
+		        .SingleInstance();
+
             containerBuilder
-                .RegisterGeneric(typeof(AsyncRepository<>))
+                .RegisterGeneric(typeof(Repository<>))
                 .As(typeof(IRepository<>))
+	            .As(typeof(INotifyObjectInserted<>))
                 .SingleInstance();
 
 	        containerBuilder
-		        .RegisterType<AsyncTableCreator>()
-		        .As<ITableCreator>();
-
-            var databasePath = Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.Personal),
-                "database.db3");
+		        .Register(c => c.Resolve<IConnectionProvider>().Connection)
+		        .InstancePerDependency()
+		        .AsImplementedInterfaces();
 
 	        var exportPath = Android.OS.Environment.ExternalStorageDirectory.AbsolutePath;
 
 	        containerBuilder.Register(_ => new ExportParameters(databasePath, exportPath));
-
-			containerBuilder
-                .Register(ctx => ctx
-                    .Resolve<DatabaseConnectionFactory>()
-                    .CreateAsyncConnection(databasePath))
-                .As<SQLiteAsyncConnection>()
-                .SingleInstance();
+			
             containerBuilder.RegisterModule(new SettingsModule(assemblies));
         }
 

@@ -55,10 +55,10 @@ module Models =
 
         
      type LeitnerInitializer
-         (flashcardRepository : IRepository<Flashcard>,
+         (notifier : INotifyObjectInserted<Flashcard>,
           deckRepository : IRepository<Deck>,
           cardDeckRepository : IRepository<CardDeck>,
-          tableCreator : ITableCreator) =
+          tableCreatorFunc : ITableCreator) =
         let deckCurrentId = 
             lazy(
                 let decks =
@@ -75,11 +75,11 @@ module Models =
                     |> Async.AwaitTask
                     |> Async.RunSynchronously
 
-                tableCreator.CreateTable<CardDeck>() |> sync
-                tableCreator.CreateTable<Deck>() |> sync
+                tableCreatorFunc.CreateTable<CardDeck>() |> sync
+                tableCreatorFunc.CreateTable<Deck>() |> sync
                 if deckRepository.GetAllWithChildren(null, false) |> syncT |> Seq.isEmpty then
                     deckRepository.InsertOrReplaceAllWithChildren(deckTitles 
                                              |> List.mapi (fun id title -> 
                                                         Deck(DeckTitle = title, Cards = List<Flashcard>(), Id = id)))
                                              |> sync
-                flashcardRepository.ObjectInserted.Add(fun f -> insertIntoDeck f)
+                notifier.ObjectInserted.Add(fun f -> insertIntoDeck f)

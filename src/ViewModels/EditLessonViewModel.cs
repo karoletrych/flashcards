@@ -100,7 +100,7 @@ namespace Flashcards.ViewModels
 				Localization.AppResources.No);
 			if (sure)
 			{
-				await _lessonRepository.Delete(_lesson);
+				await _lessonRepository.DeleteWithChildren(_lesson);
 				await _navigationService.GoBackAsync();
 			}
 		});

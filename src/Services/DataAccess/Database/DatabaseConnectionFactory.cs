@@ -5,12 +5,15 @@ namespace Flashcards.Services.DataAccess.Database
 {
     public class DatabaseConnectionFactory
     {
-        private const SQLiteOpenFlags SqliteOpenFlags =
-            SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.FullMutex;
+	    private const SQLiteOpenFlags SqliteOpenFlags =
+		    SQLiteOpenFlags.Create | 
+		    SQLiteOpenFlags.ReadWrite | 
+		    SQLiteOpenFlags.FullMutex;
 
         public SQLiteAsyncConnection CreateAsyncConnection(string databasePath)
         {
-            var connection = new SQLiteAsyncConnection(databasePath,
+            var connection = new SQLiteAsyncConnection(
+	            databasePath,
                 SqliteOpenFlags);
 
             connection.CreateTableAsync<Flashcard>();
@@ -21,7 +24,8 @@ namespace Flashcards.Services.DataAccess.Database
 
         public SQLiteConnection CreateConnection(string databasePath)
         {
-            var connection = new SQLiteConnection(databasePath,
+            var connection = new SQLiteConnection(
+	            databasePath,
                 SqliteOpenFlags);
 
 			connection.CreateTable<Flashcard>();
