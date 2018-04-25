@@ -5,9 +5,12 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using Flashcards.Localization;
 using Flashcards.Models;
+using Flashcards.PlatformDependentTools;
 using Flashcards.Services.DataAccess;
 using Flashcards.ViewModels.Tools;
+using Prism.Commands;
 using Prism.Navigation;
 using Prism.Services;
 using Xamarin.Forms;
@@ -21,6 +24,7 @@ namespace Flashcards.ViewModels
 		private readonly IPageDialogService _dialogService;
 
 		private Lesson _lesson;
+		private readonly IMessage _message;
 
 		public EditLessonViewModel()
 		{
@@ -29,11 +33,13 @@ namespace Flashcards.ViewModels
 		public EditLessonViewModel(
 			INavigationService navigationService, 
 			IRepository<Lesson> lessonRepository, 
-			IPageDialogService dialogService)
+			IPageDialogService dialogService,
+			IMessage message)
 		{
 			_navigationService = navigationService;
 			_lessonRepository = lessonRepository;
 			_dialogService = dialogService;
+			_message = message;
 		}
 
 		public string LessonName
@@ -54,11 +60,9 @@ namespace Flashcards.ViewModels
 			get => _lesson?.AskingMode ?? default(AskingMode);
 			set
 			{
-				if (_lesson != null && (int)value != -1) // prevents xamarin from setting default value when navigating back
-				{
-					_lesson.AskingMode = value;
-					_lessonRepository.Update(_lesson);
-				}
+				if (_lesson == null || (int) value == -1) return;
+				_lesson.AskingMode = value;
+				_lessonRepository.Update(_lesson);
 			}
 		}
 
@@ -94,10 +98,10 @@ namespace Flashcards.ViewModels
 		public ICommand DeleteLessonCommand => new Command(async () =>
 		{
 			var sure = await _dialogService.DisplayAlertAsync(
-				Localization.AppResources.Warning, 
-				Localization.AppResources.AreYouSure, 
-				Localization.AppResources.Yes, 
-				Localization.AppResources.No);
+				AppResources.Warning, 
+				AppResources.AreYouSure, 
+				AppResources.Yes, 
+				AppResources.No);
 			if (sure)
 			{
 				await _lessonRepository.DeleteWithChildren(_lesson);
@@ -105,13 +109,31 @@ namespace Flashcards.ViewModels
 			}
 		});
 
-		public ICommand FlashcardListCommand => new Command(() =>
+		public bool CanNavigate { get; set; } = true;
+
+		public ICommand FlashcardListCommand => 
+			new DelegateCommand(FlashcardList)
+			.ObservesCanExecute(() => CanNavigate);
+
+		private void FlashcardList()
+		{
+			if (string.IsNullOrWhiteSpace(_lesson.Name))
+			{
+				_message.LongAlert(AppResources.InsertLessonName);
+				return;
+			}
+
+			CanNavigate = false;
 			_navigationService.NavigateAsync(
 				"FlashcardListPage",
 				new NavigationParameters
 				{
-					{"lesson", _lesson}
-				}));
+					{
+						"lesson", _lesson
+					}
+				});
+			CanNavigate = true;
+		}
 
 
 		public void OnNavigatedTo(NavigationParameters parameters)

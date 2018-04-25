@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using Flashcards.Localization;
 using Flashcards.Models;
 using Flashcards.PlatformDependentTools;
 using Flashcards.ViewModels.Tools;
@@ -103,8 +104,14 @@ namespace Flashcards.ViewModels
 
 	    private async void FlashcardList()
 	    {
+		    if (string.IsNullOrWhiteSpace(_lesson.Name))
+		    {
+			    _message.LongAlert(AppResources.InsertLessonName);
+			    return;
+		    }
+
 		    CanNavigate = false;
-		    await _navigationService.NavigateAsync(
+			await _navigationService.NavigateAsync(
 			    "FlashcardListPage",
 			    new NavigationParameters
 			    {
