@@ -6,7 +6,7 @@ namespace Flashcards.ServicesTests
 {
 	public class CorrectAnswersRatioTrackerTests
 	{
-		private readonly CorrectAnswersRatioTracker _tracker;
+		private readonly CorrectAnswersProgressCalculator _calculator;
 		private readonly Examiner _examiner;
 
 		public CorrectAnswersRatioTrackerTests()
@@ -19,9 +19,6 @@ namespace Flashcards.ServicesTests
 				new Question(new Flashcard(), Language.English, Language.Polish),
 				new Question(new Flashcard(), Language.English, Language.Polish)
 			});
-
-			_tracker = new CorrectAnswersRatioTracker();
-			_examiner.SessionEnded += _tracker.UpdateProgress;
 		}
 
 		private void Answer(bool answer, int times)
@@ -36,31 +33,43 @@ namespace Flashcards.ServicesTests
 		[Fact]
 		public void WhenAnswered2QuestionsOutOf5_Gives40PercentRatio()
 		{
+			_examiner.SessionEnded += (sender, args) =>
+			{
+				var progress = _calculator.CalculateProgress(args);
+				Assert.Equal(40, progress);
+			};
+
 			Answer(true, 2);
 			Answer(false, 3);
-			
-			Assert.Equal(40, _tracker.Progress);
 		}
 
 		[Fact]
 		public void WhenAnswered2QuestionsOutOf5_AndAllAnswersAreIncorrectInNextSession_Gives40PercentRatio()
 		{
+			_examiner.SessionEnded += (sender, args) =>
+			{
+				var progress = _calculator.CalculateProgress(args);
+				Assert.Equal(40, progress);
+			};
+
 			Answer(true, 2);
 			Answer(false, 3);
 			Answer(false, 3);
-
-			Assert.Equal(40, _tracker.Progress);
 		}
 
 		[Fact]
 		public void WhenAnsweredAllQuestionsInThirdSession_Gives100PercentRatio()
 		{
+			_examiner.SessionEnded += (sender, args) =>
+			{
+				var progress = _calculator.CalculateProgress(args);
+				Assert.Equal(100, progress);
+			};
+
 			Answer(true, 2);
 			Answer(false, 3);
 			Answer(false, 3);
 			Answer(true, 3);
-
-			Assert.Equal(100, _tracker.Progress);
 		}
 	}
 }

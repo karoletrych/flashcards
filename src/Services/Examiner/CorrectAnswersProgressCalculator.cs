@@ -2,20 +2,18 @@
 
 namespace Flashcards.Services.Examiner
 {
-	public class CorrectAnswersRatioTracker
+	public class CorrectAnswersProgressCalculator
 	{
-		public int Progress { get; private set; }
-
 		private int? _totalNumberOfFlashcards;
 		private int _totalAnsweredCorrectly = 0;
 
-
-		public void UpdateProgress(object sender, QuestionResultsEventArgs e)
+		public int CalculateProgress(QuestionResultsEventArgs e)
 		{
 			if(_totalNumberOfFlashcards == null)
 				_totalNumberOfFlashcards = e.Results.Count;
 			_totalAnsweredCorrectly += e.Results.Count(f => f.IsKnown);
-			Progress = 100 * _totalAnsweredCorrectly / (_totalNumberOfFlashcards ?? default(int));
+			var correctAnswersPercentage = 100 * _totalAnsweredCorrectly / (_totalNumberOfFlashcards ?? default(int));
+			return correctAnswersPercentage;
 		}
 	}
 }

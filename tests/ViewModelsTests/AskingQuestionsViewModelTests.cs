@@ -5,6 +5,7 @@ using Flashcards.Models;
 using Flashcards.PlatformDependentTools;
 using Flashcards.Services.Examiner;
 using Flashcards.ViewModels;
+using FluentAssertions;
 using NSubstitute;
 using Prism.Navigation;
 using Prism.Services;
@@ -30,10 +31,10 @@ namespace ViewModelsTests
 			_examiner = new ExaminerBuilder().WithLessons(new[] {_lesson}).Build();
 
 			_navigationService = Substitute.For<INavigationService>();
-			var dialogService = Substitute.For<IPageDialogService>();
+			_pageDialogService = Substitute.For<IPageDialogService>();
 			var textToSpeech = Substitute.For<ITextToSpeech>();
 			_askingQuestionsViewModel =
-				new AskingQuestionsViewModel(_navigationService, dialogService, textToSpeech, examiner => new CorrectAnswersRatioTracker());
+				new AskingQuestionsViewModel(_navigationService, _pageDialogService, textToSpeech, examiner => new CorrectAnswersProgressCalculator());
 		}
 
 		private readonly AskingQuestionsViewModel _askingQuestionsViewModel;
@@ -41,6 +42,7 @@ namespace ViewModelsTests
 		private readonly IExaminer _examiner;
 
 		private readonly Lesson _lesson;
+		private readonly IPageDialogService _pageDialogService;
 
 		private async Task NavigateToViewModel()
 		{
@@ -105,14 +107,31 @@ namespace ViewModelsTests
 		public async void WhenAllQuestionsAreAnswered_NavigatesBack()
 		{
 			await NavigateToViewModel();
-			_askingQuestionsViewModel.ShowBackCommand.Execute(null);
-			_askingQuestionsViewModel.UserAnswerCommand.Execute(true);
-			_askingQuestionsViewModel.ShowBackCommand.Execute(null);
-			_askingQuestionsViewModel.UserAnswerCommand.Execute(true);
-			_askingQuestionsViewModel.ShowBackCommand.Execute(null);
-			_askingQuestionsViewModel.UserAnswerCommand.Execute(true);
+			AnswerQuestions();
 
 			await _navigationService.Received().GoBackAsync();
+		}
+
+		[Fact]
+		public async void after_first_session_shows_correct_percentage_of_answered()
+		{
+			await NavigateToViewModel();
+			AnswerQuestions();
+
+			await _pageDialogService.Received().DisplayAlertAsync(
+				Arg.Any<string>(),
+				Arg.Is<string>(x => x.EndsWith("100%")),
+				Arg.Any<string>());
+		}
+
+		private void AnswerQuestions()
+		{
+			_askingQuestionsViewModel.ShowBackCommand.Execute(null);
+			_askingQuestionsViewModel.UserAnswerCommand.Execute(true);
+			_askingQuestionsViewModel.ShowBackCommand.Execute(null);
+			_askingQuestionsViewModel.UserAnswerCommand.Execute(true);
+			_askingQuestionsViewModel.ShowBackCommand.Execute(null);
+			_askingQuestionsViewModel.UserAnswerCommand.Execute(true);
 		}
 	}
 }

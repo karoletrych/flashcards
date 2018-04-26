@@ -45,10 +45,11 @@ namespace Flashcards.ServicesTests
 		private readonly ISpacedRepetition _spacedRepetition;
 		private readonly ISetting<int> _maximumFlashcardsInRepetitionSetting;
 		private readonly IEnumerable<Flashcard> _flashcards;
+		private readonly IRepository<Lesson> _lessonRepository;
 
 		public RepetitionExaminerBuilderTests()
 		{
-			IEnumerable<Lesson> lessons = new List<Lesson>
+			var lessons = new List<Lesson>
 			{
 				new Lesson
 				{
@@ -73,12 +74,9 @@ namespace Flashcards.ServicesTests
 				.Concat(_inactiveFlashcards.AsEnumerable())
 				.Concat(_activeFlashcards2.AsEnumerable());
 
-
-
-			new DatabaseConnectionFactory().CreateInMemoryConnection();
-			IRepository<Lesson> lessonRepository = new Repository<Lesson>(
-				() => new Connection(new DatabaseConnectionFactory().CreateInMemoryConnection()));
-			lessonRepository.InsertOrReplaceAllWithChildren(lessons);
+			var connection = new Connection(new DatabaseConnectionFactory().CreateInMemoryConnection());
+			_lessonRepository = new Repository<Lesson>(() => connection);
+			_lessonRepository.InsertOrReplaceAllWithChildren(lessons);
 			_spacedRepetition = Substitute.For<ISpacedRepetition>();
 
 			_maximumFlashcardsInRepetitionSetting = Substitute.For<ISetting<int>>();
@@ -88,7 +86,7 @@ namespace Flashcards.ServicesTests
 
 			_sut = new RepetitionExaminerBuilder(
 				_spacedRepetition, 
-				lessonRepository, 
+				_lessonRepository, 
 				_maximumFlashcardsInRepetitionSetting,
 				repetitionAskingModeSetting,
 				shuffleRepetitionSetting);
@@ -98,7 +96,7 @@ namespace Flashcards.ServicesTests
 		[Fact]
 		public async void BuildExaminer_ReturnsOnlyFlashcardsFromActiveLessons()
 		{
-			_spacedRepetition.CurrentRepetitionFlashcards().Returns(
+			 _spacedRepetition.CurrentRepetitionFlashcards().Returns(
 				Task.FromResult(_flashcards));
 
 			var examiner = await _sut.BuildExaminer();

@@ -3,8 +3,6 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using Flashcards.Localization;
 using Flashcards.Models;
@@ -19,11 +17,26 @@ namespace Flashcards.ViewModels
 {
 	public class AskingQuestionsViewModel : INotifyPropertyChanged, INavigatedAware
 	{
+		private readonly Func<IExaminer, CorrectAnswersProgressCalculator> _correctAnswerRatioTrackerFactory;
+
+		private readonly IPageDialogService _dialogService;
+
+		private readonly INavigationService _navigationService;
+		private readonly ITextToSpeech _textToSpeech;
+
+		private bool _backIsVisible;
+		private Language _backLanguage;
+		private bool _canAnswer = true;
+		private CorrectAnswersProgressCalculator _correctAnswersProgressCalculator;
+
+		private IExaminer _examiner;
+		private Language _frontLanguage;
+
 		public AskingQuestionsViewModel(
 			INavigationService navigationService,
 			IPageDialogService dialogService,
 			ITextToSpeech textToSpeech,
-			Func<IExaminer, CorrectAnswersRatioTracker> correctAnswerRatioTrackerFactory)
+			Func<IExaminer, CorrectAnswersProgressCalculator> correctAnswerRatioTrackerFactory)
 		{
 			_navigationService = navigationService;
 			_dialogService = dialogService;
@@ -31,80 +44,11 @@ namespace Flashcards.ViewModels
 			_correctAnswerRatioTrackerFactory = correctAnswerRatioTrackerFactory;
 		}
 
-		public int CurrentQuestionNumber { get; private set; } = 0;
-		private CorrectAnswersRatioTracker _correctAnswersRatioTracker;
-
-		public void OnNavigatedTo(NavigationParameters parameters)
-		{
-			_examiner = (IExaminer)parameters["examiner"];
-
-			SubscribeToSessionEnded();
-
-			ResetQuestionStatuses(_examiner.QuestionsCount);
-			TryShowNextQuestion();
-		}
-
-		private async void HandleSessionEnd(object sender, QuestionResultsEventArgs args)
-		{
-			_canAnswer = false;
-			await _dialogService.DisplayAlertAsync(AppResources.EndOfSession,
-				$"{AppResources.Known}: {args.Results.Count(x => x.IsKnown)} \n" +
-				$"{AppResources.Unknown}: {args.Results.Count(x => !x.IsKnown)}\n" +
-				_correctAnswersRatioTracker.Progress + "%",
-				"OK");
-			if (!args.Results.All(r => r.IsKnown))
-				ResetQuestionStatuses(args.NumberOfQuestionsInNextSession);
-			else
-			{
-				UnsubscribeFromSessionEnded();
-				await _navigationService.GoBackAsync();
-			}
-
-			_canAnswer = true;
-		}
-
-		private void SubscribeToSessionEnded()
-		{
-			_correctAnswersRatioTracker = _correctAnswerRatioTrackerFactory(_examiner);
-			_examiner.SessionEnded += HandleSessionEnd;
-			_examiner.SessionEnded += _correctAnswersRatioTracker.UpdateProgress;
-		}
-
-		private void UnsubscribeFromSessionEnded()
-		{
-			_examiner.SessionEnded -= HandleSessionEnd;
-			_examiner.SessionEnded -= _correctAnswersRatioTracker.UpdateProgress;
-		}
-
-		private void ResetQuestionStatuses(int questionsCount)
-		{
-			CurrentQuestionNumber = 0;
-
-			QuestionStatuses.Clear();
-			for (var i = 0; i < questionsCount; ++i)
-			{
-				QuestionStatuses.Add(new MulticolorbarItem {Color = Color.Gray, Value = 1});
-			}
-
-			OnPropertyChanged(nameof(QuestionsProgress));
-		}
-
-		private readonly IPageDialogService _dialogService;
-		private readonly ITextToSpeech _textToSpeech;
-		private readonly Func<IExaminer, CorrectAnswersRatioTracker> _correctAnswerRatioTrackerFactory;
-
-		private readonly INavigationService _navigationService;
-
-		private IExaminer _examiner;
-
-		private bool _backIsVisible;
-		private Language _frontLanguage;
-		private Language _backLanguage;
-		private bool _canAnswer = true;
-
 		public AskingQuestionsViewModel()
 		{
 		}
+
+		public int CurrentQuestionNumber { get; private set; } = 0;
 
 		public bool FrontIsVisible => !BackIsVisible;
 
@@ -115,7 +59,7 @@ namespace Flashcards.ViewModels
 
 		public string BackText { get; private set; }
 
-		public ObservableCollection<MulticolorbarItem> QuestionStatuses { get; } = 
+		public ObservableCollection<MulticolorbarItem> QuestionStatuses { get; } =
 			new ObservableCollection<MulticolorbarItem>();
 
 		public Uri ImageUri { get; set; }
@@ -128,17 +72,24 @@ namespace Flashcards.ViewModels
 				if (_backIsVisible == value)
 					return;
 				_backIsVisible = value;
-				OnPropertyChanged();
-				OnPropertyChanged(nameof(FrontIsVisible));
+				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName: nameof(FrontIsVisible)));
 			}
 		}
-		
+
 		public ICommand UserAnswerCommand => new Command<bool>(known =>
 		{
 			QuestionStatuses[CurrentQuestionNumber] =
 				known
-					? new MulticolorbarItem { Color = Color.LawnGreen, Value = 1 }
-					: new MulticolorbarItem { Color = Color.Red, Value = 1 };
+					? new MulticolorbarItem
+					{
+						Color = Color.LawnGreen,
+						Value = 1
+					}
+					: new MulticolorbarItem
+					{
+						Color = Color.Red,
+						Value = 1
+					};
 
 			BackIsVisible = false;
 
@@ -158,7 +109,7 @@ namespace Flashcards.ViewModels
 
 		public ICommand SpeakCommand => new Command(() =>
 		{
-			if(FrontIsVisible)
+			if (FrontIsVisible)
 				_textToSpeech.Speak(FrontText, new CultureInfo(_frontLanguage.Tag()));
 			else
 				_textToSpeech.Speak(BackText, new CultureInfo(_backLanguage.Tag()));
@@ -166,11 +117,57 @@ namespace Flashcards.ViewModels
 
 		public ICommand RotateCommand => new Command(() => { BackIsVisible = !BackIsVisible; });
 
+		public void OnNavigatedTo(NavigationParameters parameters)
+		{
+			_examiner = (IExaminer) parameters["examiner"];
+			_correctAnswersProgressCalculator = _correctAnswerRatioTrackerFactory(_examiner);
+
+			_examiner.SessionEnded += HandleSessionEnd;
+
+			ResetQuestionStatuses(_examiner.QuestionsCount);
+			TryShowNextQuestion();
+		}
+
 		public void OnNavigatedFrom(NavigationParameters parameters)
 		{
 		}
 
 		public event PropertyChangedEventHandler PropertyChanged;
+
+		private async void HandleSessionEnd(object sender, QuestionResultsEventArgs args)
+		{
+			_canAnswer = false;
+			var totalCorrectAnswersRatio = _correctAnswersProgressCalculator.CalculateProgress(args);
+			await _dialogService.DisplayAlertAsync(AppResources.EndOfSession,
+				$"{AppResources.Known}: {args.Results.Count(x => x.IsKnown)} \n" +
+				$"{AppResources.Unknown}: {args.Results.Count(x => !x.IsKnown)}\n" +
+				totalCorrectAnswersRatio + "%",
+				"OK");
+			if (!args.Results.All(r => r.IsKnown))
+			{
+				ResetQuestionStatuses(args.NumberOfQuestionsInNextSession);
+			}
+			else
+			{
+				_examiner.SessionEnded -= HandleSessionEnd;
+				await _navigationService.GoBackAsync();
+			}
+
+			_canAnswer = true;
+		}
+
+		private void ResetQuestionStatuses(int questionsCount)
+		{
+			CurrentQuestionNumber = 0;
+
+			QuestionStatuses.Clear();
+			for (var i = 0; i < questionsCount; ++i)
+				QuestionStatuses.Add(new MulticolorbarItem
+				{
+					Color = Color.Gray,
+					Value = 1
+				});
+		}
 
 		private void TryShowNextQuestion()
 		{
@@ -185,11 +182,6 @@ namespace Flashcards.ViewModels
 					? new Uri(question.ImageUrl)
 					: null;
 			}
-		}
-
-		private void OnPropertyChanged([CallerMemberName] string propertyName = null)
-		{
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName: propertyName));
 		}
 	}
 }

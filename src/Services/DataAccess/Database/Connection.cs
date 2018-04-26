@@ -17,11 +17,10 @@ namespace Flashcards.Services.DataAccess.Database
 			_dbConnection = dbConnection;
 		}
 
-		Task<IEnumerable<T>> IDatabase.GetAllWithChildren<T>(Expression<Func<T, bool>> predicate, bool recursive)
+		public Task<IEnumerable<T>> GetAllWithChildren<T>(Expression<Func<T, bool>> predicate, bool recursive) where T : new()
 		{
 			var list = _dbConnection
-				.GetAllWithChildren(predicate, recursive: recursive)
-				.ToList();
+				.GetAllWithChildren(predicate, recursive: recursive);
 			return Task.FromResult(list.AsEnumerable());
 		}
 

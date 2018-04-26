@@ -22,21 +22,20 @@ namespace LeitnerTests
 
 			void InitializeSpacedRepetitionModule()
 			{
-				var sqliteConnection =
-					new DatabaseConnectionFactory()
-						.CreateInMemoryConnection();
+				var connection =
+					new Connection(new DatabaseConnectionFactory()
+						.CreateInMemoryConnection());
 
-				_deckRepository = new Repository<Deck>(sqliteConnection);
-				flashcardRepository = new Repository<Flashcard>(sqliteConnection);
-				_cardDeckRepository = new Repository<CardDeck>(sqliteConnection);
-				var tableCreator = new TableCreator(sqliteConnection);
+				_deckRepository = new Repository<Deck>(() =>connection);
+				flashcardRepository = new Repository<Flashcard>(() => connection);
+				_cardDeckRepository = new Repository<CardDeck>(() => connection);
 
 				ISpacedRepetitionInitializer leitnerInitializer =
 					new LeitnerInitializer(
 						flashcardRepository,
 						_deckRepository,
 						_cardDeckRepository,
-						tableCreator);
+						connection);
 				leitnerInitializer.Initialize();
 			}
 
@@ -95,7 +94,7 @@ namespace LeitnerTests
 		private IEnumerable<Flashcard> Flashcards(string deck)
 		{
 			return _deckRepository
-				.FindWhere(cd => cd.DeckTitle == deck)
+				.GetAllWithChildren(cd => cd.DeckTitle == deck, false)
 				.Result
 				.Single()
 				.Cards;
@@ -144,11 +143,12 @@ namespace LeitnerTests
 			await _leitner.SubmitRepetitionResults(flashcards.Select(Known));
 
 			var session0DeckCards =
-				_deckRepository.FindWhere(cd => cd.DeckTitle == "0259").Result;
+				_deckRepository.GetAllWithChildren(cd => cd.DeckTitle == "0259", false).Result;
 			Assert.NotEmpty(session0DeckCards);
 
 			var currentDeckCards =
-				_deckRepository.FindWhere(cd => cd.DeckTitle == CurrentDeckTitle).Result.Single().Cards;
+				_deckRepository.GetAllWithChildren(cd => cd.DeckTitle == CurrentDeckTitle, false)
+					.Result.Single().Cards;
 			Assert.Empty(currentDeckCards);
 		}
 
