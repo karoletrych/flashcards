@@ -33,6 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Leitner">
+      <HintPath>..\..\src\Domain\SpacedRepetition\Leitner\bin\Release\netstandard2.0\Leitner.dll</HintPath>
+    </Reference>
     <Reference Include="Plugin.Settings, Version=3.1.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Xam.Plugins.Settings.3.1.1\lib\net45\Plugin.Settings.dll</HintPath>
     </Reference>
@@ -82,28 +85,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Models\Models.csproj">
-      <Project>{BF8FC753-3438-42CD-B3D4-7337E16F8223}</Project>
-      <Name>Models</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\src\Services\Services.csproj">
-      <Project>{71E85B13-54C6-4A98-BC94-8379B3744844}</Project>
-      <Name>Services</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\src\Settings\Settings.csproj">
-      <Project>{D3AE7397-71D5-4954-B9F4-8128D21918AA}</Project>
-      <Name>Settings</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\src\SpacedRepetition\Interface\Interface.csproj">
-      <Project>{FE8515BB-9A6A-453C-9309-B6BE2CE6C2CD}</Project>
-      <Name>Interface</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\src\SpacedRepetition\Leitner\Leitner.fsproj">
-      <Project>{23711d95-dc1d-4702-b49e-8ad060658b87}</Project>
-      <Name>Leitner</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup>
@@ -112,6 +93,28 @@
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\..\packages\xunit.analyzers.0.7.0\analyzers\dotnet\cs\xunit.analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\DataAccess\DataAccess.csproj">
+      <Project>{73EF1688-AC8E-44C4-85B4-364F1A4B1FB2}</Project>
+      <Name>DataAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Domain\Models\Models.csproj">
+      <Project>{1DABEFEB-31E6-4DA5-97E1-C021CCA3A867}</Project>
+      <Name>Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Domain\Services\Services.csproj">
+      <Project>{8EB24541-1588-4A1F-9317-6542581BA2DD}</Project>
+      <Name>Services</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Domain\SpacedRepetition\Interface\Interface.csproj">
+      <Project>{4AEF5045-8EAF-4380-9879-CFE35C522107}</Project>
+      <Name>Interface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Infrastructure\Settings\Settings.csproj">
+      <Project>{4FF50E14-42B7-4B2B-B474-FAF7074C5369}</Project>
+      <Name>Settings</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

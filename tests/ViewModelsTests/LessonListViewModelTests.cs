@@ -39,5 +39,7 @@ namespace ViewModelsTests
 	            spacedRepetition);
         }
 
+		//TODO: add tests
+
 	}
 }

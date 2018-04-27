@@ -10,14 +10,11 @@
     <PackageReference Include="PropertyChanged.Fody" Version="2.4.0" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Domain\Models\Models.csproj" />
+    <ProjectReference Include="..\Domain\Services\Services.csproj" />
+    <ProjectReference Include="..\Infrastructure\Localization\Localization.csproj" />
+    <ProjectReference Include="..\Infrastructure\PlatformDependentTools\PlatformDependentTools.csproj" />
     <ProjectReference Include="..\Localization\Localization.csproj" />
-    <ProjectReference Include="..\Models\Models.csproj" />
-    <ProjectReference Include="..\PlatformDependentTools\PlatformDependentTools.csproj" />
-    <ProjectReference Include="..\Services\Services.csproj" />
-    <ProjectReference Include="..\Settings\Settings.csproj">
-      <Project>{D3AE7397-71D5-4954-B9F4-8128D21918AA}</Project>
-      <Name>Settings</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Prism.Forms">

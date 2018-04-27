@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
+using Flashcards.Infrastructure.DataAccess;
 using Flashcards.Models;
 using Flashcards.Services.DataAccess;
 using Flashcards.Services.DataAccess.Database;
 using Xunit;
-using DatabaseConnectionFactory = Flashcards.Services.DataAccess.Database.DatabaseConnectionFactory;
 
 namespace Flashcards.ServicesTests
 {
@@ -23,8 +23,8 @@ namespace Flashcards.ServicesTests
         [Fact]
         public void FindAll_EmptyRepository()
         {
-            var flashcards = _flashcardRepository.GetAllWithChildren(null, false).Result;
-            var lessons = _lessonRepository.GetAllWithChildren(null, false).Result;
+            var flashcards = _flashcardRepository.GetWithChildren(null).Result;
+            var lessons = _lessonRepository.GetWithChildren(null).Result;
 
             Assert.Empty(flashcards);
             Assert.Empty(lessons);
@@ -38,8 +38,8 @@ namespace Flashcards.ServicesTests
             _lessonRepository.Insert(lesson);
             _flashcardRepository.Insert(flashcard);
 
-            var lessons = _lessonRepository.GetAllWithChildren(null, false).Result;
-            var flashcards = _flashcardRepository.GetAllWithChildren(null, false).Result;
+            var lessons = _lessonRepository.GetAllWithChildren().Result;
+            var flashcards = _flashcardRepository.GetAllWithChildren().Result;
 
             Assert.NotEmpty(lessons);
             Assert.NotEmpty(flashcards);
@@ -55,7 +55,7 @@ namespace Flashcards.ServicesTests
             _flashcardRepository.Insert(flashcard2);
             _flashcardRepository.Insert(flashcard);
 
-            var matchingFlashcards = _flashcardRepository.GetAllWithChildren(f => f.LessonId == "1", false).Result;
+            var matchingFlashcards = _flashcardRepository.GetWithChildren(f => f.LessonId == "1").Result;
 
             Assert.Equal(2, matchingFlashcards.Count());
         }
@@ -66,7 +66,7 @@ namespace Flashcards.ServicesTests
             var lesson = new Lesson { FrontLanguage = Language.English, BackLanguage = Language.Polish, Id = "1" };
             _lessonRepository.Insert(lesson);
 
-            var matchingFlashcards = _flashcardRepository.GetAllWithChildren(f => f.LessonId == "1", false).Result;
+            var matchingFlashcards = _flashcardRepository.GetWithChildren(f => f.LessonId == "1").Result;
 
             Assert.Empty(matchingFlashcards);
         }
@@ -89,8 +89,8 @@ namespace Flashcards.ServicesTests
             await _lessonRepository.Insert(lesson);
 
             await _lessonRepository.Delete(lesson);
-            Assert.Empty(_lessonRepository.GetAllWithChildren(null, false).Result);
-            Assert.Empty(_flashcardRepository.GetAllWithChildren(null, false).Result);
+            Assert.Empty(_lessonRepository.GetAllWithChildren().Result);
+            Assert.Empty(_flashcardRepository.GetAllWithChildren().Result);
         }
 
         [Fact]
@@ -109,11 +109,11 @@ namespace Flashcards.ServicesTests
 	            Id = "1"
 			};
             await _lessonRepository.Insert(lesson);
-            var lessonRef = _lessonRepository.GetAllWithChildren(null, false).Result.Single();
+            var lessonRef = _lessonRepository.GetAllWithChildren().Result.Single();
 
             await _lessonRepository.Delete(lesson);
-            Assert.Empty(_lessonRepository.GetAllWithChildren(null, false).Result);
-            Assert.Empty(_flashcardRepository.GetAllWithChildren(null, false).Result);
+            Assert.Empty(_lessonRepository.GetAllWithChildren().Result);
+            Assert.Empty(_flashcardRepository.GetAllWithChildren().Result);
         }
     }
 }

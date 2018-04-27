@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Flashcards.Models;
 using Flashcards.Services.Http;
 using FluentAssertions;
@@ -36,19 +35,19 @@ namespace Flashcards.ServicesTests
 			var phrase = "the quick brown fox";
 			var numberOfResults = 20;
 
-			_internalImageBrowser.Find(phrase, Language.English, numberOfResults).Returns(new List<Uri>
+			_internalImageBrowser.FindAsync(phrase, Language.English, numberOfResults).Returns(new List<Uri>
 			{
 				_uris[0],
 				_uris[1],
 				_uris[2],
 			});
 
-			await _sut.Find(phrase, Language.English, numberOfResults);
+			await _sut.FindAsync(phrase, Language.English, numberOfResults);
 
-			await _internalImageBrowser.Received().Find("the", Language.English, numberOfResults);
-			await _internalImageBrowser.Received().Find("quick", Language.English, numberOfResults);
-			await _internalImageBrowser.Received().Find("brown", Language.English, numberOfResults);
-			await _internalImageBrowser.Received().Find("fox", Language.English, numberOfResults);
+			await _internalImageBrowser.Received().FindAsync("the", Language.English, numberOfResults);
+			await _internalImageBrowser.Received().FindAsync("quick", Language.English, numberOfResults);
+			await _internalImageBrowser.Received().FindAsync("brown", Language.English, numberOfResults);
+			await _internalImageBrowser.Received().FindAsync("fox", Language.English, numberOfResults);
 		}
 
 		[Fact]
@@ -58,7 +57,7 @@ namespace Flashcards.ServicesTests
 			var numberOfResults = 20;
 
 			SetupInternalImageBrowser(phrase, numberOfResults);
-			var results = await _sut.Find(phrase, Language.English, numberOfResults);
+			var results = await _sut.FindAsync(phrase, Language.English, numberOfResults);
 
 			results.Should().BeEquivalentTo(_uris);
 		}
@@ -70,34 +69,34 @@ namespace Flashcards.ServicesTests
 			var numberOfResults = 5;
 
 			SetupInternalImageBrowser(phrase, numberOfResults);
-			var results = await _sut.Find(phrase, Language.English, numberOfResults);
+			var results = await _sut.FindAsync(phrase, Language.English, numberOfResults);
 
 			results.Count.Should().Be(numberOfResults);
 		}
 
 		private void SetupInternalImageBrowser(string phrase, int numberOfResults)
 		{
-			_internalImageBrowser.Find(phrase, Language.English, numberOfResults).Returns(new List<Uri>
+			_internalImageBrowser.FindAsync(phrase, Language.English, numberOfResults).Returns(new List<Uri>
 			{
 				_uris[0],
 				_uris[1],
 			});
-			_internalImageBrowser.Find("the", Language.English, numberOfResults)
+			_internalImageBrowser.FindAsync("the", Language.English, numberOfResults)
 				.Returns(new List<Uri>
 				{
 					_uris[2],
 				});
-			_internalImageBrowser.Find("quick", Language.English, numberOfResults)
+			_internalImageBrowser.FindAsync("quick", Language.English, numberOfResults)
 				.Returns(new List<Uri>
 				{
 					_uris[3],
 				});
-			_internalImageBrowser.Find("brown", Language.English, numberOfResults)
+			_internalImageBrowser.FindAsync("brown", Language.English, numberOfResults)
 				.Returns(new List<Uri>
 				{
 					_uris[4],
 				});
-			_internalImageBrowser.Find("fox", Language.English, numberOfResults)
+			_internalImageBrowser.FindAsync("fox", Language.English, numberOfResults)
 				.Returns(new List<Uri>
 				{
 					_uris[5],

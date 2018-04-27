@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Flashcards.Infrastructure.DataAccess;
 using Flashcards.Models;
 using Flashcards.Services.DataAccess;
 using Flashcards.Services.DataAccess.Database;
@@ -94,7 +95,7 @@ namespace LeitnerTests
 		private IEnumerable<Flashcard> Flashcards(string deck)
 		{
 			return _deckRepository
-				.GetAllWithChildren(cd => cd.DeckTitle == deck, false)
+				.GetWithChildren(cd => cd.DeckTitle == deck)
 				.Result
 				.Single()
 				.Cards;
@@ -114,7 +115,7 @@ namespace LeitnerTests
 				await _leitner.SubmitRepetitionResults(flashcards.Select(Known));
 				_repetitionSession.Increment();
 				_output.WriteLine($"session: {i}");
-				foreach (var deck in _deckRepository.GetAllWithChildren(null, true).Result)
+				foreach (var deck in _deckRepository.GetWithChildren(null).Result)
 					_output.WriteLine(deck.DeckTitle + ": " + deck.Cards.Count);
 				_output.WriteLine("");
 			}
@@ -143,11 +144,11 @@ namespace LeitnerTests
 			await _leitner.SubmitRepetitionResults(flashcards.Select(Known));
 
 			var session0DeckCards =
-				_deckRepository.GetAllWithChildren(cd => cd.DeckTitle == "0259", false).Result;
+				_deckRepository.GetWithChildren(cd => cd.DeckTitle == "0259").Result;
 			Assert.NotEmpty(session0DeckCards);
 
 			var currentDeckCards =
-				_deckRepository.GetAllWithChildren(cd => cd.DeckTitle == CurrentDeckTitle, false)
+				_deckRepository.GetWithChildren(cd => cd.DeckTitle == CurrentDeckTitle)
 					.Result.Single().Cards;
 			Assert.Empty(currentDeckCards);
 		}

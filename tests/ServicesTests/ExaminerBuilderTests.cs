@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Flashcards.Models;
 using Flashcards.Services.Examiner;
+using Flashcards.Services.Examiner.Builder;
 using Xunit;
 
 namespace Flashcards.ServicesTests

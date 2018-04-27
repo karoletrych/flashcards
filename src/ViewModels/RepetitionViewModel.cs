@@ -75,7 +75,7 @@ namespace Flashcards.ViewModels
 			PendingRepetitionExaminer = await _repetitionExaminerBuilder.BuildExaminer();
 			PendingRepetitionQuestionsNumber = PendingRepetitionExaminer.QuestionsCount;
 
-			var activeLessons = (await _lessonRepository.GetAllWithChildren(l => l.AskInRepetitions, true)).ToList();
+			var activeLessons = (await _lessonRepository.GetWithChildren(l => l.AskInRepetitions)).ToList();
 			var activeFlashcards = activeLessons.SelectMany(l => l.Flashcards).ToList();
 
 			var learnedFlashcardsCount = activeFlashcards

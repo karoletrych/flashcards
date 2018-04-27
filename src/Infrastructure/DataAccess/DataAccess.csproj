@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>Flashcards.Infrastructure.DataAccess</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\src\Domain\Services\Services.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="SQLiteNetExtensionsAsync">
+      <HintPath>..\src\Domain\SpacedRepetition\Leitner\bin\Release\netstandard2.0\SQLiteNetExtensionsAsync.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

@@ -1,4 +1,5 @@
-﻿using Flashcards.Models;
+﻿using Flashcards.Infrastructure.HttpClient;
+using Flashcards.Models;
 using Flashcards.Services.Http;
 using Xunit;
 
@@ -11,7 +12,7 @@ namespace Flashcards.ServicesTests
         {
             var imageUrlsProvider = new PixabayImageBrowser();
 
-            var urls = imageUrlsProvider.Find("pies", Language.Polish).Result;
+            var urls = imageUrlsProvider.FindAsync("pies", Language.Polish).Result;
             Assert.Equal(9, urls.Count);
         }
     }

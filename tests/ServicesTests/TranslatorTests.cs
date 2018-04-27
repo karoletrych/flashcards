@@ -22,14 +22,14 @@ namespace Flashcards.ServicesTests
         public void Translation(Language @from, Language to, string text, string[] expected)
         {
             var expectedList = expected.ToList().AsReadOnly();
-            Assert.Equal(expectedList, _yandexTranslator.Translate(@from, to, text).Result);
+            Assert.Equal(expectedList, _yandexTranslator.TranslateAsync(@from, to, text).Result);
         }
 
         [Fact]
         public void TranslationOfEmptyStringReturnEmptyString()
         {
             var emptyList = new List<string>();
-            Assert.Equal(emptyList, _yandexTranslator.Translate(Language.English, Language.French, "").Result);
+            Assert.Equal(emptyList, _yandexTranslator.TranslateAsync(Language.English, Language.French, "").Result);
         }
     }
 }

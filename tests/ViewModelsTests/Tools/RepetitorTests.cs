@@ -2,6 +2,7 @@
 using System.Linq;
 using Flashcards.Models;
 using Flashcards.Services.Examiner;
+using Flashcards.Services.Examiner.Builder;
 using Flashcards.SpacedRepetition.Interface;
 using Flashcards.ViewModels.Tools;
 using NSubstitute;

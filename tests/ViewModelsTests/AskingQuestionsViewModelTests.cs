@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Flashcards.Models;
 using Flashcards.PlatformDependentTools;
 using Flashcards.Services.Examiner;
+using Flashcards.Services.Examiner.Builder;
 using Flashcards.ViewModels;
 using FluentAssertions;
 using NSubstitute;

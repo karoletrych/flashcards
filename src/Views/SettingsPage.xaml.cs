@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Flashcards.Infrastructure.DataAccess;
 using Flashcards.Models;
 using Flashcards.PlatformDependentTools;
 using Flashcards.Services.DataAccess.Database;
@@ -34,7 +35,7 @@ namespace Flashcards.Views
 		private readonly ISetting<int> _sessionNumberSetting;
 		private readonly ExportParameters _exportParameters;
 		private readonly IMessage _message;
-		private readonly IDisconnect _disconnect;
+		private readonly IDisconnector _disconnect;
 
 		public SettingsPage (INotificationScheduler notificationScheduler, 
 			ISetting<TimeSpan> repetitionTimeSetting,
@@ -45,7 +46,7 @@ namespace Flashcards.Views
 			ISetting<int> sessionNumberSetting,
 			ExportParameters exportParameters,
 			IMessage message,
-			IDisconnect disconnect)
+			IDisconnector disconnect)
 		{
 			InitializeComponent();
 

@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Flashcards.Infrastructure.DataAccess;
 using Flashcards.Models;
 using Flashcards.Services;
 using Flashcards.Services.DataAccess;
-using Flashcards.Services.DataAccess.Database;
 using Flashcards.Settings;
 using Flashcards.SpacedRepetition.Interface;
 using NSubstitute;

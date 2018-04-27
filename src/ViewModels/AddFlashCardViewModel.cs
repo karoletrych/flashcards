@@ -67,7 +67,7 @@ namespace Flashcards.ViewModels
 				return;
 			}
 
-			if (!(await _lessonRepository.GetAllWithChildren(l => l.Id == _lesson.Id, true)).Any())
+			if (!(await _lessonRepository.GetWithChildren(l => l.Id == _lesson.Id)).Any())
 			{
 				await _lessonRepository.Insert(_lesson);
 			}
@@ -111,7 +111,7 @@ namespace Flashcards.ViewModels
 		{
 			await Try(async () =>
 			{
-				var imageUris = await _imageBrowser.Find(text, language, ImagesLimit);
+				var imageUris = await _imageBrowser.FindAsync(text, language, ImagesLimit);
 				ImageUris.Clear();
 				foreach (var imageUri in imageUris) ImageUris.Add(imageUri);
 			});
@@ -126,7 +126,7 @@ namespace Flashcards.ViewModels
 			{
 				await Try(async () =>
 				{
-					var translations = await _translator.Translate(
+					var translations = await _translator.TranslateAsync(
 						from: _lesson.FrontLanguage,
 						to: _lesson.BackLanguage,
 						text: FrontText);
@@ -149,7 +149,7 @@ namespace Flashcards.ViewModels
 				await Try(async () =>
 				{
 					var translations =
-						await _translator.Translate(from: _lesson.BackLanguage, to: _lesson.FrontLanguage, text: BackText);
+						await _translator.TranslateAsync(from: _lesson.BackLanguage, to: _lesson.FrontLanguage, text: BackText);
 					FrontText = string.Join("", translations);
 				});
 			}

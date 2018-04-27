@@ -5,6 +5,7 @@ using System.Windows.Input;
 using Flashcards.Models;
 using Flashcards.Services.DataAccess;
 using Flashcards.Services.Examiner;
+using Flashcards.Services.Examiner.Builder;
 using Flashcards.SpacedRepetition.Interface;
 using Flashcards.ViewModels.Tools;
 using Prism.Commands;
@@ -35,7 +36,7 @@ namespace Flashcards.ViewModels
 
 		public async void OnNavigatedTo(NavigationParameters parameters)
 		{
-			var lessons = (await _lessonRepository.GetAllWithChildren(null, true)).ToList();
+			var lessons = (await _lessonRepository.GetAllWithChildren()).ToList();
 
 			Lessons.SynchronizeWith(
 				lessons,
@@ -59,7 +60,7 @@ namespace Flashcards.ViewModels
 
 		public ICommand PracticeLessonCommand => new Command<LessonViewModel>(async lesson =>
 		{
-			var loadedLesson = _lessonRepository.GetAllWithChildren(l => l.Id == lesson.InternalLesson.Id, true).Result.Single();
+			var loadedLesson = _lessonRepository.GetWithChildren(l => l.Id == lesson.InternalLesson.Id).Result.Single();
 
 			var examiner = new ExaminerBuilder()
 				.WithLessons(new []{ loadedLesson })

@@ -48,7 +48,7 @@ namespace ViewModelsTests
                 });
             
             _translator
-                .Translate(Language.English, Language.Polish, "dog")
+                .TranslateAsync(Language.English, Language.Polish, "dog")
                 .Returns(new[] {"pies"});
 
             await TypeInFrontText("dog");
@@ -68,11 +68,11 @@ namespace ViewModelsTests
                 });
             
             _translator
-                .Translate(Language.Polish, Language.English, "nastrojowy")
+                .TranslateAsync(Language.Polish, Language.English, "nastrojowy")
                 .Returns(new[] {"moody"}); // unwanted translation
             
             _translator
-                .Translate(Language.English, Language.Polish, "atmospheric")
+                .TranslateAsync(Language.English, Language.Polish, "atmospheric")
                 .Returns(new[] {"atmosferyczny"});
 
             await TypeInFrontText("nastrojowy");            
