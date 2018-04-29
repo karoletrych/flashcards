@@ -149,6 +149,10 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Common\Settings\Settings.csproj">
+      <Project>{0F8F7384-61E5-49E5-93C6-0D559453B8E9}</Project>
+      <Name>Settings</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Domain\Models\Models.csproj">
       <Project>{1DABEFEB-31E6-4DA5-97E1-C021CCA3A867}</Project>
       <Name>Models</Name>
@@ -180,10 +184,6 @@
     <ProjectReference Include="..\..\Infrastructure\PlatformDependentTools\PlatformDependentTools.csproj">
       <Project>{A43093E5-7E72-43D4-925D-F6476695DA83}</Project>
       <Name>PlatformDependentTools</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Infrastructure\Settings\Settings.csproj">
-      <Project>{4FF50E14-42B7-4B2B-B474-FAF7074C5369}</Project>
-      <Name>Settings</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Views\Views.csproj">
       <Project>{4dcd6756-8ae6-4567-a2b9-1b61165a1146}</Project>

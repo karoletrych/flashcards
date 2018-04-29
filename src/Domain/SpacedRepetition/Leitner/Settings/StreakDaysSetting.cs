@@ -1,4 +1,4 @@
-﻿using Flashcards.Infrastructure.Settings;
+﻿using Settings;
 
 namespace Flashcards.Domain.SpacedRepetition.Leitner.Settings
 {

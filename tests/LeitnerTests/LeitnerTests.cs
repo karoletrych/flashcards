@@ -3,9 +3,9 @@ using System.Linq;
 using Flashcards.Domain.SpacedRepetition.Leitner;
 using Flashcards.Domain.SpacedRepetition.Leitner.Models;
 using Flashcards.Infrastructure.DataAccess;
-using Flashcards.Infrastructure.Settings;
 using Flashcards.Models;
 using Flashcards.SpacedRepetition.Interface;
+using Settings;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -44,11 +44,7 @@ namespace LeitnerTests
 			var cards = Enumerable
 				.Range(1, FlashcardCount)
 				.Select(cardId =>
-					new Flashcard
-					{
-						Id = cardId,
-						LessonId = "1"
-					});
+					new Flashcard("1", "A", "B", ""));
 
 			foreach (var card in cards)
 			{

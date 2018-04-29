@@ -4,10 +4,10 @@ using System.IO;
 using System.Linq;
 using Flashcards.Infrastructure.DataAccess;
 using Flashcards.Infrastructure.PlatformDependentTools;
-using Flashcards.Infrastructure.Settings;
 using Flashcards.Models;
 using Flashcards.Services.DataAccess.Database;
 using Flashcards.Views.CustomViews;
+using Settings;
 using Xamarin.Forms;
 
 namespace Flashcards.Views

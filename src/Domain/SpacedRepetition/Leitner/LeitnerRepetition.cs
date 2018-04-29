@@ -3,10 +3,10 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Flashcards.Domain.SpacedRepetition.Leitner.Models;
-using Flashcards.Infrastructure.Settings;
 using Flashcards.Models;
 using Flashcards.Services.DataAccess;
 using Flashcards.SpacedRepetition.Interface;
+using Settings;
 
 
 [assembly: InternalsVisibleTo("LeitnerTests")]

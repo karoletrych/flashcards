@@ -4,7 +4,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Flashcards.Services.DataAccess;
-using Flashcards.Services.DataAccess.Database;
 using SQLite;
 using SQLiteNetExtensions.Extensions;
 

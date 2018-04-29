@@ -14,7 +14,7 @@ namespace Flashcards.ServicesTests
 			{
 				Flashcards = new List<Flashcard>
 				{
-					new Flashcard{Id = 1, Front = "Front", Back = "Back"}
+					new Flashcard("lesson", "Front", "Back", "")
 				}
 			}
 		};

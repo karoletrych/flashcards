@@ -55,18 +55,10 @@ namespace Flashcards.Services.Examiner.Builder
 
 			Question Invert(Question question)
 			{
-				var invertedFlashcard = new Flashcard
-				{
-					Front = question.Back,
-					Back = question.Front,
-					ImageUrl = question.ImageUrl,
-					Id = question.InternalFlashcard.Id,
-					LessonId = question.InternalFlashcard.LessonId
-				};
 				return new Question(
 					frontLanguage: question.BackLanguage, 
 					backLanguage: question.FrontLanguage,
-					flashcard: invertedFlashcard);
+					flashcard: question.InternalFlashcard.Invert());
 			}
 
 			Question Random(Question question)

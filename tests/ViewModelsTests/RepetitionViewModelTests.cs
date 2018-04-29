@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Flashcards.Domain.ViewModels;
 using Flashcards.Domain.ViewModels.Tools;
-using Flashcards.Infrastructure.Settings;
 using Flashcards.Models;
 using Flashcards.Services;
 using Flashcards.Services.DataAccess;
@@ -12,6 +11,7 @@ using Flashcards.SpacedRepetition.Interface;
 using NSubstitute;
 using Prism.Navigation;
 using Prism.Services;
+using Settings;
 using Xunit;
 
 namespace ViewModelsTests
@@ -57,8 +57,8 @@ namespace ViewModelsTests
 		[Fact]
 		public void Repetition_is_executed_with_correct_flashcards_when_repetition_view_is_tapped()
 		{
-			var f1 = new Flashcard { Id = 1 };
-			var f2 = new Flashcard { Id = 2 };
+			var f1 = new Flashcard { Id = "1" };
+			var f2 = new Flashcard { Id = "2" };
 			var questions = new List<Flashcard> { f1, f2 }.Select(x => new Question(x, Language.English, Language.Polish));
 			var lessons = new[]
 			{

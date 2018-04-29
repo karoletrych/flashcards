@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Flashcards.Infrastructure.Settings;
 using Flashcards.SpacedRepetition.Interface;
+using Settings;
 
 namespace Flashcards.Domain.SpacedRepetition.Leitner
 {

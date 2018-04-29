@@ -2,12 +2,12 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Flashcards.Infrastructure.DataAccess;
-using Flashcards.Infrastructure.Settings;
 using Flashcards.Models;
 using Flashcards.Services;
 using Flashcards.Services.DataAccess;
 using Flashcards.SpacedRepetition.Interface;
 using NSubstitute;
+using Settings;
 using Xunit;
 
 namespace Flashcards.ServicesTests
@@ -20,25 +20,25 @@ namespace Flashcards.ServicesTests
 		{
 			new Flashcard
 			{
-				Id = 1
+				Id = "1"
 			},
 			new Flashcard
 			{
-				Id = 2
+				Id = "2"
 			},
 		};
 		private readonly List<Flashcard> _inactiveFlashcards = new List<Flashcard>
 		{
 			new Flashcard
 			{
-				Id = 3
+				Id = "3"
 			},
 		};
 		private readonly List<Flashcard> _activeFlashcards2 = new List<Flashcard>
 		{
 			new Flashcard
 			{
-				Id = 4
+				Id = "4"
 			},
 		};
 

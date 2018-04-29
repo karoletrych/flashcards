@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Flashcards.Infrastructure.Settings
+namespace Settings
 {
 	public abstract class Setting<T> : ISetting<T>
 	{

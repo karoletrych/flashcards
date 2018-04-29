@@ -7,7 +7,7 @@ namespace Flashcards.Domain.SpacedRepetition.Leitner.Models
 	public class CardDeck
 	{
 		[ForeignKey(typeof(Flashcard))]
-		public int CardId { get; set; } = 0;
+		public string CardId { get; set; }
 
 		[ForeignKey(typeof(Deck))]
 		public int DeckId { get; set; } = 0;

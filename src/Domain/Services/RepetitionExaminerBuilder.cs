@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Flashcards.Infrastructure.Settings;
 using Flashcards.Models;
 using Flashcards.Services.DataAccess;
 using Flashcards.Services.Examiner;
 using Flashcards.Services.Examiner.Builder;
 using Flashcards.SpacedRepetition.Interface;
+using Settings;
 
 namespace Flashcards.Services
 {

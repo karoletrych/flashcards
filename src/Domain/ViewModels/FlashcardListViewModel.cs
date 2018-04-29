@@ -29,7 +29,7 @@ namespace Flashcards.Domain.ViewModels
 
 		public ObservableCollection<Flashcard> Flashcards { get; set; } = new ObservableCollection<Flashcard>();
 
-		public ICommand DeleteFlashcardCommand => new Command<int>(async flashcardId =>
+		public ICommand DeleteFlashcardCommand => new Command<string>(async flashcardId =>
 		{
 			var flashcardToRemove = new Flashcard {Id = flashcardId};
 			await _flashcardRepository.Delete(flashcardToRemove);

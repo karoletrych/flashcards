@@ -10,12 +10,12 @@ using Flashcards.Droid;
 using Flashcards.Infrastructure.DataAccess;
 using Flashcards.Infrastructure.HttpClient;
 using Flashcards.Infrastructure.PlatformDependentTools;
-using Flashcards.Infrastructure.Settings;
 using Flashcards.Models;
 using Flashcards.Services.DataAccess;
 using Flashcards.Services.Http;
 using Flashcards.SpacedRepetition.Interface;
 using Flashcards.Views;
+using Settings;
 
 namespace Flashcards.Android
 {

@@ -1,9 +1,9 @@
 ﻿using System;
 using Android.Content;
 using Flashcards.Infrastructure.PlatformDependentTools;
-using Flashcards.Infrastructure.Settings;
 using Flashcards.Droid.Repetitions.IncrementRepetition;
 using Flashcards.Droid.Repetitions.Notifications;
+using Settings;
 
 namespace Flashcards.Droid.Repetitions
 {

@@ -102,6 +102,10 @@
       <Project>{f723017d-ede5-49cc-a84f-881c067c6004}</Project>
       <Name>SQLiteNetExtensions-PCL</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\src\Common\Settings\Settings.csproj">
+      <Project>{0F8F7384-61E5-49E5-93C6-0D559453B8E9}</Project>
+      <Name>Settings</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\Domain\Models\Models.csproj">
       <Project>{1DABEFEB-31E6-4DA5-97E1-C021CCA3A867}</Project>
       <Name>Models</Name>
@@ -121,10 +125,6 @@
     <ProjectReference Include="..\..\src\Infrastructure\HttpClient\HttpClient.csproj">
       <Project>{E219E50C-C8B7-47A5-A18F-5D202D7E86FA}</Project>
       <Name>HttpClient</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\src\Infrastructure\Settings\Settings.csproj">
-      <Project>{4FF50E14-42B7-4B2B-B474-FAF7074C5369}</Project>
-      <Name>Settings</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\src\Views\Views.csproj">
       <Project>{4DCD6756-8AE6-4567-A2B9-1B61165A1146}</Project>
