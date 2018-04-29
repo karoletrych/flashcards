@@ -1,17 +1,18 @@
-# flashcards
 # Flashcards
 
 Flashcards is a language learning mobile app based on spaced repetition techniques created with .NET and Xamarin.Forms.
 
-## Features
+### Features
   - Automatic translation when adding new flashcards
   - Notifications reminding about repetitions
   - Export and import flashcards database
 
 <table>
-	<img src="https://i.imgur.com/R2uMcWf.png" height="300;"/>
-	<img src="https://i.imgur.com/E1CAnTq.png" height="300;"/>
-	<img src="https://i.imgur.com/FMaFsME.png" height="300;"/>
+	<tr>
+		<td> <img src="https://i.imgur.com/R2uMcWf.png" height="300;"/> </td>
+		<td> <img src="https://i.imgur.com/E1CAnTq.png" height="300;"/> </td>
+		<td> <img src="https://i.imgur.com/FMaFsME.png" height="300;"/> </td>
+	</tr>
 </table>
 
 ### Development
