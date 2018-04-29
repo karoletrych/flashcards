@@ -1,9 +1,10 @@
 ﻿using Android.App;
 using Android.Content;
 using Autofac;
-using Flashcards.PlatformDependentTools;
+using Flashcards.Android;
+using Flashcards.Infrastructure.PlatformDependentTools;
 
-namespace FlashCards.Droid.Repetitions
+namespace Flashcards.Droid.Repetitions
 {
 	[BroadcastReceiver(Enabled = true)]
 	[IntentFilter(new[]

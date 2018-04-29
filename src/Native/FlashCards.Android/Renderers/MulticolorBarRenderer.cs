@@ -3,12 +3,12 @@ using System.ComponentModel;
 using Android.Content;
 using Android.Graphics;
 using Flashcards.Views.CustomViews;
-using FlashCards.Droid.Renderers;
+using Flashcards.Droid.Renderers;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
 [assembly: ExportRenderer(typeof(MulticolorBar), typeof(MulticolorBarRenderer))]
-namespace FlashCards.Droid.Renderers
+namespace Flashcards.Droid.Renderers
 {
 	public class MulticolorBarRenderer : ViewRenderer<MulticolorBar, AndroidMulticolorBar>
 	{

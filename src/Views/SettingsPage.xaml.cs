@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Flashcards.Infrastructure.DataAccess;
+using Flashcards.Infrastructure.PlatformDependentTools;
+using Flashcards.Infrastructure.Settings;
 using Flashcards.Models;
-using Flashcards.PlatformDependentTools;
 using Flashcards.Services.DataAccess.Database;
-using Flashcards.Settings;
 using Flashcards.Views.CustomViews;
 using Xamarin.Forms;
 

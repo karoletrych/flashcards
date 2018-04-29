@@ -7,7 +7,7 @@ namespace Flashcards.SpacedRepetition.Interface
 	public interface ISpacedRepetition
     {
         Task<IEnumerable<Flashcard>> CurrentRepetitionFlashcards();
-	    IEnumerable<Flashcard> LearnedFlashcards { get; }
+	    Task<IEnumerable<Flashcard>> LearnedFlashcards();
 
         Task SubmitRepetitionResults(IEnumerable<QuestionResult> questionResults);
     }

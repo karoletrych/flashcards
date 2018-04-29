@@ -1,4 +1,4 @@
-﻿namespace Flashcards.PlatformDependentTools
+﻿namespace Flashcards.Infrastructure.PlatformDependentTools
 {
 	public interface IAlarmsInitializer
 	{

@@ -87,7 +87,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CorrectAnswersRatioTrackerTests.cs" />
+    <Compile Include="CorrectAnswersProgressCalculatorTests.cs" />
     <Compile Include="ExaminerBuilderTests.cs" />
     <Compile Include="ImageBrowserTests.cs" />
     <Compile Include="MultipleWordsImageBrowserTests.cs" />
@@ -98,10 +98,6 @@
     <Compile Include="TranslatorTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\DataAccess\DataAccess.csproj">
-      <Project>{73EF1688-AC8E-44C4-85B4-364F1A4B1FB2}</Project>
-      <Name>DataAccess</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\sqlite-net-extensions\SQLiteNetExtensions\SQLiteNetExtensions-PCL.csproj">
       <Project>{f723017d-ede5-49cc-a84f-881c067c6004}</Project>
       <Name>SQLiteNetExtensions-PCL</Name>
@@ -117,6 +113,10 @@
     <ProjectReference Include="..\..\src\Domain\SpacedRepetition\Interface\Interface.csproj">
       <Project>{4AEF5045-8EAF-4380-9879-CFE35C522107}</Project>
       <Name>Interface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Infrastructure\DataAccess\DataAccess.csproj">
+      <Project>{E419BC41-CF4E-434A-A6BA-CE1D023EA250}</Project>
+      <Name>DataAccess</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\src\Infrastructure\HttpClient\HttpClient.csproj">
       <Project>{E219E50C-C8B7-47A5-A18F-5D202D7E86FA}</Project>

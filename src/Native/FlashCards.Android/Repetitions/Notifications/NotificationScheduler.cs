@@ -1,7 +1,7 @@
 ﻿using System;
-using Flashcards.PlatformDependentTools;
+using Flashcards.Infrastructure.PlatformDependentTools;
 
-namespace FlashCards.Droid.Repetitions.Notifications
+namespace Flashcards.Droid.Repetitions.Notifications
 {
 	public class NotificationScheduler : INotificationScheduler
 	{

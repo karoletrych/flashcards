@@ -4,12 +4,12 @@ using Xunit;
 
 namespace Flashcards.ServicesTests
 {
-	public class CorrectAnswersRatioTrackerTests
+	public class CorrectAnswersProgressCalculatorTests
 	{
-		private readonly CorrectAnswersProgressCalculator _calculator;
+		private readonly CorrectAnswersProgressCalculator _sut;
 		private readonly Examiner _examiner;
 
-		public CorrectAnswersRatioTrackerTests()
+		public CorrectAnswersProgressCalculatorTests()
 		{
 			_examiner = new Examiner(new[]
 			{
@@ -19,6 +19,7 @@ namespace Flashcards.ServicesTests
 				new Question(new Flashcard(), Language.English, Language.Polish),
 				new Question(new Flashcard(), Language.English, Language.Polish)
 			});
+			_sut = new CorrectAnswersProgressCalculator();
 		}
 
 		private void Answer(bool answer, int times)
@@ -35,7 +36,7 @@ namespace Flashcards.ServicesTests
 		{
 			_examiner.SessionEnded += (sender, args) =>
 			{
-				var progress = _calculator.CalculateProgress(args);
+				var progress = _sut.CalculateProgress(args);
 				Assert.Equal(40, progress);
 			};
 
@@ -48,7 +49,7 @@ namespace Flashcards.ServicesTests
 		{
 			_examiner.SessionEnded += (sender, args) =>
 			{
-				var progress = _calculator.CalculateProgress(args);
+				var progress = _sut.CalculateProgress(args);
 				Assert.Equal(40, progress);
 			};
 
@@ -60,10 +61,13 @@ namespace Flashcards.ServicesTests
 		[Fact]
 		public void WhenAnsweredAllQuestionsInThirdSession_Gives100PercentRatio()
 		{
+			var session = 1;
 			_examiner.SessionEnded += (sender, args) =>
 			{
-				var progress = _calculator.CalculateProgress(args);
-				Assert.Equal(100, progress);
+				var progress = _sut.CalculateProgress(args);
+				if(session==3)
+					Assert.Equal(100, progress);
+				session++;
 			};
 
 			Answer(true, 2);

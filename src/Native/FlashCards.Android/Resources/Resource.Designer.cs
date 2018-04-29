@@ -9,9 +9,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: global::Android.Runtime.ResourceDesignerAttribute("FlashCards.Droid.Resource", IsApplication=true)]
+[assembly: global::Android.Runtime.ResourceDesignerAttribute("Flashcards.Android.Resource", IsApplication=true)]
 
-namespace FlashCards.Droid
+namespace Flashcards.Android
 {
 	
 	
@@ -26,8 +26,8 @@ namespace FlashCards.Droid
 		
 		public static void UpdateIdValues()
 		{
-			global::ModernHttpClient.Resource.String.library_name = global::FlashCards.Droid.Resource.String.library_name;
-			global::Xamarin.Forms.Platform.Android.Resource.Attribute.actionBarSize = global::FlashCards.Droid.Resource.Attribute.actionBarSize;
+			global::ModernHttpClient.Resource.String.library_name = global::Flashcards.Android.Resource.String.library_name;
+			global::Xamarin.Forms.Platform.Android.Resource.Attribute.actionBarSize = global::Flashcards.Android.Resource.Attribute.actionBarSize;
 		}
 		
 		public partial class Animation

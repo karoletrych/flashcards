@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Flashcards.Infrastructure.PlatformDependentTools;
 using Flashcards.Models;
-using Flashcards.PlatformDependentTools;
 using Flashcards.Services.Examiner;
 using Flashcards.Services.Examiner.Builder;
 using Flashcards.ViewModels;
@@ -86,7 +86,7 @@ namespace ViewModelsTests
 		}
 
 		[Fact]
-		public async void At_startup_first_question_with_hidden_back_is_displayed()
+		public async void at_startup_first_question_with_hidden_back_is_displayed()
 		{
 			await NavigateToViewModel();
 			Assert.Equal("cat", _askingQuestionsViewModel.FrontText);
@@ -96,7 +96,7 @@ namespace ViewModelsTests
 
 		[Fact]
 		public async void
-			At_startup_QuestionStatuses_has_number_of_gray_items_equal_to_number_of_flashcards()
+			at_startup_QuestionStatuses_has_number_of_gray_items_equal_to_number_of_flashcards()
 		{
 			await NavigateToViewModel();
 			Assert.Equal(_askingQuestionsViewModel.QuestionStatuses.Count, _lesson.Flashcards.Count);
@@ -105,7 +105,7 @@ namespace ViewModelsTests
 		}
 
 		[Fact]
-		public async void WhenAllQuestionsAreAnswered_NavigatesBack()
+		public async void when_all_questions_are_answered_navigates_back()
 		{
 			await NavigateToViewModel();
 			AnswerQuestions();

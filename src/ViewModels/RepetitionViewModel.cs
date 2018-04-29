@@ -1,12 +1,12 @@
 ﻿using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
-using Flashcards.Localization;
+using Flashcards.Infrastructure.Localization;
+using Flashcards.Infrastructure.Settings;
 using Flashcards.Models;
 using Flashcards.Services;
 using Flashcards.Services.DataAccess;
 using Flashcards.Services.Examiner;
-using Flashcards.Settings;
 using Flashcards.SpacedRepetition.Interface;
 using Flashcards.ViewModels.Tools;
 using Prism.Navigation;
@@ -79,7 +79,7 @@ namespace Flashcards.ViewModels
 			var activeFlashcards = activeLessons.SelectMany(l => l.Flashcards).ToList();
 
 			var learnedFlashcardsCount = activeFlashcards
-				.Intersect(_spacedRepetition.LearnedFlashcards)
+				.Intersect(await _spacedRepetition.LearnedFlashcards())
 				.Count();
 
 			var totalActiveFlashcardsCount = activeFlashcards.Count;

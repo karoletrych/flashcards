@@ -1,8 +1,9 @@
 ﻿using Android.Content;
 using Autofac;
+using Flashcards.Android;
 using Flashcards.SpacedRepetition.Interface;
 
-namespace FlashCards.Droid.Repetitions.IncrementRepetition
+namespace Flashcards.Droid.Repetitions.IncrementRepetition
 {
 	[BroadcastReceiver(Enabled = true)]
 	public class IncrementRepetitionDayReceiver : BroadcastReceiver

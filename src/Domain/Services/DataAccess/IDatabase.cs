@@ -20,6 +20,8 @@ namespace Flashcards.Services.DataAccess
 
 		Task Delete<T>(T entity);
 		Task DeleteWithChildren<T>(T entity) where T : new();
+		Task<bool> Any<T>() where T : new();
+		Task<T> SingleWithChildren<T>(Expression<Func<T, bool>> predicate) where T : new();
 	}
 
 	public interface IConnection : IDatabase, ITableCreator

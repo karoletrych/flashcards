@@ -4,9 +4,9 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Input;
-using Flashcards.Localization;
+using Flashcards.Infrastructure.Localization;
+using Flashcards.Infrastructure.PlatformDependentTools;
 using Flashcards.Models;
-using Flashcards.PlatformDependentTools;
 using Flashcards.Services.Examiner;
 using Flashcards.ViewModels.Tools;
 using Prism.Navigation;
@@ -138,10 +138,12 @@ namespace Flashcards.ViewModels
 		{
 			_canAnswer = false;
 			var totalCorrectAnswersRatio = _correctAnswersProgressCalculator.CalculateProgress(args);
-			await _dialogService.DisplayAlertAsync(AppResources.EndOfSession,
-				$"{AppResources.Known}: {args.Results.Count(x => x.IsKnown)} \n" +
-				$"{AppResources.Unknown}: {args.Results.Count(x => !x.IsKnown)}\n" +
-				totalCorrectAnswersRatio + "%",
+			var summary = $"{AppResources.Known}: {args.Results.Count(x => x.IsKnown)} \n" +
+			              $"{AppResources.Unknown}: {args.Results.Count(x => !x.IsKnown)}\n" +
+			              totalCorrectAnswersRatio + "%";
+			await _dialogService.DisplayAlertAsync(
+				AppResources.EndOfSession,
+				summary,
 				"OK");
 			if (!args.Results.All(r => r.IsKnown))
 			{

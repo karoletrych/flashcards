@@ -1,8 +1,8 @@
 ﻿using Android.App;
 using Android.Widget;
-using Flashcards.PlatformDependentTools;
+using Flashcards.Infrastructure.PlatformDependentTools;
 
-namespace FlashCards.Droid.Tools
+namespace Flashcards.Droid.Tools
 {
 	class ToastMessage
 	{

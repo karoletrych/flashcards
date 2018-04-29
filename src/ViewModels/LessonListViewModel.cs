@@ -37,10 +37,10 @@ namespace Flashcards.ViewModels
 		public async void OnNavigatedTo(NavigationParameters parameters)
 		{
 			var lessons = (await _lessonRepository.GetAllWithChildren()).ToList();
-
+			var learnedFlashcards = await _spacedRepetition.LearnedFlashcards();
 			Lessons.SynchronizeWith(
 				lessons,
-				l => new LessonViewModel(l, _spacedRepetition.LearnedFlashcards));
+				l => new LessonViewModel(l, learnedFlashcards));
 		}
 
 		public ObservableCollection<LessonViewModel> Lessons { get; } = new ObservableCollection<LessonViewModel>();

@@ -5,12 +5,12 @@ using Android.Content.PM;
 using Android.OS;
 using FFImageLoading.Forms.Droid;
 using Flashcards.Views;
-using FlashCards.Droid;
+using Flashcards.Droid;
 using Java.Util;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 using Debug = System.Diagnostics.Debug;
-using Resource = FlashCards.Droid.Resource;
+using Resource = Flashcards.Android.Resource;
 
 namespace Flashcards.Droid
 {

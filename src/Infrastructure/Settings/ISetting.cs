@@ -1,4 +1,4 @@
-﻿namespace Flashcards.Settings
+﻿namespace Flashcards.Infrastructure.Settings
 {
 	public interface ISetting<T>
 	{

@@ -7,10 +7,8 @@
     <PackageReference Include="sqlite-net-pcl" Version="1.5.166-beta" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Infrastructure\LanguageExtensions\LanguageExtensions.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\LanguageExtensions\LanguageExtensions.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Settings\Settings.csproj" />
-    <ProjectReference Include="..\..\sqlite-net-extensions\SQLiteNetExtensionsAsync-PCL\SQLiteNetExtensionsAsync-PCL.csproj" />
-    <ProjectReference Include="..\..\sqlite-net-extensions\SQLiteNetExtensions\SQLiteNetExtensions-PCL.csproj" />
     <ProjectReference Include="..\Models\Models.csproj" />
     <ProjectReference Include="..\SpacedRepetition\Interface\Interface.csproj" />
   </ItemGroup>

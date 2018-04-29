@@ -1,5 +1,5 @@
-﻿using Flashcards.Models;
-using Flashcards.Settings;
+﻿using Flashcards.Infrastructure.Settings;
+using Flashcards.Models;
 
 namespace Flashcards.SpacedRepetition.Interface
 {

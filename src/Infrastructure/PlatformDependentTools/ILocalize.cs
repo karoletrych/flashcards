@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 
-namespace Flashcards.PlatformDependentTools
+namespace Flashcards.Infrastructure.PlatformDependentTools
 {
 	public interface ILocalize
 	{

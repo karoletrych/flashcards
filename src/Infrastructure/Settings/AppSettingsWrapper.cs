@@ -2,7 +2,7 @@
 using Plugin.Settings;
 using Plugin.Settings.Abstractions;
 
-namespace Flashcards.Settings
+namespace Flashcards.Infrastructure.Settings
 {
 	public static class AppSettingsWrapper
 	{

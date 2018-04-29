@@ -34,7 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Leitner">
-      <HintPath>..\..\src\Domain\SpacedRepetition\Leitner\bin\Release\netstandard2.0\Leitner.dll</HintPath>
+      <HintPath>..\..\src\Domain\SpacedRepetition\LeitnerCSharp\bin\Debug\netstandard2.0\Leitner.dll</HintPath>
     </Reference>
     <Reference Include="Plugin.Settings, Version=3.1.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Xam.Plugins.Settings.3.1.1\lib\net45\Plugin.Settings.dll</HintPath>
@@ -95,10 +95,6 @@
     <Analyzer Include="..\..\packages\xunit.analyzers.0.7.0\analyzers\dotnet\cs\xunit.analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\DataAccess\DataAccess.csproj">
-      <Project>{73EF1688-AC8E-44C4-85B4-364F1A4B1FB2}</Project>
-      <Name>DataAccess</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\src\Domain\Models\Models.csproj">
       <Project>{1DABEFEB-31E6-4DA5-97E1-C021CCA3A867}</Project>
       <Name>Models</Name>
@@ -110,6 +106,10 @@
     <ProjectReference Include="..\..\src\Domain\SpacedRepetition\Interface\Interface.csproj">
       <Project>{4AEF5045-8EAF-4380-9879-CFE35C522107}</Project>
       <Name>Interface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Infrastructure\DataAccess\DataAccess.csproj">
+      <Project>{E419BC41-CF4E-434A-A6BA-CE1D023EA250}</Project>
+      <Name>DataAccess</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\src\Infrastructure\Settings\Settings.csproj">
       <Project>{4FF50E14-42B7-4B2B-B474-FAF7074C5369}</Project>

@@ -66,6 +66,22 @@ namespace Flashcards.Infrastructure.DataAccess
 			return Task.CompletedTask;
 		}
 
+		public Task<bool> Any<T>() where T : new()
+		{
+			var any = _dbConnection
+				.Table<T>()
+				.Take(1)
+				.ToList()
+				.Any();
+			return Task.FromResult(any);
+		}
+
+		public Task<T> SingleWithChildren<T>(Expression<Func<T, bool>> predicate) where T : new()
+		{
+			var item = _dbConnection.GetAllWithChildren(predicate);
+			return Task.FromResult(item.Single());
+		}
+
 		public Task CreateTable<T>() where T : new()
 		{
 			_dbConnection.CreateTable<T>();

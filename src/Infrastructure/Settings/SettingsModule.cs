@@ -5,7 +5,7 @@ using Autofac;
 using Autofac.Core;
 using Module = Autofac.Module;
 
-namespace Flashcards.Settings
+namespace Flashcards.Infrastructure.Settings
 {
 	public class SettingsModule : Module
 	{

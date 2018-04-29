@@ -4,7 +4,7 @@ using Android.App;
 using Android.Content;
 using Java.Util;
 
-namespace FlashCards.Droid.Repetitions
+namespace Flashcards.Droid.Repetitions
 {
 	public class AlarmScheduler
 	{

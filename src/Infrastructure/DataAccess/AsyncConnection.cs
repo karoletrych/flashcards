@@ -34,6 +34,22 @@ namespace Flashcards.Infrastructure.DataAccess
 			await _sqLiteAsyncConnection.DeleteAsync(entity, true).ConfigureAwait(false);
 		}
 
+		public async Task<bool> Any<T>() where T : new()
+		{
+			var list = await _sqLiteAsyncConnection
+				.Table<T>()
+				.Take(1)
+				.ToListAsync()
+				.ConfigureAwait(false);
+			return list.Any();
+		}
+
+		public async Task<T> SingleWithChildren<T>(Expression<Func<T, bool>> predicate) where T : new()
+		{
+			var list = await _sqLiteAsyncConnection.GetAllWithChildrenAsync<T>(predicate).ConfigureAwait(false);
+			return list.Single();
+		}
+
 		public async Task Update<T>(T entity)
 		{
 			await _sqLiteAsyncConnection.UpdateAsync(entity).ConfigureAwait(false);

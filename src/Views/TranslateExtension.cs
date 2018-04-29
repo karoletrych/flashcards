@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using System.Resources;
-using Flashcards.Localization;
+using Flashcards.Infrastructure.Localization;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 

@@ -4,8 +4,8 @@ using Android.OS;
 using Flashcards.Views;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
-
-namespace FlashCards.Droid.Repetitions.Notifications
+using Resource = Flashcards.Android.Resource;
+namespace Flashcards.Droid.Repetitions.Notifications
 {
     [Activity(
         Label = "@string/app_name",

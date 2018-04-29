@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Flashcards.Settings
+namespace Flashcards.Infrastructure.Settings
 {
 	class RepetitionTimeSetting : Setting<TimeSpan>
 	{

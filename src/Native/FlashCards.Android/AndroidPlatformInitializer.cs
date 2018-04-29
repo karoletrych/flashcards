@@ -1,10 +1,11 @@
 ﻿using Android.Content;
 using Autofac;
+using Flashcards.Android;
 using Prism;
 using Prism.Autofac;
 using Prism.Ioc;
 
-namespace FlashCards.Droid
+namespace Flashcards.Droid
 {
     class AndroidPlatformInitializer : IPlatformInitializer
     {

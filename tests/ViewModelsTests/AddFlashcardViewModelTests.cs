@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
+using Flashcards.Infrastructure.PlatformDependentTools;
 using Flashcards.Models;
-using Flashcards.PlatformDependentTools;
 using Flashcards.Services.DataAccess;
 using Flashcards.Services.Http;
 using Flashcards.ViewModels;

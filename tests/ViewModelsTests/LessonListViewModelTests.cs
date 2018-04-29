@@ -1,7 +1,7 @@
-﻿using Flashcards.Models;
+﻿using Flashcards.Infrastructure.Settings;
+using Flashcards.Models;
 using Flashcards.Services;
 using Flashcards.Services.DataAccess;
-using Flashcards.Settings;
 using Flashcards.SpacedRepetition.Interface;
 using Flashcards.ViewModels;
 using Flashcards.ViewModels.Tools;

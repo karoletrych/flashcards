@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using DLToolkit.Forms.Controls;
-using Flashcards.Localization;
-using Flashcards.PlatformDependentTools;
+using Flashcards.Infrastructure.Localization;
+using Flashcards.Infrastructure.PlatformDependentTools;
 using Flashcards.SpacedRepetition.Interface;
 using Prism;
 using Prism.Ioc;

@@ -1,5 +1,5 @@
 ﻿using System;
-using Flashcards.Localization;
+using Flashcards.Infrastructure.Localization;
 using Flashcards.Models;
 
 namespace Flashcards.ViewModels.Tools

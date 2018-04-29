@@ -28,7 +28,11 @@ namespace Flashcards.Infrastructure.DataAccess
 		public Task<T> Single(Expression<Func<T, bool>> predicate)
 		{
 			return _dbConnection().Single(predicate);
-			
+		}
+
+		public Task<T> SingleWithChildren(Expression<Func<T, bool>> predicate)
+		{
+			return _dbConnection().SingleWithChildren(predicate);
 		}
 
 		public event EventHandler<T> ObjectInserted;
@@ -64,6 +68,11 @@ namespace Flashcards.Infrastructure.DataAccess
 		{
 			_dbConnection().DeleteWithChildren(entity);
 			return Task.CompletedTask;
+		}
+
+		public Task<bool> Any()
+		{
+			return _dbConnection().Any<T>();
 		}
 	}
 }

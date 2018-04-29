@@ -1,11 +1,11 @@
 ﻿using System;
 using Android.Content;
-using Flashcards.PlatformDependentTools;
-using Flashcards.Settings;
-using FlashCards.Droid.Repetitions.IncrementRepetition;
-using FlashCards.Droid.Repetitions.Notifications;
+using Flashcards.Infrastructure.PlatformDependentTools;
+using Flashcards.Infrastructure.Settings;
+using Flashcards.Droid.Repetitions.IncrementRepetition;
+using Flashcards.Droid.Repetitions.Notifications;
 
-namespace FlashCards.Droid.Repetitions
+namespace Flashcards.Droid.Repetitions
 {
 	public class AlarmsInitializer : IAlarmsInitializer
 	{

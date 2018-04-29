@@ -12,13 +12,15 @@ namespace Flashcards.Services.DataAccess
         Task<IEnumerable<T>> GetAllWithChildren();
 
 	    Task<T> Single(Expression<Func<T, bool>> predicate);
+	    Task<T> SingleWithChildren(Expression<Func<T, bool>> predicate);
 
 	    Task Insert(T entity);
-		Task InsertOrReplaceAllWithChildren(IEnumerable<T> entities);
+	    Task InsertOrReplaceAllWithChildren(IEnumerable<T> entities);
 
 	    Task Update(T entity);
 
-        Task Delete(T entity);
+	    Task Delete(T entity);
 	    Task DeleteWithChildren(T enitity);
+	    Task<bool> Any();
     }
 }

@@ -4,10 +4,9 @@ using System.Linq;
 using Android.Content;
 using Android.Graphics;
 using Android.Views;
-using Flashcards.ViewModels;
 using Flashcards.ViewModels.Tools;
 
-namespace FlashCards.Droid.Renderers
+namespace Flashcards.Droid.Renderers
 {
 	public class AndroidMulticolorBar : View
 	{
@@ -40,7 +39,7 @@ namespace FlashCards.Droid.Renderers
 			}
 		}
 
-		private (int a, int r, int g, int b) ConvertColorToInteger(Color color)
+		private (int a, int r, int g, int b) ConvertColorToInteger(Xamarin.Forms.Color color)
 		{
 			return ((int)(color.A * 255), (int)(color.R * 255), (int)(color.G * 255), (int)(color.B * 255));
 		}

@@ -2,10 +2,10 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Flashcards.Infrastructure.DataAccess;
+using Flashcards.Infrastructure.Settings;
 using Flashcards.Models;
 using Flashcards.Services;
 using Flashcards.Services.DataAccess;
-using Flashcards.Settings;
 using Flashcards.SpacedRepetition.Interface;
 using NSubstitute;
 using Xunit;

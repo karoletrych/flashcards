@@ -1,9 +1,9 @@
 ﻿using System.Globalization;
 using System.Threading;
-using Flashcards.PlatformDependentTools;
+using Flashcards.Infrastructure.PlatformDependentTools;
 using Java.Util;
 
-namespace FlashCards.Droid.Tools
+namespace Flashcards.Droid.Tools
 {
 	// https://docs.microsoft.com/en-us/xamarin/xamarin-forms/app-fundamentals/localization?tabs=vswin#overview
 	public class Localize : ILocalize

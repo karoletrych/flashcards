@@ -1,11 +1,11 @@
 ﻿namespace Flashcards.SpacedRepetition.Leitner
 open System.Collections.Generic
 open SQLite
-open Flashcards.Services.DataAccess
-open Flashcards.Models
-open Flashcards.SpacedRepetition.Interface
+open Flashcards.Domain.Services.DataAccess
+open Flashcards.Domain.Models
+open Flashcards.Domain.SpacedRepetition.Interface
 open SQLiteNetExtensions.Attributes
-open Flashcards.Services.DataAccess.Database
+open Flashcards.Domain.Services.DataAccess.Database
 
 
 module Models =

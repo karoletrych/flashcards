@@ -2,19 +2,20 @@
 using System.Globalization;
 using Android.Content;
 using Android.Speech.Tts;
+using Flashcards.Infrastructure.PlatformDependentTools;
 using Flashcards.Models;
-using Flashcards.PlatformDependentTools;
 using Java.Util;
+using TextToSpeech = Android.Speech.Tts.TextToSpeech;
 
-namespace FlashCards.Droid.Tools
+namespace Flashcards.Droid.Tools
 {
-	public class TextToSpeech : Java.Lang.Object, ITextToSpeech, Android.Speech.Tts.TextToSpeech.IOnInitListener
+	public class Speech : Java.Lang.Object, ITextToSpeech, TextToSpeech.IOnInitListener
 	{
-		readonly Android.Speech.Tts.TextToSpeech _speaker;
+		private readonly TextToSpeech _speaker;
 
-		public TextToSpeech(Context context)
+		public Speech(Context context)
 		{
-			_speaker = new Android.Speech.Tts.TextToSpeech(context, this);
+			_speaker = new TextToSpeech(context, this);
 		}
 
 		private static Locale ToLocale(CultureInfo language)

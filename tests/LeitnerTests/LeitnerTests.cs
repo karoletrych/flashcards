@@ -1,15 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Flashcards.Domain.SpacedRepetition.Leitner;
+using Flashcards.Domain.SpacedRepetition.Leitner.Models;
 using Flashcards.Infrastructure.DataAccess;
+using Flashcards.Infrastructure.Settings;
 using Flashcards.Models;
-using Flashcards.Services.DataAccess;
-using Flashcards.Services.DataAccess.Database;
-using Flashcards.Settings;
 using Flashcards.SpacedRepetition.Interface;
 using Xunit;
 using Xunit.Abstractions;
-using static Flashcards.SpacedRepetition.Leitner.Models;
-using static Flashcards.SpacedRepetition.Leitner.Algorithm;
 
 namespace LeitnerTests
 {
@@ -115,14 +113,13 @@ namespace LeitnerTests
 				await _leitner.SubmitRepetitionResults(flashcards.Select(Known));
 				_repetitionSession.Increment();
 				_output.WriteLine($"session: {i}");
-				foreach (var deck in _deckRepository.GetWithChildren(null).Result)
+				foreach (var deck in _deckRepository.GetAllWithChildren().Result)
 					_output.WriteLine(deck.DeckTitle + ": " + deck.Cards.Count);
 				_output.WriteLine("");
 			}
 
-			Assert.Equal(FlashcardCount, Flashcards(RetiredDeckTitle).Count());
-			Assert.Equal(FlashcardCount, _leitner.LearnedFlashcards.Count());
-
+			Assert.Equal(FlashcardCount, Flashcards(DeckIds.RetiredDeckTitle).Count());
+			Assert.Equal(FlashcardCount, (await _leitner.LearnedFlashcards()).Count());
 		}
 
 		[Fact]
@@ -148,7 +145,7 @@ namespace LeitnerTests
 			Assert.NotEmpty(session0DeckCards);
 
 			var currentDeckCards =
-				_deckRepository.GetWithChildren(cd => cd.DeckTitle == CurrentDeckTitle)
+				_deckRepository.GetWithChildren(cd => cd.DeckTitle == DeckIds.CurrentDeckTitle)
 					.Result.Single().Cards;
 			Assert.Empty(currentDeckCards);
 		}

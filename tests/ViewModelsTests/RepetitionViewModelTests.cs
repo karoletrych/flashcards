@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Flashcards.Infrastructure.Settings;
 using Flashcards.Models;
 using Flashcards.Services;
 using Flashcards.Services.DataAccess;
 using Flashcards.Services.Examiner;
-using Flashcards.Settings;
 using Flashcards.SpacedRepetition.Interface;
 using Flashcards.ViewModels;
 using Flashcards.ViewModels.Tools;

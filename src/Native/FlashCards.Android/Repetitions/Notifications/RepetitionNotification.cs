@@ -3,9 +3,10 @@ using Android.App;
 using Android.Content;
 using Android.Widget;
 using Autofac;
+using Flashcards.Android;
 using Flashcards.Services;
 
-namespace FlashCards.Droid.Repetitions.Notifications
+namespace Flashcards.Droid.Repetitions.Notifications
 {
     [BroadcastReceiver(Enabled = true)]
 	public class RepetitionNotification : BroadcastReceiver

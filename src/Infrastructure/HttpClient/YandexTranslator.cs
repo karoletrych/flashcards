@@ -4,9 +4,10 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Flashcards.Models;
+using Flashcards.Services.Http;
 using Newtonsoft.Json;
 
-namespace Flashcards.Services.Http
+namespace Flashcards.Infrastructure.HttpClient
 {
     public class YandexTranslator : ITranslator
     {
@@ -14,7 +15,7 @@ namespace Flashcards.Services.Http
             "trnsl.1.1.20171117T191335Z.d621ce719bfba7b1.078c313c6f9536f1a4cb15469216f22f05a2318b";
 
 
-        private readonly HttpClient _client = new HttpClient();
+        private readonly System.Net.Http.HttpClient _client = new System.Net.Http.HttpClient();
 
 	    /// <exception cref="HttpRequestException">The request failed due to an underlying issue such as network connectivity, DNS failure, server certificate validation or timeout.</exception>
 	    public async Task<IEnumerable<string>> TranslateAsync(Language from, Language to, string text)

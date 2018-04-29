@@ -1,9 +1,9 @@
-namespace Flashcards.SpacedRepetition.Leitner
-open Flashcards.Services.DataAccess
-open Flashcards.Models
-open Flashcards.SpacedRepetition.Interface
-open Flashcards.SpacedRepetition.Leitner.Models
-open Flashcards.Settings
+namespace Flashcards.Domain.SpacedRepetition.Leitner
+open Flashcards.Domain.Services.DataAccess
+open Flashcards.Domain.Models
+open Flashcards.Domain.SpacedRepetition.Interface
+open Flashcards.Domain.SpacedRepetition.Leitner.Models
+open Flashcards.Infrastructure.Settings
 open System.Threading.Tasks
 open System.Linq
 
