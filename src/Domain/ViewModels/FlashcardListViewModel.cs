@@ -1,13 +1,13 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Input;
+using Flashcards.Domain.ViewModels.Tools;
 using Flashcards.Models;
 using Flashcards.Services.DataAccess;
-using Flashcards.ViewModels.Tools;
 using Prism.Navigation;
 using Xamarin.Forms;
 
-namespace Flashcards.ViewModels
+namespace Flashcards.Domain.ViewModels
 {
 	public class FlashcardListViewModel : INotifyPropertyChanged, INavigatedAware
 	{

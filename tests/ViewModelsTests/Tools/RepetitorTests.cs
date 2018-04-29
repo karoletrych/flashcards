@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Flashcards.Domain.ViewModels.Tools;
 using Flashcards.Models;
 using Flashcards.Services.Examiner;
 using Flashcards.Services.Examiner.Builder;
 using Flashcards.SpacedRepetition.Interface;
-using Flashcards.ViewModels.Tools;
 using NSubstitute;
 using Prism.Navigation;
 using Xunit;

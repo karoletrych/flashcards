@@ -1,4 +1,4 @@
-using Flashcards.ViewModels;
+using Flashcards.Domain.ViewModels;
 using Prism.Ioc;
 using Xamarin.Forms;
 

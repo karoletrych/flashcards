@@ -2,12 +2,12 @@
 
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:viewModels="clr-namespace:Flashcards.ViewModels;assembly=ViewModels"
              xmlns:converters="clr-namespace:Flashcards.Views.Converters;assembly=Views"
              xmlns:views="clr-namespace:Flashcards.Views;assembly=Views"
+             xmlns:viewModels1="clr-namespace:Flashcards.Domain.ViewModels;assembly=ViewModels"
              x:Class="Flashcards.Views.EditLessonPage">
     <ContentPage.BindingContext>
-        <viewModels:EditLessonViewModel />
+        <viewModels1:EditLessonViewModel />
     </ContentPage.BindingContext>
 
 

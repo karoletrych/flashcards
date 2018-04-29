@@ -2,17 +2,16 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
+using Flashcards.Domain.ViewModels.Tools;
 using Flashcards.Models;
 using Flashcards.Services.DataAccess;
-using Flashcards.Services.Examiner;
 using Flashcards.Services.Examiner.Builder;
 using Flashcards.SpacedRepetition.Interface;
-using Flashcards.ViewModels.Tools;
 using Prism.Commands;
 using Prism.Navigation;
 using Xamarin.Forms;
 
-namespace Flashcards.ViewModels
+namespace Flashcards.Domain.ViewModels
 {
 	public class LessonListViewModel : INotifyPropertyChanged, INavigatedAware
 	{

@@ -2,7 +2,7 @@
 using Flashcards.Infrastructure.Localization;
 using Flashcards.Models;
 
-namespace Flashcards.ViewModels.Tools
+namespace Flashcards.Domain.ViewModels.Tools
 {
 	public static class AskingModeLocalizationExtension
 	{

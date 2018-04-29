@@ -4,14 +4,14 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using Flashcards.Domain.ViewModels.Tools;
 using Flashcards.Infrastructure.Localization;
 using Flashcards.Infrastructure.PlatformDependentTools;
 using Flashcards.Models;
-using Flashcards.ViewModels.Tools;
 using Prism.Commands;
 using Prism.Navigation;
 
-namespace Flashcards.ViewModels
+namespace Flashcards.Domain.ViewModels
 {
     public class AddLessonViewModel : INavigatingAware, INotifyPropertyChanged
     {

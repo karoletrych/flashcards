@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
+using Flashcards.Domain.ViewModels;
 using Flashcards.Infrastructure.PlatformDependentTools;
 using Flashcards.Models;
 using Flashcards.Services.DataAccess;
 using Flashcards.Services.Http;
-using Flashcards.ViewModels;
 using NSubstitute;
 using Prism.Navigation;
 using Prism.Services;

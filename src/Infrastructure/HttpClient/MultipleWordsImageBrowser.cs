@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CSharpExtensions;
 using Flashcards.Models;
 using Flashcards.Services.Http;
-using LanguageExtensions;
 
 namespace Flashcards.Infrastructure.HttpClient
 {

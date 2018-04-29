@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:viewModels="clr-namespace:Flashcards.ViewModels;assembly=ViewModels"
              xmlns:views="clr-namespace:Flashcards.Views;assembly=Views"
+             xmlns:viewModels1="clr-namespace:Flashcards.Domain.ViewModels;assembly=ViewModels"
              x:Class="Flashcards.Views.FlashcardListPage">
     <ContentPage.BindingContext>
-        <viewModels:FlashcardListViewModel />
+        <viewModels1:FlashcardListViewModel />
     </ContentPage.BindingContext>
 
     <ContentPage.ToolbarItems>

@@ -2,10 +2,8 @@ using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using Flashcards.ViewModels;
-using Flashcards.ViewModels.Tools;
+using Flashcards.Domain.ViewModels.Tools;
 using Xamarin.Forms;
-using Xamarin.Forms.Internals;
 
 namespace Flashcards.Views.CustomViews
 {

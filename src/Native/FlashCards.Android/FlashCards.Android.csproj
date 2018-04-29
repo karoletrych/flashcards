@@ -161,9 +161,13 @@
       <Project>{4AEF5045-8EAF-4380-9879-CFE35C522107}</Project>
       <Name>Interface</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Domain\SpacedRepetition\LeitnerCSharp\Leitner.csproj">
-      <Project>{5cf483e7-db2e-4313-8dd1-560666ec8886}</Project>
+    <ProjectReference Include="..\..\Domain\SpacedRepetition\Leitner\Leitner.csproj">
+      <Project>{9FF7D1B3-F246-4F28-A63D-C1AD9262E388}</Project>
       <Name>Leitner</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Domain\ViewModels\ViewModels.csproj">
+      <Project>{9F87D049-DD5E-4E6C-94EE-4218ECFC9C00}</Project>
+      <Name>ViewModels</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Infrastructure\DataAccess\DataAccess.csproj">
       <Project>{E419BC41-CF4E-434A-A6BA-CE1D023EA250}</Project>
@@ -180,10 +184,6 @@
     <ProjectReference Include="..\..\Infrastructure\Settings\Settings.csproj">
       <Project>{4FF50E14-42B7-4B2B-B474-FAF7074C5369}</Project>
       <Name>Settings</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\ViewModels\ViewModels.csproj">
-      <Project>{CE907DEC-EB8C-48D5-92D0-CB346331248E}</Project>
-      <Name>ViewModels</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Views\Views.csproj">
       <Project>{4dcd6756-8ae6-4567-a2b9-1b61165a1146}</Project>

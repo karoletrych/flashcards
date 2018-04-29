@@ -4,7 +4,7 @@
              xmlns:converters="clr-namespace:Flashcards.Views.Converters;assembly=Views"
              xmlns:customViews="clr-namespace:Flashcards.Views.CustomViews;assembly=Views"
              xmlns:views="clr-namespace:Flashcards.Views;assembly=Views"
-             xmlns:viewModels="clr-namespace:Flashcards.ViewModels;assembly=ViewModels"
+             xmlns:viewModels1="clr-namespace:Flashcards.Domain.ViewModels;assembly=ViewModels"
              x:Class="Flashcards.Views.LessonListView">
     <ContentView.Resources>
         <ResourceDictionary>
@@ -12,7 +12,7 @@
         </ResourceDictionary>
     </ContentView.Resources>
     <ContentView.BindingContext>
-        <viewModels:LessonListViewModel />
+        <viewModels1:LessonListViewModel />
     </ContentView.BindingContext>
 
     <ContentView.Content>

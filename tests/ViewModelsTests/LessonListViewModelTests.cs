@@ -1,10 +1,10 @@
-﻿using Flashcards.Infrastructure.Settings;
+﻿using Flashcards.Domain.ViewModels;
+using Flashcards.Domain.ViewModels.Tools;
+using Flashcards.Infrastructure.Settings;
 using Flashcards.Models;
 using Flashcards.Services;
 using Flashcards.Services.DataAccess;
 using Flashcards.SpacedRepetition.Interface;
-using Flashcards.ViewModels;
-using Flashcards.ViewModels.Tools;
 using NSubstitute;
 using Prism.Navigation;
 using Prism.Services;

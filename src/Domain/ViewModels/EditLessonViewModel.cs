@@ -1,21 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using Flashcards.Domain.ViewModels.Tools;
 using Flashcards.Infrastructure.Localization;
 using Flashcards.Infrastructure.PlatformDependentTools;
 using Flashcards.Models;
 using Flashcards.Services.DataAccess;
-using Flashcards.ViewModels.Tools;
 using Prism.Commands;
 using Prism.Navigation;
 using Prism.Services;
 using Xamarin.Forms;
 
-namespace Flashcards.ViewModels
+namespace Flashcards.Domain.ViewModels
 {
 	public class EditLessonViewModel : INavigatingAware, INotifyPropertyChanged
 	{

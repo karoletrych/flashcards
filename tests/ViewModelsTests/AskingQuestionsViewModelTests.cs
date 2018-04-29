@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Flashcards.Domain.ViewModels;
 using Flashcards.Infrastructure.PlatformDependentTools;
 using Flashcards.Models;
 using Flashcards.Services.Examiner;
 using Flashcards.Services.Examiner.Builder;
-using Flashcards.ViewModels;
 using FluentAssertions;
 using NSubstitute;
 using Prism.Navigation;

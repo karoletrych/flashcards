@@ -15,7 +15,7 @@ using Prism.Navigation;
 using Prism.Services;
 using Xamarin.Forms;
 
-namespace Flashcards.ViewModels
+namespace Flashcards.Domain.ViewModels
 {
 	public class AddFlashcardViewModel : INotifyPropertyChanged, INavigatedAware
 	{

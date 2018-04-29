@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LanguageExtensions
+namespace CSharpExtensions
 {
     public static class PipeExtension
     {

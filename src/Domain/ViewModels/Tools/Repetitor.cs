@@ -4,7 +4,7 @@ using Flashcards.Services.Examiner;
 using Flashcards.SpacedRepetition.Interface;
 using Prism.Navigation;
 
-namespace Flashcards.ViewModels.Tools
+namespace Flashcards.Domain.ViewModels.Tools
 {
 	public class Repetitor : IRepetitor
 	{

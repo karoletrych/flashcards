@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:viewModels="clr-namespace:Flashcards.ViewModels;assembly=ViewModels"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:DLToolkit.Forms.Controls;assembly=DLToolkit.Forms.Controls.FlowListView"
              xmlns:views="clr-namespace:Flashcards.Views;assembly=Views"
              xmlns:forms="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             xmlns:viewModels1="clr-namespace:Flashcards.Domain.ViewModels;assembly=ViewModels"
              x:Class="Flashcards.Views.AddFlashcardPage">
     <ContentPage.BindingContext>
-        <viewModels:AddFlashcardViewModel />
+        <viewModels1:AddFlashcardViewModel />
     </ContentPage.BindingContext>
 
     <ContentPage.Content>

@@ -18,9 +18,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Domain\ViewModels\ViewModels.csproj" />
     <ProjectReference Include="..\Infrastructure\DataAccess\DataAccess.csproj" />
     <ProjectReference Include="..\Infrastructure\Localization\Localization.csproj" />
-    <ProjectReference Include="..\ViewModels\ViewModels.csproj" />
+    <ProjectReference Include="..\Infrastructure\PlatformDependentTools\PlatformDependentTools.csproj" />
   </ItemGroup>
 
   <ItemGroup>

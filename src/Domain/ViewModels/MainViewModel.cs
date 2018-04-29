@@ -1,11 +1,10 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Windows.Input;
 using Prism.Navigation;
 using Prism.Services;
 using Xamarin.Forms;
 
-namespace Flashcards.ViewModels
+namespace Flashcards.Domain.ViewModels
 {
 	public class MainViewModel : INavigatedAware
 	{

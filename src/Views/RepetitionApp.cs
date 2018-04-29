@@ -1,10 +1,8 @@
-﻿using Flashcards.Services;
-using Flashcards.ViewModels;
-using Flashcards.ViewModels.Tools;
+﻿using Flashcards.Domain.ViewModels.Tools;
+using Flashcards.Services;
 using Prism;
 using Prism.Autofac;
 using Prism.Ioc;
-using Xamarin.Forms;
 
 namespace Flashcards.Views
 {
@@ -13,7 +11,6 @@ namespace Flashcards.Views
 	    public RepetitionApp(IPlatformInitializer platformInitializer) : base(platformInitializer)
 	    {
 	    }
-
 
 	    protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {

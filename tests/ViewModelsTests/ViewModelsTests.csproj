@@ -114,6 +114,10 @@
       <Project>{4AEF5045-8EAF-4380-9879-CFE35C522107}</Project>
       <Name>Interface</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\src\Domain\ViewModels\ViewModels.csproj">
+      <Project>{9F87D049-DD5E-4E6C-94EE-4218ECFC9C00}</Project>
+      <Name>ViewModels</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\Infrastructure\PlatformDependentTools\PlatformDependentTools.csproj">
       <Project>{A43093E5-7E72-43D4-925D-F6476695DA83}</Project>
       <Name>PlatformDependentTools</Name>
@@ -121,10 +125,6 @@
     <ProjectReference Include="..\..\src\Infrastructure\Settings\Settings.csproj">
       <Project>{4FF50E14-42B7-4B2B-B474-FAF7074C5369}</Project>
       <Name>Settings</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\src\ViewModels\ViewModels.csproj">
-      <Project>{ce907dec-eb8c-48d5-92d0-cb346331248e}</Project>
-      <Name>ViewModels</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -4,16 +4,16 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Input;
+using Flashcards.Domain.ViewModels.Tools;
 using Flashcards.Infrastructure.Localization;
 using Flashcards.Infrastructure.PlatformDependentTools;
 using Flashcards.Models;
 using Flashcards.Services.Examiner;
-using Flashcards.ViewModels.Tools;
 using Prism.Navigation;
 using Prism.Services;
 using Xamarin.Forms;
 
-namespace Flashcards.ViewModels
+namespace Flashcards.Domain.ViewModels
 {
 	public class AskingQuestionsViewModel : INotifyPropertyChanged, INavigatedAware
 	{

@@ -5,6 +5,7 @@ using Autofac;
 using Autofac.Core;
 using Flashcards.Domain.SpacedRepetition.Leitner;
 using Flashcards.Domain.SpacedRepetition.Leitner.Models;
+using Flashcards.Domain.ViewModels;
 using Flashcards.Droid;
 using Flashcards.Infrastructure.DataAccess;
 using Flashcards.Infrastructure.HttpClient;
@@ -14,7 +15,6 @@ using Flashcards.Models;
 using Flashcards.Services.DataAccess;
 using Flashcards.Services.Http;
 using Flashcards.SpacedRepetition.Interface;
-using Flashcards.ViewModels;
 using Flashcards.Views;
 
 namespace Flashcards.Android

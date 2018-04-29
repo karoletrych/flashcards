@@ -4,7 +4,7 @@ using System.Linq;
 using Android.Content;
 using Android.Graphics;
 using Android.Views;
-using Flashcards.ViewModels.Tools;
+using Flashcards.Domain.ViewModels.Tools;
 
 namespace Flashcards.Droid.Renderers
 {

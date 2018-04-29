@@ -1,5 +1,5 @@
 ﻿using System;
-using Flashcards.ViewModels;
+using Flashcards.Domain.ViewModels;
 using Xamarin.Forms;
 
 namespace Flashcards.Views
