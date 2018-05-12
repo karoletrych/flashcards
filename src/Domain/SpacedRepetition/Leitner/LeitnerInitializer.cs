@@ -48,11 +48,11 @@ namespace Flashcards.Domain.SpacedRepetition.Leitner
 			}
 
 			_flashcardInsertedNotifier.ObjectInserted +=
-				((f, flashcard) =>
+				(f, flashcard) =>
 				{
 					var cardDeck = new CardDeck {CardId = flashcard.Id, DeckId = DeckCurrentId};
 					_cardDeckRepository.Insert(cardDeck);
-				});
+				};
 		}
 	}
 }

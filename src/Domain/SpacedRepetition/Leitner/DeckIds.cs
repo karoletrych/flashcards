@@ -7,7 +7,7 @@ namespace Flashcards.Domain.SpacedRepetition.Leitner
 		public const string CurrentDeckTitle = "CurrentDeck";
 		public const string RetiredDeckTitle = "RetiredDeck";
 
-		public static ISet<string> DeckTitles = new HashSet<string>
+		public static readonly ISet<string> DeckTitles = new HashSet<string>
 		{
 			CurrentDeckTitle,
 			RetiredDeckTitle,

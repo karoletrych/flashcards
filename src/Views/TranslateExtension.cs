@@ -27,7 +27,7 @@ namespace Flashcards.Views
 			{
 #if DEBUG
 				throw new ArgumentException(
-					string.Format("Key '{0}' was not found in resources '{1}' for culture '{2}'.", Text, ResourceId, AppResources.Culture.Name),
+					$"Key '{Text}' was not found in resources '{ResourceId}' for culture '{AppResources.Culture.Name}'.",
 					"Text");
 #else
 				translation = Text; // HACK: returns the key, which GETS DISPLAYED TO THE USER

@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using Autofac;
 using Autofac.Core;
@@ -23,18 +25,19 @@ namespace Flashcards.Android
     {
         public static void RegisterTypesInIocContainer(ContainerBuilder containerBuilder)
         {
-            var assemblies = new[]
+            var assemblies = new HashSet<Assembly>
             {
                 Assembly.GetAssembly(typeof(App)),
                 Assembly.GetAssembly(typeof(AskingQuestionsViewModel)), 
                 Assembly.GetAssembly(typeof(Flashcard)),
                 Assembly.GetAssembly(typeof(ITranslator)),
-                Assembly.GetAssembly(typeof(ISpacedRepetition)),
+                Assembly.GetAssembly(typeof(YandexTranslator)),
+				Assembly.GetAssembly(typeof(ISpacedRepetition)),
                 Assembly.GetAssembly(typeof(CardDeck)),
 				Assembly.GetAssembly(typeof(MainActivity)),
 	            Assembly.GetAssembly(typeof(SettingsModule)),
 	            Assembly.GetAssembly(typeof(IMessage)),
-			};
+			}.ToArray();
 
             containerBuilder
                 .RegisterAssemblyTypes(assemblies)

@@ -28,17 +28,14 @@ namespace Flashcards.Domain.ViewModels
 		private readonly ITranslator _translator;
 		private Lesson _lesson;
 
-		public AddFlashcardViewModel()
-		{
-		}
-
 		public AddFlashcardViewModel(
 			ITranslator translator,
 			IRepository<Flashcard> flashcardRepository,
 			IImageBrowser imageBrowser,
 			IRepository<Lesson> lessonRepository,
 			IMessage message,
-			IPageDialogService dialogService)
+			IPageDialogService dialogService
+			)
 		{
 			_translator = translator;
 			_flashcardRepository = flashcardRepository;
@@ -72,14 +69,9 @@ namespace Flashcards.Domain.ViewModels
 				await _lessonRepository.Insert(_lesson);
 			}
 
-			var flashcard = new Flashcard
-			{
-				Front = FrontText,
-				Back = BackText,
-				LessonId = _lesson.Id,
-				ImageUrl = SelectedImageUri?.AbsoluteUri
-			};
+			var flashcard = new Flashcard(_lesson.Id, FrontText, BackText, SelectedImageUri?.AbsoluteUri);
 
+			// ReSharper disable once UnusedVariable
 			var doNotAwait = _flashcardRepository.Insert(flashcard);
 
 			FrontText = "";

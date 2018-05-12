@@ -5,6 +5,7 @@ using Flashcards.Infrastructure.Localization;
 using Flashcards.Infrastructure.PlatformDependentTools;
 using Flashcards.SpacedRepetition.Interface;
 using Prism;
+using Prism.Autofac;
 using Prism.Ioc;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -12,7 +13,7 @@ using Xamarin.Forms.Xaml;
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace Flashcards.Views
 {
-	public partial class App
+	public partial class App : PrismApplication
     {
         public App(IPlatformInitializer platformInitializer) : base(platformInitializer)
         {

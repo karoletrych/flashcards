@@ -2,7 +2,7 @@
 using Android.Widget;
 using Flashcards.Infrastructure.PlatformDependentTools;
 
-namespace Flashcards.Droid.Tools
+namespace Flashcards.Android.Tools
 {
 	class ToastMessage
 	{

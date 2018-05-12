@@ -140,12 +140,12 @@ namespace Flashcards.Views
 			var fileName = Path.GetFileName(_exportParameters.DatabasePath);
 
 			var fileNameWithDateTime =
-				Path.GetFileNameWithoutExtension(fileName) + DateTime.Now + Path.GetExtension(fileName);
+				Path.GetFileNameWithoutExtension(fileName) 
+				+ DateTime.Now.ToString("yyyyMMddHHmmss")
+				+ Path.GetExtension(fileName);
 
 			var exportFilePath = Path.Combine(_exportParameters.ExportPath, fileNameWithDateTime);
-
 			File.Copy(_exportParameters.DatabasePath, exportFilePath);
-
 			_message.LongAlert($"Exported to: {exportFilePath}");
 		}
 

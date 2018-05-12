@@ -4,6 +4,7 @@
     <RootNamespace>Flashcards.Domain.ViewModels</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Autofac" Version="4.6.2" />
     <PackageReference Include="Fody" Version="3.0.1" />
     <PackageReference Include="Prism.Autofac.Forms" Version="7.0.0.396" />
     <PackageReference Include="Prism.Core" Version="7.0.0.396" />
