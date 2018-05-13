@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Flashcards.Services.DataAccess.Database;
 
 namespace Flashcards.Services.DataAccess
 {

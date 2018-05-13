@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Flashcards.Domain.SpacedRepetition.Leitner.Models;
 using Flashcards.Models;
 using Flashcards.Services.DataAccess;
-using Flashcards.Services.DataAccess.Database;
 using Flashcards.SpacedRepetition.Interface;
 
 namespace Flashcards.Domain.SpacedRepetition.Leitner
@@ -34,12 +34,13 @@ namespace Flashcards.Domain.SpacedRepetition.Leitner
 			return deck.Id;
 		}).Value;
 
-		public async void Initialize()
+		public async Task InitializeAsync()
 		{
 			await _tableCreator.CreateTable<CardDeck>();
 			await _tableCreator.CreateTable<Deck>();
 
-			if (! await _deckRepository.Any())
+			var decksCreated = await _deckRepository.Any();
+			if (!decksCreated)
 			{
 				var decks = DeckIds.DeckTitles.AsEnumerable()
 					.Select((title, id) =>

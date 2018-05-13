@@ -3,7 +3,6 @@ using System.Linq;
 using Flashcards.Infrastructure.DataAccess;
 using Flashcards.Models;
 using Flashcards.Services.DataAccess;
-using Flashcards.Services.DataAccess.Database;
 using Xunit;
 
 namespace Flashcards.ServicesTests

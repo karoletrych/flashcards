@@ -36,17 +36,16 @@ namespace Flashcards.Infrastructure.DataAccess
 
 		public async Task<bool> Any<T>() where T : new()
 		{
-			var list = await _sqLiteAsyncConnection
+			var count = await _sqLiteAsyncConnection
 				.Table<T>()
-				.Take(1)
-				.ToListAsync()
+				.CountAsync()
 				.ConfigureAwait(false);
-			return list.Any();
+			return count > 0;
 		}
 
 		public async Task<T> SingleWithChildren<T>(Expression<Func<T, bool>> predicate) where T : new()
 		{
-			var list = await _sqLiteAsyncConnection.GetAllWithChildrenAsync<T>(predicate).ConfigureAwait(false);
+			var list = await _sqLiteAsyncConnection.GetAllWithChildrenAsync(predicate).ConfigureAwait(false);
 			return list.Single();
 		}
 
@@ -78,7 +77,9 @@ namespace Flashcards.Infrastructure.DataAccess
 
 		public async Task CreateTable<T>() where T : new()
 		{
-			await _sqLiteAsyncConnection.CreateTableAsync<T>().ConfigureAwait(false);
+			await _sqLiteAsyncConnection
+				.CreateTableAsync<T>()
+				.ConfigureAwait(false);
 		}
 	}
 }

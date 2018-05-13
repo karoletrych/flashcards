@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Flashcards.Models;
 using SQLite;
 
@@ -16,8 +17,8 @@ namespace Flashcards.Infrastructure.DataAccess
 	            databasePath,
                 SqliteOpenFlags);
 
-            connection.CreateTableAsync<Flashcard>();
-            connection.CreateTableAsync<Lesson>();
+	        Task.Run(() => connection.CreateTableAsync<Flashcard>()).Wait();
+	        Task.Run(() => connection.CreateTableAsync<Lesson>()).Wait();
 
             return connection;
         }

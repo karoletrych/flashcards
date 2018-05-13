@@ -37,37 +37,31 @@ namespace Flashcards.Infrastructure.DataAccess
 
 		public event EventHandler<T> ObjectInserted;
 
-		public Task Insert(T entity)
+		public async Task Insert(T entity)
 		{
-			_dbConnection().Insert(entity);
+			await _dbConnection().Insert(entity);
 
 			ObjectInserted?.Invoke(this, entity);
-
-			return Task.CompletedTask;
 		}
 
 		public Task Update(T entity)
 		{
-			_dbConnection().Update(entity);
-			return Task.CompletedTask;
+			return _dbConnection().Update(entity);
 		}
 
 		public Task InsertOrReplaceAllWithChildren(IEnumerable<T> entities)
 		{
-			_dbConnection().InsertOrReplaceAllWithChildren(entities);
-			return Task.CompletedTask;
+			return _dbConnection().InsertOrReplaceAllWithChildren(entities);
 		}
 
 		public Task Delete(T entity)
 		{
-			_dbConnection().Delete(entity);
-			return Task.CompletedTask;
+			return _dbConnection().Delete(entity);
 		}
 
 		public Task DeleteWithChildren(T entity)
 		{
-			_dbConnection().DeleteWithChildren(entity);
-			return Task.CompletedTask;
+			return _dbConnection().DeleteWithChildren(entity);
 		}
 
 		public Task<bool> Any()

@@ -57,7 +57,7 @@
     </AndroidSupportedAbis>
     <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
     <AndroidTlsProvider>btls</AndroidTlsProvider>
-    <AndroidLinkMode>SdkOnly</AndroidLinkMode>
+    <AndroidLinkMode>None</AndroidLinkMode>
     <AndroidCreatePackagePerAbi>false</AndroidCreatePackagePerAbi>
     <EnableProguard>true</EnableProguard>
     <JavaMaximumHeapSize>

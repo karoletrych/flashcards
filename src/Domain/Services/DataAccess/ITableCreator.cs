@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Flashcards.Services.DataAccess.Database
+namespace Flashcards.Services.DataAccess
 {
     public interface ITableCreator
     {

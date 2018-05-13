@@ -56,9 +56,9 @@ namespace Flashcards.Domain.SpacedRepetition.Leitner
 		    return deck.Cards;
 	    }
 
-	    private static Deck Where(IEnumerable<Deck> decks, QuestionResult result)
+	    private static Deck Deck(IEnumerable<Deck> decks, string flashcardId)
 	    {
-		    return decks.Single(deck => deck.Cards.Any(c => c.Id == result.Flashcard.Id));
+		    return decks.Single(deck => deck.Cards.Any(c => c.Id == flashcardId));
 	    }
 
 	    public async Task SubmitRepetitionResults(IEnumerable<QuestionResult> results)
@@ -67,7 +67,7 @@ namespace Flashcards.Domain.SpacedRepetition.Leitner
 		    var questionResults = results.ToList();
 		    var cardsWithDecks =
 			    questionResults
-				    .Select(result => (result.Flashcard, result.IsKnown, Where(decks, result)));
+				    .Select(result => (result.Flashcard, result.IsKnown, Deck(decks, result.Flashcard.Id)));
 
 		    var decksMoveOperations = Algorithm.RearrangeCards(cardsWithDecks, _sessionNumberSetting.Value);
 

@@ -71,8 +71,7 @@ namespace Flashcards.Domain.ViewModels
 
 			var flashcard = new Flashcard(_lesson.Id, FrontText, BackText, SelectedImageUri?.AbsoluteUri);
 
-			// ReSharper disable once UnusedVariable
-			var doNotAwait = _flashcardRepository.Insert(flashcard);
+			await _flashcardRepository.Insert(flashcard);
 
 			FrontText = "";
 			BackText = "";

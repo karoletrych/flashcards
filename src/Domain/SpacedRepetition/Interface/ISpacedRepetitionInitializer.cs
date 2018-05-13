@@ -1,7 +1,9 @@
-﻿namespace Flashcards.SpacedRepetition.Interface
+﻿using System.Threading.Tasks;
+
+namespace Flashcards.SpacedRepetition.Interface
 {
     public interface ISpacedRepetitionInitializer
     {
-        void Initialize();
+        Task InitializeAsync();
     }
 }
