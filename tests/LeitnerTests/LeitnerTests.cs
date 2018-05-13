@@ -35,7 +35,7 @@ namespace LeitnerTests
 						_deckRepository,
 						_cardDeckRepository,
 						connection);
-				leitnerInitializer.Initialize();
+				leitnerInitializer.InitializeAsync();
 			}
 
 			_output = output;
