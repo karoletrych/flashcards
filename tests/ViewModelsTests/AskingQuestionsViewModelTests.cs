@@ -23,9 +23,9 @@ namespace ViewModelsTests
 			{
 				Flashcards = new List<Flashcard>
 				{
-					new Flashcard {Front = "cat", Back = "kot"},
-					new Flashcard {Front = "dog", Back = "pies"},
-					new Flashcard {Front = "duck", Back = "kaczka"}
+					new Flashcard("1", "cat", "kot"),
+					new Flashcard("1", "dog", "pies"),
+					new Flashcard("1", "duck", "kaczka")
 				}
 			};
 

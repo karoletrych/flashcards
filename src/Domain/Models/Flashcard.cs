@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using JetBrains.Annotations;
 using SQLite;
 using SQLiteNetExtensions.Attributes;
 
@@ -14,23 +13,25 @@ namespace Flashcards.Models
 		public string Id { get; set; }
 
 		[ForeignKey(typeof(Lesson))]
+
+		// ReSharper disable once MemberCanBePrivate.Global required for OneToMany relationship with Lesson
 		public string LessonId { get; set; }
 
 		[MaxLength(MaxLength)]     
-		public string Front { get; set; }
+		public string Front { get; private set; }
 
 		[MaxLength(MaxLength)]
-		public string Back { get; set; }
+		public string Back { get; private set; }
 
 		[MaxLength(2000)]
-		public string ImageUrl { get; set; }
+		public string ImageUrl { get; private set; }
 
 		public Flashcard()
 		{
 
 		}
 
-		public Flashcard(string lessonId, string front, string back, [CanBeNull] string imageUri)
+		public Flashcard(string lessonId, string front, string back, string imageUri = null)
 		{
 			if (front.Length > MaxLength)
 				throw new ArgumentException($"Front text length cannot be longer than {MaxLength}");
@@ -46,7 +47,7 @@ namespace Flashcards.Models
 
 		public Flashcard Invert()
 		{
-			return new Flashcard(LessonId, Back, Front, ImageUrl);
+			return new Flashcard{Id = Id, LessonId = LessonId, Front = Back, Back = Front, ImageUrl = ImageUrl};
 		}
 
 		public bool Equals(Flashcard other)

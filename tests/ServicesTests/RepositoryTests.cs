@@ -33,7 +33,7 @@ namespace Flashcards.ServicesTests
         public void FindAll_ReturnsAllObjects()
         {
             var lesson = new Lesson {FrontLanguage = Language.English, BackLanguage = Language.Polish, Id = "1"};
-            var flashcard = new Flashcard {Front = "cat", Back = "kot", LessonId = "1", Id = "1"};
+            var flashcard = new Flashcard ("1", "cat", "kot");
             _lessonRepository.Insert(lesson);
             _flashcardRepository.Insert(flashcard);
 
@@ -48,8 +48,8 @@ namespace Flashcards.ServicesTests
         public void FindMatching_ReturnsResults()
         {
             var lesson = new Lesson { FrontLanguage = Language.English, BackLanguage = Language.Polish, Id = "1" };
-            var flashcard = new Flashcard { Front = "cat", Back = "kot", LessonId = "1", Id = "1"};
-            var flashcard2 = new Flashcard { Front = "dog", Back = "pies", LessonId = "1" , Id = "2"};
+	        var flashcard = new Flashcard("1", "cat", "kot");
+            var flashcard2 = new Flashcard("1", "dog", "pies");
             _lessonRepository.Insert(lesson);
             _flashcardRepository.Insert(flashcard2);
             _flashcardRepository.Insert(flashcard);
