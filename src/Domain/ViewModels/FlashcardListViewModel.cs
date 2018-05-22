@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Input;
 using Flashcards.Domain.ViewModels.Tools;
@@ -27,11 +28,11 @@ namespace Flashcards.Domain.ViewModels
 		{
 		}
 
-		public ObservableCollection<Flashcard> Flashcards { get; set; } = new ObservableCollection<Flashcard>();
+		public ObservableCollection<Flashcard> Flashcards { get; } = new ObservableCollection<Flashcard>();
 
 		public ICommand DeleteFlashcardCommand => new Command<string>(async flashcardId =>
 		{
-			var flashcardToRemove = new Flashcard {Id = flashcardId};
+			var flashcardToRemove = Flashcard.CreateEmpty();
 			await _flashcardRepository.Delete(flashcardToRemove);
 			Flashcards.Remove(flashcardToRemove);
 		});
@@ -55,8 +56,36 @@ namespace Flashcards.Domain.ViewModels
 			var flashcards = await _flashcardRepository.GetWithChildren(f => f.LessonId == _lesson.Id);
 
 			Flashcards.SynchronizeWith(flashcards);
+			SortByCreationDate.Execute(null);
 		}
 
 		public event PropertyChangedEventHandler PropertyChanged;
+
+		#region Sorting
+
+		private bool _sortingByFrontTextAscending;
+		private bool _sortingByBackTextAscending;
+		private bool _sortingByCreationDateAscending;
+
+		public ICommand SortByFront => new Command(() =>
+		{
+			_sortingByFrontTextAscending = !_sortingByFrontTextAscending;
+			Flashcards.Sort((f1, f2) => string.Compare(f1.Front, f2.Front, StringComparison.CurrentCultureIgnoreCase), _sortingByFrontTextAscending);
+		});
+
+		public ICommand SortByBack => new Command(() =>
+		{
+			_sortingByBackTextAscending = !_sortingByBackTextAscending;
+			Flashcards.Sort((f1, f2) =>
+				string.Compare(f1.Back, f2.Back, StringComparison.CurrentCultureIgnoreCase), _sortingByBackTextAscending);
+		});
+
+		public ICommand SortByCreationDate => new Command(() =>
+		{
+			_sortingByCreationDateAscending = !_sortingByCreationDateAscending;
+			Flashcards.Sort((f1, f2) => DateTime.Compare(f1.Created, f2.Created), _sortingByCreationDateAscending);
+		});
+
+		#endregion
 	}
 }

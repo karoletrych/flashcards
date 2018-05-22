@@ -69,7 +69,8 @@ namespace Flashcards.Domain.ViewModels
 				await _lessonRepository.Insert(_lesson);
 			}
 
-			var flashcard = new Flashcard(_lesson.Id, FrontText, BackText, SelectedImageUri?.AbsoluteUri);
+			var flashcard = Flashcard.Create(FrontText, BackText, SelectedImageUri?.AbsoluteUri);
+			flashcard.LessonId = _lesson.Id;
 
 			await _flashcardRepository.Insert(flashcard);
 

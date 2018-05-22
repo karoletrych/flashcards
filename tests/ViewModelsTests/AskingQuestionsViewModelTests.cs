@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Flashcards.Domain.ViewModels;
 using Flashcards.Infrastructure.PlatformDependentTools;
 using Flashcards.Models;
+using Flashcards.Services;
 using Flashcards.Services.Examiner;
 using Flashcards.Services.Examiner.Builder;
 using FluentAssertions;
@@ -19,17 +20,19 @@ namespace ViewModelsTests
 	{
 		public AskingQuestionsViewModelTests()
 		{
-			_lesson = new Lesson
-			{
-				Flashcards = new List<Flashcard>
+			_lesson = Lesson.Create(Language.English, Language.Polish,
+				new List<Flashcard>
 				{
-					new Flashcard("1", "cat", "kot"),
-					new Flashcard("1", "dog", "pies"),
-					new Flashcard("1", "duck", "kaczka")
-				}
-			};
+					Flashcard.Create("cat", "kot"),
+					Flashcard.Create("dog", "pies"),
+					Flashcard.Create("duck", "kaczka")
+				});
+			
 
-			_examiner = new ExaminerBuilder().WithLessons(new[] {_lesson}).Build();
+			_examiner = new ExaminerBuilder().WithFlashcards(new[]
+			{
+				new FlashcardsInLanguage(_lesson.FrontLanguage, _lesson.BackLanguage, _lesson.Flashcards),
+			}).Build();
 
 			_navigationService = Substitute.For<INavigationService>();
 			_pageDialogService = Substitute.For<IPageDialogService>();

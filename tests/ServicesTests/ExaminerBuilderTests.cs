@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Flashcards.Models;
-using Flashcards.Services.Examiner;
+using Flashcards.Services;
 using Flashcards.Services.Examiner.Builder;
 using Xunit;
 
@@ -10,13 +11,10 @@ namespace Flashcards.ServicesTests
 	{
 		private readonly IEnumerable<Lesson> _lessons = new[]
 		{
-			new Lesson
+			Lesson.Create(Language.English, Language.Polish, new List<Flashcard>
 			{
-				Flashcards = new List<Flashcard>
-				{
-					new Flashcard("lesson", "Front", "Back", "")
-				}
-			}
+				Flashcard.Create("Front", "Back")
+			})
 		};
 
 		[Fact]
@@ -24,7 +22,7 @@ namespace Flashcards.ServicesTests
 		{
 			var examiner = new ExaminerBuilder()
 				.WithAskingMode(AskingMode.Back)
-				.WithLessons(_lessons)
+				.WithFlashcards(_lessons.Select(l => new FlashcardsInLanguage(l.FrontLanguage, l.BackLanguage, l.Flashcards)))
 				.Build();
 			examiner.TryAskNextQuestion(out var question);
 			Assert.Equal("Back", question.Front);

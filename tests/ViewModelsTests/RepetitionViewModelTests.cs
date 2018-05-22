@@ -57,13 +57,13 @@ namespace ViewModelsTests
 		[Fact]
 		public void Repetition_is_executed_with_correct_flashcards_when_repetition_view_is_tapped()
 		{
-			var f1 = new Flashcard { Id = "1" };
-			var f2 = new Flashcard { Id = "2" };
+			var f1 = Flashcard.CreateEmpty();
+			var f2 = Flashcard.CreateEmpty();
 			var questions = new List<Flashcard> { f1, f2 }.Select(x => new Question(x, Language.English, Language.Polish));
 			var lessons = new[]
 			{
-				new Lesson {Id = "1", Flashcards = new List<Flashcard>{f1}},
-				new Lesson {Id = "2", Flashcards = new List<Flashcard>{f2}}
+				Lesson.Create(Language.English, Language.Polish, new List<Flashcard>{f1}),
+				Lesson.Create(Language.English, Language.Polish, new List<Flashcard>{f2})
 			};
 
 			_lessonRepository.GetAllWithChildren().Returns(lessons);

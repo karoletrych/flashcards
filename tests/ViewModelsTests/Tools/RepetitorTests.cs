@@ -2,7 +2,7 @@
 using System.Linq;
 using Flashcards.Domain.ViewModels.Tools;
 using Flashcards.Models;
-using Flashcards.Services.Examiner;
+using Flashcards.Services;
 using Flashcards.Services.Examiner.Builder;
 using Flashcards.SpacedRepetition.Interface;
 using NSubstitute;
@@ -20,76 +20,20 @@ namespace ViewModelsTests.Tools
 		}
 
 		[Fact]
-		public async void NavigatesToAskingQuestionsPageWithExaminer()
-		{
-			var navigationService = Substitute.For<INavigationService>();
-			var examiner = new ExaminerBuilder()
-				.WithLessons(new[]
-				{
-					new Lesson
-					{
-						Flashcards = new List<Flashcard>
-						{
-							new Flashcard()
-						}
-					}
-				})
-				.Build();
-
-			var uri = "AskingQuestionsPage";
-			await _sut.Repeat(navigationService, uri, examiner);
-			await navigationService.Received().NavigateAsync(uri, Arg.Is<NavigationParameters>(p => p["examiner"] == examiner));
-		}
-
-		[Fact]
-		public async void RepetitionResultsAreSubmittedOnlyOnce_AfterSessionEndedIsRaised()
-		{
-			var navigationService = Substitute.For<INavigationService>();
-			var flashcard = new Flashcard();
-			var examiner = new ExaminerBuilder()
-				.WithLessons(new[]
-				{
-					new Lesson
-					{
-						Flashcards = new List<Flashcard>
-						{
-							flashcard
-						}
-					}
-				})
-				.Build();
-
-			var uri = "AskingQuestionsPage";
-			await _sut.Repeat(navigationService, uri, examiner);
-
-			examiner.TryAskNextQuestion(out _);
-			examiner.Answer(false);
-			examiner.TryAskNextQuestion(out _);
-			examiner.Answer(true);
-			
-			await _spacedRepetition
-				.Received(1)
-				.SubmitRepetitionResults(Arg.Is<IEnumerable<QuestionResult>>(qr => qr.Single().Flashcard == flashcard));
-		}
-
-		[Fact]
 		public async void HandlerIsUnsubscribedFromSessionEndedEvent_WhenExaminerIsDisposed()
 		{
 			var navigationService = Substitute.For<INavigationService>();
 			var flashcard = new Flashcard();
 			var examiner = new ExaminerBuilder()
-				.WithLessons(new[]
+				.WithFlashcards(new[]
 				{
-					new Lesson
+					new FlashcardsInLanguage(Language.English, Language.Polish, new List<Flashcard>
 					{
-						Flashcards = new List<Flashcard>
-						{
-							flashcard
-						}
-					}
+						flashcard
+					})
 				})
 				.Build();
-			
+
 			var uri = "AskingQuestionsPage";
 			await _sut.Repeat(navigationService, uri, examiner);
 
@@ -100,6 +44,54 @@ namespace ViewModelsTests.Tools
 			await _spacedRepetition
 				.Received(0)
 				.SubmitRepetitionResults(Arg.Any<IEnumerable<QuestionResult>>());
+		}
+
+		[Fact]
+		public async void NavigatesToAskingQuestionsPageWithExaminer()
+		{
+			var navigationService = Substitute.For<INavigationService>();
+			var examiner = new ExaminerBuilder()
+				.WithFlashcards(new[]
+				{
+					new FlashcardsInLanguage(Language.English, Language.Polish, new List<Flashcard>
+					{
+						new Flashcard()
+					})
+				})
+				.Build();
+
+			var uri = "AskingQuestionsPage";
+			await _sut.Repeat(navigationService, uri, examiner);
+			await navigationService.Received()
+				.NavigateAsync(uri, Arg.Is<NavigationParameters>(p => p["examiner"] == examiner));
+		}
+
+		[Fact]
+		public async void RepetitionResultsAreSubmittedOnlyOnce_AfterSessionEndedIsRaised()
+		{
+			var navigationService = Substitute.For<INavigationService>();
+			var flashcard = new Flashcard();
+			var examiner = new ExaminerBuilder()
+				.WithFlashcards(new[]
+				{
+					new FlashcardsInLanguage(Language.English, Language.Polish, new List<Flashcard>
+					{
+						flashcard
+					})
+				})
+				.Build();
+
+			var uri = "AskingQuestionsPage";
+			await _sut.Repeat(navigationService, uri, examiner);
+
+			examiner.TryAskNextQuestion(out _);
+			examiner.Answer(false);
+			examiner.TryAskNextQuestion(out _);
+			examiner.Answer(true);
+
+			await _spacedRepetition
+				.Received(1)
+				.SubmitRepetitionResults(Arg.Is<IEnumerable<QuestionResult>>(qr => qr.Single().Flashcard == flashcard));
 		}
 
 		private readonly Repetitor _sut;

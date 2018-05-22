@@ -40,7 +40,7 @@ namespace ViewModelsTests
         [Fact]
         private async void WhenFrontTextIsChanged_BackTextTranslationAppears()
         {
-	        var lesson = new Lesson {FrontLanguage = Language.English, BackLanguage = Language.Polish};
+	        var lesson = Lesson.Create(Language.English, Language.Polish);
             _viewModel.OnNavigatedTo(
                 new NavigationParameters
                 {
@@ -59,7 +59,7 @@ namespace ViewModelsTests
         [Fact]
         private async void WhenSecondTextIsModifiedByUser_FirstDoesNotChange()
         {
-	        var lesson = new Lesson { FrontLanguage = Language.Polish, BackLanguage = Language.English };
+	        var lesson = Lesson.Create(Language.Polish, Language.English);
 
 			_viewModel.OnNavigatedTo(
                 new NavigationParameters

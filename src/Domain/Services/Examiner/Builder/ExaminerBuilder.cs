@@ -14,7 +14,7 @@ namespace Flashcards.Services.Examiner.Builder
 		private bool _shuffle;
 		private int _maximum = Int32.MaxValue;
 
-		public ExaminerBuilder WithLessons(IEnumerable<Lesson> lessons)
+		public ExaminerBuilder WithFlashcards(IEnumerable<FlashcardsInLanguage> lessons)
 		{
 			_questions = lessons.SelectMany(l =>
 				l.Flashcards.Select(f => new Question(f, l.FrontLanguage, l.BackLanguage)));

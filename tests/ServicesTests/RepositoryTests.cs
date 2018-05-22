@@ -14,7 +14,7 @@ namespace Flashcards.ServicesTests
 
         public RepositoryTests()
         {
-            var sqliteConnection = new Connection(new DatabaseConnectionFactory().CreateConnection(":memory:"));
+            var sqliteConnection = new Connection(new DatabaseConnectionFactory().CreateInMemoryConnection());
             _flashcardRepository = new Repository<Flashcard>(() => sqliteConnection);
             _lessonRepository = new Repository<Lesson>(() => sqliteConnection);
         }
@@ -22,8 +22,8 @@ namespace Flashcards.ServicesTests
         [Fact]
         public void FindAll_EmptyRepository()
         {
-            var flashcards = _flashcardRepository.GetWithChildren(null).Result;
-            var lessons = _lessonRepository.GetWithChildren(null).Result;
+            var flashcards = _flashcardRepository.GetAllWithChildren().Result;
+            var lessons = _lessonRepository.GetAllWithChildren().Result;
 
             Assert.Empty(flashcards);
             Assert.Empty(lessons);
@@ -32,9 +32,10 @@ namespace Flashcards.ServicesTests
         [Fact]
         public void FindAll_ReturnsAllObjects()
         {
-            var lesson = new Lesson {FrontLanguage = Language.English, BackLanguage = Language.Polish, Id = "1"};
-            var flashcard = new Flashcard ("1", "cat", "kot");
-            _lessonRepository.Insert(lesson);
+	        var lesson = Lesson.Create(Language.English, Language.Polish, new List<Flashcard>());
+            var flashcard = Flashcard.Create("cat", "kot");
+
+			_lessonRepository.Insert(lesson);
             _flashcardRepository.Insert(flashcard);
 
             var lessons = _lessonRepository.GetAllWithChildren().Result;
@@ -45,46 +46,16 @@ namespace Flashcards.ServicesTests
         }
 
         [Fact]
-        public void FindMatching_ReturnsResults()
-        {
-            var lesson = new Lesson { FrontLanguage = Language.English, BackLanguage = Language.Polish, Id = "1" };
-	        var flashcard = new Flashcard("1", "cat", "kot");
-            var flashcard2 = new Flashcard("1", "dog", "pies");
-            _lessonRepository.Insert(lesson);
-            _flashcardRepository.Insert(flashcard2);
-            _flashcardRepository.Insert(flashcard);
-
-            var matchingFlashcards = _flashcardRepository.GetWithChildren(f => f.LessonId == "1").Result;
-
-            Assert.Equal(2, matchingFlashcards.Count());
-        }
-
-        [Fact]
-        public void FindMatching_EmptyResults()
-        {
-            var lesson = new Lesson { FrontLanguage = Language.English, BackLanguage = Language.Polish, Id = "1" };
-            _lessonRepository.Insert(lesson);
-
-            var matchingFlashcards = _flashcardRepository.GetWithChildren(f => f.LessonId == "1").Result;
-
-            Assert.Empty(matchingFlashcards);
-        }
-
-        [Fact]
         public async void FlashcardsAreDeleted_WhenItsLessonIsDeleted()
         {
-            var lesson = new Lesson
-            {
-                FrontLanguage = Language.English,
-                BackLanguage = Language.Polish,
-                Flashcards = new List<Flashcard>
+            var lesson = Lesson.Create(Language.English, Language.Polish,
+				new List<Flashcard>
                 {
-                    new Flashcard{Id = "0"},
-                    new Flashcard{Id = "1"},
-                    new Flashcard{Id = "2"},
-                },
-	            Id = "1"
-			};
+                    Flashcard.CreateEmpty(),
+                    Flashcard.CreateEmpty(),
+                    Flashcard.CreateEmpty(),
+                }
+			);
             await _lessonRepository.Insert(lesson);
 
             await _lessonRepository.Delete(lesson);
@@ -95,18 +66,14 @@ namespace Flashcards.ServicesTests
         [Fact]
         public async void FlashcardsAreDeleted_WhenItsLessonIsDeletedBySeparateReference()
         {
-            var lesson = new Lesson
-            {
-                FrontLanguage = Language.English,
-                BackLanguage = Language.Polish,
-                Flashcards = new List<Flashcard>
+            var lesson = Lesson.Create(Language.English, Language.Polish,
+                new List<Flashcard>
                 {
-                    new Flashcard{Id = "0"},
-                    new Flashcard{Id = "1"},
-                    new Flashcard{Id = "2"},
-                },
-	            Id = "1"
-			};
+	                Flashcard.CreateEmpty(),
+	                Flashcard.CreateEmpty(),
+	                Flashcard.CreateEmpty(),
+                }
+			);
             await _lessonRepository.Insert(lesson);
             var lessonRef = _lessonRepository.GetAllWithChildren().Result.Single();
 

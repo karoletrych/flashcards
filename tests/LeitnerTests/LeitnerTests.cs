@@ -5,6 +5,7 @@ using Flashcards.Domain.SpacedRepetition.Leitner.Models;
 using Flashcards.Infrastructure.DataAccess;
 using Flashcards.Models;
 using Flashcards.SpacedRepetition.Interface;
+using FluentAssertions;
 using Settings;
 using Xunit;
 using Xunit.Abstractions;
@@ -17,6 +18,7 @@ namespace LeitnerTests
 
 		public LeitnerTests(ITestOutputHelper output)
 		{
+			Repository<CardDeck> cardDeckRepository;
 			Repository<Flashcard> flashcardRepository;
 
 			void InitializeSpacedRepetitionModule()
@@ -27,13 +29,13 @@ namespace LeitnerTests
 
 				_deckRepository = new Repository<Deck>(() =>connection);
 				flashcardRepository = new Repository<Flashcard>(() => connection);
-				_cardDeckRepository = new Repository<CardDeck>(() => connection);
+				cardDeckRepository = new Repository<CardDeck>(() => connection);
 
 				ISpacedRepetitionInitializer leitnerInitializer =
 					new LeitnerInitializer(
 						flashcardRepository,
 						_deckRepository,
-						_cardDeckRepository,
+						cardDeckRepository,
 						connection);
 				leitnerInitializer.InitializeAsync();
 			}
@@ -43,12 +45,12 @@ namespace LeitnerTests
 
 			var cards = Enumerable
 				.Range(1, FlashcardCount)
-				.Select(cardId =>
-					new Flashcard("1", "A", "B", ""));
+				.Select(_ =>
+					Flashcard.Create("A", "B"));
 
-			foreach (var card in cards)
+			foreach (var flashcard in cards)
 			{
-				flashcardRepository.Insert(card);
+				flashcardRepository.Insert(flashcard).Wait();
 			}
 
 			var repetitionDoneTodaySetting = new MockRepetitionTodaySetting();
@@ -56,7 +58,7 @@ namespace LeitnerTests
 			var streakDaysSetting = new MockStreakDaysSetting();
 			_leitner = new LeitnerRepetition(
 				_deckRepository,
-				_cardDeckRepository,
+				cardDeckRepository,
 				sessionNumberSetting,
 				repetitionDoneTodaySetting,
 				streakDaysSetting);
@@ -84,7 +86,6 @@ namespace LeitnerTests
 		private Repository<Deck> _deckRepository;
 		private readonly ISpacedRepetition _leitner;
 		private readonly IRepetitionSession _repetitionSession;
-		private Repository<CardDeck> _cardDeckRepository;
 
 		private IEnumerable<Flashcard> Flashcards(string deck)
 		{
@@ -114,6 +115,7 @@ namespace LeitnerTests
 				_output.WriteLine("");
 			}
 
+
 			Assert.Equal(FlashcardCount, Flashcards(DeckIds.RetiredDeckTitle).Count());
 			Assert.Equal(FlashcardCount, (await _leitner.LearnedFlashcards()).Count());
 		}
@@ -127,8 +129,9 @@ namespace LeitnerTests
 			
 			var rearrangedFlashcards = _leitner.CurrentRepetitionFlashcards().Result;
 
-			Assert.NotEqual(FlashcardCount, rearrangedFlashcards.Count());
+			rearrangedFlashcards.Count().Should().Be(0);
 		}
+
 
 		[Fact]
 		public async void AnsweringCorrectlyAllFlashcards_MovesThemToDeckBeginningWithSessionNumber()

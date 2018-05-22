@@ -18,9 +18,9 @@ namespace Flashcards.ServicesTests
 
         private readonly IList<Question> _questions = new[]
         {
-            new Flashcard("1", "dog", "pies"),
-            new Flashcard ("1", "cat", "kot"),
-            new Flashcard ("1", "duck", "kaczka"),
+			Flashcard.Create("dog", "pies"),
+			Flashcard.Create("cat", "kot"),
+			Flashcard.Create("duck", "kaczka")
         }
 	    .Select(f=> new Question(f, Language.English, Language.Polish)).ToList();
 

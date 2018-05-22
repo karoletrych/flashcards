@@ -237,4 +237,13 @@
   <data name="Flashcards" xml:space="preserve">
     <value>Fiszki</value>
   </data>
+  <data name="Back" xml:space="preserve">
+    <value>Tył</value>
+  </data>
+  <data name="CreationDate" xml:space="preserve">
+    <value>Data dodania</value>
+  </data>
+  <data name="Front" xml:space="preserve">
+    <value>Przód</value>
+  </data>
 </root>

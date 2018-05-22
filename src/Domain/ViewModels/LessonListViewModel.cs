@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows.Input;
 using Flashcards.Domain.ViewModels.Tools;
 using Flashcards.Models;
+using Flashcards.Services;
 using Flashcards.Services.DataAccess;
 using Flashcards.Services.Examiner.Builder;
 using Flashcards.SpacedRepetition.Interface;
@@ -60,9 +61,13 @@ namespace Flashcards.Domain.ViewModels
 		public ICommand PracticeLessonCommand => new Command<LessonViewModel>(async lesson =>
 		{
 			var loadedLesson = _lessonRepository.GetWithChildren(l => l.Id == lesson.InternalLesson.Id).Result.Single();
+			var flashcards = new FlashcardsInLanguage(
+				loadedLesson.FrontLanguage, 
+				loadedLesson.BackLanguage,
+				loadedLesson.Flashcards);
 
 			var examiner = new ExaminerBuilder()
-				.WithLessons(new []{ loadedLesson })
+				.WithFlashcards(new []{ flashcards })
 				.WithAskingMode(loadedLesson.AskingMode)
 				.WithShuffling(loadedLesson.Shuffle)
 				.Build();

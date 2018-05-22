@@ -18,31 +18,40 @@ namespace Flashcards.Models
 		public string LessonId { get; set; }
 
 		[MaxLength(MaxLength)]     
-		public string Front { get; private set; }
+		public string Front { get; set; }
 
 		[MaxLength(MaxLength)]
-		public string Back { get; private set; }
+		public string Back { get; set; }
 
 		[MaxLength(2000)]
-		public string ImageUrl { get; private set; }
+		public string ImageUrl { get; set; }
+
+		public DateTime Created { get; set; }
 
 		public Flashcard()
 		{
 
 		}
 
-		public Flashcard(string lessonId, string front, string back, string imageUri = null)
+		public static Flashcard CreateEmpty()
+		{
+			return new Flashcard{Id = Guid.NewGuid().ToString()};
+		}
+
+		public static Flashcard Create(string front, string back, string imageUri = null)
 		{
 			if (front.Length > MaxLength)
 				throw new ArgumentException($"Front text length cannot be longer than {MaxLength}");
 			if (back.Length > MaxLength)
 				throw new ArgumentException($"Back text length cannot be longer than {MaxLength}");
-
-			Id = Guid.NewGuid().ToString();
-			LessonId = lessonId;
-			Front = front;
-			Back = back;
-			ImageUrl = imageUri;
+			return new Flashcard
+			{
+				Id = Guid.NewGuid().ToString(),
+				Front = front,
+				Back = back,
+				ImageUrl = imageUri,
+				Created = DateTime.UtcNow
+			};
 		}
 
 		public Flashcard Invert()
@@ -54,7 +63,7 @@ namespace Flashcards.Models
 		{
 			if (ReferenceEquals(null, other)) return false;
 			if (ReferenceEquals(this, other)) return true;
-			return Id == other.Id;
+			return string.Equals(Id, other.Id);
 		}
 
 		public override bool Equals(object obj)
@@ -67,13 +76,9 @@ namespace Flashcards.Models
 
 		public override int GetHashCode()
 		{
-			var hashCode = 168429825;
-			hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Id);
-			hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(LessonId);
-			hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Front);
-			hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Back);
-			hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(ImageUrl);
-			return hashCode;
+			return (Id != null
+				? Id.GetHashCode()
+				: 0);
 		}
 	}
 }

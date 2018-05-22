@@ -18,7 +18,6 @@ namespace Flashcards.Domain.ViewModels
 	    private readonly INavigationService _navigationService;
 		private readonly IMessage _message;
 
-		private Lesson _lesson;
 
 		public AddLessonViewModel()
 		{
@@ -32,41 +31,13 @@ namespace Flashcards.Domain.ViewModels
 			_message = message;
 		}
 
-		public string LessonName
-		{
-			get => _lesson?.Name ?? string.Empty;
-			set
-			{
-				if (_lesson != null)
-				{
-					_lesson.Name = value;
-				}
-			}
-		}
+	    public string LessonName { get; set; }
 
-		public AskingMode AskingMode
-		{
-			get => _lesson?.AskingMode ?? default(AskingMode);
-			set
-			{
-				if (_lesson != null && (int)value != -1) // prevents xamarin from setting default value when navigating back
-				{
-					_lesson.AskingMode = value;
-				}
-			}
-		}
+	    public AskingMode AskingMode { get; set; }
 
-		public bool AskInRepetitions
-		{
-			get => _lesson?.AskInRepetitions ?? default(bool);
-			set => _lesson.AskInRepetitions = value;
-		}
+		public bool AskInRepetitions { get; set; }
 
-		public bool ShuffleFlashcards
-		{
-			get => _lesson?.Shuffle ?? default(bool);
-			set => _lesson.Shuffle = value;
-		}
+		public bool ShuffleFlashcards { get; set; }
 
 		public IEnumerable<string> AllAskingModes =>
 			Enum.GetValues(typeof(AskingMode))
@@ -78,25 +49,9 @@ namespace Flashcards.Domain.ViewModels
 			Enum.GetNames(typeof(Language))
 				.ToList();
 
-	    public Language SelectedFrontLanguage
-	    {
-		    get => _lesson?.FrontLanguage ?? default(Language);
-		    set
-		    {
-			    if (_lesson != null && (int) value != -1)
-				    _lesson.FrontLanguage = value;
-		    }
-	    }
+	    public Language SelectedFrontLanguage { get; set; }
 
-	    public Language SelectedBackLanguage
-	    {
-		    get => _lesson?.BackLanguage ?? default(Language);
-		    set
-		    {
-			    if (_lesson != null && (int)value != -1)
-					_lesson.BackLanguage = value;
-		    }
-	    }
+	    public Language SelectedBackLanguage { get; set; }
 
 
 	    public bool CanNavigate { get; set; } = true;
@@ -104,19 +59,26 @@ namespace Flashcards.Domain.ViewModels
 
 	    private async void FlashcardList()
 	    {
-		    if (string.IsNullOrWhiteSpace(_lesson.Name))
+		    if (string.IsNullOrWhiteSpace(LessonName))
 		    {
 			    _message.LongAlert(AppResources.InsertLessonName);
 			    return;
 		    }
 
 		    CanNavigate = false;
+
+		    var lesson = Lesson.Create(SelectedFrontLanguage, SelectedBackLanguage);
+		    lesson.AskInRepetitions = AskInRepetitions;
+		    lesson.AskingMode = AskingMode;
+		    lesson.Name = LessonName;
+		    lesson.Shuffle = ShuffleFlashcards;
+
 			await _navigationService.NavigateAsync(
 			    "FlashcardListPage",
 			    new NavigationParameters
 			    {
 				    {
-					    "lesson", _lesson
+					    "lesson", lesson
 				    }
 			    });
 		    CanNavigate = true;
@@ -141,19 +103,8 @@ namespace Flashcards.Domain.ViewModels
 #pragma warning restore 0067
 		public void OnNavigatingTo(NavigationParameters parameters)
 		{
-			_lesson = new Lesson
-			{
-				Id = Guid.NewGuid().ToString(),
-				AskInRepetitions = true,
-				AskingMode = AskingMode.Front,
-				Shuffle = true,
-				Flashcards = new List<Flashcard>()
-			};
-
-			OnPropertyChanged(nameof(LessonName));
-			OnPropertyChanged(nameof(AskingMode));
-			OnPropertyChanged(nameof(AskInRepetitions));
-			OnPropertyChanged(nameof(ShuffleFlashcards));
+			AskInRepetitions = true;
+			AskingMode = AskingMode.Front;
 		}
 	}
 }

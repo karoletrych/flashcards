@@ -13,11 +13,17 @@
     </ContentPage.ToolbarItems>
 
     <ContentPage.Content>
-            <ListView x:Name="FlashcardList"
+        <StackLayout>
+        <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+            <Button Text="{views:Translate Front}" Command="{Binding SortByFront}"/>
+            <Button Text="{views:Translate Back}" Command="{Binding SortByBack}"/>
+            <Button Text="{views:Translate CreationDate}" Command="{Binding SortByCreationDate}"/>
+        </StackLayout>
+        <ListView x:Name="FlashcardList"
                       VerticalOptions="Fill"
                       ItemsSource="{Binding Flashcards}"
                       HasUnevenRows="True">
-                <ListView.ItemTemplate>
+                    <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell Height="30">
                             <Grid>
@@ -41,5 +47,6 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
+        </StackLayout>
     </ContentPage.Content>
 </ContentPage>

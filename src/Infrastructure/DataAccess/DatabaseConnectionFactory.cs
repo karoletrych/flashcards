@@ -15,7 +15,8 @@ namespace Flashcards.Infrastructure.DataAccess
         {
             var connection = new SQLiteAsyncConnection(
 	            databasePath,
-                SqliteOpenFlags);
+                SqliteOpenFlags,
+	            storeDateTimeAsTicks: true);
 
 	        Task.Run(() => connection.CreateTableAsync<Flashcard>()).Wait();
 	        Task.Run(() => connection.CreateTableAsync<Lesson>()).Wait();
@@ -27,7 +28,8 @@ namespace Flashcards.Infrastructure.DataAccess
         {
             var connection = new SQLiteConnection(
 	            databasePath,
-                SqliteOpenFlags);
+                SqliteOpenFlags,
+	            storeDateTimeAsTicks: true);
 
 			connection.CreateTable<Flashcard>();
             connection.CreateTable<Lesson>();

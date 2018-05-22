@@ -1,13 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Flashcards.Infrastructure.DataAccess;
 using Flashcards.Models;
 using Flashcards.Services;
-using Flashcards.Services.DataAccess;
 using Flashcards.SpacedRepetition.Interface;
 using NSubstitute;
 using Settings;
+using SQLite;
 using Xunit;
 
 namespace Flashcards.ServicesTests
@@ -18,34 +19,21 @@ namespace Flashcards.ServicesTests
 
 		private readonly List<Flashcard> _activeFlashcards1 = new List<Flashcard>
 		{
-			new Flashcard
-			{
-				Id = "1"
-			},
-			new Flashcard
-			{
-				Id = "2"
-			},
+			Flashcard.CreateEmpty(),
+			Flashcard.CreateEmpty()
 		};
 		private readonly List<Flashcard> _inactiveFlashcards = new List<Flashcard>
 		{
-			new Flashcard
-			{
-				Id = "3"
-			},
+			Flashcard.CreateEmpty(),
 		};
 		private readonly List<Flashcard> _activeFlashcards2 = new List<Flashcard>
 		{
-			new Flashcard
-			{
-				Id = "4"
-			},
+			Flashcard.CreateEmpty(),
 		};
 
 		private readonly ISpacedRepetition _spacedRepetition;
 		private readonly ISetting<int> _maximumFlashcardsInRepetitionSetting;
 		private readonly IEnumerable<Flashcard> _flashcards;
-		private readonly IRepository<Lesson> _lessonRepository;
 
 		public RepetitionExaminerBuilderTests()
 		{
@@ -54,18 +42,25 @@ namespace Flashcards.ServicesTests
 				new Lesson
 				{
 					Id = "1",
+					FrontLanguage = Language.English,
+					BackLanguage = Language.Polish,
 					Flashcards = _activeFlashcards1,
 					AskInRepetitions = true
 				},
 				new Lesson
 				{
 					Id = "2",
+
+					FrontLanguage = Language.English,
+					BackLanguage = Language.Polish,
 					Flashcards = _activeFlashcards2,
 					AskInRepetitions = true
 				},
 				new Lesson
 				{
 					Id = "3",
+					FrontLanguage = Language.English,
+					BackLanguage = Language.Polish,
 					Flashcards = _inactiveFlashcards,
 					AskInRepetitions = false
 				}
@@ -74,9 +69,11 @@ namespace Flashcards.ServicesTests
 				.Concat(_inactiveFlashcards.AsEnumerable())
 				.Concat(_activeFlashcards2.AsEnumerable());
 
-			var connection = new Connection(new DatabaseConnectionFactory().CreateInMemoryConnection());
-			_lessonRepository = new Repository<Lesson>(() => connection);
-			_lessonRepository.InsertOrReplaceAllWithChildren(lessons);
+			var connection = new Connection(
+				new DatabaseConnectionFactory().CreateInMemoryConnection());
+			var lessonRepository = new Repository<Lesson>(() => connection);
+			lessonRepository.InsertOrReplaceAllWithChildren(lessons).Wait();
+
 			_spacedRepetition = Substitute.For<ISpacedRepetition>();
 
 			_maximumFlashcardsInRepetitionSetting = Substitute.For<ISetting<int>>();
@@ -86,7 +83,7 @@ namespace Flashcards.ServicesTests
 
 			_sut = new RepetitionExaminerBuilder(
 				_spacedRepetition, 
-				_lessonRepository, 
+				lessonRepository, 
 				_maximumFlashcardsInRepetitionSetting,
 				repetitionAskingModeSetting,
 				shuffleRepetitionSetting);
@@ -129,7 +126,5 @@ namespace Flashcards.ServicesTests
 
 			Assert.Equal(1, examiner.QuestionsCount);
 		}
-
-
 	}
 }

@@ -24,7 +24,7 @@ namespace Flashcards.ServicesTests
 
 		private void Answer(bool answer, int times)
 		{
-			for (int i = 0; i < times; i++)
+			for (var i = 0; i < times; i++)
 			{
 				_examiner.TryAskNextQuestion(out var _);
 				_examiner.Answer(answer);
