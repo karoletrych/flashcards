@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows.Input;
 using Flashcards.Domain.ViewModels.Tools;
 using Flashcards.Models;
@@ -32,7 +33,7 @@ namespace Flashcards.Domain.ViewModels
 
 		public ICommand DeleteFlashcardCommand => new Command<string>(async flashcardId =>
 		{
-			var flashcardToRemove = Flashcard.CreateEmpty();
+			var flashcardToRemove = Flashcards.Single(f => f.Id == flashcardId);
 			await _flashcardRepository.Delete(flashcardToRemove);
 			Flashcards.Remove(flashcardToRemove);
 		});
