@@ -246,4 +246,7 @@
   <data name="Front" xml:space="preserve">
     <value>Front</value>
   </data>
+  <data name="KnowledgeLevel" xml:space="preserve">
+    <value>Knowledge level</value>
+  </data>
 </root>

@@ -15,11 +15,18 @@
 
     <ContentPage.Content>
         <StackLayout VerticalOptions="FillAndExpand">
-            <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
-                <Button Text="{views:Translate Front}" Command="{Binding SortByFront}" />
-                <Button Text="{views:Translate Back}" Command="{Binding SortByBack}" />
-                <Button Text="{views:Translate CreationDate}" Command="{Binding SortByCreationDate}" />
-            </StackLayout>
+            <Grid HorizontalOptions="FillAndExpand">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="25*" />
+                    <ColumnDefinition Width="25*" />
+                    <ColumnDefinition Width="25*" />
+                    <ColumnDefinition Width="25*" />
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" Text="{views:Translate Front}" Command="{Binding SortByFront}" />
+                <Button Grid.Column="1" Text="{views:Translate Back}" Command="{Binding SortByBack}" />
+                <Button Grid.Column="2" Text="{views:Translate CreationDate}" Command="{Binding SortByCreationDate}" />
+                <Button Grid.Column="3" Text="{views:Translate KnowledgeLevel}" Command="{Binding SortByKnowledgeLevel}" />
+            </Grid>
             <ListView x:Name="FlashcardList"
                       VerticalOptions="Fill"
                       ItemsSource="{Binding Flashcards}"

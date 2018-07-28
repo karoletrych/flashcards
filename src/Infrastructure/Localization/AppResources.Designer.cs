@@ -259,6 +259,15 @@ namespace Flashcards.Infrastructure.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Knowledge level.
+        /// </summary>
+        public static string KnowledgeLevel {
+            get {
+                return ResourceManager.GetString("KnowledgeLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Known.
         /// </summary>
         public static string Known {

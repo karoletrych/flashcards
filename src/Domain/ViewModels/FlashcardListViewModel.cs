@@ -14,14 +14,14 @@ namespace Flashcards.Domain.ViewModels
 {
 	public class FlashcardViewModel
 	{
-
 		public FlashcardViewModel(Flashcard flashcard, KnowledgeLevel knowledgeLevel)
 		{
 			Flashcard = flashcard;
+			KnowledgeLevel = knowledgeLevel;
 			KnowledgeLevelColor = 
-				knowledgeLevel == KnowledgeLevel.Known ? Color.GreenYellow :
+				knowledgeLevel == KnowledgeLevel.Known ? Color.Green :
 				knowledgeLevel == KnowledgeLevel.Medium ? Color.Yellow :
-				knowledgeLevel == KnowledgeLevel.None ? Color.Gray : 
+				knowledgeLevel == KnowledgeLevel.None ? Color.LightGray : 
 				throw new InvalidOperationException();
 		}
 
@@ -62,6 +62,7 @@ namespace Flashcards.Domain.ViewModels
 		}
 
 		public Flashcard Flashcard { get; }
+		public KnowledgeLevel KnowledgeLevel { get; }
 		public Color KnowledgeLevelColor { get; }
 	}
 
@@ -124,6 +125,7 @@ namespace Flashcards.Domain.ViewModels
 		private bool _sortingByFrontTextAscending;
 		private bool _sortingByBackTextAscending;
 		private bool _sortingByCreationDateAscending;
+		private bool _sortingByKnowledgeLevelAscending;
 
 		public ICommand SortByFront => new Command(() =>
 		{
@@ -142,6 +144,12 @@ namespace Flashcards.Domain.ViewModels
 		{
 			_sortingByCreationDateAscending = !_sortingByCreationDateAscending;
 			Flashcards.Sort((f1, f2) => DateTime.Compare(f1.Created, f2.Created), _sortingByCreationDateAscending);
+		});
+
+		public ICommand SortByKnowledgeLevel => new Command(() =>
+		{
+			_sortingByKnowledgeLevelAscending = !_sortingByKnowledgeLevelAscending;
+			Flashcards.Sort((f1, f2) =>  f1.KnowledgeLevel.CompareTo(f2.KnowledgeLevel) , _sortingByKnowledgeLevelAscending);
 		});
 
 		#endregion
