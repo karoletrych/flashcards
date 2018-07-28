@@ -116,7 +116,7 @@ namespace LeitnerTests
 			}
 
 
-			Assert.Equal(FlashcardCount, Flashcards(DeckIds.RetiredDeckTitle).Count());
+			Assert.Equal(FlashcardCount, Flashcards(DeckTitles.RetiredDeckTitle).Count());
 			Assert.Equal(FlashcardCount, (await _leitner.LearnedFlashcards()).Count());
 		}
 
@@ -144,7 +144,7 @@ namespace LeitnerTests
 			Assert.NotEmpty(session0DeckCards);
 
 			var currentDeckCards =
-				_deckRepository.GetWithChildren(cd => cd.DeckTitle == DeckIds.CurrentDeckTitle)
+				_deckRepository.GetWithChildren(cd => cd.DeckTitle == DeckTitles.CurrentDeckTitle)
 					.Result.Single().Cards;
 			Assert.Empty(currentDeckCards);
 		}

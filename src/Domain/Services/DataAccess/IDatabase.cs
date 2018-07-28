@@ -9,6 +9,8 @@ namespace Flashcards.Services.DataAccess
 	{
 		Task<IEnumerable<T>> GetAllWithChildren<T>(Expression<Func<T, bool>> predicate)
 			where T : new();
+		Task<IEnumerable<T>> GetUsingSQL<T>(string query, params object[] args) where T : new();
+
 
 		Task<T> Single<T>(Expression<Func<T, bool>> predicate) where T : new();
 

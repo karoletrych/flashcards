@@ -31,7 +31,7 @@ namespace Flashcards.Domain.SpacedRepetition.Leitner
 
 		private int DeckCurrentId => new Lazy<int>(() =>
 		{
-			var deck = _deckRepository.Single(d => d.DeckTitle == DeckIds.CurrentDeckTitle).Result;
+			var deck = _deckRepository.Single(d => d.DeckTitle == DeckTitles.CurrentDeckTitle).Result;
 			return deck.Id;
 		}).Value;
 
@@ -43,7 +43,7 @@ namespace Flashcards.Domain.SpacedRepetition.Leitner
 			var decksCreated = await _deckRepository.Any();
 			if (!decksCreated)
 			{
-				var decks = DeckIds.DeckTitles.AsEnumerable()
+				var decks = DeckTitles.Titles.AsEnumerable()
 					.Select((title, id) =>
 						new Deck {DeckTitle = title, Cards = new List<Flashcard>(), Id = id});
 				await _deckRepository.InsertOrReplaceAllWithChildren(decks);

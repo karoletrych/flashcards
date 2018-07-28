@@ -85,6 +85,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GetFlashcardsKnowledgeLevelsTests.cs" />
     <Compile Include="Helpers\Settings.cs" />
     <Compile Include="LeitnerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

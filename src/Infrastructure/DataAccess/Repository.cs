@@ -25,6 +25,11 @@ namespace Flashcards.Infrastructure.DataAccess
 			return _dbConnection().GetAllWithChildren<T>(null);
 		}
 
+		public Task<IEnumerable<T>> GetUsingSQL(string query, object[] args)
+		{
+			return _dbConnection().GetUsingSQL<T>(query, args);
+		}
+
 		public Task<T> Single(Expression<Func<T, bool>> predicate)
 		{
 			return _dbConnection().Single(predicate);

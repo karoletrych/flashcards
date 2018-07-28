@@ -45,14 +45,14 @@ namespace Flashcards.Domain.SpacedRepetition.Leitner
 				decks
 					.Where(deck =>
 						deck.DeckTitle.Select(c => c.ToInt()).Contains(sessionNumber) ||
-						deck.DeckTitle == DeckIds.CurrentDeckTitle)
+						deck.DeckTitle == DeckTitles.CurrentDeckTitle)
 					.SelectMany(deck => deck.Cards);
 			return result;
 		}
 
 		public async Task<IEnumerable<Flashcard>> LearnedFlashcards()
 		{
-			var deck = await _deckRepository.SingleWithChildren(d => d.DeckTitle == DeckIds.RetiredDeckTitle);
+			var deck = await _deckRepository.SingleWithChildren(d => d.DeckTitle == DeckTitles.RetiredDeckTitle);
 			return deck.Cards;
 		}
 

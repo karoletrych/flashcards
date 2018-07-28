@@ -81,6 +81,12 @@ namespace Flashcards.Infrastructure.DataAccess
 			return Task.FromResult(item.Single());
 		}
 
+		public Task<IEnumerable<T>> GetUsingSQL<T>(string query, params object[] args) where T : new()
+		{
+			var items = _dbConnection.DeferredQuery<T>(query, args);
+			return Task.FromResult(items);
+		}
+
 		public Task CreateTable<T>() where T : new()
 		{
 			_dbConnection.CreateTable<T>();

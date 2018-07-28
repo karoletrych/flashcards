@@ -6,35 +6,92 @@ using System.Windows.Input;
 using Flashcards.Domain.ViewModels.Tools;
 using Flashcards.Models;
 using Flashcards.Services.DataAccess;
+using Flashcards.SpacedRepetition.Interface;
 using Prism.Navigation;
 using Xamarin.Forms;
 
 namespace Flashcards.Domain.ViewModels
 {
+	public class FlashcardViewModel
+	{
+
+		public FlashcardViewModel(Flashcard flashcard, KnowledgeLevel knowledgeLevel)
+		{
+			Flashcard = flashcard;
+			KnowledgeLevelColor = 
+				knowledgeLevel == KnowledgeLevel.Known ? Color.GreenYellow :
+				knowledgeLevel == KnowledgeLevel.Medium ? Color.Yellow :
+				knowledgeLevel == KnowledgeLevel.None ? Color.Gray : 
+				throw new InvalidOperationException();
+		}
+
+		public string Id
+		{
+			get => Flashcard.Id;
+			set => Flashcard.Id = value;
+		}
+
+		public string LessonId
+		{
+			get => Flashcard.LessonId;
+			set => Flashcard.LessonId = value;
+		}
+
+		public string Front
+		{
+			get => Flashcard.Front;
+			set => Flashcard.Front = value;
+		}
+
+		public string Back
+		{
+			get => Flashcard.Back;
+			set => Flashcard.Back = value;
+		}
+
+		public string ImageUrl
+		{
+			get => Flashcard.ImageUrl;
+			set => Flashcard.ImageUrl = value;
+		}
+
+		public DateTime Created
+		{
+			get => Flashcard.Created;
+			set => Flashcard.Created = value;
+		}
+
+		public Flashcard Flashcard { get; }
+		public Color KnowledgeLevelColor { get; }
+	}
+
 	public class FlashcardListViewModel : INotifyPropertyChanged, INavigatedAware
 	{
 		private readonly IRepository<Flashcard> _flashcardRepository;
+		private readonly IGetFlashcardsKnowledgeLevels _getFlashcardsKnowledgeLevel;
 		private readonly INavigationService _navigationService;
 		private Lesson _lesson;
 
 		public FlashcardListViewModel(
 			IRepository<Flashcard> flashcardRepository,
-			INavigationService navigationService)
+			INavigationService navigationService,
+			IGetFlashcardsKnowledgeLevels getFlashcardsKnowledgeLevel)
 		{
 			_flashcardRepository = flashcardRepository;
 			_navigationService = navigationService;
+			_getFlashcardsKnowledgeLevel = getFlashcardsKnowledgeLevel;
 		}
 
 		public FlashcardListViewModel()
 		{
 		}
 
-		public ObservableCollection<Flashcard> Flashcards { get; } = new ObservableCollection<Flashcard>();
+		public ObservableCollection<FlashcardViewModel> Flashcards { get; } = new ObservableCollection<FlashcardViewModel>();
 
 		public ICommand DeleteFlashcardCommand => new Command<string>(async flashcardId =>
 		{
 			var flashcardToRemove = Flashcards.Single(f => f.Id == flashcardId);
-			await _flashcardRepository.Delete(flashcardToRemove);
+			await _flashcardRepository.Delete(flashcardToRemove.Flashcard);
 			Flashcards.Remove(flashcardToRemove);
 		});
 
@@ -54,9 +111,9 @@ namespace Flashcards.Domain.ViewModels
 		public async void OnNavigatedTo(NavigationParameters parameters)
 		{
 			_lesson = (Lesson) parameters["lesson"];
-			var flashcards = await _flashcardRepository.GetWithChildren(f => f.LessonId == _lesson.Id);
-
-			Flashcards.SynchronizeWith(flashcards);
+			var knowledgeLevels = await _getFlashcardsKnowledgeLevel.KnowledgeLevels(_lesson);
+			var x = knowledgeLevels.Select(kl => new FlashcardViewModel(kl.Flashcard, kl.KnowledgeLevel));
+			Flashcards.SynchronizeWith(x);
 			SortByCreationDate.Execute(null);
 		}
 

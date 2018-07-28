@@ -25,12 +25,12 @@ namespace Flashcards.Domain.SpacedRepetition.Leitner
 						// If a learner is successful at a card from Deck Current,
 						// it gets transferred into the progress deck that begins with 
 						// that session's number.
-						case var currentDeckTitle when result.known && currentDeckTitle == DeckIds.CurrentDeckTitle:
+						case var currentDeckTitle when result.known && currentDeckTitle == DeckTitles.CurrentDeckTitle:
 							return new MoveOperation
 							{
 								Card = result.card,
-								SourceDeck = DeckIds.CurrentDeckTitle,
-								DestinationDeck = DeckIds.DeckTitles
+								SourceDeck = DeckTitles.CurrentDeckTitle,
+								DestinationDeck = DeckTitles.Titles
 									.First(deck => deck.First().IsDigit(sessionNumber))
 							};
 						// If a learner has difficulty with a card during a subsequent review, 
@@ -40,7 +40,7 @@ namespace Flashcards.Domain.SpacedRepetition.Leitner
 							{
 								Card = result.card,
 								SourceDeck = result.deck.DeckTitle,
-								DestinationDeck = DeckIds.CurrentDeckTitle
+								DestinationDeck = DeckTitles.CurrentDeckTitle
 							};
 						// When a learner is successful at a card during a session that matches 
 						// the last number on the deck that card goes into Deck Retired
@@ -49,7 +49,7 @@ namespace Flashcards.Domain.SpacedRepetition.Leitner
 							{
 								Card = result.card,
 								SourceDeck = result.deck.DeckTitle,
-								DestinationDeck = DeckIds.RetiredDeckTitle
+								DestinationDeck = DeckTitles.RetiredDeckTitle
 							};
 						default:
 							return null;

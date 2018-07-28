@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Flashcards.Domain.ViewModels;
 using Flashcards.Models;
+using Flashcards.SpacedRepetition.Interface;
 using FluentAssertions;
 using NSubstitute;
 using Prism.Navigation;
@@ -24,8 +25,9 @@ namespace ViewModelsTests
 		{
 			var navigationService = Substitute.For<INavigationService>();
 			var repository = TestRepository.InitializedWith(_lesson.Flashcards);
+			var getFlashcardsKnowledgeLevels = Substitute.For<IGetFlashcardsKnowledgeLevels>();
 
-			_sut = new FlashcardListViewModel(repository, navigationService);
+			_sut = new FlashcardListViewModel(repository, navigationService, getFlashcardsKnowledgeLevels);
 
 			_sut.OnNavigatedTo(new NavigationParameters
 			{

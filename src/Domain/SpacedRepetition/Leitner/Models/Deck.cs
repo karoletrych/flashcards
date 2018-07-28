@@ -11,7 +11,7 @@ namespace Flashcards.Domain.SpacedRepetition.Leitner.Models
 		public int Id { get; set; } = 0;
 
 		[Indexed]
-		public string DeckTitle { get; set; } = DeckIds.CurrentDeckTitle;
+		public string DeckTitle { get; set; } = DeckTitles.CurrentDeckTitle;
 
 		[ManyToMany(typeof(CardDeck), CascadeOperations = CascadeOperation.All)]
 		public List<Flashcard> Cards { get; set; } = new List<Flashcard>();

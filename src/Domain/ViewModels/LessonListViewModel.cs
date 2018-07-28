@@ -38,9 +38,9 @@ namespace Flashcards.Domain.ViewModels
 		{
 			var lessons = (await _lessonRepository.GetAllWithChildren()).ToList();
 			var learnedFlashcards = await _spacedRepetition.LearnedFlashcards();
-			Lessons.SynchronizeWith(
-				lessons,
-				l => new LessonViewModel(l, learnedFlashcards));
+			var viewModels = lessons.Select(l => new LessonViewModel(l, learnedFlashcards));
+
+			Lessons.SynchronizeWith(viewModels);
 		}
 
 		public ObservableCollection<LessonViewModel> Lessons { get; } = new ObservableCollection<LessonViewModel>();

@@ -101,6 +101,7 @@
     <Compile Include="LessonListViewModelTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RepetitionViewModelTests.cs" />
+    <Compile Include="SynchronizeExtensionTests.cs" />
     <Compile Include="TestRepository.cs" />
     <Compile Include="Tools\RepetitorTests.cs" />
   </ItemGroup>

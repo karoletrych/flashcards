@@ -10,8 +10,10 @@ namespace Flashcards.Services.DataAccess
     {
         Task<IEnumerable<T>> GetWithChildren(Expression<Func<T,bool>> predicate);
         Task<IEnumerable<T>> GetAllWithChildren();
+	    Task<IEnumerable<T>> GetUsingSQL(string query, params object[] args);
 
-	    Task<T> Single(Expression<Func<T, bool>> predicate);
+
+		Task<T> Single(Expression<Func<T, bool>> predicate);
 	    Task<T> SingleWithChildren(Expression<Func<T, bool>> predicate);
 
 	    Task Insert(T entity);

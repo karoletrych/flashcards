@@ -24,6 +24,11 @@ namespace Flashcards.Infrastructure.DataAccess
 			return await _sqLiteAsyncConnection.GetAllWithChildrenAsync(predicate).ConfigureAwait(false);
 		}
 
+		public async Task<IEnumerable<T>> GetUsingSQL<T>(string query, params object[] args) where T : new()
+		{
+			return await _sqLiteAsyncConnection.QueryAsync<T>(query, args);
+		}
+
 		public async Task Delete<T>(T entity)
 		{
 			await _sqLiteAsyncConnection.DeleteAsync(entity).ConfigureAwait(false);
@@ -48,7 +53,7 @@ namespace Flashcards.Infrastructure.DataAccess
 			var list = await _sqLiteAsyncConnection.GetAllWithChildrenAsync(predicate).ConfigureAwait(false);
 			return list.Single();
 		}
-
+		
 		public async Task Update<T>(T entity)
 		{
 			await _sqLiteAsyncConnection.UpdateAsync(entity).ConfigureAwait(false);
